@@ -11,8 +11,8 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { Chess } from "npm:chess.js@1.4.0";
 
-// only the app's own addresses may call it from a browser: the live site (set ALLOWED_ORIGINS when it is deployed,
-// comma-separated) and this computer's test address
+// only the app's own addresses may call it from a browser: the live site, this computer's test address, and any
+// others set in ALLOWED_ORIGINS (comma-separated; e.g. a custom domain later)
 const ALLOWED = (Deno.env.get("ALLOWED_ORIGINS") ?? "").split(",").map(s => s.trim()).filter(Boolean).concat(["https://scc-chess-school.pages.dev", "http://localhost:8752", "http://127.0.0.1:8752"]);
 let cors: Record<string, string> = {};
 const reply = (status: number, body: unknown) => new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } });

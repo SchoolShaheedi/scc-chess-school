@@ -1,5 +1,15 @@
 # Putting SCC Chess School online (Cloudflare Pages)
 
+> **LIVE since 2026-10-06 (DECISIONS #88):** https://scc-chess-school.pages.dev. The source is public at
+> https://github.com/SchoolShaheedi/scc-chess-school (GPLv3 code; artwork and lessons © Shaheedi Bunga, see NOTICE.md).
+>
+> **Every update, in this order** (the public source must always match what is live):
+> 1. `git add -A && git commit -m "…" && git push`
+> 2. `npm run deploy`
+>
+> Note: Wrangler now steers new projects to Workers. This project was created on classic Pages with `--force`
+> (once only). `npm run deploy` (`wrangler pages deploy`) goes to it directly; no `--force` is needed again.
+
 Decided 2026-10-05 (DECISIONS #80/#81): free hosting on Cloudflare Pages. The app is a set of static
 files: Supabase does sign-in and saving, so there is no server to run. Everything is prepared; only the steps
 marked **You** need your hands, because they are your accounts.
