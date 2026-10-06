@@ -1,0 +1,554 @@
+{
+ "source": "Lichess puzzle database, CC0 - https://database.lichess.org/#puzzles",
+ "built": "2026-10-05",
+ "pack": {
+  "id": "pawn-endgame",
+  "themes": [
+   "pawnEndgame"
+  ],
+  "min": 600,
+  "max": 1100,
+  "count": 30,
+  "atLeast": 15,
+  "maxPly": 4
+ },
+ "puzzles": [
+  {
+   "id": "0N5wp",
+   "fen": "8/6p1/4k1p1/6P1/4K2P/8/8/8 w - - 5 61",
+   "moves": [
+    "e4d4",
+    "e6f5",
+    "d4d5",
+    "f5g4"
+   ],
+   "rating": 604,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "07d8p",
+   "fen": "8/8/8/8/4P2p/8/5K1k/8 b - - 0 63",
+   "moves": [
+    "h2h3",
+    "e4e5",
+    "h3g4",
+    "e5e6"
+   ],
+   "rating": 618,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "quietMove",
+    "short"
+   ]
+  },
+  {
+   "id": "098qS",
+   "fen": "8/8/8/p3ppk1/1p6/1P3KPP/P7/8 b - - 1 48",
+   "moves": [
+    "g5h5",
+    "g3g4",
+    "f5g4",
+    "h3g4"
+   ],
+   "rating": 628,
+   "themes": [
+    "crushing",
+    "endgame",
+    "master",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "01cFH",
+   "fen": "8/8/p7/5p1P/4p3/4k3/6P1/3K4 b - - 0 42",
+   "moves": [
+    "e3f4",
+    "h5h6",
+    "f4e5",
+    "h6h7"
+   ],
+   "rating": 633,
+   "themes": [
+    "advancedPawn",
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0QR7V",
+   "fen": "8/8/2p5/8/6P1/2k5/4K3/8 b - - 0 57",
+   "moves": [
+    "c6c5",
+    "g4g5",
+    "c5c4",
+    "g5g6"
+   ],
+   "rating": 636,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "quietMove",
+    "short"
+   ]
+  },
+  {
+   "id": "0JjQM",
+   "fen": "8/K4k2/1p5p/5p1P/1P1P4/P1P5/8/8 w - - 0 48",
+   "moves": [
+    "a7a8",
+    "f5f4",
+    "a8b7",
+    "f4f3"
+   ],
+   "rating": 653,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "quietMove",
+    "short"
+   ]
+  },
+  {
+   "id": "04Vkq",
+   "fen": "8/5k1p/6p1/p3p3/K7/2P3P1/1P5P/8 w - - 1 41",
+   "moves": [
+    "a4a5",
+    "e5e4",
+    "a5b4",
+    "e4e3"
+   ],
+   "rating": 656,
+   "themes": [
+    "crushing",
+    "endgame",
+    "master",
+    "pawnEndgame",
+    "quietMove",
+    "short"
+   ]
+  },
+  {
+   "id": "0mJaU",
+   "fen": "8/8/8/1p1kpp2/8/1PPK1P2/8/8 b - - 1 36",
+   "moves": [
+    "f5f4",
+    "c3c4",
+    "b5c4",
+    "b3c4"
+   ],
+   "rating": 656,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0THJu",
+   "fen": "4k3/8/3K4/4P2p/8/8/8/8 w - - 4 71",
+   "moves": [
+    "e5e6",
+    "h5h4",
+    "e6e7",
+    "h4h3"
+   ],
+   "rating": 692,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "quietMove",
+    "short"
+   ]
+  },
+  {
+   "id": "0bzbM",
+   "fen": "8/8/1p2k3/1P3p2/2K1pPp1/4P1P1/8/8 w - - 3 56",
+   "moves": [
+    "c4b4",
+    "e6d5",
+    "b4c3",
+    "d5c5"
+   ],
+   "rating": 693,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0B1Nr",
+   "fen": "8/8/6p1/5kPp/3K3P/8/8/8 w - - 5 59",
+   "moves": [
+    "d4e3",
+    "f5g4",
+    "e3e4",
+    "g4h4"
+   ],
+   "rating": 705,
+   "themes": [
+    "crushing",
+    "endgame",
+    "master",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0oE9y",
+   "fen": "8/p6p/4k1p1/1p1pp1P1/2p1P1KP/2PP4/PP6/8 w - - 0 37",
+   "moves": [
+    "e4d5",
+    "e6d5",
+    "d3c4",
+    "d5c4"
+   ],
+   "rating": 709,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0pFuF",
+   "fen": "5K2/7p/6p1/6P1/3p1P1P/8/k7/8 w - - 0 53",
+   "moves": [
+    "f8g7",
+    "d4d3",
+    "h4h5",
+    "d3d2"
+   ],
+   "rating": 709,
+   "themes": [
+    "advancedPawn",
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0AC8g",
+   "fen": "8/8/1k6/2p5/PpP5/8/2K5/8 w - - 7 63",
+   "moves": [
+    "c2b3",
+    "b6a5",
+    "b3b2",
+    "a5a4"
+   ],
+   "rating": 719,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0bFMn",
+   "fen": "8/8/2kp4/1p2p3/1P3P2/4K3/2P5/8 w - - 0 38",
+   "moves": [
+    "f4e5",
+    "d6e5",
+    "e3e4",
+    "c6d6"
+   ],
+   "rating": 726,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0KFo9",
+   "fen": "8/8/8/5K1p/7P/5k2/8/8 b - - 0 53",
+   "moves": [
+    "f3g3",
+    "f5g5",
+    "g3f3",
+    "g5h5"
+   ],
+   "rating": 746,
+   "themes": [
+    "crushing",
+    "endgame",
+    "master",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0h6bu",
+   "fen": "8/8/2p1p1k1/3p1p2/1K1P1P2/8/5P2/8 b - - 0 49",
+   "moves": [
+    "g6f6",
+    "b4c5",
+    "f6e7",
+    "c5c6"
+   ],
+   "rating": 772,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "00aU5",
+   "fen": "8/8/8/p3k2p/P1K4P/8/8/8 b - - 5 47",
+   "moves": [
+    "e5f4",
+    "c4b5",
+    "f4e5",
+    "b5a5"
+   ],
+   "rating": 773,
+   "themes": [
+    "crushing",
+    "endgame",
+    "master",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0OiV2",
+   "fen": "8/1k5K/p7/7P/2p5/8/6P1/8 w - - 0 42",
+   "moves": [
+    "h7g8",
+    "c4c3",
+    "h5h6",
+    "c3c2"
+   ],
+   "rating": 781,
+   "themes": [
+    "advancedPawn",
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "02P6P",
+   "fen": "8/8/p1p5/Pp1p3p/1P1Pk1p1/2P3PP/4K3/8 w - - 0 50",
+   "moves": [
+    "h3g4",
+    "h5g4",
+    "e2d2",
+    "e4f3"
+   ],
+   "rating": 783,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0qfdT",
+   "fen": "8/6Kp/7P/5k2/8/8/8/8 b - - 4 65",
+   "moves": [
+    "f5g5",
+    "g7h7",
+    "g5f6",
+    "h7g8"
+   ],
+   "rating": 788,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0R7Yt",
+   "fen": "8/1p6/p1p1kp2/P1P2p2/1P3P2/4K1P1/8/8 w - - 3 50",
+   "moves": [
+    "e3d3",
+    "e6d5",
+    "d3e3",
+    "d5c4"
+   ],
+   "rating": 793,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0VSkx",
+   "fen": "8/8/8/2k2p1p/5p1P/3K1P2/8/8 b - - 15 66",
+   "moves": [
+    "c5b4",
+    "d3d4",
+    "b4b3",
+    "d4e5"
+   ],
+   "rating": 798,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "01tUB",
+   "fen": "8/8/p4k2/P2p3p/3P1K1P/8/8/8 w - - 4 48",
+   "moves": [
+    "f4f3",
+    "f6f5",
+    "f3e3",
+    "f5g4"
+   ],
+   "rating": 800,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0FfsC",
+   "fen": "8/8/p7/7p/1k3K1P/5Pp1/6P1/8 w - - 0 49",
+   "moves": [
+    "f4g3",
+    "a6a5",
+    "g3f4",
+    "a5a4"
+   ],
+   "rating": 801,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "pawnEndgame",
+    "quietMove",
+    "short"
+   ]
+  },
+  {
+   "id": "0gkeu",
+   "fen": "8/p7/6p1/3Pk3/1pp1P1P1/3p4/PP1K4/8 b - - 1 34",
+   "moves": [
+    "e5d4",
+    "d5d6",
+    "d4e5",
+    "d6d7"
+   ],
+   "rating": 810,
+   "themes": [
+    "advancedPawn",
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0YzOU",
+   "fen": "8/ppp5/8/2PPk3/1P3p2/5K2/P7/8 w - - 4 33",
+   "moves": [
+    "d5d6",
+    "c7d6",
+    "c5c6",
+    "b7c6"
+   ],
+   "rating": 829,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0Jrpo",
+   "fen": "8/8/p7/1p4K1/1P2k1p1/1P4P1/8/8 b - - 5 60",
+   "moves": [
+    "e4f3",
+    "g5h4",
+    "f3e4",
+    "h4g4"
+   ],
+   "rating": 833,
+   "themes": [
+    "crushing",
+    "endgame",
+    "master",
+    "pawnEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0CC7Z",
+   "fen": "8/8/8/1p6/1P2K3/Pk6/8/8 w - - 7 50",
+   "moves": [
+    "e4d5",
+    "b3a3",
+    "d5c5",
+    "a3a4"
+   ],
+   "rating": 837,
+   "themes": [
+    "crushing",
+    "endgame",
+    "master",
+    "pawnEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0jQam",
+   "fen": "8/8/5kp1/7p/4PK1P/8/8/8 b - - 3 71",
+   "moves": [
+    "g6g5",
+    "h4g5",
+    "f6g6",
+    "e4e5"
+   ],
+   "rating": 837,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  }
+ ]
+}

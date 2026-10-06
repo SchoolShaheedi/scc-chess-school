@@ -1,0 +1,386 @@
+{
+ "source": "Lichess puzzle database, CC0 - https://database.lichess.org/#puzzles",
+ "built": "2026-10-05",
+ "pack": {
+  "id": "deflection",
+  "themes": [
+   "deflection"
+  ],
+  "min": 900,
+  "max": 1400,
+  "count": 20,
+  "atLeast": 10,
+  "maxPly": 6
+ },
+ "puzzles": [
+  {
+   "id": "01bFi",
+   "fen": "8/5k2/6R1/6K1/8/3r4/8/8 w - - 1 58",
+   "moves": [
+    "g5h6",
+    "d3h3",
+    "h6g5",
+    "h3g3",
+    "g5f4",
+    "g3g6"
+   ],
+   "rating": 918,
+   "themes": [
+    "crushing",
+    "deflection",
+    "endgame",
+    "long",
+    "master",
+    "rookEndgame",
+    "skewer"
+   ]
+  },
+  {
+   "id": "002Mm",
+   "fen": "rn1qr1k1/ppp3pQ/3p1pP1/3Pp3/2P1P3/8/PP3PP1/R1B1K3 b Q - 2 16",
+   "moves": [
+    "g8f8",
+    "h7h8",
+    "f8e7",
+    "h8g7"
+   ],
+   "rating": 927,
+   "themes": [
+    "deflection",
+    "mate",
+    "mateIn2",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "01SLc",
+   "fen": "3k4/5p2/3Pb3/4P1p1/N7/4K3/8/8 b - - 9 54",
+   "moves": [
+    "d8d7",
+    "a4c5",
+    "d7c6",
+    "c5e6"
+   ],
+   "rating": 943,
+   "themes": [
+    "crushing",
+    "deflection",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "03LQm",
+   "fen": "1k2n3/pB6/K7/8/2P5/8/8/8 w - - 14 65",
+   "moves": [
+    "c4c5",
+    "e8c7",
+    "a6a5",
+    "b8b7"
+   ],
+   "rating": 945,
+   "themes": [
+    "crushing",
+    "deflection",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "00ybx",
+   "fen": "6k1/p7/2p1r1bp/3p2p1/8/1PP3BP/P4P2/3R1K2 w - - 0 35",
+   "moves": [
+    "d1e1",
+    "g6d3",
+    "f1g2",
+    "e6e1"
+   ],
+   "rating": 947,
+   "themes": [
+    "crushing",
+    "deflection",
+    "endgame",
+    "master",
+    "short"
+   ]
+  },
+  {
+   "id": "0416t",
+   "fen": "7k/1Q4bp/6p1/8/8/8/5RPP/q5K1 w - - 1 27",
+   "moves": [
+    "f2f1",
+    "g7d4",
+    "g1h1",
+    "a1f1"
+   ],
+   "rating": 968,
+   "themes": [
+    "deflection",
+    "endgame",
+    "mate",
+    "mateIn2",
+    "short"
+   ]
+  },
+  {
+   "id": "03JHV",
+   "fen": "6k1/5pbp/q5p1/6N1/1p1nQ3/6P1/P2K1P1P/2r4R b - - 1 26",
+   "moves": [
+    "c1h1",
+    "e4e8",
+    "g7f8",
+    "e8f7",
+    "g8h8",
+    "f7f8"
+   ],
+   "rating": 972,
+   "themes": [
+    "deflection",
+    "endgame",
+    "long",
+    "mate",
+    "mateIn3"
+   ]
+  },
+  {
+   "id": "01Qwv",
+   "fen": "5rk1/p3Q1pp/2p5/3q4/4p1B1/6PP/4P1K1/8 b - - 3 31",
+   "moves": [
+    "d5d1",
+    "g4e6",
+    "g8h8",
+    "e7f8"
+   ],
+   "rating": 988,
+   "themes": [
+    "deflection",
+    "endgame",
+    "mate",
+    "mateIn2",
+    "short"
+   ]
+  },
+  {
+   "id": "02sY0",
+   "fen": "5rk1/pp4pp/3qp3/6N1/3r4/1P3BP1/P5KP/R3Q3 w - - 2 22",
+   "moves": [
+    "e1e6",
+    "d6e6",
+    "g5e6",
+    "d4d2",
+    "g2h3",
+    "f8f3"
+   ],
+   "rating": 1006,
+   "themes": [
+    "advantage",
+    "deflection",
+    "long",
+    "middlegame"
+   ]
+  },
+  {
+   "id": "03ykE",
+   "fen": "6k1/pp3p1p/2q3p1/8/2PR4/1P1Q2PP/P4PK1/4r3 w - - 3 26",
+   "moves": [
+    "d3f3",
+    "e1g1",
+    "g2g1",
+    "c6f3"
+   ],
+   "rating": 1020,
+   "themes": [
+    "advantage",
+    "deflection",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "00TFd",
+   "fen": "1R6/8/p1P3k1/6pp/1P6/6PK/r6P/8 w - - 1 40",
+   "moves": [
+    "c6c7",
+    "g5g4",
+    "h3h4",
+    "a2h2"
+   ],
+   "rating": 1031,
+   "themes": [
+    "deflection",
+    "endgame",
+    "mate",
+    "mateIn2",
+    "rookEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "01vYl",
+   "fen": "r6r/p1p2pk1/1p1qpbB1/8/3P2R1/2P2P2/PPQ2P1P/2KR4 b - - 0 18",
+   "moves": [
+    "f7g6",
+    "c2g6",
+    "g7f8",
+    "g6f6"
+   ],
+   "rating": 1037,
+   "themes": [
+    "crushing",
+    "deflection",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "03ZzZ",
+   "fen": "r2qkbnr/pp2pp1p/3p2p1/2pQ4/4PP2/2P5/P1PP2PP/R1B1K2R b KQkq - 0 10",
+   "moves": [
+    "b7b6",
+    "d5c6",
+    "d8d7",
+    "c6a8"
+   ],
+   "rating": 1043,
+   "themes": [
+    "advantage",
+    "deflection",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "043dJ",
+   "fen": "1k3r2/pp5p/2B1pN2/8/3n2P1/7Q/PPPR3P/2K1q3 w - - 1 27",
+   "moves": [
+    "d2d1",
+    "d4e2",
+    "c1b1",
+    "e1d1"
+   ],
+   "rating": 1047,
+   "themes": [
+    "deflection",
+    "master",
+    "mate",
+    "mateIn2",
+    "middlegame",
+    "queensideAttack",
+    "short"
+   ]
+  },
+  {
+   "id": "00yIS",
+   "fen": "3r3k/p5p1/5q1p/8/P1b5/4Q1RP/6BK/8 b - - 6 42",
+   "moves": [
+    "d8d3",
+    "e3e8",
+    "c4g8",
+    "g3d3"
+   ],
+   "rating": 1055,
+   "themes": [
+    "advantage",
+    "deflection",
+    "discoveredAttack",
+    "endgame",
+    "master",
+    "short"
+   ]
+  },
+  {
+   "id": "02ffy",
+   "fen": "5rk1/1p3rpp/p5p1/2pBq3/2Pb4/1Q4P1/PP3PP1/R4RK1 w - - 10 26",
+   "moves": [
+    "a1e1",
+    "d4f2",
+    "f1f2",
+    "e5e1",
+    "g1h2",
+    "e1f2"
+   ],
+   "rating": 1057,
+   "themes": [
+    "attraction",
+    "crushing",
+    "deflection",
+    "fork",
+    "long",
+    "middlegame"
+   ]
+  },
+  {
+   "id": "01kih",
+   "fen": "3r2k1/pp3pp1/1n4p1/2p5/6P1/1B3PKP/PP6/4R3 b - - 5 28",
+   "moves": [
+    "d8d2",
+    "e1e8",
+    "g8h7",
+    "b3f7"
+   ],
+   "rating": 1058,
+   "themes": [
+    "advantage",
+    "deflection",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "02Wbe",
+   "fen": "8/8/2k5/PR2K1p1/8/5P2/r7/8 w - - 5 57",
+   "moves": [
+    "b5d5",
+    "a2e2",
+    "e5d4",
+    "e2d2",
+    "d4e3",
+    "d2d5"
+   ],
+   "rating": 1059,
+   "themes": [
+    "crushing",
+    "deflection",
+    "endgame",
+    "long",
+    "rookEndgame",
+    "skewer"
+   ]
+  },
+  {
+   "id": "03JUH",
+   "fen": "k6r/pb2p2p/1p1p2p1/8/2Q5/8/P1Pq2PP/1R4RK w - - 0 24",
+   "moves": [
+    "b1d1",
+    "b7g2",
+    "g1g2",
+    "d2d1"
+   ],
+   "rating": 1064,
+   "themes": [
+    "crushing",
+    "deflection",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "03OmD",
+   "fen": "5Q2/7p/pp2R1p1/2pn1p1k/P2p3q/3P1P2/1PP3B1/5K2 w - - 8 42",
+   "moves": [
+    "e6e1",
+    "d5e3",
+    "f1e2",
+    "e3g2"
+   ],
+   "rating": 1085,
+   "themes": [
+    "crushing",
+    "deflection",
+    "endgame",
+    "short"
+   ]
+  }
+ ]
+}

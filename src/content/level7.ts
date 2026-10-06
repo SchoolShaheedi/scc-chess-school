@@ -1,0 +1,127 @@
+// Level 7 · 1200-1400 · Tactics II. Ids/titles follow CURRICULUM.md (decoy = ਚੋਗਾ; sacrifice is never
+// ਕੁਰਬਾਨੀ/ਬਲੀ). ALL TEXT DRAFT (#25, #33). Puzzles are Lichess 900-1500, theme-tagged; Try steps are single
+// real puzzles, so every position here comes from a real game and is replayed by the guard.
+import type { Lesson, Text } from "../lesson/types";
+
+const real = (en: string, pa: string): Text => ({ en: `Real games: ${en}`, pa: `ਅਸਲੀ ਖੇਡਾਂ: ${pa}` });
+const one = (pack: string, en: string, pa: string) => ({ kind: "pack" as const, pack, count: 1, prompt: { en, pa } });
+const many = (pack: string, count: number, en: string, pa: string) => ({ kind: "pack" as const, pack, count, prompt: real(en, pa) });
+
+export const LEVEL7: Lesson[] = [
+  {
+    id: "7.1", level: 7, status: "draft",
+    title: { en: "Mate in two", pa: "ਦੋ ਚਾਲਾਂ ਵਿੱਚ ਮਾਤ" },
+    goal: { en: "Find a checkmate that takes two moves.", pa: "ਦੋ ਚਾਲਾਂ ਵਾਲੀ ਸ਼ਹਿ-ਮਾਤ ਲੱਭੋ।" },
+    learn: [
+      { text: { en: "Look at forcing moves first, in this order: checks, then captures, then threats. Forcing moves leave your opponent few choices, so you can see to the end.", pa: "ਪਹਿਲਾਂ ਮਜਬੂਰ ਕਰਨ ਵਾਲੀਆਂ ਚਾਲਾਂ ਵੇਖੋ, ਇਸ ਤਰਤੀਬ ਵਿੱਚ: ਸ਼ਹਿ, ਫਿਰ ਮਾਰ, ਫਿਰ ਧਮਕੀ। ਇਹ ਚਾਲਾਂ ਵਿਰੋਧੀ ਕੋਲ ਘੱਟ ਰਾਹ ਛੱਡਦੀਆਂ ਹਨ, ਇਸ ਲਈ ਤੁਸੀਂ ਅੰਤ ਤੱਕ ਵੇਖ ਸਕਦੇ ਹੋ।" } },
+      { text: { en: "For each check, ask: what are ALL the replies? If every reply allows mate next move, you've found it.", pa: "ਹਰ ਸ਼ਹਿ ਲਈ ਪੁੱਛੋ: ਸਾਰੇ ਜਵਾਬ ਕਿਹੜੇ ਹਨ? ਜੇ ਹਰ ਜਵਾਬ ਤੋਂ ਬਾਅਦ ਅਗਲੀ ਚਾਲ ਮਾਤ ਹੈ, ਤਾਂ ਤੁਸੀਂ ਲੱਭ ਲਈ।" } },
+    ],
+    try: one("mate2", "Mate in two moves.", "ਦੋ ਚਾਲਾਂ ਵਿੱਚ ਮਾਤ।"),
+    practise: [many("mate2", 5, "mate in two.", "ਦੋ ਚਾਲਾਂ ਵਿੱਚ ਮਾਤ।")],
+    challenge: many("mate2", 4, "four mates in two.", "ਦੋ ਚਾਲਾਂ ਵਾਲੀਆਂ ਚਾਰ ਮਾਤਾਂ।"),
+  },
+  {
+    id: "7.2", level: 7, status: "draft",
+    title: { en: "Mate in three", pa: "ਤਿੰਨ ਚਾਲਾਂ ਵਿੱਚ ਮਾਤ" },
+    goal: { en: "Calculate a forcing line three moves deep.", pa: "ਮਜਬੂਰ ਕਰਨ ਵਾਲੀਆਂ ਚਾਲਾਂ ਦੀ ਲੜੀ ਤਿੰਨ ਚਾਲਾਂ ਡੂੰਘੀ ਗਿਣੋ।" },
+    learn: [
+      { text: { en: "The same method, one step deeper. Keep the picture in your head: where is every piece after each move?", pa: "ਉਹੀ ਤਰੀਕਾ, ਇੱਕ ਕਦਮ ਹੋਰ ਡੂੰਘਾ। ਤਸਵੀਰ ਦਿਮਾਗ਼ ਵਿੱਚ ਰੱਖੋ: ਹਰ ਚਾਲ ਤੋਂ ਬਾਅਦ ਹਰ ਮੋਹਰਾ ਕਿੱਥੇ ਹੈ?" } },
+      { text: { en: "Often the first move is a sacrifice that drags the king out into the open.", pa: "ਅਕਸਰ ਪਹਿਲੀ ਚਾਲ ਜਾਣ-ਬੁੱਝ ਕੇ ਮੋਹਰਾ ਦੇਣ ਵਾਲੀ ਹੁੰਦੀ ਹੈ, ਜੋ ਬਾਦਸ਼ਾਹ ਨੂੰ ਖੁੱਲ੍ਹੇ ਵਿੱਚ ਖਿੱਚ ਲਿਆਉਂਦੀ ਹੈ।" } },
+    ],
+    try: one("mate3", "Mate in three moves.", "ਤਿੰਨ ਚਾਲਾਂ ਵਿੱਚ ਮਾਤ।"),
+    practise: [many("mate3", 4, "mate in three.", "ਤਿੰਨ ਚਾਲਾਂ ਵਿੱਚ ਮਾਤ।")],
+    challenge: many("mate3", 3, "three mates in three.", "ਤਿੰਨ ਚਾਲਾਂ ਵਾਲੀਆਂ ਤਿੰਨ ਮਾਤਾਂ।"),
+  },
+  {
+    id: "7.3", level: 7, status: "draft",
+    title: { en: "Mating patterns", pa: "ਮਾਤ ਦੇ ਨਮੂਨੇ" },
+    goal: { en: "Recognise the famous mating patterns at a glance.", pa: "ਮਸ਼ਹੂਰ ਮਾਤ ਦੇ ਨਮੂਨੇ ਇੱਕ ਨਜ਼ਰ ਵਿੱਚ ਪਛਾਣੋ।" },
+    learn: [
+      { text: { en: "Arabian mate: a rook next to the king, protected by a knight, in the corner.", pa: "ਅਰਬੀ ਮਾਤ: ਕੋਨੇ ਵਿੱਚ ਬਾਦਸ਼ਾਹ ਦੇ ਨਾਲ ਹਾਥੀ, ਘੋੜੇ ਦੀ ਰਾਖੀ ਨਾਲ।" },
+        board: { fen: "7k/7R/5N2/8/8/8/8/6K1 b - - 0 1", arrows: [["f6", "h7"]] } },
+      { text: { en: "Patterns are like words: once you know them, you read them instantly. Hook, Boden, Anastasia and dovetail mates all appear in these games.", pa: "ਨਮੂਨੇ ਸ਼ਬਦਾਂ ਵਾਂਗ ਹਨ: ਇੱਕ ਵਾਰ ਜਾਣ ਲਓ, ਤਾਂ ਤੁਰੰਤ ਪੜ੍ਹ ਲੈਂਦੇ ਹੋ। ਹੁੱਕ, ਬੋਡਨ, ਅਨਾਸਤਾਸੀਆ ਅਤੇ ਡਵਟੇਲ ਮਾਤਾਂ ਸਭ ਇਨ੍ਹਾਂ ਖੇਡਾਂ ਵਿੱਚ ਆਉਂਦੀਆਂ ਹਨ।" } },
+    ],
+    try: one("mate-patterns", "Find the mating pattern.", "ਮਾਤ ਦਾ ਨਮੂਨਾ ਲੱਭੋ।"),
+    practise: [many("mate-patterns", 5, "spot the pattern.", "ਨਮੂਨਾ ਪਛਾਣੋ।")],
+    challenge: many("mate-patterns", 4, "four patterns.", "ਚਾਰ ਨਮੂਨੇ।"),
+  },
+  {
+    id: "7.4", level: 7, status: "draft",
+    title: { en: "Decoy", pa: "ਚੋਗਾ" },
+    goal: { en: "Lure a piece onto a bad square.", pa: "ਕਿਸੇ ਮੋਹਰੇ ਨੂੰ ਮਾੜੇ ਖਾਨੇ 'ਤੇ ਲੁਭਾਓ।" },
+    learn: [
+      { text: { en: "A decoy offers a piece to pull an enemy piece, often the king, onto a square where your next move wins.", pa: "ਚੋਗਾ ਇੱਕ ਮੋਹਰਾ ਪੇਸ਼ ਕਰਦਾ ਹੈ ਤਾਂ ਜੋ ਦੁਸ਼ਮਣ ਦਾ ਕੋਈ ਮੋਹਰਾ, ਅਕਸਰ ਬਾਦਸ਼ਾਹ, ਉਸ ਖਾਨੇ 'ਤੇ ਆ ਜਾਵੇ ਜਿੱਥੇ ਤੁਹਾਡੀ ਅਗਲੀ ਚਾਲ ਜਿਤਾਉਂਦੀ ਹੈ।" } },
+      { text: { en: "Ask: on which square would their king or queen be in trouble? Can I force it there?", pa: "ਪੁੱਛੋ: ਉਨ੍ਹਾਂ ਦਾ ਬਾਦਸ਼ਾਹ ਜਾਂ ਰਾਣੀ ਕਿਸ ਖਾਨੇ 'ਤੇ ਮੁਸ਼ਕਲ ਵਿੱਚ ਹੋਵੇਗੀ? ਕੀ ਤੁਸੀਂ ਉਸ ਨੂੰ ਉੱਥੇ ਜਾਣ ਲਈ ਮਜਬੂਰ ਕਰ ਸਕਦੇ ਹੋ?" } },
+    ],
+    try: one("attraction", "Lure a piece onto the wrong square.", "ਮੋਹਰੇ ਨੂੰ ਗ਼ਲਤ ਖਾਨੇ 'ਤੇ ਲੁਭਾਓ।"),
+    practise: [many("attraction", 4, "the decoy.", "ਚੋਗਾ।")],
+    challenge: many("attraction", 3, "three decoys.", "ਤਿੰਨ ਚੋਗੇ।"),
+  },
+  {
+    id: "7.5", level: 7, status: "draft",
+    title: { en: "Deflection", pa: "ਧਿਆਨ ਹਟਾਉਣਾ" },
+    goal: { en: "Pull a defender away from its job.", pa: "ਰਾਖੇ ਨੂੰ ਉਸ ਦੇ ਕੰਮ ਤੋਂ ਦੂਰ ਖਿੱਚੋ।" },
+    learn: [
+      { text: { en: "Every defender has a job: guarding a square or a piece. Give it a second job it can't refuse, and the first job is left undone.", pa: "ਹਰ ਰਾਖੇ ਦਾ ਇੱਕ ਕੰਮ ਹੁੰਦਾ ਹੈ: ਕਿਸੇ ਖਾਨੇ ਜਾਂ ਮੋਹਰੇ ਦੀ ਰਾਖੀ। ਉਸ ਨੂੰ ਦੂਜਾ ਕੰਮ ਦਿਓ ਜਿਸ ਤੋਂ ਉਹ ਨਾਂਹ ਨਾ ਕਰ ਸਕੇ, ਤਾਂ ਪਹਿਲਾ ਕੰਮ ਅਧੂਰਾ ਰਹਿ ਜਾਂਦਾ ਹੈ।" } },
+    ],
+    try: one("deflection", "Deflect the defender.", "ਰਾਖੇ ਦਾ ਧਿਆਨ ਹਟਾਓ।"),
+    practise: [many("deflection", 4, "deflection.", "ਧਿਆਨ ਹਟਾਉਣਾ।")],
+    challenge: many("deflection", 3, "three deflections.", "ਤਿੰਨ ਵਾਰ ਧਿਆਨ ਹਟਾਉਣਾ।"),
+  },
+  {
+    id: "7.6", level: 7, status: "draft",
+    title: { en: "In-between move", pa: "ਵਿਚਕਾਰਲੀ ਚਾਲ" },
+    goal: { en: "Play a surprise move before the expected recapture.", pa: "ਉਮੀਦ ਵਾਲੀ ਵਾਪਸੀ ਮਾਰ ਤੋਂ ਪਹਿਲਾਂ ਇੱਕ ਹੈਰਾਨੀ ਵਾਲੀ ਚਾਲ ਚੱਲੋ।" },
+    learn: [
+      { text: { en: "When a capture seems forced, stop and look: is there a check or a bigger threat first? Playing it in between can change everything.", pa: "ਜਦੋਂ ਮਾਰ ਜ਼ਰੂਰੀ ਲੱਗੇ, ਰੁਕੋ ਅਤੇ ਵੇਖੋ: ਕੀ ਪਹਿਲਾਂ ਕੋਈ ਸ਼ਹਿ ਜਾਂ ਵੱਡੀ ਧਮਕੀ ਹੈ? ਉਸ ਨੂੰ ਵਿਚਕਾਰ ਚੱਲਣਾ ਸਭ ਕੁਝ ਬਦਲ ਸਕਦਾ ਹੈ।" } },
+    ],
+    try: one("intermezzo", "Find the move in between.", "ਵਿਚਕਾਰਲੀ ਚਾਲ ਲੱਭੋ।"),
+    practise: [many("intermezzo", 4, "the in-between move.", "ਵਿਚਕਾਰਲੀ ਚਾਲ।")],
+    challenge: many("intermezzo", 3, "three surprises.", "ਤਿੰਨ ਹੈਰਾਨੀਆਂ।"),
+  },
+  {
+    id: "7.7", level: 7, status: "draft",
+    title: { en: "Interference & clearance", pa: "ਰੋਕ ਤੇ ਰਾਹ ਖੋਲ੍ਹਣਾ" },
+    goal: { en: "Cut a defender's line, or clear a square for your own piece.", pa: "ਰਾਖੇ ਦੀ ਲਕੀਰ ਕੱਟੋ, ਜਾਂ ਆਪਣੇ ਮੋਹਰੇ ਲਈ ਖਾਨਾ ਖਾਲੀ ਕਰੋ।" },
+    learn: [
+      { text: { en: "Interference: put a piece between a defender and what it defends. The line is cut.", pa: "ਰੋਕ: ਰਾਖੇ ਅਤੇ ਜਿਸ ਦੀ ਉਹ ਰਾਖੀ ਕਰਦਾ ਹੈ, ਉਨ੍ਹਾਂ ਵਿਚਕਾਰ ਮੋਹਰਾ ਰੱਖੋ। ਲਕੀਰ ਕੱਟੀ ਗਈ।" } },
+      { text: { en: "Clearance: move your own piece out of the way, often with a threat, so another piece can use its square or line.", pa: "ਰਾਹ ਖੋਲ੍ਹਣਾ: ਆਪਣੇ ਮੋਹਰੇ ਨੂੰ ਰਾਹੋਂ ਹਟਾਓ, ਅਕਸਰ ਧਮਕੀ ਨਾਲ, ਤਾਂ ਜੋ ਕੋਈ ਹੋਰ ਮੋਹਰਾ ਉਸ ਦਾ ਖਾਨਾ ਜਾਂ ਲਕੀਰ ਵਰਤ ਸਕੇ।" } },
+    ],
+    try: one("interference", "Cut the defender's line.", "ਰਾਖੇ ਦੀ ਲਕੀਰ ਕੱਟੋ।"),
+    practise: [many("interference", 2, "interference.", "ਰੋਕ।"), many("clearance", 3, "clear the way.", "ਰਾਹ ਖੋਲ੍ਹੋ।")],
+    challenge: many("clearance", 3, "three clearances.", "ਤਿੰਨ ਵਾਰ ਰਾਹ ਖੋਲ੍ਹਣਾ।"),
+  },
+  {
+    id: "7.8", level: 7, status: "draft",
+    title: { en: "X-ray", pa: "ਆਰ-ਪਾਰ ਹਮਲਾ" },
+    goal: { en: "Attack or defend through another piece.", pa: "ਕਿਸੇ ਹੋਰ ਮੋਹਰੇ ਦੇ ਆਰ-ਪਾਰ ਹਮਲਾ ਜਾਂ ਰਾਖੀ ਕਰੋ।" },
+    learn: [
+      { text: { en: "A rook, bishop or queen still works through a piece in its way: once that piece moves or is captured, the line comes alive.", pa: "ਹਾਥੀ, ਊਠ ਜਾਂ ਰਾਣੀ ਰਾਹ ਵਿੱਚ ਆਏ ਮੋਹਰੇ ਦੇ ਆਰ-ਪਾਰ ਵੀ ਕੰਮ ਕਰਦੇ ਹਨ: ਜਿਉਂ ਹੀ ਉਹ ਮੋਹਰਾ ਹਿੱਲੇ ਜਾਂ ਮਾਰਿਆ ਜਾਵੇ, ਲਕੀਰ ਜਾਗ ਪੈਂਦੀ ਹੈ।" } },
+    ],
+    try: one("xray", "Use the x-ray.", "ਆਰ-ਪਾਰ ਹਮਲਾ ਵਰਤੋ।"),
+    practise: [many("xray", 4, "x-ray.", "ਆਰ-ਪਾਰ ਹਮਲਾ।")],
+    challenge: many("xray", 3, "three x-rays.", "ਤਿੰਨ ਆਰ-ਪਾਰ ਹਮਲੇ।"),
+  },
+  {
+    id: "7.9", level: 7, status: "draft",
+    title: { en: "Giving up material", pa: "ਜਾਣ-ਬੁੱਝ ਕੇ ਮੋਹਰਾ ਦੇਣਾ" },
+    goal: { en: "Know when giving a piece away wins more.", pa: "ਜਾਣੋ ਕਦੋਂ ਮੋਹਰਾ ਦੇਣ ਨਾਲ ਵੱਧ ਜਿੱਤ ਹੁੰਦੀ ਹੈ।" },
+    learn: [
+      { text: { en: "Sometimes the best move gives material away on purpose: to mate, to win more back, or to break the king's shelter. Count to the end before you give.", pa: "ਕਦੇ-ਕਦੇ ਸਭ ਤੋਂ ਵਧੀਆ ਚਾਲ ਜਾਣ-ਬੁੱਝ ਕੇ ਮੋਹਰਾ ਦਿੰਦੀ ਹੈ: ਮਾਤ ਲਈ, ਵੱਧ ਵਾਪਸ ਜਿੱਤਣ ਲਈ, ਜਾਂ ਬਾਦਸ਼ਾਹ ਦੀ ਆੜ ਤੋੜਨ ਲਈ। ਦੇਣ ਤੋਂ ਪਹਿਲਾਂ ਅੰਤ ਤੱਕ ਗਿਣੋ।" } },
+    ],
+    try: one("sacrifice", "Give up material to win.", "ਜਿੱਤਣ ਲਈ ਮੋਹਰਾ ਦਿਓ।"),
+    practise: [many("sacrifice", 5, "the winning gift.", "ਜਿਤਾਉਣ ਵਾਲਾ ਤੋਹਫ਼ਾ।")],
+    challenge: many("sacrifice", 4, "four brave moves.", "ਚਾਰ ਦਲੇਰ ਚਾਲਾਂ।"),
+  },
+  {
+    id: "7.10", level: 7, status: "draft",
+    title: { en: "Quiet moves", pa: "ਚੁੱਪ ਚਾਲ" },
+    goal: { en: "Find the strong move that is not a check or capture.", pa: "ਉਹ ਤਕੜੀ ਚਾਲ ਲੱਭੋ ਜੋ ਨਾ ਸ਼ਹਿ ਹੈ ਨਾ ਮਾਰ।" },
+    learn: [
+      { text: { en: "Not every winning move is loud. A quiet move can cut off the king, set up a threat that can't be stopped, or take away the last defence.", pa: "ਹਰ ਜਿਤਾਉਣ ਵਾਲੀ ਚਾਲ ਉੱਚੀ ਨਹੀਂ ਹੁੰਦੀ। ਚੁੱਪ ਚਾਲ ਬਾਦਸ਼ਾਹ ਦਾ ਰਾਹ ਕੱਟ ਸਕਦੀ ਹੈ, ਨਾ ਰੁਕਣ ਵਾਲੀ ਧਮਕੀ ਬਣਾ ਸਕਦੀ ਹੈ, ਜਾਂ ਆਖ਼ਰੀ ਬਚਾਅ ਖੋਹ ਸਕਦੀ ਹੈ।" } },
+    ],
+    try: one("quiet", "Find the quiet winning move.", "ਜਿਤਾਉਣ ਵਾਲੀ ਚੁੱਪ ਚਾਲ ਲੱਭੋ।"),
+    practise: [many("quiet", 4, "quiet moves.", "ਚੁੱਪ ਚਾਲਾਂ।")],
+    challenge: many("quiet", 3, "three quiet killers.", "ਤਿੰਨ ਚੁੱਪ ਵਾਰ।"),
+  },
+];

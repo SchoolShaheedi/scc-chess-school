@@ -1,0 +1,365 @@
+{
+ "source": "Lichess puzzle database, CC0 - https://database.lichess.org/#puzzles",
+ "built": "2026-10-05",
+ "pack": {
+  "id": "intermezzo",
+  "themes": [
+   "intermezzo"
+  ],
+  "min": 900,
+  "max": 1500,
+  "count": 20,
+  "atLeast": 10,
+  "maxPly": 6
+ },
+ "puzzles": [
+  {
+   "id": "02X7P",
+   "fen": "rn2k2r/ppp2ppp/2q1bp2/1B1p4/1b1P4/1PN1PN2/P1PQ1PPP/R3K2R b KQkq - 4 9",
+   "moves": [
+    "b4c3",
+    "b5c6",
+    "b8c6",
+    "d2c3"
+   ],
+   "rating": 903,
+   "themes": [
+    "advantage",
+    "intermezzo",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "00Htd",
+   "fen": "rnbqk2r/1p3ppp/p4b2/2Pp4/8/2N2N2/PP2PPPP/R2QKB1R w KQkq - 0 9",
+   "moves": [
+    "d1d5",
+    "f6c3",
+    "b2c3",
+    "d8d5"
+   ],
+   "rating": 952,
+   "themes": [
+    "crushing",
+    "intermezzo",
+    "opening",
+    "short"
+   ]
+  },
+  {
+   "id": "01zpX",
+   "fen": "r3k2r/pp1q1ppp/8/3pb3/8/2N5/PP3PPP/R2QK2R w KQkq - 0 14",
+   "moves": [
+    "d1d5",
+    "e5c3",
+    "b2c3",
+    "d7d5"
+   ],
+   "rating": 963,
+   "themes": [
+    "crushing",
+    "intermezzo",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "09HOf",
+   "fen": "r3k2r/pp3pp1/2nbpq1p/8/3PB3/P5PP/1P3P2/R2QK1NR b KQkq - 0 13",
+   "moves": [
+    "f6d4",
+    "e4c6",
+    "b7c6",
+    "d1d4"
+   ],
+   "rating": 968,
+   "themes": [
+    "crushing",
+    "intermezzo",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "0F9xB",
+   "fen": "r1bqk2r/pp3ppp/2n2b2/1B1p4/3Q4/2N1P3/PP3PPP/R3K1NR w KQkq - 2 10",
+   "moves": [
+    "d4d5",
+    "f6c3",
+    "b2c3",
+    "d8d5"
+   ],
+   "rating": 968,
+   "themes": [
+    "crushing",
+    "intermezzo",
+    "opening",
+    "short"
+   ]
+  },
+  {
+   "id": "0Fcy0",
+   "fen": "3q1rk1/2p2ppp/8/1P1b4/8/4Pn2/1P1Q1PPP/3R1RK1 w - - 2 20",
+   "moves": [
+    "g2f3",
+    "d8g5",
+    "g1h1",
+    "d5f3"
+   ],
+   "rating": 977,
+   "themes": [
+    "endgame",
+    "intermezzo",
+    "mate",
+    "mateIn2",
+    "short"
+   ]
+  },
+  {
+   "id": "07ME7",
+   "fen": "r4r1k/p2qbp1p/2b5/1p1p1BQ1/3P4/2N4P/PPP3P1/2KR3R w - - 1 25",
+   "moves": [
+    "f5d7",
+    "e7g5",
+    "c1b1",
+    "c6d7"
+   ],
+   "rating": 981,
+   "themes": [
+    "advantage",
+    "hangingPiece",
+    "intermezzo",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "0Dh6K",
+   "fen": "4rr1k/pBp3p1/7p/2p1np2/2Pp3P/3P2P1/PP3P2/3RR1K1 b - - 0 23",
+   "moves": [
+    "e5d3",
+    "e1e8",
+    "f8e8",
+    "d1d3"
+   ],
+   "rating": 989,
+   "themes": [
+    "advantage",
+    "endgame",
+    "intermezzo",
+    "short"
+   ]
+  },
+  {
+   "id": "0D68N",
+   "fen": "2rr2k1/1Q3pb1/p5pp/2p1P3/2q2P2/5K1P/1PP3P1/3R3R b - - 5 30",
+   "moves": [
+    "d8d1",
+    "b7c8",
+    "g8h7",
+    "h1d1"
+   ],
+   "rating": 997,
+   "themes": [
+    "advantage",
+    "endgame",
+    "hangingPiece",
+    "intermezzo",
+    "short"
+   ]
+  },
+  {
+   "id": "06Qtv",
+   "fen": "r1bqk1nr/ppp2p1p/6p1/3pb3/8/2N1PP2/PPP3PP/R2QKBNR w KQkq - 0 8",
+   "moves": [
+    "d1d5",
+    "e5c3",
+    "b2c3",
+    "d8d5"
+   ],
+   "rating": 998,
+   "themes": [
+    "crushing",
+    "intermezzo",
+    "opening",
+    "short"
+   ]
+  },
+  {
+   "id": "0D4NL",
+   "fen": "r1b1r1k1/pp1np2p/2pp1pp1/6bq/2P4P/P1NPQBP1/1P2PP2/2KR3R w - - 0 17",
+   "moves": [
+    "f3h5",
+    "g5e3",
+    "f2e3",
+    "g6h5"
+   ],
+   "rating": 1009,
+   "themes": [
+    "advantage",
+    "intermezzo",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "0Gopa",
+   "fen": "1r3n2/2RbN1kp/pp1P4/4pp1B/3q4/6P1/5P1P/3Q2K1 w - - 4 28",
+   "moves": [
+    "c7d7",
+    "d4d1",
+    "h5d1",
+    "f8d7"
+   ],
+   "rating": 1015,
+   "themes": [
+    "advantage",
+    "intermezzo",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "03Fdm",
+   "fen": "r1bqk2r/pp3ppp/5b2/3p4/3Q4/2N1P3/PP3PPP/R3KB1R w KQkq - 0 11",
+   "moves": [
+    "d4d5",
+    "f6c3",
+    "b2c3",
+    "d8d5"
+   ],
+   "rating": 1028,
+   "themes": [
+    "crushing",
+    "intermezzo",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "0GIjw",
+   "fen": "3r2k1/1p3pp1/1Q2p2p/p4q2/8/P2r2RP/5PP1/2R3K1 b - - 12 36",
+   "moves": [
+    "d3g3",
+    "b6d8",
+    "g8h7",
+    "f2g3"
+   ],
+   "rating": 1079,
+   "themes": [
+    "advantage",
+    "endgame",
+    "hangingPiece",
+    "intermezzo",
+    "short"
+   ]
+  },
+  {
+   "id": "0Fqs7",
+   "fen": "2r2rk1/pp1b1ppp/1q2p1n1/3pP3/PP1Q1P2/2P5/4B1PP/RN3RK1 b - - 0 15",
+   "moves": [
+    "c8c3",
+    "d4b6",
+    "a7b6",
+    "b1c3"
+   ],
+   "rating": 1081,
+   "themes": [
+    "advantage",
+    "intermezzo",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "0GTvV",
+   "fen": "r3k2r/pp3pp1/1q2p3/3p2p1/3N4/2P2Q1P/P2n1PP1/1R2R1K1 w kq - 3 22",
+   "moves": [
+    "b1b6",
+    "d2f3",
+    "d4f3",
+    "a7b6"
+   ],
+   "rating": 1092,
+   "themes": [
+    "crushing",
+    "intermezzo",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "01Qta",
+   "fen": "6r1/8/p1p1k3/P1B3pr/1P2ppRP/2P5/7K/6R1 w - - 2 44",
+   "moves": [
+    "g4g5",
+    "h5h4",
+    "h2g2",
+    "g8g5"
+   ],
+   "rating": 1112,
+   "themes": [
+    "crushing",
+    "endgame",
+    "interference",
+    "intermezzo",
+    "short"
+   ]
+  },
+  {
+   "id": "0GLvr",
+   "fen": "r4rk1/pp2ppbp/1q1p1pb1/8/2NnP3/2PB4/PPQ2PPP/4RRK1 w - - 0 16",
+   "moves": [
+    "c4b6",
+    "d4c2",
+    "d3c2",
+    "a7b6"
+   ],
+   "rating": 1114,
+   "themes": [
+    "advantage",
+    "intermezzo",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "0C4FM",
+   "fen": "r2qk2r/pppnb1p1/2npp2P/4p3/4P3/3P1Q1P/PPP1NP2/RNB1K2R b KQkq - 0 10",
+   "moves": [
+    "g7h6",
+    "f3h5",
+    "e8f8",
+    "c1h6",
+    "h8h6",
+    "h5h6"
+   ],
+   "rating": 1117,
+   "themes": [
+    "crushing",
+    "exposedKing",
+    "intermezzo",
+    "long",
+    "opening"
+   ]
+  },
+  {
+   "id": "0CHyU",
+   "fen": "r2b2k1/5p1p/6p1/8/p7/1B6/P5PP/3R2K1 w - - 0 25",
+   "moves": [
+    "b3a4",
+    "d8b6",
+    "g1h1",
+    "a8a4"
+   ],
+   "rating": 1121,
+   "themes": [
+    "crushing",
+    "endgame",
+    "intermezzo",
+    "short"
+   ]
+  }
+ ]
+}

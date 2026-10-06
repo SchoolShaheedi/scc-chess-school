@@ -1,0 +1,291 @@
+{
+ "source": "Lichess puzzle database, CC0 - https://database.lichess.org/#puzzles",
+ "built": "2026-10-05",
+ "pack": {
+  "id": "doublecheck-easy",
+  "themes": [
+   "doubleCheck"
+  ],
+  "min": 500,
+  "max": 1100,
+  "count": 15,
+  "atLeast": 8,
+  "maxPly": 4
+ },
+ "puzzles": [
+  {
+   "id": "07zqN",
+   "fen": "3q1r1k/6p1/p2p2nP/2pB1P2/4PR2/2PP3R/1P4QK/r7 b - - 0 35",
+   "moves": [
+    "g6f4",
+    "h6g7"
+   ],
+   "rating": 581,
+   "themes": [
+    "advancedPawn",
+    "discoveredCheck",
+    "doubleCheck",
+    "master",
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove",
+    "pillsburysMate"
+   ]
+  },
+  {
+   "id": "0GuTp",
+   "fen": "rnbkr3/ppp2ppp/8/4n3/4B3/2N5/PPPBK1PP/3R3R b - - 3 13",
+   "moves": [
+    "e5c4",
+    "d2g5"
+   ],
+   "rating": 640,
+   "themes": [
+    "discoveredCheck",
+    "doubleCheck",
+    "epauletteMate",
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove",
+    "pillsburysMate"
+   ]
+  },
+  {
+   "id": "0Krgd",
+   "fen": "r1bqkb1r/pp1n1ppp/2p2p2/8/3PN3/8/PPP1QPPP/R3KBNR b KQkq - 2 7",
+   "moves": [
+    "g7g6",
+    "e4d6"
+   ],
+   "rating": 656,
+   "themes": [
+    "discoveredCheck",
+    "doubleCheck",
+    "epauletteMate",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "17TnK",
+   "fen": "r2qkb1r/1p1npppp/p4n2/1N1P4/Q1PP4/8/5PPP/R1B1K1NR b KQkq - 2 10",
+   "moves": [
+    "d7b6",
+    "b5c7"
+   ],
+   "rating": 687,
+   "themes": [
+    "discoveredCheck",
+    "doubleCheck",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "020iD",
+   "fen": "r2qkb1r/2p1pppp/p1n2nb1/1N2N3/B2P2P1/7P/PPP5/R1BQK2R b KQkq - 0 11",
+   "moves": [
+    "c6e5",
+    "b5c7"
+   ],
+   "rating": 691,
+   "themes": [
+    "doubleCheck",
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove"
+   ]
+  },
+  {
+   "id": "08XzM",
+   "fen": "r1bqkb1r/p1p1pppp/8/1N1P4/Q1Pn4/8/PPn2PPP/R1BK1BNR b kq - 2 9",
+   "moves": [
+    "c2a1",
+    "b5d6"
+   ],
+   "rating": 701,
+   "themes": [
+    "discoveredCheck",
+    "doubleCheck",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "062Zq",
+   "fen": "r4rk1/ppp2Rpp/2n5/4P3/2B5/2P2R1P/P1P3P1/6K1 b - - 0 18",
+   "moves": [
+    "c6e5",
+    "f7f8"
+   ],
+   "rating": 703,
+   "themes": [
+    "discoveredCheck",
+    "doubleCheck",
+    "endgame",
+    "mate",
+    "mateIn1",
+    "morphysMate",
+    "oneMove",
+    "pillsburysMate"
+   ]
+  },
+  {
+   "id": "184e9",
+   "fen": "k2r4/PR4p1/2p1p1n1/4Pn2/3P1Pp1/2P2r2/Q2KB1q1/1R6 b - - 4 37",
+   "moves": [
+    "f3e3",
+    "b7b8",
+    "d8b8",
+    "a7b8q"
+   ],
+   "rating": 708,
+   "themes": [
+    "advancedPawn",
+    "discoveredCheck",
+    "doubleCheck",
+    "mate",
+    "mateIn2",
+    "middlegame",
+    "promotion",
+    "queensideAttack",
+    "short"
+   ]
+  },
+  {
+   "id": "0fNoJ",
+   "fen": "r2qkb1r/pp1n1ppp/n2B4/1Npp1b2/Q2P4/P7/1P2PPPP/R3KBNR b KQkq - 1 9",
+   "moves": [
+    "d7b6",
+    "b5c7"
+   ],
+   "rating": 710,
+   "themes": [
+    "discoveredCheck",
+    "doubleCheck",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "1AhiB",
+   "fen": "r1q1kb1r/p2n1ppp/bp2p3/1NPpP1B1/Q7/8/P3PPPP/R3KB1R b KQkq - 0 12",
+   "moves": [
+    "d7c5",
+    "b5d6"
+   ],
+   "rating": 732,
+   "themes": [
+    "doubleCheck",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "0QhWy",
+   "fen": "3RN1k1/p4ppp/1nr5/8/8/6B1/PbP3PP/7K b - - 3 22",
+   "moves": [
+    "h7h6",
+    "e8f6"
+   ],
+   "rating": 752,
+   "themes": [
+    "discoveredCheck",
+    "doubleCheck",
+    "endgame",
+    "mate",
+    "mateIn1",
+    "oneMove"
+   ]
+  },
+  {
+   "id": "0djcT",
+   "fen": "2r5/1p3pk1/pn2p1pQ/3pP3/1P1P3N/2q2NP1/5PK1/7R b - - 0 29",
+   "moves": [
+    "g7h6",
+    "h4f5"
+   ],
+   "rating": 759,
+   "themes": [
+    "discoveredCheck",
+    "doubleCheck",
+    "endgame",
+    "master",
+    "mate",
+    "mateIn1",
+    "oneMove"
+   ]
+  },
+  {
+   "id": "0VasO",
+   "fen": "R7/5pn1/4p1k1/p2pP1P1/Pb1P2Pp/1r5P/1n2N3/2B3K1 b - - 0 41",
+   "moves": [
+    "b3h3",
+    "e2f4",
+    "g6g5",
+    "f4h3"
+   ],
+   "rating": 771,
+   "themes": [
+    "advantage",
+    "discoveredCheck",
+    "doubleCheck",
+    "fork",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "04KbJ",
+   "fen": "8/pR6/5ppk/8/2P4p/1P3P1P/P5P1/4rnBK w - - 0 43",
+   "moves": [
+    "g1f2",
+    "f1g3",
+    "h1h2",
+    "e1h1"
+   ],
+   "rating": 776,
+   "themes": [
+    "discoveredCheck",
+    "doubleCheck",
+    "endgame",
+    "hookMate",
+    "mate",
+    "mateIn2",
+    "short"
+   ]
+  },
+  {
+   "id": "14oJJ",
+   "fen": "r1bqkbnr/3n1ppp/p2p4/1ppP4/8/5N2/PPP1BPPP/RNBQR1K1 b kq - 3 8",
+   "moves": [
+    "d7b6",
+    "e2b5"
+   ],
+   "rating": 818,
+   "themes": [
+    "discoveredCheck",
+    "doubleCheck",
+    "epauletteMate",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening",
+    "pillsburysMate"
+   ]
+  }
+ ]
+}

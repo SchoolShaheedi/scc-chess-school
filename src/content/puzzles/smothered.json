@@ -1,0 +1,264 @@
+{
+ "source": "Lichess puzzle database, CC0 - https://database.lichess.org/#puzzles",
+ "built": "2026-10-05",
+ "pack": {
+  "id": "smothered",
+  "themes": [
+   "smotheredMate",
+   "mateIn1"
+  ],
+  "min": 0,
+  "max": 1600,
+  "count": 15,
+  "atLeast": 8,
+  "maxPly": 2
+ },
+ "puzzles": [
+  {
+   "id": "0DMIm",
+   "fen": "r3r1Qk/1p1qb1pp/p1np1n2/6N1/8/P1N5/BP3PPP/R1B3K1 b - - 4 19",
+   "moves": [
+    "e8g8",
+    "g5f7"
+   ],
+   "rating": 591,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove",
+    "smotheredMate"
+   ]
+  },
+  {
+   "id": "0DhIB",
+   "fen": "r4rk1/1ppb2bp/3p2p1/3Ppp2/p1P1P3/PN3P1n/1P2N1PP/1RBQ1BqK w - - 9 24",
+   "moves": [
+    "e2g1",
+    "h3f2"
+   ],
+   "rating": 635,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove",
+    "smotheredMate"
+   ]
+  },
+  {
+   "id": "0DhAU",
+   "fen": "r5Qk/p1p3pp/1p1q1n2/n3r1N1/8/8/PPPP1PPP/R1B2RK1 b - - 2 18",
+   "moves": [
+    "f6g8",
+    "g5f7"
+   ],
+   "rating": 640,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove",
+    "smotheredMate"
+   ]
+  },
+  {
+   "id": "05GFz",
+   "fen": "r4rk1/pp2bppp/2p1pnb1/8/1P2PP1N/2P3Pn/P1QN2BP/R1B1R1qK w - - 9 19",
+   "moves": [
+    "e1g1",
+    "h3f2"
+   ],
+   "rating": 642,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove",
+    "smotheredMate"
+   ]
+  },
+  {
+   "id": "0Aqug",
+   "fen": "7k/p5rp/P1b2p2/1p2p3/2p5/B1PnqN2/5PPP/R5RK w - - 0 30",
+   "moves": [
+    "f2e3",
+    "d3f2"
+   ],
+   "rating": 645,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove",
+    "smotheredMate"
+   ]
+  },
+  {
+   "id": "05HWB",
+   "fen": "1r3rnk/p3bNpp/b1p4N/q2p4/5P2/1P1pP3/PBP2RPP/R5K1 b - - 1 21",
+   "moves": [
+    "f8f7",
+    "h6f7"
+   ],
+   "rating": 663,
+   "themes": [
+    "hangingPiece",
+    "kingsideAttack",
+    "master",
+    "masterVsMaster",
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove",
+    "smotheredMate"
+   ]
+  },
+  {
+   "id": "00A9Q",
+   "fen": "2rq1rk1/1p3p1p/p1pn2p1/P2p4/1P1PnP2/3NP3/5PBP/R1Q3RK w - - 2 22",
+   "moves": [
+    "d3c5",
+    "e4f2"
+   ],
+   "rating": 679,
+   "themes": [
+    "kingsideAttack",
+    "master",
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove",
+    "smotheredMate"
+   ]
+  },
+  {
+   "id": "0EHq4",
+   "fen": "r2q1rQk/p3b1pp/np5N/8/3P1P2/8/PP4PP/R1B2RK1 b - - 6 20",
+   "moves": [
+    "f8g8",
+    "h6f7"
+   ],
+   "rating": 794,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove",
+    "smotheredMate"
+   ]
+  },
+  {
+   "id": "09OLV",
+   "fen": "3r1r1k/6bp/2p2np1/pb2p1B1/4P3/P4N1n/BPQN2PP/R2R2qK w - - 10 24",
+   "moves": [
+    "d1g1",
+    "h3f2"
+   ],
+   "rating": 805,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove",
+    "smotheredMate"
+   ]
+  },
+  {
+   "id": "01H4V",
+   "fen": "r5k1/6p1/2N3pp/3p4/P2P4/1P5n/6PP/5RqK w - - 7 34",
+   "moves": [
+    "f1g1",
+    "h3f2"
+   ],
+   "rating": 810,
+   "themes": [
+    "endgame",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "smotheredMate"
+   ]
+  },
+  {
+   "id": "03EDn",
+   "fen": "r2qr1Qk/ppp3pp/2n5/4N3/3P4/2P5/P4PPP/R3K2R b KQ - 2 16",
+   "moves": [
+    "e8g8",
+    "e5f7"
+   ],
+   "rating": 814,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove",
+    "smotheredMate"
+   ]
+  },
+  {
+   "id": "0D7DF",
+   "fen": "r4rk1/1b3ppp/pq2n1n1/4pN1P/4P1K1/1Pp2NP1/P1B5/R1Q1R3 b - - 0 28",
+   "moves": [
+    "g6h8",
+    "f5e7"
+   ],
+   "rating": 827,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove",
+    "smotheredMate"
+   ]
+  },
+  {
+   "id": "08AtT",
+   "fen": "5rk1/Q4ppp/1p2p3/8/8/5P1n/6PP/1R1R2qK w - - 9 30",
+   "moves": [
+    "d1g1",
+    "h3f2"
+   ],
+   "rating": 831,
+   "themes": [
+    "endgame",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "smotheredMate"
+   ]
+  },
+  {
+   "id": "01Tea",
+   "fen": "r6r/N2k1pQ1/4p2p/1Nbp4/P3n3/8/2P3PP/R3R1qK w - - 2 26",
+   "moves": [
+    "e1g1",
+    "e4f2"
+   ],
+   "rating": 835,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove",
+    "smotheredMate"
+   ]
+  },
+  {
+   "id": "04l90",
+   "fen": "r1br2Qk/2qnb1pp/2p2p1N/p1p5/2P1NP2/2BP4/PP4PP/R4R1K b - - 6 20",
+   "moves": [
+    "d8g8",
+    "h6f7"
+   ],
+   "rating": 836,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove",
+    "smotheredMate"
+   ]
+  }
+ ]
+}

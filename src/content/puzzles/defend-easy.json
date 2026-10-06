@@ -1,0 +1,378 @@
+{
+ "source": "Lichess puzzle database, CC0 - https://database.lichess.org/#puzzles",
+ "built": "2026-10-05",
+ "pack": {
+  "id": "defend-easy",
+  "themes": [
+   "defensiveMove"
+  ],
+  "not": [
+   "mate"
+  ],
+  "min": 0,
+  "max": 1600,
+  "count": 20,
+  "atLeast": 12,
+  "maxPly": 4
+ },
+ "puzzles": [
+  {
+   "id": "08NWB",
+   "fen": "8/rkp5/8/2K3p1/8/7P/8/R7 w - - 0 51",
+   "moves": [
+    "a1a7",
+    "b7a7",
+    "c5c6",
+    "a7b8"
+   ],
+   "rating": 854,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "03mv2",
+   "fen": "8/8/6p1/8/5KPk/8/8/8 b - - 5 80",
+   "moves": [
+    "g6g5",
+    "f4f5",
+    "h4h3",
+    "f5g5"
+   ],
+   "rating": 879,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "pawnEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "018KD",
+   "fen": "k6r/1b5p/6p1/1P6/3Q1P2/PP2R3/3K3P/6q1 b - - 4 31",
+   "moves": [
+    "g1h2",
+    "e3e2",
+    "h2e2",
+    "d2e2"
+   ],
+   "rating": 892,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "01mGq",
+   "fen": "8/8/p1k3p1/P1P2p2/2K3Pp/7P/8/8 w - - 0 51",
+   "moves": [
+    "g4f5",
+    "g6f5",
+    "c4d4",
+    "f5f4"
+   ],
+   "rating": 894,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0842V",
+   "fen": "8/8/8/1p5k/1P2K3/1P2bp2/8/8 w - - 0 63",
+   "moves": [
+    "e4e3",
+    "h5g4",
+    "e3f2",
+    "g4f4"
+   ],
+   "rating": 934,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "master",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "05HlX",
+   "fen": "8/8/6p1/1Pk4p/3pKP1P/8/8/8 b - - 0 51",
+   "moves": [
+    "c5b5",
+    "e4d4",
+    "b5c6",
+    "d4e5"
+   ],
+   "rating": 975,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "master",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "08Ag8",
+   "fen": "r4rk1/4npp1/p2p4/2p1p1R1/4P3/1BPPQNPq/P3K2N/8 w - - 5 28",
+   "moves": [
+    "g5g7",
+    "g8g7",
+    "e3g5",
+    "e7g6"
+   ],
+   "rating": 980,
+   "themes": [
+    "advantage",
+    "defensiveMove",
+    "hangingPiece",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "04EKu",
+   "fen": "8/1p3k2/p2p1np1/3P4/1P2BP2/4K3/P7/8 w - - 4 38",
+   "moves": [
+    "e3f3",
+    "f6e4",
+    "f3e4",
+    "f7f6"
+   ],
+   "rating": 1032,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "02myt",
+   "fen": "8/5r2/5P2/1p1pBk2/p1pP4/P1P2K2/1P6/8 b - - 4 46",
+   "moves": [
+    "f7f6",
+    "e5f6",
+    "f5f6",
+    "f3f4"
+   ],
+   "rating": 1041,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "05x7b",
+   "fen": "r1b1r2k/pp3Q2/3p1n1b/2p1N3/1q2P3/8/PPP2PPP/1R3K1R w - - 0 20",
+   "moves": [
+    "f7f6",
+    "h6g7",
+    "f6h4",
+    "h8g8"
+   ],
+   "rating": 1042,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "master",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "08pUY",
+   "fen": "r6r/1p1k2p1/p2p1q1p/3Qnb2/8/1PP5/P4PPP/R1B1R1K1 w - - 0 18",
+   "moves": [
+    "e1e5",
+    "f6e5",
+    "d5b7",
+    "d7e6"
+   ],
+   "rating": 1069,
+   "themes": [
+    "advantage",
+    "defensiveMove",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "03YmY",
+   "fen": "8/5R1p/8/8/4k1P1/7P/1r3p2/5K2 w - - 5 60",
+   "moves": [
+    "f7e7",
+    "e4f3",
+    "e7f7",
+    "f3g3"
+   ],
+   "rating": 1074,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "master",
+    "rookEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "06cRU",
+   "fen": "6k1/6p1/2p1Rp1p/q1Pp1Q2/3P4/2r3PP/5P2/6K1 b - - 1 33",
+   "moves": [
+    "a5a1",
+    "g1g2",
+    "c3c1",
+    "e6e8"
+   ],
+   "rating": 1076,
+   "themes": [
+    "advantage",
+    "defensiveMove",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "03Hd9",
+   "fen": "8/8/4p3/8/1k1p4/2p5/2K2P2/1N6 w - - 0 55",
+   "moves": [
+    "b1c3",
+    "d4c3",
+    "f2f4",
+    "b4c4"
+   ],
+   "rating": 1097,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "master",
+    "short"
+   ]
+  },
+  {
+   "id": "06Pl7",
+   "fen": "Q7/4R3/1B4k1/2P2n2/2K5/5r1p/5q1P/8 w - - 6 55",
+   "moves": [
+    "a8c6",
+    "g6g5",
+    "c6f3",
+    "f2f3"
+   ],
+   "rating": 1097,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "01ghr",
+   "fen": "8/8/5k2/6p1/r2RK1P1/5P2/8/8 b - - 51 68",
+   "moves": [
+    "a4d4",
+    "e4d4",
+    "f6e6",
+    "d4e4"
+   ],
+   "rating": 1100,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "06BMo",
+   "fen": "8/pq6/1p2Q2P/8/2P5/3k4/P3p1P1/7K w - - 0 41",
+   "moves": [
+    "e6f5",
+    "b7e4",
+    "f5e4",
+    "d3e4"
+   ],
+   "rating": 1100,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "master",
+    "queenEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "084I6",
+   "fen": "8/8/8/4p3/5pK1/8/4k2P/5N2 w - - 1 51",
+   "moves": [
+    "f1g3",
+    "f4g3",
+    "g4g3",
+    "e5e4"
+   ],
+   "rating": 1103,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "02nyA",
+   "fen": "8/1p1R2p1/p1p3r1/P1P5/1P3k1K/7P/8/8 w - - 0 45",
+   "moves": [
+    "d7f7",
+    "g6f6",
+    "f7f6",
+    "g7f6"
+   ],
+   "rating": 1110,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "rookEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "05EX9",
+   "fen": "8/8/8/pK6/P3k3/8/8/8 b - - 9 44",
+   "moves": [
+    "e4e5",
+    "b5a5",
+    "e5d6",
+    "a5b6"
+   ],
+   "rating": 1121,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  }
+ ]
+}

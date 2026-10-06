@@ -1,0 +1,230 @@
+{
+ "source": "Lichess puzzle database, CC0 - https://database.lichess.org/#puzzles",
+ "built": "2026-10-05",
+ "pack": {
+  "id": "enpassant",
+  "themes": [
+   "enPassant"
+  ],
+  "min": 0,
+  "max": 2400,
+  "count": 12,
+  "atLeast": 8,
+  "maxPly": 2
+ },
+ "puzzles": [
+  {
+   "id": "p3D6j",
+   "fen": "r3kbnr/pp3pp1/4p1p1/2Ppq1B1/Q7/8/P2N1PPP/R4RK1 b kq - 1 13",
+   "moves": [
+    "b7b5",
+    "c5b6"
+   ],
+   "rating": 778,
+   "themes": [
+    "discoveredAttack",
+    "discoveredCheck",
+    "enPassant",
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove"
+   ]
+  },
+  {
+   "id": "nt3tD",
+   "fen": "2kr4/p4Q2/4p3/1qp1P3/3pN1n1/5N1P/PPP2bP1/R1B2K2 w - - 2 18",
+   "moves": [
+    "c2c4",
+    "d4c3"
+   ],
+   "rating": 945,
+   "themes": [
+    "discoveredAttack",
+    "enPassant",
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove"
+   ]
+  },
+  {
+   "id": "ApspH",
+   "fen": "r2q2nr/pppbk3/4ppB1/3Pp2p/1Q1n2pB/P7/1PP2PPP/RN3RK1 b - - 2 15",
+   "moves": [
+    "c7c5",
+    "d5c6"
+   ],
+   "rating": 978,
+   "themes": [
+    "discoveredAttack",
+    "discoveredCheck",
+    "enPassant",
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove"
+   ]
+  },
+  {
+   "id": "658Hx",
+   "fen": "2kr2nQ/pp3p1p/1q2p3/1b2P3/3p3b/5N2/PPPBK1PP/1R1N3R w - - 2 16",
+   "moves": [
+    "c2c4",
+    "d4c3"
+   ],
+   "rating": 1037,
+   "themes": [
+    "discoveredAttack",
+    "discoveredCheck",
+    "enPassant",
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove"
+   ]
+  },
+  {
+   "id": "dzw1s",
+   "fen": "6r1/1kp2p2/1p3Q2/p1bbB3/5P1p/P6P/1P4PK/8 w - - 3 38",
+   "moves": [
+    "g2g4",
+    "h4g3"
+   ],
+   "rating": 1362,
+   "themes": [
+    "enPassant",
+    "endgame",
+    "master",
+    "mate",
+    "mateIn1",
+    "oneMove"
+   ]
+  },
+  {
+   "id": "GU8n3",
+   "fen": "8/1pk4p/2p1b2p/N1P1bp2/1P2p1P1/4P2P/2R2PBK/1r6 w - - 1 31",
+   "moves": [
+    "f2f4",
+    "e4f3"
+   ],
+   "rating": 1528,
+   "themes": [
+    "discoveredAttack",
+    "discoveredCheck",
+    "enPassant",
+    "endgame",
+    "mate",
+    "mateIn1",
+    "oneMove"
+   ]
+  },
+  {
+   "id": "wtvlj",
+   "fen": "r4rk1/ppb3pp/2p5/3p3q/3Np1n1/1N2P1K1/PPPBQP2/R4R2 w - - 6 22",
+   "moves": [
+    "f2f4",
+    "e4f3"
+   ],
+   "rating": 1590,
+   "themes": [
+    "discoveredAttack",
+    "enPassant",
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove"
+   ]
+  },
+  {
+   "id": "H9Nki",
+   "fen": "r1bqk2r/pp4p1/2n5/1B1p4/P2Ppp1p/2N1nP1K/1P1NQ1P1/R1B2R2 w kq - 0 16",
+   "moves": [
+    "g2g4",
+    "f4g3"
+   ],
+   "rating": 1624,
+   "themes": [
+    "discoveredAttack",
+    "discoveredCheck",
+    "enPassant",
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove"
+   ]
+  },
+  {
+   "id": "QKy7Z",
+   "fen": "r2q1r2/1p1b1p1R/pnn1p1k1/3pP1P1/3P1P2/P2Q2P1/1P6/R1B2KN1 b - - 1 20",
+   "moves": [
+    "f7f5",
+    "e5f6"
+   ],
+   "rating": 1686,
+   "themes": [
+    "discoveredAttack",
+    "discoveredCheck",
+    "enPassant",
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove"
+   ]
+  },
+  {
+   "id": "5fr6H",
+   "fen": "r1bn3r/1p2Rpp1/p1k2n1p/P1Bp1q2/QP1P4/2P2B2/5PPP/R5K1 b - - 8 21",
+   "moves": [
+    "b7b5",
+    "a5b6"
+   ],
+   "rating": 1705,
+   "themes": [
+    "discoveredAttack",
+    "discoveredCheck",
+    "enPassant",
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove"
+   ]
+  },
+  {
+   "id": "9KHR9",
+   "fen": "3R4/5pbk/pr2p2p/1p2P1p1/2p1BP2/P1P3PP/1P6/6K1 b - - 1 33",
+   "moves": [
+    "f7f5",
+    "e5f6"
+   ],
+   "rating": 1738,
+   "themes": [
+    "discoveredAttack",
+    "discoveredCheck",
+    "enPassant",
+    "endgame",
+    "mate",
+    "mateIn1",
+    "oneMove"
+   ]
+  },
+  {
+   "id": "7cPGX",
+   "fen": "rnbq1r2/p2nb1p1/2p1N2k/1p1pPp1P/3P2Q1/2N5/PPP2PP1/R1B1K2R b KQ - 0 13",
+   "moves": [
+    "g7g5",
+    "h5g6"
+   ],
+   "rating": 1745,
+   "themes": [
+    "discoveredAttack",
+    "doubleCheck",
+    "enPassant",
+    "mate",
+    "mateIn1",
+    "middlegame",
+    "oneMove"
+   ]
+  }
+ ]
+}

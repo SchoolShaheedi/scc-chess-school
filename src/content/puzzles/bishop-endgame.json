@@ -1,0 +1,300 @@
+{
+ "source": "Lichess puzzle database, CC0 - https://database.lichess.org/#puzzles",
+ "built": "2026-10-05",
+ "pack": {
+  "id": "bishop-endgame",
+  "themes": [
+   "bishopEndgame"
+  ],
+  "min": 1300,
+  "max": 1800,
+  "count": 15,
+  "atLeast": 8,
+  "maxPly": 6
+ },
+ "puzzles": [
+  {
+   "id": "070Gp",
+   "fen": "4B3/P4p1p/6p1/2pb4/2p5/2K2k1P/8/8 b - - 0 42",
+   "moves": [
+    "f3g3",
+    "e8f7",
+    "d5f7",
+    "a7a8q"
+   ],
+   "rating": 1302,
+   "themes": [
+    "advancedPawn",
+    "bishopEndgame",
+    "crushing",
+    "deflection",
+    "endgame",
+    "promotion",
+    "short"
+   ]
+  },
+  {
+   "id": "018Iz",
+   "fen": "8/3P4/8/1kP2pbP/8/5K2/8/8 b - - 0 51",
+   "moves": [
+    "b5c5",
+    "h5h6",
+    "c5c6",
+    "h6h7",
+    "c6d7",
+    "h7h8q"
+   ],
+   "rating": 1310,
+   "themes": [
+    "advancedPawn",
+    "bishopEndgame",
+    "crushing",
+    "endgame",
+    "long",
+    "promotion"
+   ]
+  },
+  {
+   "id": "08Bkh",
+   "fen": "8/5pk1/pp1Bp1p1/7p/PPP5/7P/1b4P1/7K b - - 0 40",
+   "moves": [
+    "b2d4",
+    "c4c5",
+    "b6c5",
+    "b4c5",
+    "d4c5",
+    "d6c5"
+   ],
+   "rating": 1316,
+   "themes": [
+    "advantage",
+    "bishopEndgame",
+    "endgame",
+    "long"
+   ]
+  },
+  {
+   "id": "09H5N",
+   "fen": "8/8/p2b3B/5K2/kp3P2/7P/8/8 w - - 0 45",
+   "moves": [
+    "f5e6",
+    "b4b3",
+    "e6d6",
+    "b3b2",
+    "f4f5",
+    "b2b1q"
+   ],
+   "rating": 1317,
+   "themes": [
+    "advancedPawn",
+    "bishopEndgame",
+    "crushing",
+    "endgame",
+    "long",
+    "master",
+    "promotion",
+    "sacrifice"
+   ]
+  },
+  {
+   "id": "03gRv",
+   "fen": "8/4kp2/1b4p1/p1pBP2p/1pK1PP1P/1P4Pb/PB6/8 w - - 6 38",
+   "moves": [
+    "b2c1",
+    "h3f1"
+   ],
+   "rating": 1336,
+   "themes": [
+    "bishopEndgame",
+    "endgame",
+    "master",
+    "mate",
+    "mateIn1",
+    "oneMove"
+   ]
+  },
+  {
+   "id": "03vv8",
+   "fen": "8/2k2b2/2P5/2K1p1p1/4BpP1/5P2/8/8 b - - 2 52",
+   "moves": [
+    "f7e8",
+    "c5d5",
+    "e8c6",
+    "d5e5"
+   ],
+   "rating": 1354,
+   "themes": [
+    "bishopEndgame",
+    "crushing",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "03I4D",
+   "fen": "4b1B1/5pp1/pk2p2p/1p2P3/1P1K1P1P/P7/5P2/8 b - - 0 36",
+   "moves": [
+    "a6a5",
+    "b4a5",
+    "b6a5",
+    "d4c5"
+   ],
+   "rating": 1355,
+   "themes": [
+    "bishopEndgame",
+    "crushing",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "03qIH",
+   "fen": "8/4Kb2/p5k1/6Pp/4P2P/P1P5/8/8 b - - 6 57",
+   "moves": [
+    "g6g7",
+    "e4e5",
+    "f7c4",
+    "e5e6"
+   ],
+   "rating": 1360,
+   "themes": [
+    "bishopEndgame",
+    "crushing",
+    "endgame",
+    "quietMove",
+    "short"
+   ]
+  },
+  {
+   "id": "08Fo5",
+   "fen": "8/5bp1/6kp/5P2/6PK/4B3/8/8 b - - 0 40",
+   "moves": [
+    "g6f6",
+    "e3d4",
+    "f6e7",
+    "d4g7"
+   ],
+   "rating": 1378,
+   "themes": [
+    "bishopEndgame",
+    "crushing",
+    "deflection",
+    "endgame",
+    "short",
+    "skewer"
+   ]
+  },
+  {
+   "id": "09qRV",
+   "fen": "4k3/1p3p1p/2pP2pP/p1P3P1/b2KB3/8/8/8 b - - 1 35",
+   "moves": [
+    "e8d7",
+    "d4e5",
+    "a4b3",
+    "e5f6"
+   ],
+   "rating": 1380,
+   "themes": [
+    "bishopEndgame",
+    "crushing",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "02SGK",
+   "fen": "4k3/2P2p2/b2K1P2/P6p/5P1P/8/8/8 b - - 0 46",
+   "moves": [
+    "a6c8",
+    "d6c6",
+    "c8a6",
+    "c6b6",
+    "e8d7",
+    "b6a6"
+   ],
+   "rating": 1384,
+   "themes": [
+    "bishopEndgame",
+    "crushing",
+    "endgame",
+    "long"
+   ]
+  },
+  {
+   "id": "03yVQ",
+   "fen": "3B4/3k1p2/bP4p1/3pPp1p/3P1K1P/6P1/8/8 w - - 2 58",
+   "moves": [
+    "f4g5",
+    "d7d8",
+    "g5f6",
+    "d8e8",
+    "e5e6",
+    "f7e6"
+   ],
+   "rating": 1404,
+   "themes": [
+    "bishopEndgame",
+    "crushing",
+    "endgame",
+    "hangingPiece",
+    "long"
+   ]
+  },
+  {
+   "id": "09W7M",
+   "fen": "8/8/3kp3/p4p2/b1BP1P2/P1K5/8/8 w - - 3 64",
+   "moves": [
+    "c4b3",
+    "a4b3",
+    "c3b3",
+    "d6d5",
+    "b3c3",
+    "d5e4"
+   ],
+   "rating": 1422,
+   "themes": [
+    "bishopEndgame",
+    "crushing",
+    "endgame",
+    "long"
+   ]
+  },
+  {
+   "id": "03HtZ",
+   "fen": "8/8/3k1p2/p1pBpKp1/1pP3P1/1P3P2/Pb6/8 w - - 17 52",
+   "moves": [
+    "f5f6",
+    "e5e4",
+    "f6f7",
+    "e4e3"
+   ],
+   "rating": 1440,
+   "themes": [
+    "bishopEndgame",
+    "crushing",
+    "discoveredAttack",
+    "discoveredCheck",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "06KDj",
+   "fen": "4k3/8/6p1/1bBPp3/1P2Pb1p/2p2K1P/2B3P1/8 w - - 2 59",
+   "moves": [
+    "f3g4",
+    "b5e2",
+    "g4h4",
+    "g6g5"
+   ],
+   "rating": 1446,
+   "themes": [
+    "bishopEndgame",
+    "endgame",
+    "mate",
+    "mateIn2",
+    "short"
+   ]
+  }
+ ]
+}

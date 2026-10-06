@@ -1,0 +1,378 @@
+{
+ "source": "Lichess puzzle database, CC0 - https://database.lichess.org/#puzzles",
+ "built": "2026-10-05",
+ "pack": {
+  "id": "defender-easy",
+  "themes": [
+   "capturingDefender"
+  ],
+  "min": 500,
+  "max": 1000,
+  "count": 20,
+  "atLeast": 10,
+  "maxPly": 4
+ },
+ "puzzles": [
+  {
+   "id": "3NmL7",
+   "fen": "8/pp1r2k1/7p/8/3q1p2/PQ1NpP2/1P4KP/4R3 w - - 2 35",
+   "moves": [
+    "b3c3",
+    "d4c3",
+    "b2c3",
+    "d7d3"
+   ],
+   "rating": 664,
+   "themes": [
+    "advantage",
+    "capturingDefender",
+    "discoveredAttack",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "2VJwa",
+   "fen": "2kr1bnr/ppp1pppp/2n5/1P5q/6b1/2N2N2/P1PPBPPP/R1BQ1RK1 b - - 0 8",
+   "moves": [
+    "c6e5",
+    "f3e5",
+    "h5e5",
+    "e2g4"
+   ],
+   "rating": 694,
+   "themes": [
+    "capturingDefender",
+    "crushing",
+    "discoveredAttack",
+    "opening",
+    "short"
+   ]
+  },
+  {
+   "id": "1bfPO",
+   "fen": "r4b1r/1p6/pkbRP2p/3nP3/4Bp2/1P3N2/P4PPP/2R3K1 w - - 9 27",
+   "moves": [
+    "e4d5",
+    "f8d6",
+    "e5d6",
+    "c6d5"
+   ],
+   "rating": 699,
+   "themes": [
+    "advantage",
+    "capturingDefender",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "1yOn9",
+   "fen": "8/p5k1/1p2r2p/2p1Pp2/P1Pq4/2Q1R3/6P1/6K1 b - - 2 38",
+   "moves": [
+    "e6e5",
+    "c3d4",
+    "c5d4",
+    "e3e5"
+   ],
+   "rating": 771,
+   "themes": [
+    "capturingDefender",
+    "crushing",
+    "endgame",
+    "pin",
+    "short"
+   ]
+  },
+  {
+   "id": "4pRaq",
+   "fen": "8/6pk/3p2p1/2pq2Pp/1n5P/2Q2P2/3B2K1/8 b - - 3 40",
+   "moves": [
+    "d5d4",
+    "c3d4",
+    "c5d4",
+    "d2b4"
+   ],
+   "rating": 795,
+   "themes": [
+    "capturingDefender",
+    "crushing",
+    "discoveredAttack",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "22e0W",
+   "fen": "r2qr1k1/pp2nppp/8/1P1p4/P1pPb3/2P1PB2/1B4PP/R2Q1RK1 b - - 0 19",
+   "moves": [
+    "e7f5",
+    "f3e4",
+    "e8e4",
+    "f1f5"
+   ],
+   "rating": 798,
+   "themes": [
+    "capturingDefender",
+    "crushing",
+    "discoveredAttack",
+    "master",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "56nXm",
+   "fen": "r4r2/pp3qbk/2p3pp/3n1b2/2BPp3/2P1N3/PPQ3PP/R1B1R1K1 w - - 6 20",
+   "moves": [
+    "e1f1",
+    "d5e3",
+    "c1e3",
+    "f7c4"
+   ],
+   "rating": 824,
+   "themes": [
+    "advantage",
+    "capturingDefender",
+    "discoveredAttack",
+    "master",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "4hd3N",
+   "fen": "4rrk1/1p1n1ppp/p1p1b3/8/3N4/1PP2N1P/P4KP1/R2R4 b - - 1 20",
+   "moves": [
+    "c6c5",
+    "d4e6",
+    "e8e6",
+    "d1d7"
+   ],
+   "rating": 837,
+   "themes": [
+    "advantage",
+    "capturingDefender",
+    "discoveredAttack",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "3giOA",
+   "fen": "r1q3k1/1p1n2pp/2p1r3/p2nR1N1/3P4/P5P1/1P3P1P/R2Q2K1 w - - 0 22",
+   "moves": [
+    "g5e6",
+    "d7e5",
+    "d4e5",
+    "c8e6"
+   ],
+   "rating": 847,
+   "themes": [
+    "capturingDefender",
+    "crushing",
+    "discoveredAttack",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "0QLm2",
+   "fen": "r2q1rk1/p1pp1ppp/1p3n2/3P4/1bb5/2N2N2/PP1B1PPP/R2QR1K1 b - - 1 12",
+   "moves": [
+    "f6d5",
+    "c3d5",
+    "c4d5",
+    "d2b4"
+   ],
+   "rating": 862,
+   "themes": [
+    "advantage",
+    "capturingDefender",
+    "discoveredAttack",
+    "opening",
+    "short"
+   ]
+  },
+  {
+   "id": "1vv2w",
+   "fen": "3r2k1/4bppp/pp6/2r5/3pPP2/P2P2PP/1PqQ2BK/R2R4 w - - 5 24",
+   "moves": [
+    "a1c1",
+    "c2d2",
+    "d1d2",
+    "c5c1"
+   ],
+   "rating": 863,
+   "themes": [
+    "advantage",
+    "capturingDefender",
+    "discoveredAttack",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "4XGb6",
+   "fen": "r2qkbnr/pp2pppp/2b5/8/3p4/1P3N1P/PBPP1PP1/RN1QK2R w KQkq - 0 9",
+   "moves": [
+    "b2d4",
+    "c6f3",
+    "d1f3",
+    "d8d4"
+   ],
+   "rating": 869,
+   "themes": [
+    "advantage",
+    "capturingDefender",
+    "intermezzo",
+    "opening",
+    "short"
+   ]
+  },
+  {
+   "id": "4vNvY",
+   "fen": "2rq1rk1/p4ppp/2n1p3/2pp4/3P4/5N1P/PP2QPP1/2RR2K1 w - - 0 19",
+   "moves": [
+    "c1c5",
+    "c6d4",
+    "f3d4",
+    "c8c5"
+   ],
+   "rating": 870,
+   "themes": [
+    "advantage",
+    "capturingDefender",
+    "discoveredAttack",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "4Qzyi",
+   "fen": "r2qk2r/pppnbpp1/3p1np1/6B1/3Pp3/2NBP3/PPPQ1PPP/R3K2R w KQkq - 0 11",
+   "moves": [
+    "c3e4",
+    "f6e4",
+    "d3e4",
+    "e7g5"
+   ],
+   "rating": 875,
+   "themes": [
+    "advantage",
+    "capturingDefender",
+    "discoveredAttack",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "0oYoj",
+   "fen": "r2r2k1/pppQppbp/6p1/4n2n/4P1b1/P1P2N2/1P2BPPP/R1B1RNK1 b - - 0 13",
+   "moves": [
+    "d8d7",
+    "f3e5",
+    "g7e5",
+    "e2g4"
+   ],
+   "rating": 876,
+   "themes": [
+    "capturingDefender",
+    "crushing",
+    "discoveredAttack",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "2Jzpb",
+   "fen": "r2q1rk1/pppbbppp/2n5/1B2P3/4pB2/2P1PN2/PPQ2PPP/R3K2R w KQ - 0 11",
+   "moves": [
+    "f3d4",
+    "c6d4",
+    "e3d4",
+    "d7b5"
+   ],
+   "rating": 879,
+   "themes": [
+    "capturingDefender",
+    "crushing",
+    "discoveredAttack",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "3cEtP",
+   "fen": "k5rr/1p1q4/p1p3Bp/4QPb1/3pP3/3P4/PPP5/1K4RR w - - 3 26",
+   "moves": [
+    "e5e6",
+    "d7e6",
+    "f5e6",
+    "g8g6"
+   ],
+   "rating": 888,
+   "themes": [
+    "advantage",
+    "capturingDefender",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "05GU4",
+   "fen": "4r1k1/rb3p2/pq2P1pp/1p1n4/2pN4/2P4P/1PQ3P1/1B1RR1K1 b - - 2 27",
+   "moves": [
+    "e8e6",
+    "e1e6",
+    "f7e6",
+    "c2g6"
+   ],
+   "rating": 891,
+   "themes": [
+    "capturingDefender",
+    "crushing",
+    "kingsideAttack",
+    "master",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "0rt6a",
+   "fen": "r3k2r/ppp1nppp/8/2q1n3/6b1/1P3N2/P1PNBPPP/R2Q1RK1 b kq - 1 13",
+   "moves": [
+    "e8c8",
+    "f3e5",
+    "c5e5",
+    "e2g4"
+   ],
+   "rating": 892,
+   "themes": [
+    "capturingDefender",
+    "crushing",
+    "discoveredAttack",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "3AB4F",
+   "fen": "5k2/8/1p1p3p/r1pP2p1/PpP5/r6P/4RPK1/R7 w - - 2 39",
+   "moves": [
+    "a1a3",
+    "b4a3",
+    "e2a2",
+    "a5a4"
+   ],
+   "rating": 892,
+   "themes": [
+    "advantage",
+    "capturingDefender",
+    "endgame",
+    "rookEndgame",
+    "short"
+   ]
+  }
+ ]
+}

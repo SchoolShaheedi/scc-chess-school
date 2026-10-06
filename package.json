@@ -1,0 +1,35 @@
+{
+  "name": "scc-school",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Sikh Chess Championship - the chess school. Graded bilingual lessons for all ages.",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run check && vite build",
+    "check": "tsc --noEmit && vitest run",
+    "test": "vitest run",
+    "puzzles": "node tools/build-puzzles.mjs",
+    "preview": "vite preview",
+    "engine": "cp node_modules/stockfish/bin/stockfish-19-lite-single.* public/engine/ && cp node_modules/stockfish/Copying.txt public/engine/COPYING-stockfish.txt",
+    "ladder": "LADDER=1 vitest run test/bots.test.ts",
+    "voice-script": "VOICE=1 vitest run test/voice-script.test.ts",
+    "deploy": "npm run build && npx wrangler pages deploy dist --project-name scc-chess-school"
+  },
+  "dependencies": {
+    "@fontsource/jost": "^5.3.0",
+    "@fontsource/mukta-mahee": "^5.3.0",
+    "@supabase/supabase-js": "^2.117.2",
+    "chess.js": "^1.4.0",
+    "lucide": "^0.469.0",
+    "stockfish": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.2",
+    "vite-plugin-pwa": "^1.3.0",
+    "vitest": "^5.0.3"
+  }
+}

@@ -1,0 +1,269 @@
+{
+ "source": "Lichess puzzle database, CC0 - https://database.lichess.org/#puzzles",
+ "built": "2026-10-05",
+ "pack": {
+  "id": "queen-endgame",
+  "themes": [
+   "queenEndgame"
+  ],
+  "min": 600,
+  "max": 1200,
+  "count": 15,
+  "atLeast": 8,
+  "maxPly": 4
+ },
+ "puzzles": [
+  {
+   "id": "08t3k",
+   "fen": "2Q5/7p/7P/3p2p1/5pP1/2K2P2/kp6/8 b - - 0 51",
+   "moves": [
+    "b2b1q",
+    "c8a6"
+   ],
+   "rating": 615,
+   "themes": [
+    "endgame",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "queenEndgame"
+   ]
+  },
+  {
+   "id": "05ZcF",
+   "fen": "8/8/4Q3/3p2k1/1p6/1P4PK/2q1p2P/8 w - - 4 49",
+   "moves": [
+    "e6d5",
+    "c2f5",
+    "d5f5",
+    "g5f5"
+   ],
+   "rating": 655,
+   "themes": [
+    "crushing",
+    "endgame",
+    "queenEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0DdIb",
+   "fen": "8/pp4R1/7p/4qp2/8/P4P1k/1P3K2/2Q5 b - - 6 45",
+   "moves": [
+    "e5g7",
+    "c1h1"
+   ],
+   "rating": 685,
+   "themes": [
+    "endgame",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "queenEndgame"
+   ]
+  },
+  {
+   "id": "09DFQ",
+   "fen": "8/2Q3p1/6p1/5pP1/4qP1P/3k4/5K2/8 w - - 9 67",
+   "moves": [
+    "c7d6",
+    "e4d4",
+    "d6d4",
+    "d3d4"
+   ],
+   "rating": 700,
+   "themes": [
+    "crushing",
+    "endgame",
+    "queenEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "070Zi",
+   "fen": "8/4q1p1/3k1p1p/5Q1P/4PKP1/8/8/8 b - - 0 63",
+   "moves": [
+    "e7e5",
+    "f5e5",
+    "f6e5",
+    "f4f5"
+   ],
+   "rating": 728,
+   "themes": [
+    "crushing",
+    "endgame",
+    "master",
+    "queenEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "054YX",
+   "fen": "8/1kp5/1p6/1q6/4Q3/8/5K2/8 b - - 3 57",
+   "moves": [
+    "b7a6",
+    "e4a8"
+   ],
+   "rating": 750,
+   "themes": [
+    "endgame",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "queenEndgame"
+   ]
+  },
+  {
+   "id": "07fwq",
+   "fen": "k7/p1q1Npp1/Q4pp1/8/1p4P1/1P6/P1P5/2K5 b - - 0 34",
+   "moves": [
+    "c7e7",
+    "a6c8"
+   ],
+   "rating": 793,
+   "themes": [
+    "endgame",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "queenEndgame"
+   ]
+  },
+  {
+   "id": "01R6L",
+   "fen": "2k5/8/1K1Q4/2P5/8/8/8/1q6 w - - 13 67",
+   "moves": [
+    "b6c6",
+    "b1b7"
+   ],
+   "rating": 803,
+   "themes": [
+    "endgame",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "queenEndgame"
+   ]
+  },
+  {
+   "id": "04VTC",
+   "fen": "8/5p2/2p1p1p1/3pPq1P/kPpP1P2/2P3K1/3Q4/8 b - - 2 56",
+   "moves": [
+    "g6h5",
+    "d2a2",
+    "a4b5",
+    "a2a5"
+   ],
+   "rating": 803,
+   "themes": [
+    "endgame",
+    "mate",
+    "mateIn2",
+    "queenEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0AJzY",
+   "fen": "5Q2/2pk1p2/4p3/p4qP1/3P3P/5R2/1p3PK1/8 b - - 1 46",
+   "moves": [
+    "f5f3",
+    "g2f3",
+    "b2b1q",
+    "f8f7"
+   ],
+   "rating": 805,
+   "themes": [
+    "crushing",
+    "endgame",
+    "queenEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0EIUd",
+   "fen": "8/6Q1/8/5q2/4p1k1/5p2/5P2/5K2 b - - 5 89",
+   "moves": [
+    "g4f4",
+    "g7g3"
+   ],
+   "rating": 822,
+   "themes": [
+    "endgame",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "queenEndgame"
+   ]
+  },
+  {
+   "id": "00HeG",
+   "fen": "8/1p5k/p3pQq1/3pP3/2p3P1/2P5/PP6/2K5 w - - 3 33",
+   "moves": [
+    "f6h4",
+    "g6h6",
+    "h4h6",
+    "h7h6"
+   ],
+   "rating": 851,
+   "themes": [
+    "crushing",
+    "endgame",
+    "master",
+    "queenEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "03UYH",
+   "fen": "1Q6/5pk1/p4p2/PN1p4/2q2P2/4P3/6PK/8 b - - 0 38",
+   "moves": [
+    "c4b5",
+    "b8b5",
+    "a6b5",
+    "a5a6"
+   ],
+   "rating": 864,
+   "themes": [
+    "crushing",
+    "endgame",
+    "queenEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0CCsd",
+   "fen": "2k5/7P/2K5/2P2p2/8/7P/5p2/8 b - - 0 51",
+   "moves": [
+    "f2f1q",
+    "h7h8q"
+   ],
+   "rating": 868,
+   "themes": [
+    "advancedPawn",
+    "endgame",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "promotion",
+    "queenEndgame"
+   ]
+  },
+  {
+   "id": "0CYLA",
+   "fen": "8/5p2/2p1q3/5pkp/3P4/2P3P1/3Q3K/8 b - - 1 41",
+   "moves": [
+    "g5g4",
+    "d2f4"
+   ],
+   "rating": 875,
+   "themes": [
+    "endgame",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "queenEndgame"
+   ]
+  }
+ ]
+}

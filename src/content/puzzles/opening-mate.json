@@ -1,0 +1,251 @@
+{
+ "source": "Lichess puzzle database, CC0 - https://database.lichess.org/#puzzles",
+ "built": "2026-10-05",
+ "pack": {
+  "id": "opening-mate",
+  "themes": [
+   "opening",
+   "mateIn1"
+  ],
+  "min": 400,
+  "max": 1000,
+  "count": 15,
+  "atLeast": 8,
+  "maxPly": 2
+ },
+ "puzzles": [
+  {
+   "id": "0266v",
+   "fen": "rnbqkb1r/ppppp2p/8/5p1p/2PPP3/8/PP3PP1/RNBQKBN1 b Qkq - 0 6",
+   "moves": [
+    "f5e4",
+    "d1h5"
+   ],
+   "rating": 438,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "02Ekq",
+   "fen": "r1q1rbk1/1ppb1pp1/p1n2n1p/8/2PP1B2/P2Q1N1P/2B2PP1/RN3RK1 b - - 4 16",
+   "moves": [
+    "f6h5",
+    "d3h7"
+   ],
+   "rating": 439,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "010Jc",
+   "fen": "rnb1k2r/bpqp1pp1/p3p3/7p/4P1n1/1NNB3P/PPP2PP1/R1BQ1R1K w kq - 1 11",
+   "moves": [
+    "d1e2",
+    "c7h2"
+   ],
+   "rating": 444,
+   "themes": [
+    "master",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "013UL",
+   "fen": "rb3rk1/5ppp/p1pqbn2/2Np4/1P2p3/P3P3/1B1PBPPP/2RQ1RK1 w - - 2 18",
+   "moves": [
+    "h2h3",
+    "d6h2"
+   ],
+   "rating": 447,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "00dOP",
+   "fen": "r2q1k1r/pbp1bppp/1p2pn2/1B2N3/3P1Q2/8/PPP2PPP/R1B2RK1 b - - 5 12",
+   "moves": [
+    "f6d5",
+    "f4f7"
+   ],
+   "rating": 481,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "022yi",
+   "fen": "rn3rk1/1bp2ppp/p3pb2/3q4/3P4/2P5/P1B1NPPP/R1BQ1RK1 w - - 3 14",
+   "moves": [
+    "d1d3",
+    "d5g2"
+   ],
+   "rating": 500,
+   "themes": [
+    "kingsideAttack",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "02oYD",
+   "fen": "1k1r2nr/ppp2ppp/3b4/1P2qb2/Q7/2P1BB2/P3PP1P/RN3RK1 w - - 1 14",
+   "moves": [
+    "f3g2",
+    "e5h2"
+   ],
+   "rating": 505,
+   "themes": [
+    "kingsideAttack",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "04q0u",
+   "fen": "r1b1kbnr/ppp1qppp/8/4PnB1/8/5N2/PPP2PPP/RN1Q1RK1 b kq - 4 9",
+   "moves": [
+    "e7e6",
+    "d1d8"
+   ],
+   "rating": 507,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "033L5",
+   "fen": "rn1qkbnr/pp2pp1b/2p1P2p/3p2pQ/3P3N/8/PPP2PPP/RNB1KB1R b KQkq - 1 7",
+   "moves": [
+    "g8f6",
+    "h5f7"
+   ],
+   "rating": 508,
+   "themes": [
+    "attackingF2F7",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "00Dlt",
+   "fen": "r3kb1r/p4pp1/b1p4p/n3p3/4N3/2Nq1Q2/PP1P1PPP/R1B2RK1 w kq - 0 14",
+   "moves": [
+    "f3f5",
+    "d3f1"
+   ],
+   "rating": 510,
+   "themes": [
+    "kingsideAttack",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "044Sh",
+   "fen": "r2q1rk1/1pp2ppp/1bn5/p2b4/P2P1p2/2PQ1N1P/1PB2PP1/RN2R1K1 b - - 2 15",
+   "moves": [
+    "d5f3",
+    "d3h7"
+   ],
+   "rating": 533,
+   "themes": [
+    "kingsideAttack",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "04vza",
+   "fen": "q3kb1r/p2npppp/5n2/2p5/2Pp2bN/2N3P1/PP1PPP1P/R1BQK2R w KQk - 0 9",
+   "moves": [
+    "c3b5",
+    "a8h1"
+   ],
+   "rating": 560,
+   "themes": [
+    "hangingPiece",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "03eid",
+   "fen": "r3kb1r/ppp3p1/2nq1np1/3p4/2PPp3/8/PP2BPPP/RNBQ1RK1 w kq - 1 11",
+   "moves": [
+    "c4c5",
+    "d6h2"
+   ],
+   "rating": 562,
+   "themes": [
+    "kingsideAttack",
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "033W8",
+   "fen": "2kr1bnr/ppp2ppp/3qb3/8/1n6/P1Q2N2/1PP1PPPP/RNB1KB1R w KQ - 3 9",
+   "moves": [
+    "a3b4",
+    "d6d1"
+   ],
+   "rating": 574,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  },
+  {
+   "id": "02aO5",
+   "fen": "r3kbnr/pp3pp1/2p1p3/7q/2P3p1/2N3P1/PP2BP2/R1BQ1RK1 w kq - 1 14",
+   "moves": [
+    "e2g4",
+    "h5h1"
+   ],
+   "rating": 591,
+   "themes": [
+    "mate",
+    "mateIn1",
+    "oneMove",
+    "opening"
+   ]
+  }
+ ]
+}
