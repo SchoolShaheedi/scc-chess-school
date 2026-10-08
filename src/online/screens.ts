@@ -17,7 +17,7 @@ import { saveGame } from "../play/history";
 import { setLastGame } from "../review/screen";
 import { sound } from "../sound";
 import {
-  activeGames, addFriend, answerChallenge, blockPlayer, enableOnlineAdult, findGame, gamePlayers, stopSeeking, cancelChallenge, challenges, claimTime, disableOnline, enableOnline, type Game, gameAction,
+  activeGames, addFriend, adultLadder, answerChallenge, blockPlayer, enableOnlineAdult, findGame, gamePlayers, stopSeeking, cancelChallenge, challenges, claimTime, disableOnline, enableOnline, type Game, gameAction,
   answerFriend, friendRequests, getGame, type Me, myPlayer, newFriendCode, opponents, type Opponent, REACTIONS, removeFriend, sendChallenge, sendMove, signedIn, watchChallenges, watchGame,
 } from "./api";
 
@@ -28,7 +28,7 @@ const tcLabel = (tc: string) => tc === "none" ? t("clockNone") : tc.includes("+"
 
 // ---------- the parent's switch, on the family screen ----------
 /** A grown-up question before online play is switched on: a times-table sum a young child is unlikely to know. */
-function parentGate(box: HTMLElement, onPass: () => void, onCancel: () => void) {
+export function parentGate(box: HTMLElement, onPass: () => void, onCancel: () => void) {
   const a = 6 + Math.floor(Math.random() * 4), b = 6 + Math.floor(Math.random() * 4);
   box.innerHTML = `<div class="parentcard">${icon("shield")}<div><b>${t("gateTitle")}</b><small>${t("gateAsk").replace("{a}", num(a)).replace("{b}", num(b))}</small>
     <form class="gateform"><input inputmode="numeric" maxlength="3" required aria-label="${t("gateTitle")}"><button class="btn" type="submit">${t("next")}</button></form>
@@ -158,7 +158,8 @@ export function onlineLobby(root: HTMLElement, go: Go): () => void {
           <button class="btn" data-accept="${c.id}">${t("onlineAccept")}</button><button class="btn ghost" data-decline="${c.id}">${t("onlineDecline")}</button></div>`).join("")}` : ""}
         ${outgoing.length ? `<h2 class="sec">${t("onlineWaiting")}</h2>${outgoing.map(c => `<div class="botcard">${face(c.to_player)}
           <span class="grow"><b>${t("onlineWaitingFor")}</b><small>${tcLabel(c.tc)}</small></span><button class="btn ghost" data-cancel="${c.id}">${t("cancel")}</button></div>`).join("")}` : ""}
-        ${me.adult ? `<h2 class="sec">${t("adultPlayTitle")}</h2><div data-strangers></div>` : ""}
+        ${me.adult ? `<h2 class="sec">${t("adultPlayTitle")}</h2><div data-strangers></div>
+          <button class="btn ghost wide" data-ladder>${icon("trophy")} ${t("ladderTitle")}</button>` : ""}
         <h2 class="sec">${t("onlinePlayWho")}</h2>
         <div class="seg tcs" role="group">${["none", "10", "5", "3+2"].map(x => `<button data-tc="${x}" aria-pressed="${tc === x}">${tcLabel(x)}</button>`).join("")}</div>
         <div class="seg colours" role="group">${(["w", "random", "b"] as const).map(c => `<button data-c="${c}" aria-pressed="${colour === c}"><span class="kingdot ${c}"></span>${t(c === "w" ? "colourWhite" : c === "b" ? "colourBlack" : "colourRandom")}</button>`).join("")}</div>
@@ -175,6 +176,7 @@ export function onlineLobby(root: HTMLElement, go: Go): () => void {
       const errBox = root.querySelector<HTMLElement>("[data-err]")!;
       const sbox = root.querySelector<HTMLElement>("[data-strangers]"); if (sbox) strangers(sbox, me, go, () => alive);
       root.querySelectorAll<HTMLButtonElement>("[data-tc]").forEach(b => b.onclick = () => { tc = b.dataset.tc!; void render(); });
+      root.querySelector<HTMLButtonElement>("[data-ladder]")?.addEventListener("click", () => go("#/online/ladder"));
       root.querySelectorAll<HTMLButtonElement>("[data-c]").forEach(b => b.onclick = () => { colour = b.dataset.c!; void render(); });
       root.querySelectorAll<HTMLButtonElement>("[data-game]").forEach(b => b.onclick = () => go(`#/online/game/${b.dataset.game}`));
       root.querySelectorAll<HTMLButtonElement>("[data-challenge]").forEach(b => b.onclick = async () => {
@@ -358,4 +360,31 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
     if (g.status === "finished") { ended = false; finish(); }
   })();
   return leave;
+}
+
+// ---------- the grown-up ladder (DECISIONS #89) ----------
+let ladderCat: "rapid" | "blitz" = "rapid";
+/** The top 50 grown-ups for a clock speed (at least 5 rated games), as animal + rating, and my own place. */
+export function ladderScreen(root: HTMLElement, go: Go): () => void {
+  let alive = true;
+  const draw = async () => {
+    root.innerHTML = `<div class="screen">${bar(t("ladderTitle"))}<p class="muted">${t("loading")}</p></div>`;
+    root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/online");
+    const me = await myPlayer();
+    if (!alive) return;
+    if (!me?.adult) return go("#/online");
+    const rows = await adultLadder(me.id, ladderCat);
+    if (!alive) return;
+    root.innerHTML = `<div class="screen">${bar(t("ladderTitle"))}
+      <div class="seg" role="group">${(["rapid", "blitz"] as const).map(c => `<button data-cat="${c}" aria-pressed="${ladderCat === c}">${t(c === "rapid" ? "adultRapid" : "adultBlitz")}</button>`).join("")}</div>
+      <p class="muted">${t("ladderAbout")}</p>
+      ${rows.length ? `<table class="boardtable"><tr><th></th><th></th><th>${t("ratingLabel")}</th><th>${t("ladderGames")}</th></tr>
+        ${rows.map(r => `<tr class="${r.me ? "me" : ""}"><td class="n">${num(r.place)}</td><td>${avatarHTML(r)}${r.me ? ` <b>${t("you")}</b>` : ""}</td>
+          <td class="n"><b>${num(r.rating)}</b></td><td class="n">${num(r.games)}</td></tr>`).join("")}</table>` : `<p class="note">${t("ladderEmpty")}</p>`}
+      ${rows.some(r => r.me) ? "" : `<p class="note">${t("ladderNotYet")}</p>`}</div>`;
+    root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/online");
+    root.querySelectorAll<HTMLButtonElement>("[data-cat]").forEach(b => b.onclick = () => { ladderCat = b.dataset.cat as "rapid" | "blitz"; void draw(); });
+  };
+  void draw();
+  return () => { alive = false; };
 }

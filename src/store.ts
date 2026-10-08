@@ -50,6 +50,8 @@ export interface State {
   hist?: { play: [string, number][]; puz: [string, number][] };
   themeStats?: Record<string, [number, number]>;
   results?: Record<string, [number, number, number]>;
+  /** Puzzles finished per day, the last two weeks (DECISIONS #89: the class leaderboard's weekly puzzles). */
+  puzzlesByDay?: Record<string, number>;
 }
 export const GOAL = 3;
 
@@ -179,6 +181,11 @@ export const store = {
       const pr = updateRating(state.prating ?? { ...state.rating, n: 0 }, puzzleRating, clean ? 1 : 0);
       patch.prating = pr; patch.hist = { ...hist(), puz: point(hist().puz, pr.r) };
     }
+    {
+      const d = today(), keep = addDays(d, -14), pbd: Record<string, number> = {};
+      for (const [k, n] of Object.entries(state.puzzlesByDay ?? {})) if (k >= keep) pbd[k] = n;
+      pbd[d] = (pbd[d] ?? 0) + 1; patch.puzzlesByDay = pbd;
+    }
     if (themes?.length) {
       const ts = { ...(state.themeStats ?? {}) };
       for (const th of themes) { const [n, ok] = ts[th] ?? [0, 0]; ts[th] = [n + 1, ok + (clean ? 1 : 0)]; }
@@ -205,9 +212,9 @@ export const store = {
     store.set({ ...practised(), ...(kind === "review" ? { stats: { ...state.stats, reviews: state.stats.reviews + 1 } } : {}) });
   },
   /** Progress merged in from the signed-in account (sync.ts). */
-  replaceProgress(p: Pick<State, "xp" | "streak" | "lessons" | "tests" | "placed" | "daily" | "rushBest" | "rep" | "active" | "goal" | "stats" | "rating" | "missed" | "prating" | "hist" | "themeStats" | "results">) {
+  replaceProgress(p: Pick<State, "xp" | "streak" | "lessons" | "tests" | "placed" | "daily" | "rushBest" | "rep" | "active" | "goal" | "stats" | "rating" | "missed" | "prating" | "hist" | "themeStats" | "results" | "puzzlesByDay">) {
     store.set({ xp: p.xp, streak: p.streak, lessons: p.lessons, tests: p.tests, placed: p.placed, daily: p.daily, rushBest: p.rushBest, rep: p.rep, active: p.active, goal: p.goal, stats: p.stats, rating: p.rating, missed: p.missed,
-      prating: p.prating, hist: p.hist, themeStats: p.themeStats, results: p.results });
+      prating: p.prating, hist: p.hist, themeStats: p.themeStats, results: p.results, puzzlesByDay: p.puzzlesByDay });
   },
   /** A level test result: the best score is kept, and a pass is never lost. */
   recordTest(level: number, score: number, passed: boolean) {

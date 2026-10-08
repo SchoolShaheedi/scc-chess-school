@@ -10,7 +10,7 @@ src/content/     levels.ts (10 levels), level1.ts (9 lessons, DRAFT), puzzles/*.
 src/coach.ts     coach art (Chidi / Singh / Kaur, from public/art/coach)
 src/sync.ts      optional sign-in + progress sync; src/merge.ts merges device and account progress
 src/accountui.ts the Account box in Settings (13+ gate, Google, email link, delete account)
-public/art/      the user's artwork, cut by tools/slice-art.py from ../../images/
+public/art/      the user's artwork, cut by tools/slice-art.py from ../../04_Assets/sheets/
 supabase/        schema.sql: the one progress table, row-level security, delete_my_account()
 src/i18n.ts      every interface string in both languages
 test/            the content guard: every drill solvable, every puzzle legal, both languages present
@@ -22,7 +22,7 @@ tools/           build-puzzles.mjs (streams the Lichess DB), preview-copy.sh
 npm run check        # TypeScript + the content guard - a FAIL stops the batch
 npm run build        # check, then build dist/ (offline-capable PWA)
 npm run puzzles      # rebuild the puzzle packs from the Lichess database (~15 s)
-python3 tools/slice-art.py   # re-cut the artwork after a sheet in images/ changes
+python3 tools/slice-art.py   # re-cut the artwork after a sheet in 04_Assets/sheets/ changes
 ```
 The in-app preview server cannot read ~/Desktop, so `tools/preview-copy.sh <dir>` builds and copies `dist/` to a folder it can.
 

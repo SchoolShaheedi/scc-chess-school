@@ -1,4 +1,4 @@
-"""Cuts the user's art sheets (3_Sikh_Chess_Championship/images/) into the single images the app uses.
+"""Cuts the user's art sheets (3_Sikh_Chess_Championship/04_Assets/sheets/) into the single images the app uses.
 
     python3 tools/slice-art.py
 
@@ -10,7 +10,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-SRC = Path(__file__).resolve().parents[3] / "images"
+SRC = Path(__file__).resolve().parents[3] / "04_Assets" / "sheets"
 OUT = Path(__file__).resolve().parents[1] / "public" / "art"
 ORDER = ["K", "Q", "R", "B", "N", "P"]
 

@@ -3,7 +3,15 @@
 import { LEVELS } from "../content/levels";
 import type { Saved } from "../merge";
 
-export interface Summary { level: number; lessons: number; lessonsWeek: number; tests: number; daysWeek: number }
+export interface Summary { level: number; lessons: number; lessonsWeek: number; tests: number; daysWeek: number;
+  /** The class leaderboard's week (DECISIONS #89), Monday to Sunday: its Monday as YYYYMMDD, and that week's numbers. */
+  weekOf: number; wkDays: number; wkLessons: number; wkPuzzles: number }
+
+/** The Monday of the week containing a date (YYYY-MM-DD). */
+export function mondayOf(day: string): string {
+  const d = new Date(`${day}T12:00:00`); d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+  return d.toLocaleDateString("en-CA");
+}
 
 export function summaryOf(s: Saved, today: string): Summary {
   const weekAgo = new Date(`${today}T12:00:00`); weekAgo.setDate(weekAgo.getDate() - 6);
@@ -19,5 +27,9 @@ export function summaryOf(s: Saved, today: string): Summary {
     lessonsWeek: done.filter(([, r]) => r.completedAt.slice(0, 10) >= since).length,
     tests: passed.length,
     daysWeek: (s.active ?? []).filter(d => d >= since && d <= today).length,
+    weekOf: +mondayOf(today).replace(/-/g, ""),
+    wkDays: Math.min(7, (s.active ?? []).filter(d => d >= mondayOf(today) && d <= today).length),
+    wkLessons: Math.min(99, done.filter(([, r]) => r.completedAt.slice(0, 10) >= mondayOf(today)).length),
+    wkPuzzles: Math.min(999, Object.entries(s.puzzlesByDay ?? {}).filter(([d]) => d >= mondayOf(today) && d <= today).reduce((a, [, n]) => a + n, 0)),
   };
 }

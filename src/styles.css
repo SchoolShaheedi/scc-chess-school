@@ -787,3 +787,11 @@ html:has(.wwal), html:has(.wwal) body, html:has(.donescreen), html:has(.donescre
 .declare { display: flex; gap: 8px; align-items: flex-start; margin: 8px 0; font-size: 14px; }
 .declare input { width: 20px; height: 20px; flex: none; margin-top: 2px; }
 a.btn { text-decoration: none; display: flex; justify-content: center; align-items: center; }
+/* Class leaderboard and grown-up ladder (DECISIONS #89) */
+.boardtable { width: 100%; border-collapse: collapse; font-size: 14px; }
+.boardtable th { color: var(--muted); font-weight: 600; font-size: 11px; text-align: center; padding: 4px 2px; }
+.boardtable td { padding: 6px 4px; border-top: 1px solid #EEF1EF; } .boardtable td.n { text-align: center; width: 44px; }
+.boardtable td .kidav { width: 30px; height: 30px; vertical-align: middle; }
+.boardtable tr.me { background: #FFFCF3; box-shadow: inset 3px 0 0 var(--gold); }
+.boardrow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: -4px 0 8px; }
+.boardrow .declare { margin: 0; font-size: 13px; }

@@ -80,3 +80,20 @@ export async function pushSummaries() {
       .eq("class_id", m.class_id).eq("parent", userId()!).eq("profile_id", m.profile_id);
   }
 }
+
+// ---------- class leaderboards (DECISIONS #89) ----------
+export interface BoardRow { avatar: string; colour: string; days: number; lessons: number; puzzles: number; points: number; me: boolean }
+/** This week's board for one of my children in one class: classmates whose parents agreed, plus my child. */
+export async function classBoard(classId: string, profileId: string): Promise<BoardRow[]> {
+  const c = db(); if (!c) return [];
+  const { data } = await c.rpc("class_leaderboard", { p_class: classId, p_profile: profileId }); return (data as BoardRow[]) ?? [];
+}
+/** Whether each of my children is shown on each class board (the parent's switch). */
+export async function onBoard(): Promise<Record<string, boolean>> {
+  const c = db(); if (!c) return {};
+  const { data } = await c.from("memberships").select("class_id, profile_id, on_board").eq("parent", userId()!);
+  return Object.fromEntries(((data as { class_id: string; profile_id: string; on_board: boolean }[]) ?? []).map(m => [`${m.class_id}:${m.profile_id}`, m.on_board]));
+}
+export async function setOnBoard(classId: string, profileId: string, on: boolean) {
+  await db()?.rpc("set_on_board", { p_class: classId, p_profile: profileId, p_on: on });
+}

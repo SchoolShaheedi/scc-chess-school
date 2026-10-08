@@ -5,10 +5,10 @@ import { mergeCard } from "./openings/srs";
 
 /** What is saved to an account: progress only. Look, language, pieces and coach stay per device. */
 export type Saved = Pick<State, "xp" | "streak" | "lessons"> & { tests?: State["tests"]; placed?: number; daily?: State["daily"]; rushBest?: number; rep?: State["rep"]; active?: string[]; goal?: State["goal"]; stats?: State["stats"]; rating?: State["rating"]; missed?: State["missed"];
-  prating?: State["prating"]; hist?: State["hist"]; themeStats?: State["themeStats"]; results?: State["results"] };
+  prating?: State["prating"]; hist?: State["hist"]; themeStats?: State["themeStats"]; results?: State["results"]; puzzlesByDay?: State["puzzlesByDay"] };
 
 export const savable = (s: Readonly<State>): Saved => ({ xp: s.xp, streak: s.streak, lessons: s.lessons, tests: s.tests, placed: s.placed, daily: s.daily, rushBest: s.rushBest, rep: s.rep, active: s.active, goal: s.goal, stats: s.stats, rating: s.rating, missed: s.missed,
-  prating: s.prating, hist: s.hist, themeStats: s.themeStats, results: s.results });
+  prating: s.prating, hist: s.hist, themeStats: s.themeStats, results: s.results, puzzlesByDay: s.puzzlesByDay });
 
 const NO_GOAL = { date: "", n: 0 }, NO_STATS: State["stats"] = { botWins: {}, games: 0, dailies: 0, reviews: 0 };
 function mergeGoal(a: State["goal"] = NO_GOAL, b: State["goal"] = NO_GOAL): State["goal"] {
@@ -60,7 +60,13 @@ export function merge(a: Saved, b: Saved): Saved {
     // Phase 2 (DECISIONS #85): the puzzle rating like the rating; graphs: each day's point from the side whose rating
     // has seen more results; counts: the higher count wins (two devices are not double-counted, as with the totals)
     prating: (a.prating?.n ?? 0) >= (b.prating?.n ?? 0) ? a.prating : b.prating,
-    hist: mergeHist(a, b), themeStats: maxCounts(a.themeStats, b.themeStats), results: maxCounts(a.results, b.results) };
+    hist: mergeHist(a, b), themeStats: maxCounts(a.themeStats, b.themeStats), results: maxCounts(a.results, b.results),
+    puzzlesByDay: maxDays(a.puzzlesByDay, b.puzzlesByDay) };
+}
+/** Puzzles per day from two devices: the higher count for each day (the totals' rule). */
+function maxDays(a: Record<string, number> = {}, b: Record<string, number> = {}): Record<string, number> | undefined {
+  const out = { ...a }; for (const [d, n] of Object.entries(b)) out[d] = Math.max(out[d] ?? 0, n);
+  return Object.keys(out).length ? out : undefined;
 }
 function mergeHist(a: Saved, b: Saved): State["hist"] {
   if (!a.hist && !b.hist) return undefined;

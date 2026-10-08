@@ -9,6 +9,7 @@ import { tabbar } from "../tabbar";
 import { games } from "../play/history";
 import { statsHTML, wireStats } from "./stats";
 import { myPlayer, signedIn } from "../online/api";
+import { myClasses } from "../teach/api";
 import { setLastGame } from "../review/screen";
 import { rankOf, trophies } from "./trophies";
 
@@ -41,6 +42,7 @@ export function mePage(root: HTMLElement, go: (h: string) => void) {
     <h2 class="sec">${t("statsTitle")}</h2>
     ${statsHTML()}
     <div data-onlineratings></div>
+    <div data-classboards></div>
     <h2 class="sec">${t("meGames")} <span>${num(list.length)}</span></h2>
     ${list.length ? `<div class="gamelist">${list.slice(0, 20).map((g, i) => `<button class="gamerow" data-game="${i}">
       <span class="res ${g.result}">${t(g.result === "won" ? "resWon" : g.result === "lost" ? "resLost" : "resDraw")}</span>
@@ -55,6 +57,13 @@ export function mePage(root: HTMLElement, go: (h: string) => void) {
   });
   root.querySelector<HTMLButtonElement>("[data-settings]")!.onclick = () => go("#/settings");
   wireStats(root, go);
+  // this child's class leaderboards (DECISIONS #89)
+  if (signedIn()) void myClasses().then(list => {
+    const box = root.querySelector<HTMLElement>("[data-classboards]"), mine = list.filter(m => m.profile_id === family.current().id);
+    if (!box || !mine.length) return;
+    box.innerHTML = `<h3 class="sub">${t("boardTitle")}</h3>${mine.map(m => `<button class="gamerow" data-cb="${m.class_id}">${icon("trophy")}<span class="grow"><b>${m.title.replace(/[&<>"]/g, "")}</b></span>${icon("arrowRight")}</button>`).join("")}`;
+    box.querySelectorAll<HTMLButtonElement>("[data-cb]").forEach(b => b.onclick = () => go(`#/class/${b.dataset.cb}`));
+  });
   // the grown-up profile's online ratings (DECISIONS #87), once the account answers
   if (signedIn()) void myPlayer().then(me => {
     const box = root.querySelector<HTMLElement>("[data-onlineratings]");

@@ -5,7 +5,10 @@ import { family } from "../family";
 import { num, t, tx } from "../i18n";
 import { icon } from "../icons";
 import { avatarHTML } from "../me/family";
-import { createClass, deleteClass, joinClass, leaveClass, myClasses, previewClass, pupils, removePupil, setHomework, teacherClasses, type Pupil } from "./api";
+import { classBoard, createClass, deleteClass, joinClass, leaveClass, myClasses, onBoard, previewClass, pupils, removePupil, setHomework, setOnBoard, teacherClasses, type Pupil } from "./api";
+import { mondayOf } from "./summary";
+import { today } from "../store";
+import { parentGate } from "../online/screens";
 
 type Go = (h: string) => void;
 const bar = (title: string) => `<div class="lessonbar"><button class="iconbtn" data-back aria-label="${t("back")}">${icon("chevronLeft")}</button><h1 class="grow">${title}</h1></div>`;
@@ -57,6 +60,7 @@ export async function classView(root: HTMLElement, classId: string, go: Go) {
         <button class="iconbtn" data-rm="${esc(key)}" aria-label="${t("teachRemove")}">${icon("trash")}</button></div>`;
     }).join("")}</div>` : `<p class="note">${t("teachNoPupils")}</p>`}
     <p class="note">${t("teachLabelNote")}</p>
+    ${list.length ? teacherBoard(list, classId, lab) : ""}
     <div class="actions"><button class="danger" data-del>${t("teachDelete")}</button></div></div>`;
   root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/teach");
   root.querySelector<HTMLSelectElement>("[data-hw]")!.onchange = e => void setHomework(classId, (e.target as HTMLSelectElement).value || null);
@@ -107,11 +111,22 @@ export function joinScreen(root: HTMLElement, go: Go) {
 
 /** The active child's classes on the family screen, each with Leave. */
 export async function classesBlock(box: HTMLElement, go: Go) {
-  const mine = (await myClasses(true)).filter(m => m.profile_id === family.current().id);
+  const kid = family.current().id, mine = (await myClasses(true)).filter(m => m.profile_id === kid), shown = await onBoard();
   box.innerHTML = `<h2 class="sec">${t("joinMine")}</h2>
     ${mine.map(m => `<div class="li"><span class="rushicon dark">${icon("users")}</span><span class="grow"><b>${esc(m.title)}</b>
-      ${m.homework ? `<small>${t("hwLabel")}: ${m.homework}</small>` : ""}</span><button class="btn ghost" data-leave="${m.class_id}">${t("joinLeaveBtn")}</button></div>`).join("")}
+      ${m.homework ? `<small>${t("hwLabel")}: ${m.homework}</small>` : ""}</span><button class="btn ghost" data-leave="${m.class_id}">${t("joinLeaveBtn")}</button></div>
+      <div class="boardrow"><button class="btn ghost" data-board="${m.class_id}">${icon("trophy")} ${t("boardTitle")}</button>
+        <label class="declare"><input type="checkbox" data-show="${m.class_id}" ${shown[`${m.class_id}:${kid}`] ? "checked" : ""}> ${t("boardShow")}</label></div>
+      <div data-gate="${m.class_id}"></div>`).join("")}
     <button class="btn ghost wide" data-join>${icon("plus")} ${t("joinTitle")}</button>`;
+  box.querySelectorAll<HTMLButtonElement>("[data-board]").forEach(b => b.onclick = () => go(`#/class/${b.dataset.board}`));
+  // showing a child to classmates is the parent's decision (behind the grown-up question); hiding needs no question
+  box.querySelectorAll<HTMLInputElement>("[data-show]").forEach(c => c.onchange = () => {
+    const id = c.dataset.show!;
+    if (!c.checked) { void setOnBoard(id, kid, false); return; }
+    c.checked = false;
+    parentGate(box.querySelector<HTMLElement>(`[data-gate="${id}"]`)!, async () => { await setOnBoard(id, kid, true); void classesBlock(box, go); }, () => void classesBlock(box, go));
+  });
   box.querySelector<HTMLButtonElement>("[data-join]")!.onclick = () => go("#/join");
   box.querySelectorAll<HTMLButtonElement>("[data-leave]").forEach(b => b.onclick = async () => {
     if (confirm(t("joinLeaveConfirm"))) { await leaveClass(b.dataset.leave!, family.current().id); void classesBlock(box, go); }
@@ -126,4 +141,35 @@ export async function homeworkCard(box: HTMLElement, go: Go) {
   box.innerHTML = `<button class="goalcard hwcard" data-hw><span class="rushicon dark">${icon("book")}</span>
     <span class="grow"><b>${t("hwLabel")}: ${lesson.id} · ${esc(tx(lesson.title))}</b><small>${t("hwFrom").replace("{c}", esc(hw.title))}</small></span>${icon("arrowRight")}</button>`;
   box.querySelector<HTMLButtonElement>("[data-hw]")!.onclick = () => go(`#/lesson/${lesson.id}`);
+}
+
+// ---------- the class leaderboard (DECISIONS #89) ----------
+/** This week's board, Monday to Sunday: a day of practice is 10 points, a lesson 5, a puzzle 1 (at most 50). Classmates
+ *  appear only if their parents agreed; the child using the app always sees their own row. */
+export async function classBoardScreen(root: HTMLElement, classId: string, go: Go) {
+  root.innerHTML = `<div class="screen">${bar(t("boardTitle"))}<p class="muted">${t("loading")}</p></div>`;
+  root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/me");
+  const [mine, rows] = await Promise.all([myClasses(), classBoard(classId, family.current().id)]);
+  const cls = mine.find(m => m.class_id === classId);
+  if (!cls) return go("#/me");
+  root.innerHTML = `<div class="screen">${bar(esc(cls.title))}
+    <p class="muted">${t("boardAbout")}</p>
+    <table class="boardtable"><tr><th></th><th></th><th>${t("boardDays")}</th><th>${t("lessons")}</th><th>${t("puzzlesTitle")}</th><th>${t("boardPoints")}</th></tr>
+      ${rows.map((r, i) => `<tr class="${r.me ? "me" : ""}"><td class="n">${num(i + 1)}</td><td>${avatarHTML(r)}${r.me ? ` <b>${t("you")}</b>` : ""}</td>
+        <td class="n">${num(r.days)}</td><td class="n">${num(r.lessons)}</td><td class="n">${num(r.puzzles)}</td><td class="n"><b>${num(r.points)}</b></td></tr>`).join("")}</table>
+    ${rows.length < 2 ? `<p class="note">${t("boardLonely")}</p>` : ""}
+    <p class="note">${t("boardResets")}</p></div>`;
+  root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/me");
+}
+
+/** The teacher's view of the same week, for every pupil (teachers already see every pupil's summary). */
+function teacherBoard(list: Pupil[], classId: string, lab: Record<string, string>): string {
+  const wk = +mondayOf(today()).replace(/-/g, "");
+  const rows = list.map(p => {
+    const s = p.summary, cur = s.weekOf === wk;
+    const d = cur ? Math.min(7, s.wkDays ?? 0) : 0, l = cur ? Math.min(20, s.wkLessons ?? 0) : 0, z = cur ? Math.min(50, s.wkPuzzles ?? 0) : 0;
+    return { p, d, l, z, pts: d * 10 + l * 5 + z };
+  }).sort((a, b) => b.pts - a.pts || b.d - a.d);
+  return `<h2 class="sec">${t("boardTitle")}</h2><table class="boardtable"><tr><th></th><th></th><th>${t("boardDays")}</th><th>${t("lessons")}</th><th>${t("puzzlesTitle")}</th><th>${t("boardPoints")}</th></tr>
+    ${rows.map((r, i) => `<tr><td class="n">${num(i + 1)}</td><td>${avatarHTML(r.p)} ${esc(lab[pupilKey(classId, r.p)] ?? "")}</td><td class="n">${num(r.d)}</td><td class="n">${num(r.l)}</td><td class="n">${num(r.z)}</td><td class="n"><b>${num(r.pts)}</b></td></tr>`).join("")}</table>`;
 }

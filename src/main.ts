@@ -12,7 +12,8 @@ import "./fonts.css";
 import "./styles.css";
 import { registerSW } from "virtual:pwa-register";
 import { premovesOn } from "./play/gamekit";
-import { onlineGame, onlineLobby } from "./online/screens";
+import { ladderScreen, onlineGame, onlineLobby } from "./online/screens";
+import { classBoardScreen } from "./teach/screens";
 import { PIECE_SETS, pieceHTML } from "./chess/pieces";
 import { coachHTML } from "./coach";
 import { findLesson, LEVELS } from "./content/levels";
@@ -377,7 +378,8 @@ function route() {
   }
   if (page === "placement") { teardown = playPlacement(app, go); return; }
   if (page === "play" && arg === "friend") { teardown = friendSetup(app, go); return; }
-  if (page === "online") { teardown = arg === "game" && sub ? onlineGame(app, sub, go) : onlineLobby(app, go); return; }
+  if (page === "online") { teardown = arg === "game" && sub ? onlineGame(app, sub, go) : arg === "ladder" ? ladderScreen(app, go) : onlineLobby(app, go); return; }
+  if (page === "class" && arg) return void classBoardScreen(app, arg, go);
   if (page === "analysis") { teardown = analysisBoard(app, go); return; }
   if (page === "play") {
     const bot = arg ? botById(arg) : undefined;

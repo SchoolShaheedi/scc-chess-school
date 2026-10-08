@@ -1,4 +1,4 @@
-// Piece art. The four illustrated sets are the user's artwork (3_Sikh_Chess_Championship/images/),
+// Piece art. The four illustrated sets are the user's artwork (3_Sikh_Chess_Championship/04_Assets/sheets/),
 // cut into single WebPs by tools/slice-art.py into public/art/pieces/<set>/. "V" is the original
 // in-code vector set from the prototype, kept as a tiny fallback and as a plain option.
 import { store } from "../store";

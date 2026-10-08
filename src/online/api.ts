@@ -121,3 +121,9 @@ export function watchChallenges(player: string, on: () => void): () => void {
     .on("postgres_changes", { event: "*", schema: "public", table: "challenges", filter: `from_player=eq.${player}` }, on).subscribe();
   return () => { void db()?.removeChannel(ch); };
 }
+
+/** The grown-up ladder (DECISIONS #89): the top 50 for a clock speed, plus my own place. Grown-up players only. */
+export interface LadderRow { place: number; avatar: string; colour: string; rating: number; games: number; me: boolean }
+export async function adultLadder(player: string, category: "rapid" | "blitz"): Promise<LadderRow[]> {
+  const { data } = await db()!.rpc("adult_ladder", { p_player: player, p_category: category }); return (data as LadderRow[]) ?? [];
+}
