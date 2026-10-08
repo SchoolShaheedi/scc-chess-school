@@ -41,7 +41,8 @@ export const LEVEL3: Lesson[] = [
         board: { fen: "8/8/4k3/8/R7/1R6/8/7K w - - 0 1" } },
       { text: { en: "One rook guards a row so the king can't come back. The other gives check on the next row. Then they swap jobs.", pa: "ਇੱਕ ਹਾਥੀ ਇੱਕ ਕਤਾਰ ਦੀ ਰਾਖੀ ਕਰਦਾ ਹੈ ਤਾਂ ਜੋ ਬਾਦਸ਼ਾਹ ਵਾਪਸ ਨਾ ਆ ਸਕੇ। ਦੂਜਾ ਅਗਲੀ ਕਤਾਰ 'ਤੇ ਸ਼ਹਿ ਦਿੰਦਾ ਹੈ। ਫਿਰ ਉਹ ਕੰਮ ਬਦਲ ਲੈਂਦੇ ਹਨ।" },
         board: { fen: "8/8/4k3/8/R7/1R6/8/7K w - - 0 1", arrows: [["b3", "b5"], ["a4", "a6"]] } },
-      { text: { en: "If the king comes close to a rook, move that rook far away along the same row. Never leave a rook where the king can take it.", pa: "ਜੇ ਬਾਦਸ਼ਾਹ ਕਿਸੇ ਹਾਥੀ ਦੇ ਨੇੜੇ ਆਵੇ, ਤਾਂ ਉਸ ਹਾਥੀ ਨੂੰ ਉਸੇ ਕਤਾਰ ਵਿੱਚ ਦੂਰ ਲੈ ਜਾਓ। ਹਾਥੀ ਨੂੰ ਕਦੇ ਉੱਥੇ ਨਾ ਛੱਡੋ ਜਿੱਥੇ ਬਾਦਸ਼ਾਹ ਉਸ ਨੂੰ ਮਾਰ ਸਕੇ।" } },
+      { text: { en: "If the king comes close to a rook, move that rook far away along the same row. Never leave a rook where the king can take it.", pa: "ਜੇ ਬਾਦਸ਼ਾਹ ਕਿਸੇ ਹਾਥੀ ਦੇ ਨੇੜੇ ਆਵੇ, ਤਾਂ ਉਸ ਹਾਥੀ ਨੂੰ ਉਸੇ ਕਤਾਰ ਵਿੱਚ ਦੂਰ ਲੈ ਜਾਓ। ਹਾਥੀ ਨੂੰ ਕਦੇ ਉੱਥੇ ਨਾ ਛੱਡੋ ਜਿੱਥੇ ਬਾਦਸ਼ਾਹ ਉਸ ਨੂੰ ਮਾਰ ਸਕੇ।" },
+        board: { fen: "8/8/8/1k6/R7/7R/8/7K w - - 0 1", arrows: [["a4","h4"]], highlights: ["a4"] } },
     ],
     try: { kind: "play", fen: "6k1/R7/8/8/8/8/8/1R5K w - - 0 1", goal: "mate",
       prompt: { en: "The last step of the ladder: checkmate.", pa: "ਪੌੜੀ ਦਾ ਆਖ਼ਰੀ ਡੰਡਾ: ਸ਼ਹਿ-ਮਾਤ।" },
@@ -90,7 +91,8 @@ export const LEVEL3: Lesson[] = [
         board: { fen: "8/8/3k4/8/8/4R3/8/4K3 b - - 0 1", arrows: [["e3", "e8"]] } },
       { text: { en: "Walk your king towards the other king. When the two kings face each other with one square between, check on the edge row.", pa: "ਆਪਣੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਦੂਜੇ ਬਾਦਸ਼ਾਹ ਵੱਲ ਲੈ ਜਾਓ। ਜਦੋਂ ਦੋਵੇਂ ਬਾਦਸ਼ਾਹ ਇੱਕ ਖਾਨਾ ਛੱਡ ਕੇ ਆਹਮੋ-ਸਾਹਮਣੇ ਹੋਣ, ਤਾਂ ਕੰਢੇ ਵਾਲੀ ਕਤਾਰ 'ਤੇ ਸ਼ਹਿ ਦਿਓ।" },
         board: { play: true, fen: "4k3/8/4K3/8/8/8/8/7R w - - 0 1", arrows: [["h1", "h8"]] } },
-      { text: { en: "If the kings don't face each other yet, make a quiet rook move along its line: a waiting move. The other king must then step into place.", pa: "ਜੇ ਬਾਦਸ਼ਾਹ ਅਜੇ ਆਹਮੋ-ਸਾਹਮਣੇ ਨਹੀਂ, ਤਾਂ ਹਾਥੀ ਦੀ ਆਪਣੀ ਲਕੀਰ 'ਤੇ ਇੱਕ ਚੁੱਪ ਚਾਲ ਚੱਲੋ: ਉਡੀਕ ਦੀ ਚਾਲ। ਫਿਰ ਦੂਜੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਖ਼ੁਦ ਥਾਂ 'ਤੇ ਆਉਣਾ ਪਵੇਗਾ।" } },
+      { text: { en: "If the kings don't face each other yet, make a quiet rook move along its line: a waiting move. The other king must then step into place.", pa: "ਜੇ ਬਾਦਸ਼ਾਹ ਅਜੇ ਆਹਮੋ-ਸਾਹਮਣੇ ਨਹੀਂ, ਤਾਂ ਹਾਥੀ ਦੀ ਆਪਣੀ ਲਕੀਰ 'ਤੇ ਇੱਕ ਚੁੱਪ ਚਾਲ ਚੱਲੋ: ਉਡੀਕ ਦੀ ਚਾਲ। ਫਿਰ ਦੂਜੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਖ਼ੁਦ ਥਾਂ 'ਤੇ ਆਉਣਾ ਪਵੇਗਾ।" },
+        board: { fen: "4k3/R7/3K4/8/8/8/8/8 w - - 0 1", arrows: [["a7","b7"]] } },
     ],
     try: { kind: "play", fen: "4k3/8/4K3/8/8/8/8/7R w - - 0 1", goal: "mate", prompt: mate1 },
     practise: [
@@ -109,7 +111,8 @@ export const LEVEL3: Lesson[] = [
     learn: [
       { text: { en: "The queen right next to the king, protected by another of your pieces, is often checkmate: the king can't take her.", pa: "ਰਾਣੀ ਬਾਦਸ਼ਾਹ ਦੇ ਬਿਲਕੁਲ ਨਾਲ, ਤੁਹਾਡੇ ਕਿਸੇ ਹੋਰ ਮੋਹਰੇ ਦੀ ਰਾਖੀ ਨਾਲ, ਅਕਸਰ ਸ਼ਹਿ-ਮਾਤ ਹੁੰਦੀ ਹੈ: ਬਾਦਸ਼ਾਹ ਉਸ ਨੂੰ ਮਾਰ ਨਹੀਂ ਸਕਦਾ।" },
         board: { fen: "6k1/6Q1/6K1/8/8/8/8/8 b - - 0 1", arrows: [["g6", "g7"]] } },
-      { text: { en: "Look for a square next to the king that your queen can reach and another piece already guards.", pa: "ਬਾਦਸ਼ਾਹ ਦੇ ਨਾਲ ਦਾ ਉਹ ਖਾਨਾ ਲੱਭੋ ਜਿੱਥੇ ਤੁਹਾਡੀ ਰਾਣੀ ਪਹੁੰਚ ਸਕੇ ਅਤੇ ਕੋਈ ਹੋਰ ਮੋਹਰਾ ਪਹਿਲਾਂ ਹੀ ਰਾਖੀ ਕਰਦਾ ਹੋਵੇ।" } },
+      { text: { en: "Look for a square next to the king that your queen can reach and another piece already guards.", pa: "ਬਾਦਸ਼ਾਹ ਦੇ ਨਾਲ ਦਾ ਉਹ ਖਾਨਾ ਲੱਭੋ ਜਿੱਥੇ ਤੁਹਾਡੀ ਰਾਣੀ ਪਹੁੰਚ ਸਕੇ ਅਤੇ ਕੋਈ ਹੋਰ ਮੋਹਰਾ ਪਹਿਲਾਂ ਹੀ ਰਾਖੀ ਕਰਦਾ ਹੋਵੇ।" },
+        board: { fen: "4k3/8/4K3/8/8/Q7/8/8 w - - 0 1", arrows: [["a3","e7"]], highlights: ["e7"] } },
     ],
     try: { kind: "play", fen: "6k1/8/6K1/8/8/8/8/Q7 w - - 0 1", goal: "mate", prompt: mate1,
       hint: { en: "Your king guards g7.", pa: "ਤੁਹਾਡਾ ਬਾਦਸ਼ਾਹ g7 ਦੀ ਰਾਖੀ ਕਰਦਾ ਹੈ।" } },
@@ -127,7 +130,8 @@ export const LEVEL3: Lesson[] = [
     learn: [
       { text: { en: "When a king is surrounded by its own pieces, a knight can give a check that nothing can block.", pa: "ਜਦੋਂ ਬਾਦਸ਼ਾਹ ਆਪਣੇ ਹੀ ਮੋਹਰਿਆਂ ਨਾਲ ਘਿਰਿਆ ਹੋਵੇ, ਤਾਂ ਘੋੜਾ ਅਜਿਹੀ ਸ਼ਹਿ ਦੇ ਸਕਦਾ ਹੈ ਜਿਸ ਨੂੰ ਕੋਈ ਰੋਕ ਨਹੀਂ ਸਕਦਾ।" },
         board: { fen: "6rk/5Npp/8/8/8/8/8/6K1 b - - 0 1", arrows: [["f7", "h8"]] } },
-      { text: { en: "Knights jump, so the check can't be blocked. If nothing can capture the knight, it's mate.", pa: "ਘੋੜੇ ਛਾਲ ਮਾਰਦੇ ਹਨ, ਇਸ ਲਈ ਸ਼ਹਿ ਰੋਕੀ ਨਹੀਂ ਜਾ ਸਕਦੀ। ਜੇ ਕੋਈ ਘੋੜੇ ਨੂੰ ਮਾਰ ਨਾ ਸਕੇ, ਤਾਂ ਮਾਤ ਹੈ।" } },
+      { text: { en: "Knights jump, so the check can't be blocked. If nothing can capture the knight, it's mate.", pa: "ਘੋੜੇ ਛਾਲ ਮਾਰਦੇ ਹਨ, ਇਸ ਲਈ ਸ਼ਹਿ ਰੋਕੀ ਨਹੀਂ ਜਾ ਸਕਦੀ। ਜੇ ਕੋਈ ਘੋੜੇ ਨੂੰ ਮਾਰ ਨਾ ਸਕੇ, ਤਾਂ ਮਾਤ ਹੈ।" },
+        board: { fen: "6rk/6pp/8/6N1/8/8/8/6K1 w - - 0 1", arrows: [["g5","f7"]] } },
     ],
     try: { kind: "play", fen: "6rk/6pp/7N/8/8/8/8/6K1 w - - 0 1", goal: "mate", prompt: mate1,
       hint: { en: "Which square next to the king can your knight jump to?", pa: "ਤੁਹਾਡਾ ਘੋੜਾ ਬਾਦਸ਼ਾਹ ਦੇ ਨੇੜੇ ਕਿਸ ਖਾਨੇ 'ਤੇ ਛਾਲ ਮਾਰ ਸਕਦਾ ਹੈ?" } },
@@ -143,7 +147,8 @@ export const LEVEL3: Lesson[] = [
     goal: { en: "Spot mate in one in any position.", pa: "ਕਿਸੇ ਵੀ ਹਾਲਤ ਵਿੱਚ ਇੱਕ ਚਾਲ ਦੀ ਮਾਤ ਲੱਭੋ।" },
     learn: [
       { text: { en: "Checks first. List every check you have. For each one ask: can the king move, can the check be blocked, can the checker be taken? If the answer is no, no, no: it's mate.",
-                pa: "ਪਹਿਲਾਂ ਸ਼ਹਿ। ਆਪਣੀਆਂ ਸਾਰੀਆਂ ਸ਼ਹਿਆਂ ਗਿਣੋ। ਹਰ ਇੱਕ ਲਈ ਪੁੱਛੋ: ਕੀ ਬਾਦਸ਼ਾਹ ਹਿੱਲ ਸਕਦਾ ਹੈ, ਕੀ ਸ਼ਹਿ ਰੋਕੀ ਜਾ ਸਕਦੀ ਹੈ, ਕੀ ਸ਼ਹਿ ਦੇਣ ਵਾਲਾ ਮਾਰਿਆ ਜਾ ਸਕਦਾ ਹੈ? ਜੇ ਜਵਾਬ ਨਹੀਂ, ਨਹੀਂ, ਨਹੀਂ ਹੈ: ਤਾਂ ਮਾਤ ਹੈ।" } },
+                pa: "ਪਹਿਲਾਂ ਸ਼ਹਿ। ਆਪਣੀਆਂ ਸਾਰੀਆਂ ਸ਼ਹਿਆਂ ਗਿਣੋ। ਹਰ ਇੱਕ ਲਈ ਪੁੱਛੋ: ਕੀ ਬਾਦਸ਼ਾਹ ਹਿੱਲ ਸਕਦਾ ਹੈ, ਕੀ ਸ਼ਹਿ ਰੋਕੀ ਜਾ ਸਕਦੀ ਹੈ, ਕੀ ਸ਼ਹਿ ਦੇਣ ਵਾਲਾ ਮਾਰਿਆ ਜਾ ਸਕਦਾ ਹੈ? ਜੇ ਜਵਾਬ ਨਹੀਂ, ਨਹੀਂ, ਨਹੀਂ ਹੈ: ਤਾਂ ਮਾਤ ਹੈ।" },
+        board: { fen: "6k1/5ppp/8/8/8/1Q6/8/4R1K1 w - - 0 1", arrows: [["e1","e8"],["b3","f7"]] } },
     ],
     try: { kind: "play", fen: "k7/8/1K6/8/8/8/8/2R5 w - - 0 1", goal: "mate", prompt: mate1 },
     practise: [
@@ -157,7 +162,8 @@ export const LEVEL3: Lesson[] = [
     title: { en: "Don't get mated", pa: "ਆਪਣਾ ਬਚਾਅ" },
     goal: { en: "See your opponent's mate threat first, and stop it.", pa: "ਵਿਰੋਧੀ ਦੀ ਮਾਤ ਦੀ ਧਮਕੀ ਪਹਿਲਾਂ ਵੇਖੋ, ਅਤੇ ਉਸ ਨੂੰ ਰੋਕੋ।" },
     learn: [
-      { text: { en: "Before every move, ask: what does my opponent want to do next? Is there a check that would mate me?", pa: "ਹਰ ਚਾਲ ਤੋਂ ਪਹਿਲਾਂ ਪੁੱਛੋ: ਮੇਰਾ ਵਿਰੋਧੀ ਅੱਗੇ ਕੀ ਕਰਨਾ ਚਾਹੁੰਦਾ ਹੈ? ਕੀ ਕੋਈ ਸ਼ਹਿ ਮੈਨੂੰ ਮਾਤ ਦੇ ਸਕਦੀ ਹੈ?" } },
+      { text: { en: "Before every move, ask: what does my opponent want to do next? Is there a check that would mate me?", pa: "ਹਰ ਚਾਲ ਤੋਂ ਪਹਿਲਾਂ ਪੁੱਛੋ: ਮੇਰਾ ਵਿਰੋਧੀ ਅੱਗੇ ਕੀ ਕਰਨਾ ਚਾਹੁੰਦਾ ਹੈ? ਕੀ ਕੋਈ ਸ਼ਹਿ ਮੈਨੂੰ ਮਾਤ ਦੇ ਸਕਦੀ ਹੈ?" },
+        board: { fen: "r5k1/5ppp/8/8/8/8/5PPP/6K1 w - - 0 1", arrows: [["a8","a1"]], highlights: ["a1"] } },
       { text: { en: "If they threaten mate, stop it first: guard the square, block the line, or make room for your king.", pa: "ਜੇ ਉਹ ਮਾਤ ਦੀ ਧਮਕੀ ਦੇਣ, ਤਾਂ ਪਹਿਲਾਂ ਉਸ ਨੂੰ ਰੋਕੋ: ਖਾਨੇ ਦੀ ਰਾਖੀ ਕਰੋ, ਲਕੀਰ ਰੋਕੋ, ਜਾਂ ਆਪਣੇ ਬਾਦਸ਼ਾਹ ਲਈ ਥਾਂ ਬਣਾਓ।" },
         board: { fen: "6k1/5ppp/3b4/8/7q/8/5PPP/5R1K w - - 0 1", arrows: [["h4", "h2"], ["d6", "h2"]] } },
     ],

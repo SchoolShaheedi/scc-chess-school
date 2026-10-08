@@ -327,7 +327,8 @@ export const LEVEL1: Lesson[] = [
     learn: [
       { text: { en: "When a piece attacks the king, that is CHECK. The king must be saved at once.", pa: "ਜਦੋਂ ਕੋਈ ਮੋਹਰਾ ਬਾਦਸ਼ਾਹ 'ਤੇ ਹਮਲਾ ਕਰੇ, ਉਹ ਸ਼ਹਿ ਹੈ। ਬਾਦਸ਼ਾਹ ਨੂੰ ਤੁਰੰਤ ਬਚਾਉਣਾ ਪੈਂਦਾ ਹੈ।" },
         board: { pieces: { e1: "wK", e8: "bR" }, arrows: [["e8", "e1"]], highlights: ["e1"] } },
-      { text: { en: "Three ways to save it: move the king, block the attack, or capture the attacker.", pa: "ਬਚਾਉਣ ਦੇ ਤਿੰਨ ਰਾਹ: ਬਾਦਸ਼ਾਹ ਨੂੰ ਹਿਲਾਓ, ਹਮਲਾ ਰੋਕੋ, ਜਾਂ ਹਮਲਾਵਰ ਨੂੰ ਮਾਰੋ।" } },
+      { text: { en: "Three ways to save it: move the king, block the attack, or capture the attacker.", pa: "ਬਚਾਉਣ ਦੇ ਤਿੰਨ ਰਾਹ: ਬਾਦਸ਼ਾਹ ਨੂੰ ਹਿਲਾਓ, ਹਮਲਾ ਰੋਕੋ, ਜਾਂ ਹਮਲਾਵਰ ਨੂੰ ਮਾਰੋ।" },
+        board: { pieces: {e1:"wK",e8:"bR",c4:"wB",a8:"wR"}, arrows: [["e8","e1"],["c4","e2"],["a8","e8"]], dots: ["d1","d2","f1","f2"] } },
     ],
     try: { kind: "play", fen: "k7/8/8/8/8/8/8/r3K3 w - - 0 1", goal: "escape-move",
       prompt: { en: "Check! Move your king off the attacked row.", pa: "ਸ਼ਹਿ! ਆਪਣੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਹਮਲੇ ਵਾਲੀ ਕਤਾਰ ਤੋਂ ਹਟਾਓ।" },
@@ -351,7 +352,8 @@ export const LEVEL1: Lesson[] = [
     learn: [
       { text: { en: "Pawn wars! Only pawns, with the kings far away. Get a pawn to the last row first and it becomes a queen.", pa: "ਪਿਆਦਿਆਂ ਦੀ ਜੰਗ! ਸਿਰਫ਼ ਪਿਆਦੇ, ਬਾਦਸ਼ਾਹ ਦੂਰ। ਪਹਿਲਾਂ ਆਖ਼ਰੀ ਕਤਾਰ ਤੱਕ ਪਹੁੰਚਣ ਵਾਲਾ ਪਿਆਦਾ ਰਾਣੀ ਬਣ ਜਾਂਦਾ ਹੈ।" },
         board: { fen: "7k/ppp5/8/8/8/8/PPP5/7K w - - 0 1" } },
-      { text: { en: "Tip: a pawn with no enemy pawn in front of it, or beside it, can run all the way.", pa: "ਸੁਝਾਅ: ਜਿਸ ਪਿਆਦੇ ਦੇ ਅੱਗੇ ਜਾਂ ਨਾਲ ਕੋਈ ਦੁਸ਼ਮਣ ਪਿਆਦਾ ਨਾ ਹੋਵੇ, ਉਹ ਪੂਰਾ ਰਾਹ ਦੌੜ ਸਕਦਾ ਹੈ।" } },
+      { text: { en: "Tip: a pawn with no enemy pawn in front of it, or beside it, can run all the way.", pa: "ਸੁਝਾਅ: ਜਿਸ ਪਿਆਦੇ ਦੇ ਅੱਗੇ ਜਾਂ ਨਾਲ ਕੋਈ ਦੁਸ਼ਮਣ ਪਿਆਦਾ ਨਾ ਹੋਵੇ, ਉਹ ਪੂਰਾ ਰਾਹ ਦੌੜ ਸਕਦਾ ਹੈ।" },
+        board: { fen: "k7/pp6/8/8/8/8/6P1/K7 w - - 0 1", arrows: [["g2","g8"]], highlights: ["g2"] } },
     ],
     try: { kind: "botGame", fen: "7k/ppp5/8/8/8/8/PPP5/7K w - - 0 1", bot: "nanhi-chidi", goal: "promote",
       prompt: { en: "Three pawns each against Nanhi Chidi. Make a queen first!", pa: "ਨੰਨ੍ਹੀ ਚਿੜੀ ਵਿਰੁੱਧ ਤਿੰਨ-ਤਿੰਨ ਪਿਆਦੇ। ਪਹਿਲਾਂ ਰਾਣੀ ਬਣਾਓ!" } },
@@ -369,7 +371,8 @@ export const LEVEL1: Lesson[] = [
     learn: [
       { text: { en: "Your rook against three pawns. Capture them all before one reaches your back row.", pa: "ਤੁਹਾਡਾ ਹਾਥੀ ਤਿੰਨ ਪਿਆਦਿਆਂ ਵਿਰੁੱਧ। ਕੋਈ ਤੁਹਾਡੀ ਪਿਛਲੀ ਕਤਾਰ ਤੱਕ ਪਹੁੰਚੇ, ਉਸ ਤੋਂ ਪਹਿਲਾਂ ਸਾਰੇ ਮਾਰ ਦਿਓ।" },
         board: { fen: "7k/ppp5/8/8/8/8/8/R6K w - - 0 1" } },
-      { text: { en: "Tip: get behind the pawns, or in front of them, and keep your rook safe from the king.", pa: "ਸੁਝਾਅ: ਪਿਆਦਿਆਂ ਦੇ ਪਿੱਛੇ ਜਾਂ ਅੱਗੇ ਜਾਓ, ਅਤੇ ਆਪਣੇ ਹਾਥੀ ਨੂੰ ਬਾਦਸ਼ਾਹ ਤੋਂ ਬਚਾ ਕੇ ਰੱਖੋ।" } },
+      { text: { en: "Tip: get behind the pawns, or in front of them, and keep your rook safe from the king.", pa: "ਸੁਝਾਅ: ਪਿਆਦਿਆਂ ਦੇ ਪਿੱਛੇ ਜਾਂ ਅੱਗੇ ਜਾਓ, ਅਤੇ ਆਪਣੇ ਹਾਥੀ ਨੂੰ ਬਾਦਸ਼ਾਹ ਤੋਂ ਬਚਾ ਕੇ ਰੱਖੋ।" },
+        board: { fen: "R7/ppp5/8/7k/8/8/8/7K w - - 0 1", arrows: [["a8","a7"]], highlights: ["a8"] } },
     ],
     try: { kind: "botGame", fen: "7k/ppp5/8/8/8/8/8/R6K w - - 0 1", bot: "nanhi-chidi", goal: "clear",
       prompt: { en: "Catch all three pawns with your rook.", pa: "ਆਪਣੇ ਹਾਥੀ ਨਾਲ ਤਿੰਨੇ ਪਿਆਦੇ ਫੜੋ।" } },

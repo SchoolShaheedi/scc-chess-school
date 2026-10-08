@@ -52,7 +52,8 @@ export const LEVEL6: Lesson[] = [
     title: { en: "Don't move twice", pa: "ਇੱਕ ਮੋਹਰਾ, ਇੱਕ ਵਾਰ" },
     goal: { en: "Develop every piece once before moving any piece twice.", pa: "ਕਿਸੇ ਮੋਹਰੇ ਨੂੰ ਦੂਜੀ ਵਾਰ ਚਲਾਉਣ ਤੋਂ ਪਹਿਲਾਂ ਹਰ ਮੋਹਰੇ ਨੂੰ ਇੱਕ ਵਾਰ ਕੱਢੋ।" },
     learn: [
-      { text: { en: "Each move in the opening is precious. Moving the same piece twice lets your opponent bring out an extra piece.", pa: "ਸ਼ੁਰੂਆਤ ਵਿੱਚ ਹਰ ਚਾਲ ਕੀਮਤੀ ਹੈ। ਇੱਕੋ ਮੋਹਰੇ ਨੂੰ ਦੋ ਵਾਰ ਚਲਾਉਣ ਨਾਲ ਵਿਰੋਧੀ ਇੱਕ ਵਾਧੂ ਮੋਹਰਾ ਕੱਢ ਲੈਂਦਾ ਹੈ।" } },
+      { text: { en: "Each move in the opening is precious. Moving the same piece twice lets your opponent bring out an extra piece.", pa: "ਸ਼ੁਰੂਆਤ ਵਿੱਚ ਹਰ ਚਾਲ ਕੀਮਤੀ ਹੈ। ਇੱਕੋ ਮੋਹਰੇ ਨੂੰ ਦੋ ਵਾਰ ਚਲਾਉਣ ਨਾਲ ਵਿਰੋਧੀ ਇੱਕ ਵਾਧੂ ਮੋਹਰਾ ਕੱਢ ਲੈਂਦਾ ਹੈ।" },
+        board: { fen: "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3", arrows: [["f3","g5"]], crosses: ["g5"], highlights: ["b1","c1","f1"] } },
       { text: { en: "An early queen is the classic mistake: every new piece the other side develops can attack her, and she has to keep moving.", pa: "ਜਲਦੀ ਬਾਹਰ ਆਈ ਰਾਣੀ ਆਮ ਗ਼ਲਤੀ ਹੈ: ਦੂਜੇ ਪਾਸੇ ਦਾ ਹਰ ਨਵਾਂ ਮੋਹਰਾ ਉਸ 'ਤੇ ਹਮਲਾ ਕਰ ਸਕਦਾ ਹੈ, ਅਤੇ ਉਸ ਨੂੰ ਵਾਰ-ਵਾਰ ਹਿੱਲਣਾ ਪੈਂਦਾ ਹੈ।" },
         board: { play: true, fen: "rnb1kbnr/pppp1ppp/8/4p3/4P2q/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3", arrows: [["g1", "f3"]] } },
     ],
@@ -68,7 +69,8 @@ export const LEVEL6: Lesson[] = [
     learn: [
       { text: { en: "Scholar's mate: queen and bishop both aim at f7, the weakest square, guarded only by the king.", pa: "ਸਕਾਲਰ ਮਾਤ: ਰਾਣੀ ਅਤੇ ਊਠ ਦੋਵੇਂ f7 ਵੱਲ ਨਿਸ਼ਾਨਾ ਲਾਉਂਦੇ ਹਨ, ਸਭ ਤੋਂ ਕਮਜ਼ੋਰ ਖਾਨਾ, ਜਿਸ ਦੀ ਰਾਖੀ ਸਿਰਫ਼ ਬਾਦਸ਼ਾਹ ਕਰਦਾ ਹੈ।" },
         board: { fen: "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3", arrows: [["h5", "f7"], ["c4", "f7"]] } },
-      { text: { en: "Block the queen with ...g6, then chase her with your knight. You gain moves while she runs.", pa: "...g6 ਨਾਲ ਰਾਣੀ ਨੂੰ ਰੋਕੋ, ਫਿਰ ਘੋੜੇ ਨਾਲ ਉਸ ਨੂੰ ਭਜਾਓ। ਜਦੋਂ ਉਹ ਭੱਜਦੀ ਹੈ, ਤੁਸੀਂ ਚਾਲਾਂ ਕਮਾਉਂਦੇ ਹੋ।" } },
+      { text: { en: "Block the queen with ...g6, then chase her with your knight. You gain moves while she runs.", pa: "...g6 ਨਾਲ ਰਾਣੀ ਨੂੰ ਰੋਕੋ, ਫਿਰ ਘੋੜੇ ਨਾਲ ਉਸ ਨੂੰ ਭਜਾਓ। ਜਦੋਂ ਉਹ ਭੱਜਦੀ ਹੈ, ਤੁਸੀਂ ਚਾਲਾਂ ਕਮਾਉਂਦੇ ਹੋ।" },
+        board: { fen: "r1bqkbnr/pppp1p1p/2n3p1/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 0 4", arrows: [["g8","f6"]], highlights: ["g6"] } },
       { text: { en: "Légal's trap: White gives up the queen, and three pieces mate. Greed is punished.", pa: "ਲੇਗਾਲ ਦਾ ਫੰਦਾ: ਚਿੱਟਾ ਰਾਣੀ ਦੇ ਦਿੰਦਾ ਹੈ, ਅਤੇ ਤਿੰਨ ਮੋਹਰੇ ਮਾਤ ਦਿੰਦੇ ਹਨ। ਲਾਲਚ ਦੀ ਸਜ਼ਾ ਮਿਲਦੀ ਹੈ।" },
         board: { fen: "rn1q1bnr/ppp1kB1p/3p2p1/3NN3/4P3/8/PPPP1PPP/R1BbK2R b KQ - 2 7", highlights: ["e7"] } },
     ],
@@ -89,7 +91,8 @@ export const LEVEL6: Lesson[] = [
     learn: [
       { text: { en: "1. e4 e5 2. Nf3 Nc6 3. Bc4: the bishop aims at f7, the knight hits e5. Every move follows the three rules.", pa: "1. e4 e5 2. Nf3 Nc6 3. Bc4: ਊਠ f7 ਵੱਲ ਤੱਕਦਾ ਹੈ, ਘੋੜਾ e5 'ਤੇ ਹਮਲਾ ਕਰਦਾ ਹੈ। ਹਰ ਚਾਲ ਤਿੰਨ ਅਸੂਲਾਂ ਮੁਤਾਬਕ ਹੈ।" },
         board: { fen: "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3", arrows: [["c4", "f7"], ["f3", "e5"]] } },
-      { text: { en: "Then a quiet plan: c3 and d3 build a strong centre, and you castle. Calm, solid, and used by world champions.", pa: "ਫਿਰ ਸ਼ਾਂਤ ਯੋਜਨਾ: c3 ਅਤੇ d3 ਮਜ਼ਬੂਤ ਵਿਚਕਾਰ ਬਣਾਉਂਦੇ ਹਨ, ਅਤੇ ਤੁਸੀਂ ਕਿਲ੍ਹੇਬੰਦੀ ਕਰਦੇ ਹੋ। ਸ਼ਾਂਤ, ਪੱਕੀ, ਅਤੇ ਵਿਸ਼ਵ ਚੈਂਪੀਅਨਾਂ ਦੀ ਵਰਤੀ ਹੋਈ।" } },
+      { text: { en: "Then a quiet plan: c3 and d3 build a strong centre, and you castle. Calm, solid, and used by world champions.", pa: "ਫਿਰ ਸ਼ਾਂਤ ਯੋਜਨਾ: c3 ਅਤੇ d3 ਮਜ਼ਬੂਤ ਵਿਚਕਾਰ ਬਣਾਉਂਦੇ ਹਨ, ਅਤੇ ਤੁਸੀਂ ਕਿਲ੍ਹੇਬੰਦੀ ਕਰਦੇ ਹੋ। ਸ਼ਾਂਤ, ਪੱਕੀ, ਅਤੇ ਵਿਸ਼ਵ ਚੈਂਪੀਅਨਾਂ ਦੀ ਵਰਤੀ ਹੋਈ।" },
+        board: { fen: "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 b kq - 1 6", highlights: ["c3","d3","g1"] } },
     ],
     try: { kind: "line", side: "w", moves: ["e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5"], opening: "Italian Game: Giuoco Piano",
       prompt: play("Play the first three moves of the Italian Game.", "ਇਤਾਲਵੀ ਖੇਡ ਦੀਆਂ ਪਹਿਲੀਆਂ ਤਿੰਨ ਚਾਲਾਂ ਖੇਡੋ।") },
@@ -110,7 +113,8 @@ export const LEVEL6: Lesson[] = [
     learn: [
       { text: { en: "The London is a system: the same shape against almost anything. Pawns d4, e3, c3; bishop out to f4 BEFORE e3.", pa: "ਲੰਡਨ ਇੱਕ ਪ੍ਰਣਾਲੀ ਹੈ: ਲਗਭਗ ਹਰ ਜਵਾਬ ਦੇ ਖ਼ਿਲਾਫ਼ ਇੱਕੋ ਬਣਤਰ। ਪਿਆਦੇ d4, e3, c3; ਊਠ e3 ਤੋਂ ਪਹਿਲਾਂ f4 'ਤੇ।" },
         board: { fen: "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 3 3", highlights: ["f4"] } },
-      { text: { en: "Then Nbd2, Bd3 and castle. Easy to remember, hard to beat.", pa: "ਫਿਰ Nbd2, Bd3 ਅਤੇ ਕਿਲ੍ਹੇਬੰਦੀ। ਯਾਦ ਰੱਖਣੀ ਸੌਖੀ, ਹਰਾਉਣੀ ਔਖੀ।" } },
+      { text: { en: "Then Nbd2, Bd3 and castle. Easy to remember, hard to beat.", pa: "ਫਿਰ Nbd2, Bd3 ਅਤੇ ਕਿਲ੍ਹੇਬੰਦੀ। ਯਾਦ ਰੱਖਣੀ ਸੌਖੀ, ਹਰਾਉਣੀ ਔਖੀ।" },
+        board: { fen: "r1bq1rk1/pp3ppp/2nbpn2/2pp4/3P1B2/2PBPN2/PP1N1PPP/R2Q1RK1 b - - 6 8", highlights: ["d2","d3","g1"] } },
     ],
     try: { kind: "line", side: "w", moves: ["d4", "d5", "Nf3", "Nf6", "Bf4"], opening: "Queen's Pawn Game: London System",
       prompt: play("Start the London System.", "ਲੰਡਨ ਪ੍ਰਣਾਲੀ ਸ਼ੁਰੂ ਕਰੋ।") },
@@ -127,8 +131,10 @@ export const LEVEL6: Lesson[] = [
     title: { en: "Answering 1. e4", pa: "1. e4 ਦਾ ਜਵਾਬ" },
     goal: { en: "Meet 1. e4 with 1... e5 and solid development.", pa: "1. e4 ਦਾ ਜਵਾਬ 1... e5 ਨਾਲ ਦਿਓ, ਅਤੇ ਮੋਹਰੇ ਪੱਕੀ ਤਰ੍ਹਾਂ ਕੱਢੋ।" },
     learn: [
-      { text: { en: "As Black, answer 1. e4 with 1... e5: your own share of the centre. Then knights before bishops, and castle.", pa: "ਕਾਲੇ ਵਜੋਂ, 1. e4 ਦਾ ਜਵਾਬ 1... e5 ਨਾਲ ਦਿਓ: ਵਿਚਕਾਰ ਵਿੱਚ ਆਪਣਾ ਹਿੱਸਾ। ਫਿਰ ਊਠਾਂ ਤੋਂ ਪਹਿਲਾਂ ਘੋੜੇ, ਅਤੇ ਕਿਲ੍ਹੇਬੰਦੀ।" } },
-      { text: { en: "Against 3. Bb5 (the Ruy Lopez), ...a6 asks the bishop a question, then ...Nf6 and ...Be7 get you ready to castle.", pa: "3. Bb5 (ਰੂਈ ਲੋਪੇਜ਼) ਦੇ ਖ਼ਿਲਾਫ਼, ...a6 ਊਠ ਤੋਂ ਸਵਾਲ ਪੁੱਛਦਾ ਹੈ, ਫਿਰ ...Nf6 ਅਤੇ ...Be7 ਤੁਹਾਨੂੰ ਕਿਲ੍ਹੇਬੰਦੀ ਲਈ ਤਿਆਰ ਕਰਦੇ ਹਨ।" } },
+      { text: { en: "As Black, answer 1. e4 with 1... e5: your own share of the centre. Then knights before bishops, and castle.", pa: "ਕਾਲੇ ਵਜੋਂ, 1. e4 ਦਾ ਜਵਾਬ 1... e5 ਨਾਲ ਦਿਓ: ਵਿਚਕਾਰ ਵਿੱਚ ਆਪਣਾ ਹਿੱਸਾ। ਫਿਰ ਊਠਾਂ ਤੋਂ ਪਹਿਲਾਂ ਘੋੜੇ, ਅਤੇ ਕਿਲ੍ਹੇਬੰਦੀ।" },
+        board: { fen: "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2", highlights: ["e5"] } },
+      { text: { en: "Against 3. Bb5 (the Ruy Lopez), ...a6 asks the bishop a question, then ...Nf6 and ...Be7 get you ready to castle.", pa: "3. Bb5 (ਰੂਈ ਲੋਪੇਜ਼) ਦੇ ਖ਼ਿਲਾਫ਼, ...a6 ਊਠ ਤੋਂ ਸਵਾਲ ਪੁੱਛਦਾ ਹੈ, ਫਿਰ ...Nf6 ਅਤੇ ...Be7 ਤੁਹਾਨੂੰ ਕਿਲ੍ਹੇਬੰਦੀ ਲਈ ਤਿਆਰ ਕਰਦੇ ਹਨ।" },
+        board: { fen: "r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4", arrows: [["a6","b5"]] } },
     ],
     try: { kind: "line", side: "b", moves: ["e4", "e5", "Nf3", "Nc6", "Bc4", "Nf6"], opening: "Italian Game: Two Knights Defense",
       prompt: play("You are Black. Answer the Italian with two knights.", "ਤੁਸੀਂ ਕਾਲੇ ਹੋ। ਇਤਾਲਵੀ ਦਾ ਜਵਾਬ ਦੋ ਘੋੜਿਆਂ ਨਾਲ ਦਿਓ।") },
@@ -147,7 +153,8 @@ export const LEVEL6: Lesson[] = [
     learn: [
       { text: { en: "1. d4 d5 2. c4 is the Queen's Gambit: White offers a pawn. Decline it with 2... e6, keeping a strong pawn on d5.", pa: "1. d4 d5 2. c4 ਰਾਣੀ ਦਾ ਗੈਂਬਿਟ ਹੈ: ਚਿੱਟਾ ਇੱਕ ਪਿਆਦਾ ਪੇਸ਼ ਕਰਦਾ ਹੈ। 2... e6 ਨਾਲ ਨਾਂਹ ਕਰੋ, d5 ਵਾਲਾ ਪਿਆਦਾ ਮਜ਼ਬੂਤ ਰੱਖ ਕੇ।" },
         board: { fen: "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3", highlights: ["d5", "e6"] } },
-      { text: { en: "Then ...Nf6, ...Be7 and castle. Solid as a rock.", pa: "ਫਿਰ ...Nf6, ...Be7 ਅਤੇ ਕਿਲ੍ਹੇਬੰਦੀ। ਚੱਟਾਨ ਵਾਂਗ ਪੱਕਾ।" } },
+      { text: { en: "Then ...Nf6, ...Be7 and castle. Solid as a rock.", pa: "ਫਿਰ ...Nf6, ...Be7 ਅਤੇ ਕਿਲ੍ਹੇਬੰਦੀ। ਚੱਟਾਨ ਵਾਂਗ ਪੱਕਾ।" },
+        board: { fen: "rnbq1rk1/ppp1bppp/4pn2/3p2B1/2PP4/2N1P3/PP3PPP/R2QKBNR w KQ - 1 6", highlights: ["f6","e7","g8"] } },
     ],
     try: { kind: "line", side: "b", moves: ["d4", "d5", "c4", "e6"], opening: "Queen's Gambit Declined",
       prompt: play("You are Black. Decline the Queen's Gambit.", "ਤੁਸੀਂ ਕਾਲੇ ਹੋ। ਰਾਣੀ ਦੇ ਗੈਂਬਿਟ ਨੂੰ ਨਾਂਹ ਕਰੋ।") },
@@ -164,7 +171,8 @@ export const LEVEL6: Lesson[] = [
     title: { en: "From opening to plan", pa: "ਸ਼ੁਰੂਆਤ ਤੋਂ ਯੋਜਨਾ" },
     goal: { en: "Know what to do once the opening is over.", pa: "ਜਾਣੋ ਕਿ ਸ਼ੁਰੂਆਤ ਖ਼ਤਮ ਹੋਣ 'ਤੇ ਕੀ ਕਰਨਾ ਹੈ।" },
     learn: [
-      { text: { en: "Once your pieces are out and your king is castled, the opening is done. Now ask three questions: which of my pieces is worst placed? Where are their weaknesses? Can I open a line for my rooks?", pa: "ਜਦੋਂ ਮੋਹਰੇ ਬਾਹਰ ਹੋਣ ਅਤੇ ਬਾਦਸ਼ਾਹ ਨੇ ਕਿਲ੍ਹੇਬੰਦੀ ਕਰ ਲਈ ਹੋਵੇ, ਸ਼ੁਰੂਆਤ ਖ਼ਤਮ। ਹੁਣ ਤਿੰਨ ਸਵਾਲ ਪੁੱਛੋ: ਤੁਹਾਡਾ ਕਿਹੜਾ ਮੋਹਰਾ ਸਭ ਤੋਂ ਮਾੜੀ ਥਾਂ 'ਤੇ ਹੈ? ਉਨ੍ਹਾਂ ਦੀਆਂ ਕਮਜ਼ੋਰੀਆਂ ਕਿੱਥੇ ਹਨ? ਕੀ ਤੁਸੀਂ ਹਾਥੀਆਂ ਲਈ ਲਕੀਰ ਖੋਲ੍ਹ ਸਕਦੇ ਹੋ?" } },
+      { text: { en: "Once your pieces are out and your king is castled, the opening is done. Now ask three questions: which of my pieces is worst placed? Where are their weaknesses? Can I open a line for my rooks?", pa: "ਜਦੋਂ ਮੋਹਰੇ ਬਾਹਰ ਹੋਣ ਅਤੇ ਬਾਦਸ਼ਾਹ ਨੇ ਕਿਲ੍ਹੇਬੰਦੀ ਕਰ ਲਈ ਹੋਵੇ, ਸ਼ੁਰੂਆਤ ਖ਼ਤਮ। ਹੁਣ ਤਿੰਨ ਸਵਾਲ ਪੁੱਛੋ: ਤੁਹਾਡਾ ਕਿਹੜਾ ਮੋਹਰਾ ਸਭ ਤੋਂ ਮਾੜੀ ਥਾਂ 'ਤੇ ਹੈ? ਉਨ੍ਹਾਂ ਦੀਆਂ ਕਮਜ਼ੋਰੀਆਂ ਕਿੱਥੇ ਹਨ? ਕੀ ਤੁਸੀਂ ਹਾਥੀਆਂ ਲਈ ਲਕੀਰ ਖੋਲ੍ਹ ਸਕਦੇ ਹੋ?" },
+        board: { fen: "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w - - 2 7", highlights: ["b1","c1"] } },
     ],
     try: { kind: "choose", board: { fen: "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 b - - 2 6" },
       prompt: { en: "Italian, move 6. Which white knight is still undeveloped?", pa: "ਇਤਾਲਵੀ, ਚਾਲ ੬। ਚਿੱਟੇ ਦਾ ਕਿਹੜਾ ਘੋੜਾ ਅਜੇ ਨਹੀਂ ਨਿਕਲਿਆ?" },

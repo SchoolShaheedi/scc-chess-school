@@ -9,7 +9,7 @@ import { asNumber } from "../src/engine/uci";
 import { nodeEngine } from "./engine";
 // @ts-expect-error plain JS helper shared with the build tools
 import { openingName } from "../tools/opening-name.mjs";
-import { type Placement, isSquare } from "../src/chess/types";
+import { type Placement, isSquare, placementFromFen } from "../src/chess/types";
 import { LEVELS, PACKS, allLessons, expand } from "../src/content/levels";
 import { answerSquares } from "../src/chess/structure";
 import { UI } from "../src/i18n";
@@ -300,5 +300,31 @@ describe("Punjabi ordinals (DECISIONS #80)", () => {
   it("are spelled out (ਤੀਜੀ), never a Gurmukhi numeral with an ending (੩ਜੀ), whose ਜੀ reads as the honorific", () => {
     const bad = allLessons().flatMap(l => texts(l)).filter(x => /[੦-੯]+(ਜੀ|ਵੀਂ|ਥੀ|ਵਾਂ|ਵੇਂ)/.test(x.pa));
     expect(bad.map(x => x.pa.slice(0, 60))).toEqual([]);
+  });
+});
+
+// DECISIONS #92: a text-only slide showed an empty board under its words, which looked like nothing had loaded.
+describe("learn slides", () => {
+  const slides = allLessons().flatMap(l => l.learn.map((s, i) => ({ id: `${l.id} slide ${i + 1}`, lesson: l.id, d: s.board })));
+  it("every slide has a position (lesson 1.1, about the board itself, may show an empty one)", () => {
+    const bare = slides.filter(s => !s.d || (!s.d.fen && !Object.keys(s.d.pieces ?? {}).length && s.lesson !== "1.1" && !s.d.highlights?.length));
+    expect(bare.map(s => s.id)).toEqual([]);
+  });
+  it("every position is legal and every arrow starts on a piece", () => {
+    const bad: string[] = [];
+    for (const { id, d } of slides) {
+      if (!d) continue;
+      if (d.fen) {
+        try { new Chess(d.fen); } catch { bad.push(`${id}: illegal FEN`); continue; }
+        const p = d.fen.split(" "); p[1] = p[1] === "w" ? "b" : "w"; p[3] = "-";
+        if (new Chess(p.join(" ")).isCheck()) bad.push(`${id}: the side not to move is in check`);
+      }
+      // an arrow shows a move, a line or where a piece came from, so it must touch a piece at one end, or carry
+      // on from another arrow (a route in two legs); lesson 1.1's arrows run along the empty board's files and ranks
+      const at = d.fen ? placementFromFen(d.fen) : d.pieces ?? {}, arrows = d.arrows ?? [];
+      if (!id.startsWith("1.1 ")) for (const [from, to] of arrows)
+        if (!at[from] && !at[to] && !arrows.some(([, t]) => t === from)) bad.push(`${id}: arrow ${from}-${to} touches no piece`);
+    }
+    expect(bad).toEqual([]);
   });
 });

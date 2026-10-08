@@ -12,8 +12,10 @@ export const LEVEL8: Lesson[] = [
     title: { en: "Good and bad pieces", pa: "ਚੰਗੇ ਤੇ ਮਾੜੇ ਮੋਹਰੇ" },
     goal: { en: "Find your worst piece and make it better.", pa: "ਆਪਣਾ ਸਭ ਤੋਂ ਮਾੜਾ ਮੋਹਰਾ ਲੱਭੋ ਅਤੇ ਉਸ ਨੂੰ ਬਿਹਤਰ ਬਣਾਓ।" },
     learn: [
-      { text: { en: "A piece is only as good as the squares it can reach. Count its moves: few moves means a poor piece.", pa: "ਮੋਹਰਾ ਓਨਾ ਹੀ ਚੰਗਾ ਹੈ ਜਿੰਨੇ ਖਾਨਿਆਂ ਤੱਕ ਉਹ ਪਹੁੰਚ ਸਕੇ। ਉਸ ਦੀਆਂ ਚਾਲਾਂ ਗਿਣੋ: ਘੱਟ ਚਾਲਾਂ ਦਾ ਮਤਲਬ ਮਾੜਾ ਮੋਹਰਾ।" } },
-      { text: { en: "In a quiet position, improve your worst piece first. It is often worth more than winning a pawn.", pa: "ਸ਼ਾਂਤ ਹਾਲਤ ਵਿੱਚ, ਪਹਿਲਾਂ ਆਪਣੇ ਸਭ ਤੋਂ ਮਾੜੇ ਮੋਹਰੇ ਨੂੰ ਸੁਧਾਰੋ। ਅਕਸਰ ਇਹ ਇੱਕ ਪਿਆਦਾ ਜਿੱਤਣ ਨਾਲੋਂ ਵੱਧ ਕੀਮਤੀ ਹੁੰਦਾ ਹੈ।" } },
+      { text: { en: "A piece is only as good as the squares it can reach. Count its moves: few moves means a poor piece.", pa: "ਮੋਹਰਾ ਓਨਾ ਹੀ ਚੰਗਾ ਹੈ ਜਿੰਨੇ ਖਾਨਿਆਂ ਤੱਕ ਉਹ ਪਹੁੰਚ ਸਕੇ। ਉਸ ਦੀਆਂ ਚਾਲਾਂ ਗਿਣੋ: ਘੱਟ ਚਾਲਾਂ ਦਾ ਮਤਲਬ ਮਾੜਾ ਮੋਹਰਾ।" },
+        board: { fen: "4k3/pp3ppp/8/8/8/2B5/PP3PPP/N2RK3 w - - 0 1", dots: ["b3","c2"], highlights: ["a1"] } },
+      { text: { en: "In a quiet position, improve your worst piece first. It is often worth more than winning a pawn.", pa: "ਸ਼ਾਂਤ ਹਾਲਤ ਵਿੱਚ, ਪਹਿਲਾਂ ਆਪਣੇ ਸਭ ਤੋਂ ਮਾੜੇ ਮੋਹਰੇ ਨੂੰ ਸੁਧਾਰੋ। ਅਕਸਰ ਇਹ ਇੱਕ ਪਿਆਦਾ ਜਿੱਤਣ ਨਾਲੋਂ ਵੱਧ ਕੀਮਤੀ ਹੁੰਦਾ ਹੈ।" },
+        board: { fen: "4k3/pp3ppp/8/8/8/2B5/PP3PPP/N2RK3 w - - 0 1", arrows: [["a1","c2"]] } },
     ],
     try: { kind: "pick", fen: "4k3/pp3ppp/8/8/8/2B5/PP3PPP/N2RK3 w - - 0 1", feature: "fewestMoves", color: "w",
       prompt: { en: "Tap White's piece with the fewest moves (not the king or pawns). A knight in the corner is a sad knight.", pa: "ਚਿੱਟੇ ਦਾ ਸਭ ਤੋਂ ਘੱਟ ਚਾਲਾਂ ਵਾਲਾ ਮੋਹਰਾ ਛੂਹੋ (ਬਾਦਸ਼ਾਹ ਜਾਂ ਪਿਆਦੇ ਨਹੀਂ)। ਖੂੰਜੇ ਵਿੱਚ ਘੋੜਾ ਉਦਾਸ ਘੋੜਾ ਹੈ।" } },
@@ -31,7 +33,8 @@ export const LEVEL8: Lesson[] = [
     learn: [
       { text: { en: "Isolated pawn: no friendly pawn on either file beside it. It can't be defended by a pawn.", pa: "ਇਕੱਲਾ ਪਿਆਦਾ: ਨਾਲ ਵਾਲੀਆਂ ਖੜ੍ਹੀਆਂ ਕਤਾਰਾਂ ਵਿੱਚ ਕੋਈ ਸਾਥੀ ਪਿਆਦਾ ਨਹੀਂ। ਕੋਈ ਪਿਆਦਾ ਉਸ ਦੀ ਰਾਖੀ ਨਹੀਂ ਕਰ ਸਕਦਾ।" },
         board: { fen: "4k3/pp3ppp/8/8/3P4/8/PP3PPP/4K3 w - - 0 1", highlights: ["d4"] } },
-      { text: { en: "Doubled pawns: two on one file. They block each other. Passed pawns: nothing can stop them but pieces.", pa: "ਦੋਹਰੇ ਪਿਆਦੇ: ਇੱਕ ਖੜ੍ਹੀ ਕਤਾਰ ਵਿੱਚ ਦੋ। ਉਹ ਇੱਕ ਦੂਜੇ ਨੂੰ ਰੋਕਦੇ ਹਨ। ਆਜ਼ਾਦ ਪਿਆਦੇ: ਉਨ੍ਹਾਂ ਨੂੰ ਮੋਹਰਿਆਂ ਤੋਂ ਬਿਨਾਂ ਕੋਈ ਨਹੀਂ ਰੋਕ ਸਕਦਾ।" } },
+      { text: { en: "Doubled pawns: two on one file. They block each other. Passed pawns: nothing can stop them but pieces.", pa: "ਦੋਹਰੇ ਪਿਆਦੇ: ਇੱਕ ਖੜ੍ਹੀ ਕਤਾਰ ਵਿੱਚ ਦੋ। ਉਹ ਇੱਕ ਦੂਜੇ ਨੂੰ ਰੋਕਦੇ ਹਨ। ਆਜ਼ਾਦ ਪਿਆਦੇ: ਉਨ੍ਹਾਂ ਨੂੰ ਮੋਹਰਿਆਂ ਤੋਂ ਬਿਨਾਂ ਕੋਈ ਨਹੀਂ ਰੋਕ ਸਕਦਾ।" },
+        board: { fen: "4k3/pp4pp/8/3P4/8/1P6/1P4PP/4K3 w - - 0 1", highlights: ["b2","b3","d5"] } },
     ],
     try: { kind: "pick", fen: "4k3/pp3ppp/8/8/3P4/8/PP3PPP/4K3 w - - 0 1", feature: "isolated", color: "w",
       prompt: { en: "Tap White's isolated pawn.", pa: "ਚਿੱਟੇ ਦਾ ਇਕੱਲਾ ਪਿਆਦਾ ਛੂਹੋ।" } },
@@ -66,7 +69,8 @@ export const LEVEL8: Lesson[] = [
     learn: [
       { text: { en: "An open file has no pawns on it at all. Rooks love open files: they reach deep into the enemy camp, often to the 7th rank.", pa: "ਖੁੱਲ੍ਹੀ ਖੜ੍ਹੀ ਕਤਾਰ ਵਿੱਚ ਕੋਈ ਪਿਆਦਾ ਨਹੀਂ ਹੁੰਦਾ। ਹਾਥੀ ਖੁੱਲ੍ਹੀਆਂ ਕਤਾਰਾਂ ਪਸੰਦ ਕਰਦੇ ਹਨ: ਉਹ ਦੁਸ਼ਮਣ ਦੇ ਅੰਦਰ ਤੱਕ, ਅਕਸਰ ਸੱਤਵੀਂ ਕਤਾਰ ਤੱਕ, ਪਹੁੰਚਦੇ ਹਨ।" },
         board: { play: true, fen: "r4rk1/pp3ppp/8/8/8/8/PP3PPP/R4RK1 w - - 0 1", arrows: [["f1", "d1"]] } },
-      { text: { en: "A file with only enemy pawns is half-open: good for your rooks too, but not as good.", pa: "ਜਿਸ ਕਤਾਰ ਵਿੱਚ ਸਿਰਫ਼ ਦੁਸ਼ਮਣ ਦੇ ਪਿਆਦੇ ਹੋਣ, ਉਹ ਅੱਧੀ ਖੁੱਲ੍ਹੀ ਹੈ: ਤੁਹਾਡੇ ਹਾਥੀਆਂ ਲਈ ਵੀ ਚੰਗੀ, ਪਰ ਓਨੀ ਨਹੀਂ।" } },
+      { text: { en: "A file with only enemy pawns is half-open: good for your rooks too, but not as good.", pa: "ਜਿਸ ਕਤਾਰ ਵਿੱਚ ਸਿਰਫ਼ ਦੁਸ਼ਮਣ ਦੇ ਪਿਆਦੇ ਹੋਣ, ਉਹ ਅੱਧੀ ਖੁੱਲ੍ਹੀ ਹੈ: ਤੁਹਾਡੇ ਹਾਥੀਆਂ ਲਈ ਵੀ ਚੰਗੀ, ਪਰ ਓਨੀ ਨਹੀਂ।" },
+        board: { fen: "r4rk1/pp3ppp/2p5/8/8/8/PP3PPP/2R2RK1 w - - 0 1", arrows: [["c1","c6"]], highlights: ["c1","c6"] } },
     ],
     try: { kind: "pick", fen: "r4rk1/pp3ppp/8/8/8/8/PP3PPP/R4RK1 w - - 0 1", feature: "openFile", color: "w",
       prompt: { en: "Tap a square on each open file.", pa: "ਹਰ ਖੁੱਲ੍ਹੀ ਕਤਾਰ ਦਾ ਇੱਕ ਖਾਨਾ ਛੂਹੋ।" } },
@@ -101,8 +105,10 @@ export const LEVEL8: Lesson[] = [
     title: { en: "Knight vs bishop", pa: "ਘੋੜਾ ਬਨਾਮ ਊਠ" },
     goal: { en: "Know when a knight beats a bishop, and when it's the other way round.", pa: "ਜਾਣੋ ਕਦੋਂ ਘੋੜਾ ਊਠ ਤੋਂ ਵਧੀਆ ਹੈ, ਅਤੇ ਕਦੋਂ ਉਲਟ।" },
     learn: [
-      { text: { en: "Closed position, pawns locked together: the knight is better. It jumps; the bishop gets stuck.", pa: "ਬੰਦ ਹਾਲਤ, ਪਿਆਦੇ ਆਪਸ ਵਿੱਚ ਫਸੇ ਹੋਏ: ਘੋੜਾ ਵਧੀਆ ਹੈ। ਉਹ ਛਾਲ ਮਾਰਦਾ ਹੈ; ਊਠ ਫਸ ਜਾਂਦਾ ਹੈ।" } },
-      { text: { en: "Open position, pawns on both wings: the bishop is better. It reaches both sides of the board at once.", pa: "ਖੁੱਲ੍ਹੀ ਹਾਲਤ, ਦੋਵੇਂ ਪਾਸੇ ਪਿਆਦੇ: ਊਠ ਵਧੀਆ ਹੈ। ਉਹ ਬਿਸਾਤ ਦੇ ਦੋਵੇਂ ਪਾਸੇ ਇਕੱਠਾ ਪਹੁੰਚਦਾ ਹੈ।" } },
+      { text: { en: "Closed position, pawns locked together: the knight is better. It jumps; the bishop gets stuck.", pa: "ਬੰਦ ਹਾਲਤ, ਪਿਆਦੇ ਆਪਸ ਵਿੱਚ ਫਸੇ ਹੋਏ: ਘੋੜਾ ਵਧੀਆ ਹੈ। ਉਹ ਛਾਲ ਮਾਰਦਾ ਹੈ; ਊਠ ਫਸ ਜਾਂਦਾ ਹੈ।" },
+        board: { fen: "4k3/8/3p4/2pPp3/2PnP3/5B2/8/4K3 w - - 0 1", highlights: ["d4","f3"] } },
+      { text: { en: "Open position, pawns on both wings: the bishop is better. It reaches both sides of the board at once.", pa: "ਖੁੱਲ੍ਹੀ ਹਾਲਤ, ਦੋਵੇਂ ਪਾਸੇ ਪਿਆਦੇ: ਊਠ ਵਧੀਆ ਹੈ। ਉਹ ਬਿਸਾਤ ਦੇ ਦੋਵੇਂ ਪਾਸੇ ਇਕੱਠਾ ਪਹੁੰਚਦਾ ਹੈ।" },
+        board: { fen: "6k1/pp3npp/8/8/8/8/PP3BPP/6K1 w - - 0 1", arrows: [["f2","a7"]] } },
     ],
     try: { kind: "choose", prompt: { en: "The pawns are all locked together in the centre. Which piece would you rather have?", pa: "ਸਾਰੇ ਪਿਆਦੇ ਵਿਚਕਾਰ ਆਪਸ ਵਿੱਚ ਫਸੇ ਹੋਏ ਹਨ। ਤੁਸੀਂ ਕਿਹੜਾ ਮੋਹਰਾ ਚਾਹੋਗੇ?" },
       options: [
@@ -123,8 +129,10 @@ export const LEVEL8: Lesson[] = [
     title: { en: "Attacking the king", pa: "ਬਾਦਸ਼ਾਹ 'ਤੇ ਹਮਲਾ" },
     goal: { en: "Bring pieces towards the enemy king and break its shelter.", pa: "ਮੋਹਰਿਆਂ ਨੂੰ ਦੁਸ਼ਮਣ ਦੇ ਬਾਦਸ਼ਾਹ ਵੱਲ ਲਿਆਓ ਅਤੇ ਉਸ ਦੀ ਆੜ ਤੋੜੋ।" },
     learn: [
-      { text: { en: "Count attackers and defenders near the king. When you have more attackers there, it's time to strike.", pa: "ਬਾਦਸ਼ਾਹ ਦੇ ਨੇੜੇ ਹਮਲਾਵਰ ਅਤੇ ਰਾਖੇ ਗਿਣੋ। ਜਦੋਂ ਉੱਥੇ ਤੁਹਾਡੇ ਹਮਲਾਵਰ ਵੱਧ ਹੋਣ, ਵਾਰ ਕਰਨ ਦਾ ਵੇਲਾ ਹੈ।" } },
-      { text: { en: "If the kings castled on opposite sides, push the pawns in front of THEIR king: it opens lines without exposing yours.", pa: "ਜੇ ਬਾਦਸ਼ਾਹਾਂ ਨੇ ਉਲਟ ਪਾਸਿਆਂ ਕਿਲ੍ਹੇਬੰਦੀ ਕੀਤੀ ਹੈ, ਤਾਂ ਉਨ੍ਹਾਂ ਦੇ ਬਾਦਸ਼ਾਹ ਦੇ ਅੱਗੇ ਵਾਲੇ ਪਿਆਦੇ ਧੱਕੋ: ਇਸ ਨਾਲ ਲਕੀਰਾਂ ਖੁੱਲ੍ਹਦੀਆਂ ਹਨ, ਤੁਹਾਡੇ ਬਾਦਸ਼ਾਹ ਦੀ ਆੜ ਨਹੀਂ ਟੁੱਟਦੀ।" } },
+      { text: { en: "Count attackers and defenders near the king. When you have more attackers there, it's time to strike.", pa: "ਬਾਦਸ਼ਾਹ ਦੇ ਨੇੜੇ ਹਮਲਾਵਰ ਅਤੇ ਰਾਖੇ ਗਿਣੋ। ਜਦੋਂ ਉੱਥੇ ਤੁਹਾਡੇ ਹਮਲਾਵਰ ਵੱਧ ਹੋਣ, ਵਾਰ ਕਰਨ ਦਾ ਵੇਲਾ ਹੈ।" },
+        board: { fen: "r4rk1/ppp2ppp/8/6NQ/8/3B4/PPP2PPP/R5K1 w - - 0 1", arrows: [["h5","h7"],["g5","h7"],["d3","h7"]], highlights: ["h7"] } },
+      { text: { en: "If the kings castled on opposite sides, push the pawns in front of THEIR king: it opens lines without exposing yours.", pa: "ਜੇ ਬਾਦਸ਼ਾਹਾਂ ਨੇ ਉਲਟ ਪਾਸਿਆਂ ਕਿਲ੍ਹੇਬੰਦੀ ਕੀਤੀ ਹੈ, ਤਾਂ ਉਨ੍ਹਾਂ ਦੇ ਬਾਦਸ਼ਾਹ ਦੇ ਅੱਗੇ ਵਾਲੇ ਪਿਆਦੇ ਧੱਕੋ: ਇਸ ਨਾਲ ਲਕੀਰਾਂ ਖੁੱਲ੍ਹਦੀਆਂ ਹਨ, ਤੁਹਾਡੇ ਬਾਦਸ਼ਾਹ ਦੀ ਆੜ ਨਹੀਂ ਟੁੱਟਦੀ।" },
+        board: { fen: "r4rk1/ppp2ppp/8/8/6PP/8/PPP5/2KR3R w - - 0 1", arrows: [["g4","g5"],["h4","h5"]] } },
     ],
     try: { kind: "pack", pack: "kingside-attack", count: 1, prompt: { en: "Attack the king.", pa: "ਬਾਦਸ਼ਾਹ 'ਤੇ ਹਮਲਾ ਕਰੋ।" } },
     practise: [
@@ -138,7 +146,8 @@ export const LEVEL8: Lesson[] = [
     title: { en: "Making a plan", pa: "ਯੋਜਨਾ ਬਣਾਉਣੀ" },
     goal: { en: "Find a weakness, choose a target, improve your worst piece.", pa: "ਕਮਜ਼ੋਰੀ ਲੱਭੋ, ਨਿਸ਼ਾਨਾ ਚੁਣੋ, ਆਪਣਾ ਸਭ ਤੋਂ ਮਾੜਾ ਮੋਹਰਾ ਸੁਧਾਰੋ।" },
     learn: [
-      { text: { en: "A plan in three steps. 1) Find their weakness: an isolated pawn, a hole, a bad bishop. 2) Aim your pieces at it. 3) While they defend, improve your worst piece.", pa: "ਤਿੰਨ ਕਦਮਾਂ ਵਿੱਚ ਯੋਜਨਾ। ੧) ਉਨ੍ਹਾਂ ਦੀ ਕਮਜ਼ੋਰੀ ਲੱਭੋ: ਇਕੱਲਾ ਪਿਆਦਾ, ਖਾਲੀ ਖਾਨਾ, ਮਾੜਾ ਊਠ। ੨) ਆਪਣੇ ਮੋਹਰੇ ਉਸ ਵੱਲ ਕਰੋ। ੩) ਜਦੋਂ ਉਹ ਬਚਾਅ ਕਰਨ, ਆਪਣਾ ਸਭ ਤੋਂ ਮਾੜਾ ਮੋਹਰਾ ਸੁਧਾਰੋ।" } },
+      { text: { en: "A plan in three steps. 1) Find their weakness: an isolated pawn, a hole, a bad bishop. 2) Aim your pieces at it. 3) While they defend, improve your worst piece.", pa: "ਤਿੰਨ ਕਦਮਾਂ ਵਿੱਚ ਯੋਜਨਾ। ੧) ਉਨ੍ਹਾਂ ਦੀ ਕਮਜ਼ੋਰੀ ਲੱਭੋ: ਇਕੱਲਾ ਪਿਆਦਾ, ਖਾਲੀ ਖਾਨਾ, ਮਾੜਾ ਊਠ। ੨) ਆਪਣੇ ਮੋਹਰੇ ਉਸ ਵੱਲ ਕਰੋ। ੩) ਜਦੋਂ ਉਹ ਬਚਾਅ ਕਰਨ, ਆਪਣਾ ਸਭ ਤੋਂ ਮਾੜਾ ਮੋਹਰਾ ਸੁਧਾਰੋ।" },
+        board: { fen: "3rk3/pp3ppp/8/8/3P4/8/PP3PPP/3RK3 b - - 0 1", arrows: [["d8","d4"]], highlights: ["d4"] } },
     ],
     try: { kind: "pick", fen: "4k3/pp3ppp/8/8/3P4/8/PP3PPP/4K3 b - - 0 1", feature: "isolated", color: "w",
       prompt: { en: "You are Black. Step 1: tap White's weakness, the target of your plan.", pa: "ਤੁਸੀਂ ਕਾਲੇ ਹੋ। ਪਹਿਲਾ ਕਦਮ: ਚਿੱਟੇ ਦੀ ਕਮਜ਼ੋਰੀ ਛੂਹੋ, ਤੁਹਾਡੀ ਯੋਜਨਾ ਦਾ ਨਿਸ਼ਾਨਾ।" } },
@@ -154,8 +163,10 @@ export const LEVEL8: Lesson[] = [
     learn: [
       { text: { en: "A hole is a square in your half that none of your pawns can ever guard. An enemy knight that lands there can't be chased away.", pa: "ਛੇਕ ਤੁਹਾਡੇ ਅੱਧ ਵਿੱਚ ਉਹ ਖਾਨਾ ਹੈ ਜਿਸ ਦੀ ਤੁਹਾਡਾ ਕੋਈ ਪਿਆਦਾ ਕਦੇ ਰਾਖੀ ਨਹੀਂ ਕਰ ਸਕਦਾ। ਉੱਥੇ ਬੈਠੇ ਦੁਸ਼ਮਣ ਘੋੜੇ ਨੂੰ ਭਜਾਇਆ ਨਹੀਂ ਜਾ ਸਕਦਾ।" },
         board: { fen: "4k3/pp3ppp/3p4/2p5/2P1P3/8/PP3PPP/4K3 w - - 0 1", highlights: ["d4"] } },
-      { text: { en: "Space: pawns further forward give your pieces more room. The side with less space should trade pieces to breathe.", pa: "ਥਾਂ: ਅੱਗੇ ਵਧੇ ਪਿਆਦੇ ਤੁਹਾਡੇ ਮੋਹਰਿਆਂ ਨੂੰ ਵੱਧ ਥਾਂ ਦਿੰਦੇ ਹਨ। ਘੱਟ ਥਾਂ ਵਾਲੇ ਪਾਸੇ ਨੂੰ ਸਾਹ ਲੈਣ ਲਈ ਮੋਹਰੇ ਵਟਾਉਣੇ ਚਾਹੀਦੇ ਹਨ।" } },
-      { text: { en: "The bishop pair: two bishops together cover both colours. In open positions they are usually stronger than bishop and knight.", pa: "ਊਠਾਂ ਦੀ ਜੋੜੀ: ਦੋ ਊਠ ਮਿਲ ਕੇ ਦੋਵੇਂ ਰੰਗ ਸਾਂਭਦੇ ਹਨ। ਖੁੱਲ੍ਹੀ ਹਾਲਤ ਵਿੱਚ ਉਹ ਅਕਸਰ ਊਠ ਅਤੇ ਘੋੜੇ ਨਾਲੋਂ ਤਕੜੇ ਹੁੰਦੇ ਹਨ।" } },
+      { text: { en: "Space: pawns further forward give your pieces more room. The side with less space should trade pieces to breathe.", pa: "ਥਾਂ: ਅੱਗੇ ਵਧੇ ਪਿਆਦੇ ਤੁਹਾਡੇ ਮੋਹਰਿਆਂ ਨੂੰ ਵੱਧ ਥਾਂ ਦਿੰਦੇ ਹਨ। ਘੱਟ ਥਾਂ ਵਾਲੇ ਪਾਸੇ ਨੂੰ ਸਾਹ ਲੈਣ ਲਈ ਮੋਹਰੇ ਵਟਾਉਣੇ ਚਾਹੀਦੇ ਹਨ।" },
+        board: { fen: "4k3/pp3ppp/3p4/2pPp3/2P1P3/8/PP3PPP/4K3 w - - 0 1", highlights: ["c4","d5","e4"] } },
+      { text: { en: "The bishop pair: two bishops together cover both colours. In open positions they are usually stronger than bishop and knight.", pa: "ਊਠਾਂ ਦੀ ਜੋੜੀ: ਦੋ ਊਠ ਮਿਲ ਕੇ ਦੋਵੇਂ ਰੰਗ ਸਾਂਭਦੇ ਹਨ। ਖੁੱਲ੍ਹੀ ਹਾਲਤ ਵਿੱਚ ਉਹ ਅਕਸਰ ਊਠ ਅਤੇ ਘੋੜੇ ਨਾਲੋਂ ਤਕੜੇ ਹੁੰਦੇ ਹਨ।" },
+        board: { fen: "4k3/pp1nbppp/8/8/2B5/4B3/PP3PPP/4K3 w - - 0 1", arrows: [["c4","f7"],["e3","a7"]] } },
     ],
     try: { kind: "pick", fen: "4k3/pp3ppp/3p4/2p5/2P1P3/8/PP3PPP/4K3 w - - 0 1", feature: "outpost", color: "b",
       prompt: { en: "Tap the hole in White's camp: the square a black knight would love.", pa: "ਚਿੱਟੇ ਦੇ ਪਾਸੇ ਦਾ ਛੇਕ ਛੂਹੋ: ਉਹ ਖਾਨਾ ਜੋ ਕਾਲੇ ਘੋੜੇ ਨੂੰ ਬਹੁਤ ਪਸੰਦ ਹੋਵੇਗਾ।" } },
