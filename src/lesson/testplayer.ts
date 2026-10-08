@@ -30,7 +30,7 @@ export function playTest(root: HTMLElement, level: Level, go: (hash: string) => 
 
   function intro() {
     root.innerHTML = `<div class="screen">${head()}
-      <div class="hero"><img class="testbadge" src="art/badges/level-${level.n}.webp" alt="" onerror="this.remove()">
+      <div class="hero"><img class="testbadge" src="art/badges/level-${level.n}.webp" alt="" data-hide-on-error>
         <h1>${t("levelTest")}</h1><p>${tx(level.title)} · ${num(level.band)}</p>
         <p>${fill(t("testIntro"), { n: total, p: test.pass })}</p></div>
       <div class="actions"><button class="btn wide" data-go>${t("start")}</button></div></div>`;
@@ -77,7 +77,7 @@ export function playTest(root: HTMLElement, level: Level, go: (hash: string) => 
       ${passed ? `<div class="trophy">${icon("trophy")}</div>` : look !== "adult" ? `<div style="width:110px;height:110px">${coachHTML(look, "think")}</div>` : ""}
       <h1>${num(right)} / ${num(total)}</h1>
       <p class="${passed ? "testmsg" : "gain"}">${passed ? t("testPassed") : fill(t("testFailed"), { p: test.pass })}</p>
-      ${passed && level.n < 10 ? `<img class="testbadge" src="art/badges/level-${level.n + 1}.webp" alt="" onerror="this.remove()">` : ""}</div>
+      ${passed && level.n < 10 ? `<img class="testbadge" src="art/badges/level-${level.n + 1}.webp" alt="" data-hide-on-error>` : ""}</div>
       <div class="actions" style="flex-direction:column">
         ${passed ? "" : `<button class="btn wide" data-again>${t("retry")}</button>`}
         <button class="btn ${passed ? "gold" : "ghost"} wide" data-home>${t("backHome")}</button></div></div>`;

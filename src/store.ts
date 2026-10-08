@@ -72,9 +72,11 @@ function load(): State {
 }
 
 // Preview hook: ?look=young&lang=pa shows the app that way WITHOUT touching saved progress.
-// Used by the design-trial pages and for screenshots; a normal visit has no query string.
+// Used by the design-trial pages and for screenshots; a normal visit has no query string. ONLY on the developer's
+// own computer (full check 2026-10-08): on the live site it would skip sign-in and open every lesson.
 const preview = (() => {
   try {
+    if (!["localhost", "127.0.0.1"].includes(location.hostname)) return null;
     const q = new URLSearchParams(location.search);
     const look = q.get("look"), lang = q.get("lang");
     if (!look && !lang) return null;

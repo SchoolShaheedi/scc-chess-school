@@ -11,7 +11,9 @@ export function movesFor(g: Chess, from: Square, to: Square): Move[] {
   const direct = all.filter(m => m.to === to);
   if (direct.length) return direct;
   const p = g.get(from as CjSquare), q = g.get(to as CjSquare);
-  if (p?.type === "k" && q?.type === "r" && q.color === p.color)
+  // only the rook in its own corner (h1/a1, h8/a8): a king dropped on a rook elsewhere means nothing (full check 2026-10-08)
+  const rank = p?.color === "w" ? "1" : "8";
+  if (p?.type === "k" && q?.type === "r" && q.color === p.color && to[1] === rank)
     return all.filter(m => (to[0] === "h" ? m.isKingsideCastle() : to[0] === "a" ? m.isQueensideCastle() : false));
   return [];
 }
@@ -51,4 +53,20 @@ export function premoveTargets(fen: string, from: Square): Square[] {
   parts[1] = parts[1] === "w" ? "b" : "w"; parts[3] = "-";
   try { return new Chess(parts.join(" ")).moves({ square: from as CjSquare, verbose: true }).map(m => m.to); }
   catch { return []; }   // the swapped position can be illegal (the other king in check): no dots, the drop still works
+}
+
+/** Out of time (FIDE Article 6.9): the side whose flag fell LOSES, unless the opponent could not checkmate by any
+ *  series of legal moves; then it is a draw. That is: the opponent has only a king; or only a king and one knight or
+ *  one bishop while the flagged side has only a king; or every piece left besides the kings is a bishop on squares of
+ *  one colour (a dead position). Shared by bot games and friend games; the online server function has the same rule. */
+export function flagOutcome(g: Chess, flagged: "w" | "b"): "loss" | "draw" {
+  const pieces = g.board().flat().filter((p): p is NonNullable<typeof p> => !!p && p.type !== "k");
+  const mine = pieces.filter(p => p.color === flagged), theirs = pieces.filter(p => p.color !== flagged);
+  if (!theirs.length) return "draw";
+  if (!mine.length && theirs.length === 1 && (theirs[0].type === "n" || theirs[0].type === "b")) return "draw";
+  if (pieces.every(p => p.type === "b")) {
+    const shades = new Set(g.board().flatMap((row, r) => row.map((p, f) => (p && p.type === "b" ? (r + f) % 2 : -1))).filter(x => x >= 0));
+    if (shades.size === 1) return "draw";
+  }
+  return "loss";
 }

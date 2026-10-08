@@ -107,7 +107,7 @@ export function playBank(root: HTMLElement, go: Go): () => void {
       board: ui.board, extra: ui.extra, status: ui.status,
       say: (text, tone = "info") => { ui!.say(text, tone); if (tone === "no") sound.wrong(); },
       done: mistakes => {
-        store.recordPuzzle(id, p.rating, mistakes === 0, p.themes);
+        store.recordPuzzle(id, undefined, mistakes === 0, p.themes);   // a replay of a missed puzzle: no rating change
         if (mistakes === 0) { clean++; sound.correct(); }
         ui!.say(t(mistakes === 0 ? "bankFixed" : "bankAgain"), mistakes === 0 ? "ok" : "no");
         ui!.actions.innerHTML = `<button class="btn wide" data-next>${t("continue")}</button>`;
@@ -177,7 +177,7 @@ export function playRush(root: HTMLElement, go: Go): () => void {
     let decided = false;
     const decide = (ok: boolean) => {
       if (decided || over) return; decided = true;
-      store.recordPuzzle(ex.id, ex.rating, ok, puzzleById(ex.id)?.themes);
+      store.recordPuzzle(ex.id, undefined, ok, puzzleById(ex.id)?.themes);   // Race answers are against the clock: unrated
       if (ok) { score++; step++; sound.correct(); } else { misses++; sound.wrong(); }
       ui!.say(t(ok ? "correct" : "rushMiss"), ok ? "ok" : "no");
       if (misses >= RUSH_MISSES) return void setTimeout(finish, 700);
@@ -244,12 +244,12 @@ export function playRated(root: HTMLElement, go: Go, theme?: string): () => void
     const pz = p;
     ui = puzzleScreen(root, title, head());
     root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go(back);
-    let failed = false;
     cleanup = runExercise(bankExercise(pz), {
       board: ui.board, extra: ui.extra, status: ui.status,
-      say: (text, tone = "info") => { ui!.say(text, tone); if (tone === "no") { sound.wrong(); failed = true; } },
+      say: (text, tone = "info") => { ui!.say(text, tone); if (tone === "no") sound.wrong(); },
       done: mistakes => {
-        const clean = mistakes === 0 && !failed, before = puzzleRating().r;
+        // only a real wrong move counts (an illegal slip is never a wrong answer: runPuzzle doesn't count it)
+        const clean = mistakes === 0, before = puzzleRating().r;
         store.recordPuzzle(pz.id, pz.rating, clean, pz.themes);
         const d = puzzleRating().r - before;
         if (clean) sound.correct();

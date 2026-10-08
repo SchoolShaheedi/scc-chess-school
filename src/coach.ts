@@ -50,5 +50,5 @@ export function coachHTML(look: Look, mood: Mood = "neutral"): string {
   if (look === "young" && !CHIDI_ART_READY) return chidi(mood === "cheer" ? "happy" : mood);
   const who = look === "young" ? "young" : store.get().coach;
   const fallback = look === "young" ? chidi(mood === "cheer" ? "happy" : mood) : teen(mood === "cheer" ? "happy" : mood);
-  return `<img src="art/coach/${who}-${mood}.webp" alt="" data-fallback="${encodeURIComponent(fallback)}" onerror="this.outerHTML=decodeURIComponent(this.dataset.fallback)">`;
+  return `<img src="art/coach/${who}-${mood}.webp" alt="" data-fallback="${encodeURIComponent(fallback)}">`;
 }

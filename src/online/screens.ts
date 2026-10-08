@@ -210,15 +210,18 @@ export function onlineLobby(root: HTMLElement, go: Go): () => void {
 
 // ---------- the live game ----------
 export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
-  let alive = true, unwatch: (() => void) | null = null, timer = 0, board: Board | null = null;
-  const leave = () => { alive = false; unwatch?.(); clearInterval(timer); board?.destroy(); };
+  let alive = true, unwatch: (() => void) | null = null, timer = 0, watchdog = 0, board: Board | null = null, onVisible: (() => void) | null = null;
+  const leave = () => { alive = false; unwatch?.(); clearInterval(timer); clearInterval(watchdog); if (onVisible) document.removeEventListener("visibilitychange", onVisible); board?.destroy(); };
   root.innerHTML = `<div class="screen">${bar(t("onlineTitle"))}<p class="muted">${t("loading")}</p></div>`;
   root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/online");
   void (async () => {
     const [me, first] = await Promise.all([myPlayer(), getGame(id)]);
     if (!alive) return;
     if (!me || !first) return go("#/online");
-    let g: Game = first, busy = false, view: number | null = null, ended = first.status === "finished", lastReactionAt = "";
+    // alreadyOver: opened after the game ended (a reload, the back button): show the result, but don't save it, cheer
+    // or add it to Your games a second time (full check 2026-10-08)
+    let g: Game = first, busy = false, busySince = 0, view: number | null = null, ended = false, lastReactionAt = "";
+    const alreadyOver = first.status === "finished";
     const mine: "w" | "b" = g.white === me.id ? "w" : "b", theirs: "w" | "b" = mine === "w" ? "b" : "w";
     // the other side as this player may see them: animal, colour, and (in a rated game) rating (DECISIONS #87)
     const sides = await gamePlayers(id);
@@ -274,9 +277,9 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
       const won = (g.result === "1-0") === (mine === "w") && g.result !== "1/2-1/2", draw = g.result === "1/2-1/2";
       const r: "won" | "lost" | "draw" = draw ? "draw" : won ? "won" : "lost";
       const how = t(`byOnline_${g.reason}` as "byOnline_mate");
-      saveGame({ at: new Date().toISOString(), opp: { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" }, me: mine, result: r, tc: g.tc_min ? (g.tc_inc ? `${g.tc_min}+${g.tc_inc}` : String(g.tc_min)) : undefined, uci: g.moves });
+      if (!alreadyOver) saveGame({ at: new Date().toISOString(), opp: { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" }, me: mine, result: r, tc: g.tc_min ? (g.tc_inc ? `${g.tc_min}+${g.tc_inc}` : String(g.tc_min)) : undefined, uci: g.moves });
       setLastGame({ uci: g.moves, me: mine, botName: { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" }, back: "#/online" });
-      if (r === "won") { sound.complete(); confetti(root.querySelector(".screen")!); }
+      if (r === "won" && !alreadyOver) { sound.complete(); confetti(root.querySelector(".screen")!); }
       const buttons = `${g.moves.length >= 2 ? `<button class="btn wide gold" data-review>${icon("target")} ${t("reviewTitle")}</button>` : ""}
         <button class="btn ghost wide" data-lobby>${t("onlineBackToLobby")}</button>
         ${rated && oppId ? `<button class="linkbtn" data-block>${t("adultBlock")}</button>` : ""}`;
@@ -332,7 +335,7 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
         const pr = legal[0].promotion ? await promotion(ctx, mine) : undefined;
         const uci = legal[0].from + legal[0].to + (pr ?? "");
         // show it at once; the server's answer (by the live update) confirms it, or puts the board back
-        busy = true;
+        busy = true; busySince = Date.now();
         const optimistic = { ...g, moves: [...g.moves, uci] };
         const before = g; g = optimistic; show(true);
         const e = await sendMove(g.id, me!.id, uci);
@@ -354,10 +357,16 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
       const turn = chess().turn();
       if (turn === theirs && left(theirs) <= 0 && !claimed) { claimed = true; void claimTime(g.id, me.id).then(() => setTimeout(() => { claimed = false; }, 3000)); }
     }, 200);
-    // catch up if an update arrived before the live channel opened
-    const fresh = await getGame(g.id); if (alive && fresh) apply(fresh);
+    // safety net: if the live update for a move never arrives (a phone that slept, a dropped connection), fetch the game
+    // ourselves rather than leave the board locked; the same when the app comes back to the front
+    const resync = async () => { const x = await getGame(g.id); if (alive && x) apply(x); };
+    watchdog = window.setInterval(() => { if (busy && Date.now() - busySince > 6000) void resync(); }, 3000);
+    onVisible = () => { if (document.visibilityState === "visible") void resync(); };
+    document.addEventListener("visibilitychange", onVisible);
+    // catch up if an update arrived before the live channel opened (this also shows the result of a finished game, once)
+    await resync();
     show();
-    if (g.status === "finished") { ended = false; finish(); }
+    if (g.status === "finished") finish();
   })();
   return leave;
 }

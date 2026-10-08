@@ -14,6 +14,7 @@ import { registerSW } from "virtual:pwa-register";
 import { premovesOn } from "./play/gamekit";
 import { ladderScreen, onlineGame, onlineLobby } from "./online/screens";
 import { classBoardScreen } from "./teach/screens";
+import { tourneyHome, tourneyView } from "./tourney/screens";
 import { PIECE_SETS, pieceHTML } from "./chess/pieces";
 import { coachHTML } from "./coach";
 import { findLesson, LEVELS } from "./content/levels";
@@ -43,6 +44,14 @@ import { mountAccount } from "./accountui";
 import { account, startSync, syncConfigured } from "./sync";
 
 registerSW({ immediate: true });
+// image fallbacks (full check 2026-10-08): the site's security policy blocks inline onerror="…" handlers, so one
+// listener does it: an image marked data-hide-on-error disappears, one with data-fallback is replaced by its fallback
+document.addEventListener("error", e => {
+  const img = e.target;
+  if (!(img instanceof HTMLImageElement)) return;
+  if (img.dataset.fallback) img.outerHTML = decodeURIComponent(img.dataset.fallback);
+  else if (img.hasAttribute("data-hide-on-error")) img.remove();
+}, true);
 startSync();
 
 const app = document.getElementById("app")!;
@@ -237,10 +246,10 @@ function home() {
     ${practiceBlock(s)}
     <h2 class="sec">${t("levelsTitle")}</h2>
     <div class="lvrow" role="tablist">${LEVELS.map(lv => {
-      const open = lv.n <= curLevel, cls = lv.n === shown.n ? "on" : open ? "" : "lock";
+      const open = lv.n <= curLevel || unlockAll(), cls = lv.n === shown.n ? "on" : open ? "" : "lock";
       const got = lv.lessons.filter(l => s.lessons[l.id]).length;
       return `<button class="lvcard ${cls}" role="tab" aria-selected="${lv.n === shown.n}" data-level="${lv.n}">
-        <img src="art/badges/level-${lv.n}.webp" alt="" onerror="this.remove()"><b>${tx(lv.title)}</b>
+        <img src="art/badges/level-${lv.n}.webp" alt="" data-hide-on-error><b>${tx(lv.title)}</b>
         <small>${levelDone(lv.n) ? t("levelDone") : open ? `${num(got)} / ${num(lv.lessons.length)}` : `${icon("lock")} ${num(lv.band)}`}</small></button>`;
     }).join("")}</div>
     <h2 class="sec">${t("level")} ${num(shown.n)} · ${tx(shown.title)} <span>${num(shown.band)}</span></h2>
@@ -264,7 +273,7 @@ function home() {
   </div>${tabbar("learn")}`;
   const shake = (b: HTMLElement) => b.animate([{ transform: "translateX(-4px)" }, { transform: "translateX(4px)" }, { transform: "none" }], 250);
   app.querySelectorAll<HTMLButtonElement>("[data-level]").forEach(b => b.onclick = () => {
-    if (+b.dataset.level! > curLevel) return void shake(b);
+    if (+b.dataset.level! > curLevel && !unlockAll()) return void shake(b);
     homeLevel = +b.dataset.level!; home();
   });
   // centre the current level's card by scrolling the row sideways only (scrollIntoView also scrolled the page down)
@@ -380,6 +389,7 @@ function route() {
   if (page === "play" && arg === "friend") { teardown = friendSetup(app, go); return; }
   if (page === "online") { teardown = arg === "game" && sub ? onlineGame(app, sub, go) : arg === "ladder" ? ladderScreen(app, go) : onlineLobby(app, go); return; }
   if (page === "class" && arg) return void classBoardScreen(app, arg, go);
+  if (page === "tourney") return arg ? tourneyView(app, arg, go) : tourneyHome(app, go);
   if (page === "analysis") { teardown = analysisBoard(app, go); return; }
   if (page === "play") {
     const bot = arg ? botById(arg) : undefined;

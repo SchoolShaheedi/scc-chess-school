@@ -79,7 +79,7 @@ export function playPlacement(root: HTMLElement, go: (h: string) => void): () =>
   function finish() {
     const n = s.highest, lv = LEVELS[n - 1];
     root.innerHTML = `<div class="screen ${n > 1 ? "donescreen" : ""}"><div class="complete">
-      <img class="testbadge" src="art/badges/level-${n}.webp" alt="" onerror="this.remove()">
+      <img class="testbadge" src="art/badges/level-${n}.webp" alt="" data-hide-on-error>
       <h1>${n > 1 ? t("placeResult").replace("{n}", num(n)) : t("placeFromOne")}</h1>
       <p>${t("level")} ${num(n)} · ${tx(lv.title)} · ${num(lv.band)}</p>
       ${n > 1 ? `<p class="testmsg">${t("placeNote")}</p>` : ""}</div>

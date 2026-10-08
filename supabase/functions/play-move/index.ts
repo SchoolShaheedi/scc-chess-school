@@ -56,9 +56,20 @@ Deno.serve(async req => {
       .eq("id", g.id).eq("status", "active").eq("updated_at", g.updated_at).select("id");   // only if nobody changed it meanwhile (updated_at is the version)
     return error || !data?.length ? reply(409, { error: "the game changed, try again" }) : reply(200, { ok: true, result, reason });
   };
-  // out of time loses, unless the other side has only its king: it could never mate, so it's a draw
-  const canMate = (side: "w" | "b") => chess.board().flat().some(p => p && p.color === side && p.type !== "k");
-  const flagResult = (flagged: "w" | "b") => (canMate(flagged === "w" ? "b" : "w") ? (flagged === "w" ? "0-1" : "1-0") : "1/2-1/2");
+  // out of time (FIDE 6.9) loses, unless the opponent could not mate by any legal series of moves: only a king; a lone
+  // knight or bishop against a bare king; or nothing but bishops on one square colour (dead). The app has the same rule.
+  const flagResult = (flagged: "w" | "b") => {
+    const pieces = chess.board().flat().filter(p => p && p.type !== "k") as { type: string; color: string }[];
+    const mine = pieces.filter(p => p.color === flagged), theirs = pieces.filter(p => p.color !== flagged);
+    const lose = flagged === "w" ? "0-1" : "1-0";
+    if (!theirs.length) return "1/2-1/2";
+    if (!mine.length && theirs.length === 1 && (theirs[0].type === "n" || theirs[0].type === "b")) return "1/2-1/2";
+    if (pieces.every(p => p.type === "b")) {
+      const shades = new Set(chess.board().flatMap((row, r) => row.map((p, f) => (p && p.type === "b" ? (r + f) % 2 : -1))).filter(x => x >= 0));
+      if (shades.size === 1) return "1/2-1/2";
+    }
+    return lose;
+  };
 
   if (claim === "time") {
     if (!timed || left(turn) > 0) return reply(409, { error: "there is still time" });

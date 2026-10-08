@@ -8,7 +8,7 @@ import { confetti } from "../celebrate";
 import { num, t } from "../i18n";
 import { icon } from "../icons";
 import { checkSquare, refusal } from "../lesson/exercises";
-import { captured, movesFor, promotion } from "./gamekit";
+import { captured, flagOutcome, movesFor, promotion } from "./gamekit";
 import { saveGame } from "./history";
 import { pieceHTML } from "../chess/pieces";
 import type { PieceCode } from "../chess/types";
@@ -140,8 +140,7 @@ function friendGame(root: HTMLElement, go: Go, startClock: Clock | null, turnBoa
     const f = flagged(clock, Date.now());
     if (f) {
       // out of time loses, unless the other side has only a king left: then it can never mate, so it's a draw
-      const otherHasMaterial = g.board().flat().some(p => p && p.color !== f && p.type !== "k");
-      end(otherHasMaterial ? (f === "w" ? "0-1" : "1-0") : "1/2-1/2", t("byTime"));
+      end(flagOutcome(g, f) === "loss" ? (f === "w" ? "0-1" : "1-0") : "1/2-1/2", t("byTime"));
     } else drawClocks();
   }, 100);
   show();

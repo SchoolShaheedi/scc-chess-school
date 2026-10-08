@@ -9,7 +9,7 @@ import { getEngine } from "../engine/browser";
 import { num, t, tx } from "../i18n";
 import { icon } from "../icons";
 import { checkSquare, refusal } from "../lesson/exercises";
-import { captured, movesFor, positionAt, premoveTargets, premovesOn, promotion } from "../play/gamekit";
+import { captured, flagOutcome, movesFor, positionAt, premoveTargets, premovesOn, promotion } from "../play/gamekit";
 import { type Clock, flagged, fmt, newClock, press, remaining } from "../play/clock";
 import { saveGame } from "../play/history";
 import { pieceHTML } from "../chess/pieces";
@@ -40,6 +40,8 @@ export function botList(root: HTMLElement, go: (h: string) => void) {
       <span class="grow"><b>${t("onlineTitle")}</b><small>${t("onlineSub")}</small></span>${icon("arrowRight")}</button>
     <button class="playcard friendcard" data-friend><span class="rushicon">${icon("swords")}</span>
       <span class="grow"><b>${t("friendTitle")}</b><small>${t("friendSub")}</small></span>${icon("arrowRight")}</button>
+    ${store.get().look === "young" ? "" : `<button class="playcard tncard" data-tourney><span class="rushicon">${icon("trophy")}</span>
+      <span class="grow"><b>${t("tnTitle")}</b><small>${t("tnSub")}</small></span>${icon("arrowRight")}</button>`}
     <button class="playcard anacard" data-analysis><span class="rushicon">${icon("search")}</span>
       <span class="grow"><b>${t("anaTitle")}</b><small>${t("anaSub")}</small></span>${icon("arrowRight")}</button>
     <div class="botlist">${BOTS.map(b => `<button class="botcard ${b.id === suggested ? "on" : ""}" data-bot="${b.id}">${art(b, "neutral")}
@@ -49,6 +51,7 @@ export function botList(root: HTMLElement, go: (h: string) => void) {
   root.querySelectorAll<HTMLButtonElement>("[data-bot]").forEach(b => b.onclick = () => go(`#/play/${b.dataset.bot}`));
   root.querySelector<HTMLButtonElement>("[data-friend]")!.onclick = () => go("#/play/friend");
   root.querySelector<HTMLButtonElement>("[data-online]")!.onclick = () => go("#/online");
+  root.querySelector<HTMLButtonElement>("[data-tourney]")?.addEventListener("click", () => go("#/tourney"));
   root.querySelector<HTMLButtonElement>("[data-analysis]")!.onclick = () => go("#/analysis");
 }
 
@@ -97,6 +100,8 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
   let busy = false, alive = true, over = false, timer = 0;
   // DECISIONS #84: a premove queued while the bot thinks, and the move being looked at (null = the live game)
   let pre: [Square, Square] | null = null, view: number | null = null;
+  // a game with a take-back or a hint, or a capture race, doesn't move the playing rating (full check 2026-10-08)
+  let helped = false;
   const tcDef = TCS.find(x => x[0] === tc);
   // the clock is charged from the side that moved first, so a game from a set position starts the right clock
   let clock: Clock | null = tcDef && tcDef[1] ? { ...newClock(tcDef[1], tcDef[2]), turn: g.turn() } : null;
@@ -194,12 +199,11 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     if (!resigned && !flag && !g.isGameOver() && !raceWon && !raceLost) return false;
     over = true; clearInterval(timer);
     // out of time loses, unless the other side has only its king: it could never mate, so it is a draw
-    const canMate = (side: "w" | "b") => g.board().flat().some(p => p && p.color === side && p.type !== "k");
-    const flagDraw = !!flag && !canMate(flag === "w" ? "b" : "w");
+    const flagDraw = !!flag && flagOutcome(g, flag) === "draw";
     const won = !resigned && !flagDraw && ((g.isCheckmate() && g.turn() !== me) || (!g.isCheckmate() && raceWon) || flag === them);
     const lost = !won && !flagDraw && (resigned || (g.isCheckmate() && g.turn() === me) || raceLost || flag === me);
     const how = resigned ? t("byResign") : flag ? t("byTime") : g.isCheckmate() ? t("byMate") : raceWon || raceLost ? t("byRace").replace("{n}", num(race!)) : g.isStalemate() ? t("byStalemate") : t("byRule");
-    store.recordGame(bot.id, won, bot.rating, won ? 1 : lost ? 0 : 0.5, clock ? tc : "none");
+    store.recordGame(bot.id, won, helped || race ? undefined : bot.rating, won ? 1 : lost ? 0 : 0.5, clock ? tc : "none");
     if (won && testLevel) store.recordTest(testLevel, 1, true);
     lastResult = won ? "won" : lost ? "lost" : "draw";
     saveGame({ at: new Date().toISOString(), opp: bot.name, oppRating: bot.rating, me, result: lastResult, tc: clock ? tc : undefined, uci: uciOf(), startFen });
@@ -258,12 +262,12 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
   root.querySelector<HTMLButtonElement>("[data-next]")!.onclick = () => look((view ?? g.history().length) + 1);
   root.querySelector<HTMLButtonElement>("[data-undo]")?.addEventListener("click", () => {
     if (busy || over || g.history().length < (me === "w" ? 2 : 3)) return;
-    view = null; pre = null;
+    view = null; pre = null; helped = true;
     g.undo(); g.undo(); show(); turnText();              // the bot's reply and your move
   });
   root.querySelector<HTMLButtonElement>("[data-hint]")?.addEventListener("click", async () => {
     if (busy || over) return;
-    view = null; busy = true; say(t("engineThinking"));
+    view = null; busy = true; helped = true; say(t("engineThinking"));
     const a = await (await engine).analyse(g.fen(), { depth: 10 }); if (!alive) return;
     busy = false; show(false, [[a.best.slice(0, 2) as Square, a.best.slice(2, 4) as Square]]); turnText();
   });

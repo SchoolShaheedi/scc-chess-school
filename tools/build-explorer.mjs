@@ -48,7 +48,7 @@ for await (const line of lines) {
       add(before, mv.from + mv.to + (mv.promotion ?? ""), h.Result);
     }
     if (sans.length) kept++;
-    if (kept % PRUNE_EVERY === 0) prune(Math.ceil(kept / PRUNE_EVERY) + 1);
+    if (sans.length && kept % PRUNE_EVERY === 0) prune(Math.ceil(kept / PRUNE_EVERY) + 1);   // once per 100,000 kept (full check 2026-10-08)
   }
   h = {};
   if (Date.now() - last > 20000) { last = Date.now(); console.log(`${seen.toLocaleString()} games read, ${kept.toLocaleString()} kept, ${pos.size.toLocaleString()} positions, ${(bytes() / 1e9).toFixed(2)} GB`); }
