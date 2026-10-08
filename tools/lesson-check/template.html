@@ -1,0 +1,251 @@
+<title>Chess School Lesson Check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Mukta+Mahee:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #FFFFFF; --panel: #F6F9F6; --ink: #1F2A24; --muted: #5C6660; --line: #E1E8E2;
+  --green: #2F6B4F; --green-ink: #FFFFFF; --green-soft: #E3EFE7; --gold: #C6A24A; --gold-soft: #FBF4E2;
+  --maroon: #8B1E3F; --maroon-soft: #F8E7EC; --sq-l: #EFE4CF; --sq-d: #98744F;
+  --pw: #FCF4E4; --pw-line: #2B1C0E; --pb: #241A10; --pb-line: #F1E3C8;
+  --mark: rgba(198,162,74,.55); --arrow: #2F6B4F; --cross: #8B1E3F; --dot: rgba(31,42,36,.38);
+  --latin: "Jost", system-ui, sans-serif; --gurmukhi: "Mukta Mahee", "Noto Sans Gurmukhi", "Gurmukhi MN", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #141A17; --panel: #1C2420; --ink: #E6ECE8; --muted: #9AA7A0; --line: #2C3832;
+  --green: #5FAE88; --green-ink: #0F1A14; --green-soft: #1F3329; --gold: #D9B862; --gold-soft: #2B2617;
+  --maroon: #E07A98; --maroon-soft: #3A1E27; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #141A17; --panel: #1C2420; --ink: #E6ECE8; --muted: #9AA7A0; --line: #2C3832;
+  --green: #5FAE88; --green-ink: #0F1A14; --green-soft: #1F3329; --gold: #D9B862; --gold-soft: #2B2617;
+  --maroon: #E07A98; --maroon-soft: #3A1E27; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.55 var(--latin); }
+.wrap { max-width: 920px; margin: 0 auto; padding-inline: 16px; padding-block: 0 64px; }
+[lang="pa"], .pa { font-family: var(--gurmukhi); letter-spacing: 0 !important; }
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line);
+  padding-block: 14px 12px; display: grid; gap: 10px; }
+.toprow { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
+h1 { font-size: 22px; font-weight: 700; margin: 0; text-wrap: balance; }
+h1 .pa { font-weight: 500; font-size: 21px; margin-left: 6px; }
+.meter { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14px; }
+.meter b { color: var(--ink); }
+.bar { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; display: flex; }
+.bar i { display: block; height: 100%; }
+.bar .ok { background: var(--green); } .bar .ch { background: var(--maroon); }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.seg button { border: 0; background: transparent; color: var(--ink); font: 500 13px var(--latin); padding: 6px 12px; cursor: pointer; min-height: 34px; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.seg button:focus-visible, .verdict button:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.intro { color: var(--muted); max-width: 68ch; margin: 18px 0 6px; }
+.signin { background: var(--gold-soft); border: 1px solid var(--gold); border-radius: 10px; padding: 10px 14px; margin: 12px 0; }
+.lesson { border-top: 2px solid var(--ink); margin-top: 36px; padding-top: 14px; }
+.lhead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.lid { font: 700 13px var(--latin); color: var(--muted); font-variant-numeric: tabular-nums; letter-spacing: .04em; }
+.lhead h2 { margin: 0; font-size: 20px; font-weight: 700; }
+.lhead h2 .pa { font-weight: 500; font-size: 20px; margin-left: 8px; }
+.chip { margin-left: auto; font: 600 12px var(--latin); padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.chip.ok { background: var(--green-soft); border-color: var(--green); color: var(--green); }
+.chip.change { background: var(--maroon-soft); border-color: var(--maroon); color: var(--maroon); }
+.goal { color: var(--muted); margin: 4px 0 0; }
+.goal .pa { display: block; font-size: 17px; }
+.notes { margin: 14px 0 4px; display: grid; gap: 8px; }
+.note { border-radius: 10px; padding: 10px 14px; font-size: 14px; }
+.note h3 { margin: 0 0 4px; font: 700 12px var(--latin); text-transform: uppercase; letter-spacing: .06em; }
+.note ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.note.changed { background: var(--green-soft); } .note.changed h3 { color: var(--green); }
+.note.ask { background: var(--gold-soft); border: 1px solid var(--gold); } .note.ask h3 { color: var(--ink); }
+.note.clean { background: var(--panel); color: var(--muted); }
+.steps { display: grid; gap: 0; margin-top: 10px; }
+.step { display: grid; grid-template-columns: 168px 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.step:last-child { border-bottom: 0; }
+.step.noboard { grid-template-columns: 1fr; }
+.board { width: 168px; max-width: 100%; height: auto; display: block; border-radius: 4px; }
+.slabel { font: 700 12px var(--latin); color: var(--green); text-transform: uppercase; letter-spacing: .06em; }
+.en { margin: 2px 0 0; }
+.pa-line { margin: 4px 0 0; font-size: 18px; line-height: 1.75; }
+.sub { margin-top: 8px; padding-left: 10px; border-left: 2px solid var(--line); font-size: 14px; }
+.sub .k { font: 600 11px var(--latin); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.sub .pa-line { font-size: 16px; }
+.how { color: var(--muted); font-size: 13px; margin-top: 6px; }
+.opts { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 6px; }
+.opts li { padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 14px; }
+.opts li.right { border-color: var(--green); }
+.opts .tick { font: 700 11px var(--latin); color: var(--green); margin-right: 6px; }
+.opts .why { color: var(--muted); display: block; }
+.verdict { margin-top: 14px; background: var(--panel); border-radius: 12px; padding: 12px 14px; display: grid; gap: 10px; }
+.vrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.verdict button { font: 600 14px var(--latin); padding: 9px 16px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; min-height: 44px; }
+.verdict button.okb[aria-pressed="true"] { background: var(--green); border-color: var(--green); color: var(--green-ink); }
+.verdict button.chb[aria-pressed="true"] { background: var(--maroon); border-color: var(--maroon); color: var(--bg); }
+.verdict button:disabled { opacity: .5; cursor: default; }
+.saved { color: var(--muted); font-size: 13px; }
+textarea { width: 100%; min-height: 64px; resize: vertical; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font: 15px/1.5 var(--latin), var(--gurmukhi); background: var(--bg); color: var(--ink); }
+label.tlabel { font: 600 13px var(--latin); color: var(--muted); }
+.testline { margin-top: 36px; border-top: 2px solid var(--ink); padding-top: 12px; color: var(--muted); }
+@media (max-width: 560px) {
+  .step { grid-template-columns: 1fr; }
+  .board { width: 220px; }
+}
+@media (prefers-reduced-motion: no-preference) { .verdict button { transition: background .15s, color .15s; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="toprow">
+      <h1 id="levelTitle"></h1>
+      <div class="meter" id="meter"></div>
+    </div>
+    <div class="bar" id="bar" aria-hidden="true"><i class="ok"></i><i class="ch"></i></div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Level" id="levelSeg"></div>
+      <div class="seg" role="group" aria-label="Show" id="filterSeg">
+        <button data-f="all" aria-pressed="true">All</button>
+        <button data-f="open" aria-pressed="false">Not marked</button>
+        <button data-f="change" aria-pressed="false">Needs change</button>
+      </div>
+    </div>
+  </header>
+  <p class="intro">Read each lesson as a learner would meet it: the slides, then the try, practice and challenge. The green box lists what my check changed. A gold box asks you something. Mark each lesson <b>OK</b> or <b>Needs change</b>. I read your marks back, and the "not yet checked" badge comes off only the lessons you mark OK.</p>
+  <div class="signin" id="signin" hidden>Your marks can't be saved here: open this page on claude.ai while signed in.</div>
+  <main id="lessons"></main>
+  <p class="testline" id="testline"></p>
+</div>
+
+<script type="application/json" id="data">/*DATA*/</script>
+<script>
+const DATA = JSON.parse(document.getElementById("data").textContent);
+let levelIx = DATA.levels.length - 1, filter = "all", db = null, verdicts = {};
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const docId = id => "L" + id.replace(/\./g, "_");
+try { const f = localStorage.getItem("lc-filter"); if (f) filter = f; } catch {}
+
+// ---- the board ----
+const GLYPH = { K: "♚", Q: "♛", R: "♜", B: "♝", N: "♞", P: "♟" };
+function boardSvg(b) {
+  if (!b) return "";
+  const S = 20, flip = !!b.flip, files = "abcdefgh";
+  const xy = sq => { let f = files.indexOf(sq[0]), r = +sq[1] - 1; if (flip) { f = 7 - f; r = 7 - r; } return [f * S, (7 - r) * S]; };
+  let o = `<svg class="board" viewBox="0 0 160 160" role="img" aria-label="Board diagram">`;
+  o += `<defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--arrow)"/></marker></defs>`;
+  for (let f = 0; f < 8; f++) for (let r = 0; r < 8; r++) {
+    const sq = files[f] + (r + 1), [x, y] = xy(sq), light = (f + r) % 2 === 1;
+    o += `<rect x="${x}" y="${y}" width="${S}" height="${S}" fill="var(${light ? "--sq-l" : "--sq-d"})"/>`;
+  }
+  for (const sq of b.highlights ?? []) { const [x, y] = xy(sq); o += `<rect x="${x}" y="${y}" width="${S}" height="${S}" fill="var(--mark)"/>`; }
+  if (b.coords) for (let i = 0; i < 8; i++) {
+    const fl = flip ? 7 - i : i;
+    o += `<text x="${i * S + S - 2}" y="158" font-size="5.5" text-anchor="end" fill="#3a2a1a" font-family="Jost,sans-serif">${files[fl]}</text>`;
+    o += `<text x="1.5" y="${(7 - i) * S + 6}" font-size="5.5" fill="#3a2a1a" font-family="Jost,sans-serif">${flip ? 8 - i : i + 1}</text>`;
+  }
+  for (const [sq, p] of Object.entries(b.pieces ?? {})) {
+    const [x, y] = xy(sq), white = p[0] === "w";
+    o += `<text x="${x + S / 2}" y="${y + S * 0.8}" font-size="17" text-anchor="middle" font-family="'DejaVu Sans','Segoe UI Symbol','Apple Symbols',sans-serif" fill="var(${white ? "--pw" : "--pb"})" stroke="var(${white ? "--pw-line" : "--pb-line"})" stroke-width="${white ? 0.9 : 0.5}" paint-order="stroke">${GLYPH[p[1]]}︎</text>`;
+  }
+  for (const sq of b.dots ?? []) { const [x, y] = xy(sq); o += `<circle cx="${x + S / 2}" cy="${y + S / 2}" r="3" fill="var(--dot)"/>`; }
+  for (const sq of b.crosses ?? []) { const [x, y] = xy(sq), a = 6; o += `<path d="M${x + a},${y + a} L${x + S - a},${y + S - a} M${x + S - a},${y + a} L${x + a},${y + S - a}" stroke="var(--cross)" stroke-width="2" stroke-linecap="round"/>`; }
+  for (const sq of b.stars ?? []) { const [x, y] = xy(sq); o += `<text x="${x + S / 2}" y="${y + S * 0.74}" font-size="15" text-anchor="middle" fill="#D9A520" stroke="#6b4e10" stroke-width=".5">★</text>`; }
+  for (const [a, c] of b.arrows ?? []) {
+    const [x1, y1] = xy(a), [x2, y2] = xy(c), dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy) || 1, cut = 5;
+    o += `<line x1="${x1 + S / 2}" y1="${y1 + S / 2}" x2="${x2 + S / 2 - dx / len * cut}" y2="${y2 + S / 2 - dy / len * cut}" stroke="var(--arrow)" stroke-width="3" stroke-opacity=".85" stroke-linecap="round" marker-end="url(#ah)"/>`;
+  }
+  return o + "</svg>";
+}
+
+// ---- rendering ----
+const bil = (t, cls = "") => t ? `<p class="en ${cls}">${esc(t.en)}</p><p class="pa-line" lang="pa">${esc(t.pa)}</p>` : "";
+function stepHtml(s, isSlide) {
+  const label = `<div class="slabel">${esc(s.step)}</div>`;
+  let body = isSlide ? bil(s.text) : bil(s.prompt);
+  if (!isSlide) {
+    if (s.hint) body += `<div class="sub"><span class="k">Hint</span>${bil(s.hint)}</div>`;
+    if (s.options) body += `<ul class="opts">${s.options.map(o => `<li class="${o.correct ? "right" : ""}">${o.correct ? `<span class="tick">RIGHT</span>` : ""}${esc(o.text.en)} · <span lang="pa" class="pa">${esc(o.text.pa)}</span>${o.why ? `<span class="why">${esc(o.why.en)}</span><span class="why pa" lang="pa">${esc(o.why.pa)}</span>` : ""}</li>`).join("")}</ul>`;
+    if (s.note) body += `<div class="how">${esc(s.note)}</div>`;
+  }
+  return `<div class="step ${s.board ? "" : "noboard"}">${s.board ? boardSvg(s.board) : ""}<div>${label}${body}</div></div>`;
+}
+function lessonHtml(l, notes) {
+  const v = verdicts[docId(l.id)], st = v?.status;
+  const n = notes[l.id] ?? {};
+  const noteBoxes = [
+    n.changed?.length ? `<div class="note changed"><h3>Changed in this check</h3><ul>${n.changed.map(x => `<li>${x}</li>`).join("")}</ul></div>` : "",
+    n.ask?.length ? `<div class="note ask"><h3>Your call</h3><ul>${n.ask.map(x => `<li>${x}</li>`).join("")}</ul></div>` : "",
+    !n.changed?.length && !n.ask?.length ? `<div class="note clean">Checked: chess, Punjabi, English and teaching order. Nothing to change.</div>` : "",
+  ].join("");
+  return `<section class="lesson" id="${docId(l.id)}" data-status="${st ?? "open"}">
+    <div class="lhead"><span class="lid">LESSON ${esc(l.id)}</span><h2>${esc(l.title.en)}<span class="pa" lang="pa">${esc(l.title.pa)}</span></h2>
+      <span class="chip ${st ?? ""}">${st === "ok" ? "OK" : st === "change" ? "Needs change" : "Not marked"}</span></div>
+    <p class="goal">${esc(l.goal.en)}<span class="pa" lang="pa">${esc(l.goal.pa)}</span></p>
+    <div class="notes">${noteBoxes}</div>
+    <div class="steps">${l.slides.map(s => stepHtml(s, true)).join("")}${l.tasks.map(s => stepHtml(s, false)).join("")}</div>
+    <div class="verdict">
+      <div class="vrow">
+        <button class="okb" data-id="${esc(l.id)}" data-v="ok" aria-pressed="${st === "ok"}" ${db ? "" : "disabled"}>OK</button>
+        <button class="chb" data-id="${esc(l.id)}" data-v="change" aria-pressed="${st === "change"}" ${db ? "" : "disabled"}>Needs change</button>
+        <span class="saved" id="sv-${docId(l.id)}">${v?.at ? "Saved" : ""}</span>
+      </div>
+      <label class="tlabel" for="nt-${docId(l.id)}">What should change? (English or Punjabi)</label>
+      <textarea id="nt-${docId(l.id)}" data-id="${esc(l.id)}" ${db ? "" : "disabled"}>${esc(v?.note ?? "")}</textarea>
+    </div>
+  </section>`;
+}
+function render() {
+  const L = DATA.levels[levelIx];
+  $("#levelTitle").innerHTML = `Level ${L.level} · ${esc(L.title.en)}<span class="pa" lang="pa">${esc(L.title.pa)}</span>`;
+  $("#levelSeg").innerHTML = DATA.levels.map((x, i) => `<button data-l="${i}" aria-pressed="${i === levelIx}">Level ${x.level}</button>`).join("");
+  document.querySelectorAll("#filterSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.f === filter)));
+  const shown = L.lessons.filter(l => { const s = verdicts[docId(l.id)]?.status; return filter === "all" || (filter === "open" ? !s : s === filter); });
+  $("#lessons").innerHTML = shown.length ? shown.map(l => lessonHtml(l, L.notes ?? {})).join("") : `<p class="intro">Nothing here.</p>`;
+  $("#testline").textContent = L.test ?? "";
+  meter();
+}
+function meter() {
+  const L = DATA.levels[levelIx], n = L.lessons.length;
+  const ok = L.lessons.filter(l => verdicts[docId(l.id)]?.status === "ok").length, ch = L.lessons.filter(l => verdicts[docId(l.id)]?.status === "change").length;
+  $("#meter").innerHTML = `<b>${ok}</b> OK · <b>${ch}</b> need change · <b>${n - ok - ch}</b> to go`;
+  const [a, b] = document.querySelectorAll("#bar i"); a.style.width = (ok / n * 100) + "%"; b.style.width = (ch / n * 100) + "%";
+}
+
+// ---- saving ----
+async function save(id, patch) {
+  const key = docId(id), sv = document.getElementById("sv-" + key);
+  const next = { ...(verdicts[key] ?? {}), ...patch, lesson: id, level: DATA.levels[levelIx].level, at: new Date().toISOString() };
+  verdicts[key] = next; if (sv) sv.textContent = "Saving…";
+  try { await db.doc("verdicts/" + key).set(next); if (sv) sv.textContent = "Saved"; }
+  catch (e) { if (sv) sv.textContent = "Not saved: " + (e?.code === "not_granted" ? "you can't edit this page" : "try again"); }
+}
+document.addEventListener("click", e => {
+  const lb = e.target.closest("#levelSeg button"); if (lb) { levelIx = +lb.dataset.l; render(); return; }
+  const fb = e.target.closest("#filterSeg button"); if (fb) { filter = fb.dataset.f; try { localStorage.setItem("lc-filter", filter); } catch {} render(); return; }
+  const vb = e.target.closest(".verdict button"); if (!vb || !db) return;
+  const id = vb.dataset.id, ta = document.getElementById("nt-" + docId(id));
+  save(id, { status: vb.dataset.v, note: ta.value }).then(() => {
+    const sec = document.getElementById(docId(id));
+    sec.querySelectorAll(".verdict button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === vb.dataset.v)));
+    const chip = sec.querySelector(".chip"); chip.className = "chip " + vb.dataset.v; chip.textContent = vb.dataset.v === "ok" ? "OK" : "Needs change";
+    if (vb.dataset.v === "change") ta.focus();
+    meter();
+  });
+});
+const timers = {};
+document.addEventListener("input", e => {
+  const ta = e.target.closest("textarea[data-id]"); if (!ta || !db) return;
+  const id = ta.dataset.id; clearTimeout(timers[id]);
+  timers[id] = setTimeout(() => save(id, { note: ta.value, status: verdicts[docId(id)]?.status ?? "change" }), 900);
+});
+
+render();
+(async () => {
+  try { db = await window.claude?.use?.("db"); } catch { db = null; }
+  if (!db) { $("#signin").hidden = false; return; }
+  db.collection("verdicts").onSnapshot(snap => {
+    for (const d of snap.docs) if (d.exists) verdicts[d.id] = d.data();
+    const active = document.activeElement;
+    if (active && active.tagName === "TEXTAREA") { meter(); return; }   // don't redraw under the cursor
+    render();
+  }, () => { $("#signin").hidden = false; });
+  render();
+})();
+</script>

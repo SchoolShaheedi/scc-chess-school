@@ -502,7 +502,9 @@ html:has(.donescreen), html:has(.donescreen) body { background: #2A1D13; }
 .botcard.on { border: 2px solid var(--gold); background: #FFFCF3; }
 
 /* ---------- tab bar, daily goal, Me (DECISIONS #76) ---------- */
-.tabbed { padding-bottom: 96px; }
+/* room for the fixed tab bar, so the last item can scroll clear of it. The :has rule covers any screen that forgets
+   the class (the Learn home did, 2026-10-08: its last lessons sat behind the bar). */
+.tabbed, .screen:has(+ .tabbar) { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
 .tabbar { position: fixed; left: 50%; bottom: 0; transform: translateX(-50%); width: 100%; max-width: 520px; z-index: 20;
   display: flex; justify-content: space-around; padding: 8px 6px calc(10px + env(safe-area-inset-bottom)); background: var(--wal);
   border-radius: 20px 20px 0 0; box-shadow: 0 -6px 20px rgba(0,0,0,.12); }

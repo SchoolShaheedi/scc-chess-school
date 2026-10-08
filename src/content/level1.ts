@@ -24,7 +24,7 @@ export const LEVEL1: Lesson[] = [
                 pa: "ਇਸ ਲਈ ਹਰ ਖਾਨੇ ਦਾ ਇੱਕ ਨਾਮ ਹੈ: ਪਹਿਲਾਂ ਅੱਖਰ, ਫਿਰ ਨੰਬਰ। ਇਹ ਖਾਨਾ e4 ਹੈ।" },
         board: { highlights: ["e4"], arrows: [["e1", "e4"]], coords: true } },
       { text: { en: "A line of squares on a slant is a diagonal. Bishops and queens travel along them.",
-                pa: "ਤਿਰਛੀ ਲਕੀਰ ਵਿੱਚ ਖਾਨਿਆਂ ਦੀ ਕਤਾਰ ਨੂੰ ਤਿਰਛੀ ਲਕੀਰ ਕਹਿੰਦੇ ਹਾਂ। ਊਠ ਅਤੇ ਰਾਣੀ ਇਨ੍ਹਾਂ ਉੱਤੇ ਚੱਲਦੇ ਹਨ।" },
+                pa: "ਖਾਨਿਆਂ ਦੀ ਤਿਰਛੀ ਕਤਾਰ ਨੂੰ ਤਿਰਛੀ ਲਕੀਰ ਕਹਿੰਦੇ ਹਨ। ਊਠ ਅਤੇ ਰਾਣੀ ਇਨ੍ਹਾਂ ਉੱਤੇ ਚੱਲਦੇ ਹਨ।" },
         board: { arrows: [["a1", "h8"]], coords: true } },
     ],
     try: { kind: "coord", targets: ["e4", "a1", "h8"], coords: true,
@@ -141,7 +141,7 @@ export const LEVEL1: Lesson[] = [
   {
     id: "1.5", level: 1, status: "draft",
     title: { en: "The king", pa: "ਬਾਦਸ਼ਾਹ" },
-    goal: { en: "Move the king one square, and never into attack.", pa: "ਬਾਦਸ਼ਾਹ ਨੂੰ ਇੱਕ ਖਾਨਾ ਚਲਾਓ, ਅਤੇ ਕਦੇ ਵੀ ਹਮਲੇ ਵਿੱਚ ਨਹੀਂ।" },
+    goal: { en: "Move the king one square, and never into attack.", pa: "ਬਾਦਸ਼ਾਹ ਨੂੰ ਇੱਕ ਖਾਨਾ ਚਲਾਓ, ਅਤੇ ਕਦੇ ਵੀ ਹਮਲੇ ਵਾਲੇ ਖਾਨੇ 'ਤੇ ਨਾ ਜਾਓ।" },
     learn: [
       { text: { en: "The king moves one square in any direction.", pa: "ਬਾਦਸ਼ਾਹ ਕਿਸੇ ਵੀ ਪਾਸੇ ਇੱਕ ਖਾਨਾ ਚੱਲਦਾ ਹੈ।" },
         board: { pieces: { e4: "wK" }, dots: ["d3", "e3", "f3", "d4", "f4", "d5", "e5", "f5"] } },
@@ -157,12 +157,12 @@ export const LEVEL1: Lesson[] = [
     practise: [
       { kind: "safe", pieces: { e1: "wK", c5: "bB" }, goal: "e5", maxMoves: 4,
         prompt: { en: "Reach the star safely. The bishop guards a diagonal.", pa: "ਸੁਰੱਖਿਅਤ ਤਾਰੇ ਤੱਕ ਪਹੁੰਚੋ। ਊਠ ਇੱਕ ਤਿਰਛੀ ਲਕੀਰ ਦੀ ਰਾਖੀ ਕਰਦਾ ਹੈ।" } },
-      { kind: "safe", pieces: { e1: "wK", e4: "bN" }, goal: "e7", maxMoves: 6,
-        prompt: { en: "Reach the star safely. Watch where the knight can jump.", pa: "ਸੁਰੱਖਿਅਤ ਤਾਰੇ ਤੱਕ ਪਹੁੰਚੋ। ਵੇਖੋ ਘੋੜਾ ਕਿੱਥੇ ਛਾਲ ਮਾਰ ਸਕਦਾ ਹੈ।" } },
-      { kind: "safe", pieces: { a1: "wK", d3: "bN", h3: "bB" }, goal: "h1", maxMoves: 7,
+      { kind: "safe", pieces: { e1: "wK", c4: "bB", g4: "bB" }, goal: "e7", maxMoves: 6,
+        prompt: { en: "Reach the star safely. Two bishops guard their diagonals.", pa: "ਸੁਰੱਖਿਅਤ ਤਾਰੇ ਤੱਕ ਪਹੁੰਚੋ। ਦੋ ਊਠ ਆਪਣੀਆਂ ਤਿਰਛੀਆਂ ਲਕੀਰਾਂ ਦੀ ਰਾਖੀ ਕਰਦੇ ਹਨ।" } },
+      { kind: "safe", pieces: { a1: "wK", c8: "bR", c4: "bB", g3: "bB" }, goal: "h1", maxMoves: 7,
         prompt: { en: "Get to the other corner without stepping into attack.", pa: "ਹਮਲੇ ਵਿੱਚ ਪੈਰ ਰੱਖੇ ਬਿਨਾਂ ਦੂਜੇ ਕੋਨੇ ਤੱਕ ਪਹੁੰਚੋ।" } },
     ],
-    challenge: { kind: "safe", pieces: { e1: "wK", a4: "bR", h6: "bB", c6: "bN" }, goal: "e8", maxMoves: 8,
+    challenge: { kind: "safe", pieces: { e1: "wK", a4: "bR", c4: "bB", g7: "bB" }, goal: "e8", maxMoves: 8,
       prompt: { en: "Cross the whole board safely in 8 moves.", pa: "੮ ਚਾਲਾਂ ਵਿੱਚ ਸਾਰੀ ਬਿਸਾਤ ਸੁਰੱਖਿਅਤ ਪਾਰ ਕਰੋ।" } },
   },
 
@@ -318,6 +318,7 @@ export const LEVEL1: Lesson[] = [
       prompt: { en: "Three real games. Find the free piece in each.", pa: "ਤਿੰਨ ਅਸਲੀ ਖੇਡਾਂ। ਹਰ ਇੱਕ ਵਿੱਚ ਮੁਫ਼ਤ ਮੋਹਰਾ ਲੱਭੋ।" } },
   },
 
+  // 1.5's drills use only rooks and bishops (lesson check 2026-10-08): the knight isn't taught until 1.6.
   // 1.10–1.12 (full check 2026-10-05): play before reading, and check taught BEFORE the capture-race test,
   // which is played under full chess rules. The mini-games run against Nanhi Chidi (botGame).
   {
@@ -362,7 +363,7 @@ export const LEVEL1: Lesson[] = [
         prompt: { en: "Four pawns each. Watch out for captures!", pa: "ਚਾਰ-ਚਾਰ ਪਿਆਦੇ। ਮਾਰ ਤੋਂ ਸਾਵਧਾਨ!" } },
     ],
     challenge: { kind: "botGame", fen: "7k/pppppp2/8/8/8/8/PPPPPP2/7K w - - 0 1", bot: "nanhi-chidi", goal: "promote",
-      prompt: { en: "The big pawn war: six pawns each.", pa: "ਵੱਡੀ ਜੰਗ: ਛੇ-ਛੇ ਪਿਆਦੇ।" } },
+      prompt: { en: "The big pawn war: six pawns each.", pa: "ਪਿਆਦਿਆਂ ਦੀ ਵੱਡੀ ਜੰਗ: ਛੇ-ਛੇ ਪਿਆਦੇ।" } },
   },
   {
     id: "1.12", level: 1, status: "draft",

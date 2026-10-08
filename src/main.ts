@@ -226,7 +226,7 @@ function home() {
   const testCount = (lv: Level) => lv.test!.packs.reduce((a, p) => a + p.count, 0);
   const ring = (pct: number, color: string, ic: string) =>
     `<span class="ring" style="--p:${pct}%;--c:${color}"><span>${ic}</span></span>`;
-  app.innerHTML = `<div class="screen club">
+  app.innerHTML = `<div class="screen club tabbed">
     <header class="clubhead">
       <div class="clubtop"><span class="clubbrand">${icon("crown", "gold")}${t("appName")}</span>
         <button class="iconbtn dark" data-settings aria-label="${t("settings")}">${icon("settings")}</button></div>

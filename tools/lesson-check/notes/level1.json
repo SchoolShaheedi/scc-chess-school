@@ -1,0 +1,18 @@
+{
+  "1.1": {
+    "changed": ["Punjabi, slide 5: the definition of a diagonal went in a circle (“a row of squares in a diagonal line is called a diagonal line”). Now: <span lang=\"pa\" class=\"pa\">ਖਾਨਿਆਂ ਦੀ ਤਿਰਛੀ ਕਤਾਰ ਨੂੰ ਤਿਰਛੀ ਲਕੀਰ ਕਹਿੰਦੇ ਹਨ।</span>"],
+    "ask": ["Slide 3 keeps <b>1 ਤੋਂ 8</b> in Latin digits, because it names the labels printed on the board (like e4). The Punjabi reviewer suggested <span lang=\"pa\" class=\"pa\">੧ ਤੋਂ ੮</span>. If you want Gurmukhi numerals here, mark Needs change and say so."]
+  },
+  "1.5": {
+    "changed": [
+      "Teaching order: three drills made the king dodge a <b>knight</b>, but the knight is only taught in the next lesson (1.6). They now use rooks and bishops only, at the same lengths, each checked by the solver: Practice 2 (two bishops, 6 moves), Practice 3 (a rook whose file is cut by a bishop, 7 moves), Challenge (a rook whose row is cut by a bishop, 8 moves).",
+      "Practice 2's prompt now says <i>Two bishops guard their diagonals</i>, in both languages.",
+      "Punjabi goal: “and never into attack” had no verb. Now: <span lang=\"pa\" class=\"pa\">ਅਤੇ ਕਦੇ ਵੀ ਹਮਲੇ ਵਾਲੇ ਖਾਨੇ 'ਤੇ ਨਾ ਜਾਓ।</span>"
+    ]
+  },
+  "1.10": { "changed": ["Slide 2 now shows a position (earlier today): the three ways out of check, with the king's safe squares dotted, the bishop that can block and the rook that can capture."] },
+  "1.11": { "changed": [
+    "Slide 2 now shows a position (earlier today): a g-pawn with no enemy pawn in front or beside it, running to the end.",
+    "Punjabi challenge: “The big war” lost the pawns. Now: <span lang=\"pa\" class=\"pa\">ਪਿਆਦਿਆਂ ਦੀ ਵੱਡੀ ਜੰਗ: ਛੇ-ਛੇ ਪਿਆਦੇ।</span>"] },
+  "1.12": { "changed": ["Slide 2 now shows a position (earlier today): the rook behind the pawns on a8."] }
+}
