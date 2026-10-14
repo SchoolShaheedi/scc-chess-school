@@ -19,7 +19,7 @@ export const LEVEL5: Lesson[] = [
         board: { fen: "8/8/8/5k2/P7/8/8/7K b - - 0 1", highlights: square("a4", 4, true) } },
       { text: { en: "Here Black is to move and steps into the square: the pawn is caught.", pa: "ਇੱਥੇ ਕਾਲੇ ਦੀ ਵਾਰੀ ਹੈ ਅਤੇ ਉਹ ਵਰਗ ਵਿੱਚ ਆ ਜਾਂਦਾ ਹੈ: ਪਿਆਦਾ ਫੜਿਆ ਗਿਆ।" },
         board: { play: true, fen: "8/8/8/5k2/P7/8/8/7K b - - 0 1", arrows: [["f5", "e5"]], highlights: square("a4", 4, true) } },
-      { text: { en: "Count it before you run: it saves you thinking many moves ahead.", pa: "ਦੌੜਨ ਤੋਂ ਪਹਿਲਾਂ ਗਿਣੋ: ਇਹ ਤੁਹਾਨੂੰ ਕਈ ਚਾਲਾਂ ਅੱਗੇ ਸੋਚਣ ਤੋਂ ਬਚਾਉਂਦਾ ਹੈ।" },
+      { text: { en: "Count it before you run: it saves you thinking many moves ahead.", pa: "ਦੌੜਨ ਤੋਂ ਪਹਿਲਾਂ ਗਿਣੋ: ਇਸ ਨਾਲ ਕਈ ਚਾਲਾਂ ਅੱਗੇ ਸੋਚਣ ਦੀ ਲੋੜ ਨਹੀਂ ਪੈਂਦੀ।" },
         board: { fen: "8/8/8/7k/P7/8/8/7K b - - 0 1", highlights: ["a4","a5","a6","a7","a8","b4","b5","b6","b7","b8","c4","c5","c6","c7","c8","d4","d5","d6","d7","d8","e4","e5","e6","e7","e8"] } },
     ],
     try: { kind: "engineVs", fen: "8/8/8/8/p7/4K3/8/7k w - - 0 1", goal: "hold", maxMoves: 6,
@@ -35,7 +35,7 @@ export const LEVEL5: Lesson[] = [
       { kind: "engineVs", fen: "8/8/8/8/1p6/8/5K2/7k w - - 0 1", goal: "hold", maxMoves: 6,
         prompt: { en: "Catch the b-pawn before it queens.", pa: "b ਵਾਲੇ ਪਿਆਦੇ ਨੂੰ ਰਾਣੀ ਬਣਨ ਤੋਂ ਪਹਿਲਾਂ ਫੜੋ।" } },
     ],
-    challenge: { kind: "pack", pack: "passed-pawn", count: 3, prompt: { en: "Real games: race the pawns.", pa: "ਅਸਲੀ ਖੇਡਾਂ: ਪਿਆਦਿਆਂ ਦੀ ਦੌੜ।" } },
+    challenge: { kind: "pack", pack: "passed-pawn", count: 3, prompt: { en: "Real games: race the pawns.", pa: "ਅਸਲੀ ਖੇਡਾਂ: ਪਿਆਦਿਆਂ ਦੀ ਦੌੜ ਜਿੱਤੋ।" } },
   },
 
   {
@@ -53,7 +53,7 @@ export const LEVEL5: Lesson[] = [
       hint: { en: "Step to the side of the black king and walk round it.", pa: "ਕਾਲੇ ਬਾਦਸ਼ਾਹ ਦੇ ਪਾਸੇ ਜਾਓ ਅਤੇ ਉਸ ਦੇ ਦੁਆਲੇ ਘੁੰਮੋ।" } },
     practise: [
       { kind: "engineVs", fen: "8/8/3k4/8/8/3K4/3P4/8 w - - 0 1", goal: "promote", maxMoves: 14,
-        prompt: { en: "King first! Lead your pawn up the board and promote it.", pa: "ਪਹਿਲਾਂ ਬਾਦਸ਼ਾਹ! ਪਿਆਦੇ ਦੀ ਅਗਵਾਈ ਕਰੋ ਅਤੇ ਤਰੱਕੀ ਦਿਓ।" } },
+        prompt: { en: "King first! Lead your pawn up the board and promote it.", pa: "ਪਹਿਲਾਂ ਬਾਦਸ਼ਾਹ! ਬਾਦਸ਼ਾਹ ਨਾਲ ਪਿਆਦੇ ਨੂੰ ਅੱਗੇ ਲੈ ਜਾਓ ਅਤੇ ਤਰੱਕੀ ਦਿਓ।" } },
       { kind: "pack", pack: "pawn-endgame", count: 3, prompt: { en: "Real games: pawn endings.", pa: "ਅਸਲੀ ਖੇਡਾਂ: ਪਿਆਦਿਆਂ ਦੀ ਅੰਤਲੀ ਖੇਡ।" } },
     ],
     challenge: { kind: "pack", pack: "pawn-endgame", count: 3, prompt: { en: "Three real endings.", pa: "ਤਿੰਨ ਅਸਲੀ ਅੰਤਲੀਆਂ ਖੇਡਾਂ।" } },
@@ -66,7 +66,7 @@ export const LEVEL5: Lesson[] = [
     learn: [
       { text: { en: "When the two kings face each other with one square between them, the side that must move has to give way.", pa: "ਜਦੋਂ ਦੋਵੇਂ ਬਾਦਸ਼ਾਹ ਇੱਕ ਖਾਨਾ ਛੱਡ ਕੇ ਆਹਮੋ-ਸਾਹਮਣੇ ਹੋਣ, ਤਾਂ ਜਿਸ ਦੀ ਵਾਰੀ ਹੈ ਉਸ ਨੂੰ ਰਾਹ ਛੱਡਣਾ ਪੈਂਦਾ ਹੈ।" },
         board: { fen: "8/8/4k3/8/4K3/8/8/8 w - - 0 1", highlights: ["e5"] } },
-      { text: { en: "\"Having the opposition\" means it is the OTHER side's turn in that face-off. That is often the whole game.", pa: "\"ਆਹਮੋ-ਸਾਹਮਣਾ ਤੁਹਾਡੇ ਕੋਲ ਹੈ\" ਦਾ ਮਤਲਬ ਹੈ ਕਿ ਉਸ ਆਹਮੋ-ਸਾਹਮਣੇ ਵਿੱਚ ਵਾਰੀ ਦੂਜੇ ਪਾਸੇ ਦੀ ਹੈ। ਅਕਸਰ ਸਾਰੀ ਖੇਡ ਇਸੇ ਉੱਤੇ ਹੁੰਦੀ ਹੈ।" },
+      { text: { en: "\"Having the opposition\" means it is the OTHER side's turn in that face-off. That is often the whole game.", pa: "\"ਆਹਮੋ-ਸਾਹਮਣਾ ਤੁਹਾਡੇ ਕੋਲ ਹੈ\" ਦਾ ਮਤਲਬ ਹੈ ਕਿ ਉਸ ਆਹਮੋ-ਸਾਹਮਣੇ ਵਿੱਚ ਵਾਰੀ ਦੂਜੇ ਪਾਸੇ ਦੀ ਹੈ। ਅਕਸਰ ਸਾਰੀ ਖੇਡ ਇਸੇ ਉੱਤੇ ਟਿਕੀ ਹੁੰਦੀ ਹੈ।" },
         board: { fen: "8/8/4k3/8/4K3/8/8/8 b - - 0 1", crosses: ["d5","e5","f5"], highlights: ["e4"] } },
     ],
     try: { kind: "choose", board: { fen: "8/8/4k3/8/4K3/8/8/8 w - - 0 1" },
@@ -88,9 +88,9 @@ export const LEVEL5: Lesson[] = [
     title: { en: "King + pawn vs king", pa: "ਬਾਦਸ਼ਾਹ-ਪਿਆਦਾ ਬਨਾਮ ਬਾਦਸ਼ਾਹ" },
     goal: { en: "Win with king and pawn by reaching a key square.", pa: "ਮੁੱਖ ਖਾਨੇ 'ਤੇ ਪਹੁੰਚ ਕੇ ਬਾਦਸ਼ਾਹ ਅਤੇ ਪਿਆਦੇ ਨਾਲ ਜਿੱਤੋ।" },
     learn: [
-      { text: { en: "A pawn on its 2nd, 3rd or 4th row has key squares two rows in front of it, and the squares either side. Get your king there, and the pawn will queen.", pa: "ਆਪਣੀ ਦੂਜੀ, ਤੀਜੀ ਜਾਂ ਚੌਥੀ ਕਤਾਰ ਵਾਲੇ ਪਿਆਦੇ ਦੇ ਮੁੱਖ ਖਾਨੇ ਉਸ ਤੋਂ ਦੋ ਕਤਾਰਾਂ ਅੱਗੇ ਹੁੰਦੇ ਹਨ, ਅਤੇ ਦੋਵੇਂ ਪਾਸੇ ਵਾਲੇ ਖਾਨੇ। ਆਪਣੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਉੱਥੇ ਲੈ ਜਾਓ, ਤਾਂ ਪਿਆਦਾ ਰਾਣੀ ਬਣੇਗਾ।" },
+      { text: { en: "A pawn on its 2nd, 3rd or 4th row has key squares two rows in front of it, and the squares either side. Get your king there, and the pawn will queen.", pa: "ਦੂਜੀ, ਤੀਜੀ ਜਾਂ ਚੌਥੀ ਕਤਾਰ ਵਾਲੇ ਪਿਆਦੇ ਦੇ ਮੁੱਖ ਖਾਨੇ ਉਸ ਤੋਂ ਦੋ ਕਤਾਰਾਂ ਅੱਗੇ ਹੁੰਦੇ ਹਨ, ਅਤੇ ਦੋਵੇਂ ਪਾਸੇ ਵਾਲੇ ਖਾਨੇ। ਆਪਣੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਉੱਥੇ ਲੈ ਜਾਓ, ਤਾਂ ਪਿਆਦਾ ਰਾਣੀ ਬਣੇਗਾ।" },
         board: { pieces: { d2: "wP" }, highlights: ["c4", "d4", "e4"] } },
-      { text: { en: "Don't push the pawn too early. The king goes first; the pawn moves when the king has made room.", pa: "ਪਿਆਦੇ ਨੂੰ ਬਹੁਤ ਜਲਦੀ ਨਾ ਧੱਕੋ। ਪਹਿਲਾਂ ਬਾਦਸ਼ਾਹ; ਪਿਆਦਾ ਉਦੋਂ ਚੱਲੇ ਜਦੋਂ ਬਾਦਸ਼ਾਹ ਨੇ ਥਾਂ ਬਣਾ ਦਿੱਤੀ ਹੋਵੇ।" },
+      { text: { en: "Don't push the pawn too early. The king goes first; the pawn moves when the king has made room.", pa: "ਪਿਆਦੇ ਨੂੰ ਵੇਲੇ ਤੋਂ ਪਹਿਲਾਂ ਨਾ ਧੱਕੋ। ਪਹਿਲਾਂ ਬਾਦਸ਼ਾਹ; ਪਿਆਦਾ ਉਦੋਂ ਚੱਲਦਾ ਹੈ ਜਦੋਂ ਬਾਦਸ਼ਾਹ ਥਾਂ ਬਣਾ ਦੇਵੇ।" },
         board: { fen: "8/3k4/8/8/8/3K4/3P4/8 w - - 0 1", arrows: [["d3","e4"]], highlights: ["c4","d4","e4"] } },
     ],
     try: { kind: "engineVs", fen: "8/8/3k4/8/8/3K4/3P4/8 w - - 0 1", goal: "promote", maxMoves: 14,
@@ -108,9 +108,9 @@ export const LEVEL5: Lesson[] = [
     title: { en: "The rook pawn", pa: "ਕੰਢੇ ਦਾ ਪਿਆਦਾ" },
     goal: { en: "Know why an a- or h-pawn is often only a draw.", pa: "ਜਾਣੋ ਕਿ a ਜਾਂ h ਵਾਲਾ ਪਿਆਦਾ ਅਕਸਰ ਸਿਰਫ਼ ਬਰਾਬਰੀ ਕਿਉਂ ਹੁੰਦਾ ਹੈ।" },
     learn: [
-      { text: { en: "An a-pawn or h-pawn is special: if the defending king reaches the corner in front of it, nothing can drive it out. It's a draw.", pa: "a ਜਾਂ h ਵਾਲਾ ਪਿਆਦਾ ਖ਼ਾਸ ਹੈ: ਜੇ ਬਚਾਉਣ ਵਾਲਾ ਬਾਦਸ਼ਾਹ ਉਸ ਦੇ ਅੱਗੇ ਵਾਲੇ ਕੋਨੇ ਵਿੱਚ ਪਹੁੰਚ ਜਾਵੇ, ਤਾਂ ਉਸ ਨੂੰ ਕੋਈ ਨਹੀਂ ਕੱਢ ਸਕਦਾ। ਬਰਾਬਰੀ ਹੈ।" },
+      { text: { en: "An a-pawn or h-pawn is special: if the defending king reaches the corner in front of it, nothing can drive it out. It's a draw.", pa: "a ਜਾਂ h ਵਾਲਾ ਪਿਆਦਾ ਖ਼ਾਸ ਹੈ: ਜੇ ਬਚਾਉਣ ਵਾਲਾ ਬਾਦਸ਼ਾਹ ਉਸ ਦੇ ਅੱਗੇ ਵਾਲੇ ਕੋਨੇ ਵਿੱਚ ਪਹੁੰਚ ਜਾਵੇ, ਤਾਂ ਉਸ ਬਾਦਸ਼ਾਹ ਨੂੰ ਉੱਥੋਂ ਕੱਢਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ। ਬਰਾਬਰੀ ਹੈ।" },
         board: { fen: "k7/8/8/8/P7/8/1K6/8 b - - 0 1", highlights: ["a8"] } },
-      { text: { en: "So when defending, run for the corner. When attacking, keep the king out of it.", pa: "ਇਸ ਲਈ ਬਚਾਅ ਵੇਲੇ ਕੋਨੇ ਵੱਲ ਭੱਜੋ। ਹਮਲੇ ਵੇਲੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਉਸ ਤੋਂ ਬਾਹਰ ਰੱਖੋ।" },
+      { text: { en: "So when defending, run for the corner. When attacking, keep the defending king out of it.", pa: "ਇਸ ਲਈ ਬਚਾਅ ਵੇਲੇ ਕੋਨੇ ਵੱਲ ਭੱਜੋ। ਹਮਲੇ ਵੇਲੇ ਦੂਜੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਕੋਨੇ ਤੋਂ ਬਾਹਰ ਰੱਖੋ।" },
         board: { fen: "2k5/8/8/8/P7/8/1K6/8 b - - 0 1", arrows: [["c8","b8"]], highlights: ["a8"] } },
     ],
     try: { kind: "choose", board: { fen: "k7/8/8/8/P7/8/1K6/8 w - - 0 1" },
@@ -129,11 +129,11 @@ export const LEVEL5: Lesson[] = [
   {
     id: "5.6", level: 5, status: "draft",
     title: { en: "Passed pawns", pa: "ਆਜ਼ਾਦ ਪਿਆਦਾ" },
-    goal: { en: "Make a passed pawn, push it, and stop theirs.", pa: "ਆਜ਼ਾਦ ਪਿਆਦਾ ਬਣਾਓ, ਅੱਗੇ ਵਧਾਓ, ਅਤੇ ਉਨ੍ਹਾਂ ਦਾ ਰੋਕੋ।" },
+    goal: { en: "Make a passed pawn, push it, and stop theirs.", pa: "ਆਜ਼ਾਦ ਪਿਆਦਾ ਬਣਾਓ, ਅੱਗੇ ਵਧਾਓ, ਅਤੇ ਵਿਰੋਧੀ ਦੇ ਆਜ਼ਾਦ ਪਿਆਦੇ ਨੂੰ ਰੋਕੋ।" },
     learn: [
       { text: { en: "A passed pawn has no enemy pawn in front of it or on the files beside it. Nothing but pieces can stop it.", pa: "ਆਜ਼ਾਦ ਪਿਆਦੇ ਦੇ ਅੱਗੇ ਜਾਂ ਨਾਲ ਦੀਆਂ ਖੜ੍ਹੀਆਂ ਕਤਾਰਾਂ ਵਿੱਚ ਦੁਸ਼ਮਣ ਦਾ ਕੋਈ ਪਿਆਦਾ ਨਹੀਂ ਹੁੰਦਾ। ਉਸ ਨੂੰ ਸਿਰਫ਼ ਮੋਹਰੇ ਹੀ ਰੋਕ ਸਕਦੇ ਹਨ।" },
         board: { pieces: { g7: "bP", d5: "wP" }, highlights: ["d5"], arrows: [["d5", "d8"]] } },
-      { text: { en: "Passed pawns must be pushed: the further it goes, the more the other side must worry.", pa: "ਆਜ਼ਾਦ ਪਿਆਦੇ ਨੂੰ ਅੱਗੇ ਧੱਕੋ: ਜਿੰਨਾ ਅੱਗੇ ਜਾਵੇ, ਦੂਜੇ ਪਾਸੇ ਦੀ ਚਿੰਤਾ ਓਨੀ ਵਧਦੀ ਹੈ।" },
+      { text: { en: "Passed pawns must be pushed: the further it goes, the more the other side must worry.", pa: "ਆਜ਼ਾਦ ਪਿਆਦੇ ਨੂੰ ਅੱਗੇ ਧੱਕਣਾ ਹੀ ਚਾਹੀਦਾ ਹੈ: ਜਿੰਨਾ ਅੱਗੇ ਜਾਵੇ, ਦੂਜੇ ਪਾਸੇ ਨੂੰ ਓਨਾ ਹੀ ਵੱਧ ਫ਼ਿਕਰ ਕਰਨਾ ਪੈਂਦਾ ਹੈ।" },
         board: { fen: "6k1/6p1/8/3P4/8/8/8/6K1 w - - 0 1", arrows: [["d5","d6"]], highlights: ["d5"] } },
     ],
     try: { kind: "pack", pack: "passed-pawn", count: 1, prompt: { en: "Use your passed pawn.", pa: "ਆਪਣਾ ਆਜ਼ਾਦ ਪਿਆਦਾ ਵਰਤੋ।" } },
@@ -148,7 +148,7 @@ export const LEVEL5: Lesson[] = [
     title: { en: "Breakthrough", pa: "ਲਾਂਘਾ" },
     goal: { en: "Give up a pawn to make a passed pawn.", pa: "ਆਜ਼ਾਦ ਪਿਆਦਾ ਬਣਾਉਣ ਲਈ ਇੱਕ ਪਿਆਦਾ ਦਿਓ।" },
     learn: [
-      { text: { en: "Three pawns against three, face to face. With the enemy king far away, one pawn push breaks through: b6!", pa: "ਤਿੰਨ ਪਿਆਦੇ ਬਨਾਮ ਤਿੰਨ, ਆਹਮੋ-ਸਾਹਮਣੇ। ਜਦੋਂ ਦੁਸ਼ਮਣ ਦਾ ਬਾਦਸ਼ਾਹ ਦੂਰ ਹੋਵੇ, ਤਾਂ ਇੱਕ ਪਿਆਦੇ ਦੀ ਚਾਲ ਲਾਂਘਾ ਬਣਾ ਦਿੰਦੀ ਹੈ: b6!" },
+      { text: { en: "Three pawns against three, face to face. With the enemy king far away, one pawn push breaks through: b6!", pa: "ਤਿੰਨ ਪਿਆਦੇ ਬਨਾਮ ਤਿੰਨ, ਇੱਕ ਦੂਜੇ ਦੇ ਸਾਹਮਣੇ। ਜਦੋਂ ਦੁਸ਼ਮਣ ਦਾ ਬਾਦਸ਼ਾਹ ਦੂਰ ਹੋਵੇ, ਤਾਂ ਇੱਕ ਪਿਆਦੇ ਦੀ ਚਾਲ ਲਾਂਘਾ ਬਣਾ ਦਿੰਦੀ ਹੈ: b6!" },
         board: { play: true, fen: "8/ppp4k/8/PPP5/8/8/8/K7 w - - 0 1", arrows: [["b5", "b6"]] } },
       { text: { en: "Whatever Black takes, another white pawn gets through. Count it out on the board.", pa: "ਕਾਲਾ ਜੋ ਵੀ ਮਾਰੇ, ਚਿੱਟੇ ਦਾ ਕੋਈ ਹੋਰ ਪਿਆਦਾ ਲੰਘ ਜਾਂਦਾ ਹੈ। ਬਿਸਾਤ 'ਤੇ ਗਿਣ ਕੇ ਵੇਖੋ।" },
         board: { fen: "8/ppp4k/1P6/P1P5/8/8/8/K7 b - - 0 1", arrows: [["a7","b6"],["c7","b6"]], highlights: ["a5","c5"] } },
@@ -165,18 +165,18 @@ export const LEVEL5: Lesson[] = [
   {
     id: "5.8", level: 5, status: "draft",
     title: { en: "Queen vs pawn", pa: "ਰਾਣੀ ਬਨਾਮ ਪਿਆਦਾ" },
-    goal: { en: "Stop a pawn on the 7th with your queen, and win it.", pa: "ਸੱਤਵੀਂ ਕਤਾਰ ਵਾਲੇ ਪਿਆਦੇ ਨੂੰ ਰਾਣੀ ਨਾਲ ਰੋਕੋ, ਅਤੇ ਜਿੱਤੋ।" },
+    goal: { en: "Stop a pawn on the 7th with your queen, and win it.", pa: "ਸੱਤਵੀਂ ਕਤਾਰ ਵਾਲੇ ਪਿਆਦੇ ਨੂੰ ਰਾਣੀ ਨਾਲ ਰੋਕੋ, ਅਤੇ ਉਸ ਨੂੰ ਮਾਰ ਲਓ।" },
     learn: [
-      { text: { en: "A queen beats a pawn about to promote: check, check, and force the king to stand in front of its own pawn.", pa: "ਰਾਣੀ ਤਰੱਕੀ ਦੇ ਨੇੜੇ ਪਿਆਦੇ ਨੂੰ ਹਰਾ ਦਿੰਦੀ ਹੈ: ਸ਼ਹਿ, ਸ਼ਹਿ, ਅਤੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਆਪਣੇ ਹੀ ਪਿਆਦੇ ਦੇ ਅੱਗੇ ਖੜ੍ਹਨ ਲਈ ਮਜਬੂਰ ਕਰੋ।" },
+      { text: { en: "A queen beats a pawn about to promote: check, check, and force the king to stand in front of its own pawn.", pa: "ਰਾਣੀ ਤਰੱਕੀ ਦੇ ਨੇੜੇ ਪਹੁੰਚੇ ਪਿਆਦੇ ਨੂੰ ਹਰਾ ਦਿੰਦੀ ਹੈ: ਸ਼ਹਿ, ਸ਼ਹਿ, ਅਤੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਆਪਣੇ ਹੀ ਪਿਆਦੇ ਦੇ ਅੱਗੇ ਖੜ੍ਹਨ ਲਈ ਮਜਬੂਰ ਕਰੋ।" },
         board: { play: true, fen: "8/8/8/Q7/8/8/4p3/2k3K1 w - - 0 1", arrows: [["a5", "e1"]] } },
       { text: { en: "Each time the king blocks its pawn, you gain a move to bring your own king closer. Then take the pawn.", pa: "ਹਰ ਵਾਰ ਜਦੋਂ ਬਾਦਸ਼ਾਹ ਆਪਣੇ ਪਿਆਦੇ ਨੂੰ ਰੋਕਦਾ ਹੈ, ਤੁਹਾਨੂੰ ਆਪਣਾ ਬਾਦਸ਼ਾਹ ਨੇੜੇ ਲਿਆਉਣ ਲਈ ਇੱਕ ਚਾਲ ਮਿਲਦੀ ਹੈ। ਫਿਰ ਪਿਆਦਾ ਮਾਰ ਲਓ।" },
         board: { fen: "8/1K6/8/8/8/3Q4/4p3/4k3 w - - 0 1", arrows: [["b7","c6"]], highlights: ["e1"] } },
     ],
     try: { kind: "engineVs", fen: "8/8/8/Q7/8/8/4p3/2k3K1 w - - 0 1", goal: "wipe", maxMoves: 14,
-      prompt: { en: "Stop the pawn and win it: leave Black with only a king.", pa: "ਪਿਆਦੇ ਨੂੰ ਰੋਕੋ ਅਤੇ ਜਿੱਤੋ: ਕਾਲੇ ਕੋਲ ਸਿਰਫ਼ ਬਾਦਸ਼ਾਹ ਛੱਡੋ।" } },
+      prompt: { en: "Stop the pawn and win it: leave Black with only a king.", pa: "ਪਿਆਦੇ ਨੂੰ ਰੋਕੋ ਅਤੇ ਮਾਰ ਲਓ: ਕਾਲੇ ਕੋਲ ਸਿਰਫ਼ ਬਾਦਸ਼ਾਹ ਛੱਡੋ।" } },
     practise: [
       { kind: "engineVs", fen: "8/8/8/8/8/8/3pk3/Q5K1 w - - 0 1", goal: "wipe", maxMoves: 16,
-        prompt: { en: "Again: check, block, bring your king, take the pawn.", pa: "ਦੁਬਾਰਾ: ਸ਼ਹਿ, ਰੋਕ, ਬਾਦਸ਼ਾਹ ਲਿਆਓ, ਪਿਆਦਾ ਮਾਰੋ।" } },
+        prompt: { en: "Again: check until the king has to block its own pawn, bring your king, take the pawn.", pa: "ਦੁਬਾਰਾ: ਸ਼ਹਿ ਦਿਓ ਜਦੋਂ ਤੱਕ ਬਾਦਸ਼ਾਹ ਨੂੰ ਆਪਣੇ ਪਿਆਦੇ ਦੇ ਅੱਗੇ ਨਾ ਆਉਣਾ ਪਵੇ, ਆਪਣਾ ਬਾਦਸ਼ਾਹ ਲਿਆਓ, ਪਿਆਦਾ ਮਾਰੋ।" } },
       { kind: "pack", pack: "queen-endgame", count: 3, prompt: { en: "Real games: queen endings.", pa: "ਅਸਲੀ ਖੇਡਾਂ: ਰਾਣੀ ਦੀ ਅੰਤਲੀ ਖੇਡ।" } },
     ],
     challenge: { kind: "pack", pack: "queen-endgame", count: 3, prompt: { en: "Three real queen endings.", pa: "ਤਿੰਨ ਅਸਲੀ ਰਾਣੀ ਵਾਲੀਆਂ ਅੰਤਲੀਆਂ ਖੇਡਾਂ।" } },

@@ -1,0 +1,30 @@
+{
+  "5.1": { "changed": [
+    "Slide 3 now shows a position (2026-10-08): the king outside the pawn's square, so the pawn runs through.",
+    "Punjabi, slide 3: “it saves you thinking ahead” was stiff; now <span lang=\"pa\" class=\"pa\">ਇਸ ਨਾਲ ਕਈ ਚਾਲਾਂ ਅੱਗੇ ਸੋਚਣ ਦੀ ਲੋੜ ਨਹੀਂ ਪੈਂਦੀ</span>. Challenge: verb added (<span lang=\"pa\" class=\"pa\">ਪਿਆਦਿਆਂ ਦੀ ਦੌੜ ਜਿੱਤੋ</span>)."],
+    "ask": ["Not changed: <span lang=\"pa\" class=\"pa\">ਤੁਰੰਤ</span> in the hint. The reviewer called it Hindi-ised and offered ਹੁਣੇ; the app already uses ਤੁਰੰਤ in Levels 1 and 2."] },
+  "5.2": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): the king walks in front of its pawn.",
+    "Punjabi, practice: <span lang=\"pa\" class=\"pa\">ਅਗਵਾਈ ਕਰੋ</span> was bookish. Now <span lang=\"pa\" class=\"pa\">ਬਾਦਸ਼ਾਹ ਨਾਲ ਪਿਆਦੇ ਨੂੰ ਅੱਗੇ ਲੈ ਜਾਓ</span>."] },
+  "5.3": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): Black to move must give way; the three squares forward are crossed out.",
+    "Punjabi, slide 2: <span lang=\"pa\" class=\"pa\">ਸਾਰੀ ਖੇਡ ਇਸੇ ਉੱਤੇ ਟਿਕੀ ਹੁੰਦੀ ਹੈ</span> (“rests on this”)."] },
+  "5.4": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): the king heads for a key square before the pawn moves.",
+    "Punjabi, slide 1: <span lang=\"pa\" class=\"pa\">ਆਪਣੀ</span> had no clear owner; dropped. Slide 2: <span lang=\"pa\" class=\"pa\">ਬਹੁਤ ਜਲਦੀ</span> could be heard as “not very fast”, now <span lang=\"pa\" class=\"pa\">ਵੇਲੇ ਤੋਂ ਪਹਿਲਾਂ</span>; and the bare wish <span lang=\"pa\" class=\"pa\">ਪਿਆਦਾ ਉਦੋਂ ਚੱਲੇ</span> is now a statement, <span lang=\"pa\" class=\"pa\">ਪਿਆਦਾ ਉਦੋਂ ਚੱਲਦਾ ਹੈ</span>."] },
+  "5.5": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): the defending king runs for a8.",
+    "English and Punjabi, slide 2: “keep the king out of it” didn’t say whose king. Now <i>keep the defending king out of it</i> / <span lang=\"pa\" class=\"pa\">ਦੂਜੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਕੋਨੇ ਤੋਂ ਬਾਹਰ ਰੱਖੋ</span>.",
+    "Punjabi, slide 1: <span lang=\"pa\" class=\"pa\">ਉਸ ਨੂੰ</span> could mean the pawn; now <span lang=\"pa\" class=\"pa\">ਉਸ ਬਾਦਸ਼ਾਹ ਨੂੰ ਉੱਥੋਂ ਕੱਢਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ</span>."] },
+  "5.6": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): push the passed d-pawn.",
+    "Punjabi goal: “and stop theirs” left <span lang=\"pa\" class=\"pa\">ਉਨ੍ਹਾਂ ਦਾ</span> hanging with no noun. Now <span lang=\"pa\" class=\"pa\">ਅਤੇ ਵਿਰੋਧੀ ਦੇ ਆਜ਼ਾਦ ਪਿਆਦੇ ਨੂੰ ਰੋਕੋ।</span>",
+    "Punjabi, slide 2: “must be pushed … must worry” now carries the “must”: <span lang=\"pa\" class=\"pa\">ਧੱਕਣਾ ਹੀ ਚਾਹੀਦਾ ਹੈ … ਫ਼ਿਕਰ ਕਰਨਾ ਪੈਂਦਾ ਹੈ</span>."] },
+  "5.7": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): after b6, either capture lets another pawn through.",
+    "Punjabi, slide 1: the pawns were <span lang=\"pa\" class=\"pa\">ਆਹਮੋ-ਸਾਹਮਣੇ</span>, the word this level uses for the kings’ opposition. Now <span lang=\"pa\" class=\"pa\">ਇੱਕ ਦੂਜੇ ਦੇ ਸਾਹਮਣੇ</span>, so the technical word means one thing."] },
+  "5.8": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): the black king blocks its own pawn, and White’s king walks in.",
+    "Punjabi goal and Try: “win it” means take the pawn, but <span lang=\"pa\" class=\"pa\">ਜਿੱਤੋ</span> reads as “win the game”. Now <span lang=\"pa\" class=\"pa\">ਉਸ ਨੂੰ ਮਾਰ ਲਓ</span>.",
+    "English and Punjabi, practice: “check, block, …” didn’t say who blocks. Now <i>check until the king has to block its own pawn, bring your king, take the pawn</i>."] }
+}

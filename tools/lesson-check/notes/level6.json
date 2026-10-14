@@ -1,0 +1,29 @@
+{
+  "6.1": { "changed": [
+    "<b>Two positions that can’t happen in a real game, fixed.</b> Slide 3 showed Black to move after both sides had made four moves (it is White’s turn). Practice 2 had Black four moves to White’s three with White to move. Both are now the positions real move orders produce: slide 3 after 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.O-O Nf6, practice 2 after 4.d3 Nf6. The question and its answer are unchanged.",
+    "Punjabi goal: verbs added (<span lang=\"pa\" class=\"pa\">ਵਿਚਕਾਰ ਲਓ, ਮੋਹਰੇ ਕੱਢੋ, ਕਿਲ੍ਹੇਬੰਦੀ ਕਰੋ</span>). Practice 1: “wastes a move” is now <span lang=\"pa\" class=\"pa\">ਇਹ ਚਾਲ ਬੇਕਾਰ ਜਾਂਦੀ ਹੈ</span> (it read as “loses”)."] },
+  "6.2": { "changed": [
+    "Slide 1 now shows a position (2026-10-08): the knight moving twice while three pieces sit at home.",
+    "Punjabi, slide 2: the chased queen <span lang=\"pa\" class=\"pa\">ਹਿੱਲਣਾ</span> (“budge”) is now <span lang=\"pa\" class=\"pa\">ਭੱਜਣਾ ਪੈਂਦਾ ਹੈ</span>, as the rest of the level says."] },
+  "6.3": { "changed": [
+    "Chess, slide 2 and the Try: they said “block the queen with ...g6, then <b>chase</b> her with your knight”. In fact ...g6 itself attacks the queen, and in the Try’s line the queen goes to f3, where ...Nf6 doesn’t chase her: it closes her path to f7. Both now say so, in both languages.",
+    "Slide 2 now shows a position (2026-10-08): after ...g6, with the knight’s route to f6.",
+    "Punjabi: “quick mates” <span lang=\"pa\" class=\"pa\">ਜਲਦੀ ਵਾਲੀਆਂ ਮਾਤਾਂ / ਤਿੰਨ ਜਲਦੀ ਮਾਤਾਂ</span> (ਜਲਦੀ isn’t an adjective) is now <span lang=\"pa\" class=\"pa\">ਤੇਜ਼ ਮਾਤਾਂ</span>."] },
+  "6.4": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): the Italian after c3, d3 and castling.",
+    "Punjabi: “aims at f7” used two words across lessons (ਤੱਕਦਾ, ਨਿਸ਼ਾਨਾ ਲਾਉਂਦਾ); now <span lang=\"pa\" class=\"pa\">ਨਿਸ਼ਾਨਾ ਲਾਉਂਦਾ ਹੈ</span>. Slide 2: <span lang=\"pa\" class=\"pa\">ਵਿਸ਼ਵ ਚੈਂਪੀਅਨਾਂ ਦੀ ਵਰਤੀ ਹੋਈ</span> is now <span lang=\"pa\" class=\"pa\">ਦੁਨੀਆ ਦੇ ਚੈਂਪੀਅਨ ਵੀ ਇਹੀ ਖੇਡਦੇ ਹਨ</span>. Practice and challenge prompts: <span lang=\"pa\" class=\"pa\">ਖੇਡੋ</span> added."] },
+  "6.5": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): the full London set-up, castled.",
+    "Punjabi: <span lang=\"pa\" class=\"pa\">ਭਰੋਸੇ ਵਾਲੀ ਬਣਤਰ</span>; “against almost anything” no longer narrows to “every reply”; “bishop to f4 BEFORE e3” now has its verb (<span lang=\"pa\" class=\"pa\">f4 'ਤੇ ਕੱਢੋ</span>); challenge: <span lang=\"pa\" class=\"pa\">ਖੇਡੋ</span> added."],
+    "ask": ["The name: <span lang=\"pa\" class=\"pa\">ਲੰਡਨ ਪ੍ਰਣਾਲੀ</span> uses a bookish word for “system”. The reviewer suggests <span lang=\"pa\" class=\"pa\">ਲੰਡਨ ਸਿਸਟਮ</span>, which is how a UK child would hear it. It is an opening’s name, so it is your call: mark Needs change and say which."] },
+  "6.6": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): ...a6 asking the Ruy Lopez bishop a question.",
+    "Punjabi, slide 1: “knights before bishops, and castle” had no verb; now <span lang=\"pa\" class=\"pa\">ਘੋੜੇ ਕੱਢੋ, ਅਤੇ ਕਿਲ੍ਹੇਬੰਦੀ ਕਰੋ</span>, and <span lang=\"pa\" class=\"pa\">ਵਿਚਕਾਰ ਦਾ ਆਪਣਾ ਹਿੱਸਾ</span>. Challenge: <span lang=\"pa\" class=\"pa\">ਖੇਡੋ</span> added."] },
+  "6.7": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): the Queen’s Gambit Declined set-up, castled.",
+    "Punjabi goal: <span lang=\"pa\" class=\"pa\">ਨਾਂਹ ਕਰਨ ਵਾਲੀ ਬਣਤਰ</span>. Slide 1: “decline it” now says what is declined (<span lang=\"pa\" class=\"pa\">ਇਸ ਨੂੰ ਨਾਂਹ ਕਰੋ</span>). Slide 2: the set-up (ਬਣਤਰ, feminine) is <span lang=\"pa\" class=\"pa\">ਚੱਟਾਨ ਵਾਂਗ ਪੱਕੀ</span>. Challenge: <span lang=\"pa\" class=\"pa\">ਖੇਡੋ</span> added."] },
+  "6.8": { "changed": [
+    "Chess, the Try’s answer: it said the b1 knight comes out by “Nbd2 and then Nf1 or <b>Nc4</b>”. But White’s own bishop stands on c4, and Nf1 needs the rook off f1 first. Now: <i>it can come out to d2, and later swing round to the kingside.</i>",
+    "Slide 1 now shows a position (2026-10-08): the Italian after castling, with the two undeveloped pieces marked.",
+    "Punjabi, slide 1: <span lang=\"pa\" class=\"pa\">ਸ਼ੁਰੂਆਤ ਖ਼ਤਮ ਹੋ ਗਈ ਹੈ</span> (verb added); “their weaknesses” could be heard as your own pieces’, now <span lang=\"pa\" class=\"pa\">ਵਿਰੋਧੀ ਦੀਆਂ ਕਮਜ਼ੋਰੀਆਂ</span>."] }
+}
