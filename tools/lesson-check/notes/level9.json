@@ -1,0 +1,31 @@
+{
+  "9.1": { "changed": [
+    "Slides 1 and 2 now show positions (2026-10-08): a rook behind its passed pawn, and an active rook on the 7th against a passive one.",
+    "Punjabi: “yours or theirs” and “behind theirs it chases” now name the opponent and the rook; “worth a pawn” was <span lang=\"pa\" class=\"pa\">ਬਰਾਬਰ</span> (close to the draw word), now <span lang=\"pa\" class=\"pa\">ਇੱਕ ਪਿਆਦੇ ਜਿੰਨਾ ਕੀਮਤੀ</span>; title adds <span lang=\"pa\" class=\"pa\">ਨਿਯਮ</span>; practice and challenge tell the child what to do."] },
+  "9.2": { "changed": [
+    "<b>Punjabi, a wrong lesson in the answer:</b> “Rd1+, pushing <i>the king</i> further away” and “<i>the king</i> must go further from the pawn” read as your own king, the opposite of the Lucena (your king stays by the pawn; the opponent’s is driven off). Both now say <span lang=\"pa\" class=\"pa\">ਵਿਰੋਧੀ ਦੇ ਬਾਦਸ਼ਾਹ</span>.",
+    "Punjabi: a grammar slip in slide 1 (<span lang=\"pa\" class=\"pa\">ਤੁਹਾਡੇ ਹਾਥੀ ਨੇ ਉਨ੍ਹਾਂ ਦੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਕੱਟ ਦਿੱਤਾ ਹੈ</span>); “give up the rook <i>for it</i>” now says for the pawn; the hint has its verbs."] },
+  "9.3": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): the pawn on your 3rd rank, the rook swinging to the far end.",
+    "Punjabi: “the king loses its hiding place” now names the opponent’s king; <span lang=\"pa\" class=\"pa\">ਸ਼ਹਿ ਖਾਧੇ ਬਿਨਾਂ</span> → <span lang=\"pa\" class=\"pa\">ਸ਼ਹਿ ਮਿਲੇ ਬਿਨਾਂ</span>; “too late now” reads correctly; the draw drills now all say <span lang=\"pa\" class=\"pa\">ਬਰਾਬਰੀ ਬਚਾਓ</span>."],
+    "ask": ["Not changed: ranks are written <span lang=\"pa\" class=\"pa\">ਲੇਟਵੀਂ ਕਤਾਰ</span> (“horizontal row”) through Level 9. A bare ਕਤਾਰ also means a rank, but in a level full of files the explicit word is clearer, so I kept it. Say if you want it shortened."] },
+  "9.4": { "changed": [
+    "Slides 1 and 2 now show positions (2026-10-08): Black in zugzwang, and a waiting pawn move that hands the move back.",
+    "Punjabi: <span lang=\"pa\" class=\"pa\">ਕਦੇ</span> (“ever”) → <span lang=\"pa\" class=\"pa\">ਕਦੇ-ਕਦੇ</span> (“sometimes”); practice and challenge tell the child what to do."] },
+  "9.5": { "changed": [
+    "Slide 1 now shows a position (2026-10-08): pawns on both wings.",
+    "Punjabi: “both wings” is now <span lang=\"pa\" class=\"pa\">ਬਿਸਾਤ ਦੇ ਦੋਵੇਂ ਪਾਸੇ</span>; the wrong bishop “can’t reach” the corner; the Try says <span lang=\"pa\" class=\"pa\">ਬਰਾਬਰੀ ਬਚਾਓ</span>; practice and challenge tell the child what to do."] },
+  "9.6": { "changed": [
+    "Slides 1 and 2 now show positions (2026-10-08): a king sheltering behind its pawn, and an endless check (Qh5+ Kg8 Qe8+ Kh7, every king move forced).",
+    "Punjabi, slide 2: “a draw by repetition” now reads as a sentence; practice and challenge tell the child what to do."] },
+  "9.7": { "changed": [
+    "Slides 1 and 2 now show positions (2026-10-08): trading rooks a pawn up, and the king coming first.",
+    "Punjabi: “they are what will queen” said <span lang=\"pa\" class=\"pa\">ਉਨ੍ਹਾਂ</span>, the same word the lesson uses for the opponent; now <span lang=\"pa\" class=\"pa\">ਪਿਆਦਿਆਂ</span>. “Their counterplay” and “they offer” name the opponent; “fight back” is <span lang=\"pa\" class=\"pa\">ਟੱਕਰ ਦੇਣ</span>."] },
+  "9.8": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): the black king has run to the a-pawn; White’s king goes for g6.",
+    "Punjabi: “the a-file” was a bare ਕਤਾਰ (a rank); now <span lang=\"pa\" class=\"pa\">a ਖੜ੍ਹੀ ਕਤਾਰ</span>. “Yours wins the kingside” had become “your king-side wins”; now <span lang=\"pa\" class=\"pa\">ਤੁਹਾਡਾ ਬਾਦਸ਼ਾਹ ਬਾਦਸ਼ਾਹ ਵਾਲੇ ਪਾਸੇ ਦੇ ਪਿਆਦੇ ਜਿੱਤ ਲੈਂਦਾ ਹੈ</span>. Every “the king” now says whose."] },
+  "9.9": { "changed": [
+    "<b>Chess, the whole lesson’s position:</b> Black’s “extra” pawn on b4 simply hung: Stockfish’s first move was Bxb4, so White was never really a pawn down. The challenge had the same flaw. Black’s pawn is now on <b>b3</b>, guarded by Black’s light bishop, which White’s dark bishop can never attack. Now White truly is a pawn down and holds exactly as the slide says, by guarding b2 (both hold at 0.00; in the challenge Kd4 and Bb4 lose). Slide 2 now marks b2 and the bishop’s route to c3.",
+    "Hint, both languages: <i>Keep your bishop guarding b2, the square the b-pawn must cross, and your king close to your own f-pawn.</i> (The old one said “in front of the f-pawn”, but that pawn was blocked already; the danger is Black’s king winning White’s f4.)",
+    "Punjabi: “fight yours” had become “fight with you”; now <span lang=\"pa\" class=\"pa\">ਤੁਹਾਡੇ ਊਠ ਨਾਲ</span>. One term, <span lang=\"pa\" class=\"pa\">ਉਲਟ ਰੰਗਾਂ ਦੇ ਊਠ</span>, throughout."] }
+}

@@ -1,0 +1,28 @@
+{
+  "10.1": { "changed": [
+    "Slides 1 and 2 now show positions (2026-10-08): the two first moves to prepare for, and a pawn structure to learn.",
+    "Punjabi: the goal’s second half has its verb; the practice is <span lang=\"pa\" class=\"pa\">ਲੈਵਲ ੬ ਵਾਲੀ ਇਤਾਲਵੀ ਖੇਡ</span> (the app’s name), with <span lang=\"pa\" class=\"pa\">ਖੇਡੋ</span>."],
+    "ask": ["The Punjabi never names “repertoire” (the slide says <span lang=\"pa\" class=\"pa\">ਤੁਹਾਡੀਆਂ ਆਪਣੀਆਂ ਸ਼ੁਰੂਆਤਾਂ ਦਾ ਸੈੱਟ</span>). If you want a word for it, tell me which."] },
+  "10.2": { "changed": [
+    "Slides 1 and 2 now show positions (2026-10-08), each replayed from its move order: after ...cxd4, and after ...a6.",
+    "Punjabi: files written as bare ਕਤਾਰ (a rank) are now <span lang=\"pa\" class=\"pa\">ਖੜ੍ਹੀ ਕਤਾਰ</span>; the title says <span lang=\"pa\" class=\"pa\">ਸਿਸਿਲੀਅਨ ਦੇ ਵਿਚਾਰ</span>; “it” in the goal now names the pawn; the challenge says <span lang=\"pa\" class=\"pa\">ਖੇਡੋ</span>."] },
+  "10.3": { "changed": [
+    "Slide 2 now shows a position (2026-10-08) that a real game reaches (a Semi-Tarrasch); its move counters were corrected to that game’s.",
+    "Punjabi: “Exchange Variation” was <span lang=\"pa\" class=\"pa\">ਬਦਲੀ ਵਾਲਾ ਰੂਪ</span>, while the app’s word for trading is ਵਟਾਂਦਰਾ; now <span lang=\"pa\" class=\"pa\">ਵਟਾਂਦਰੇ ਵਾਲਾ ਰੂਪ</span>. Title adds “ideas”; the line prompts say what to play."] },
+  "10.4": { "changed": [
+    "Slides 1 and 2 now show positions (2026-10-08): three candidate moves, and a position where the obvious capture is second best.",
+    "Punjabi: “combination” was <span lang=\"pa\" class=\"pa\">ਜੋੜ</span> (sum, joint), right next to <span lang=\"pa\" class=\"pa\">ਜੋੜੀ</span> = the bishop pair. Now <span lang=\"pa\" class=\"pa\">ਚਾਲਾਂ ਦੀ ਲੜੀ</span>, the phrase 7.2 already uses for a forcing line, here and in 10.5 and 10.8. The goal uses the lesson’s own term (<span lang=\"pa\" class=\"pa\">ਚੋਣਵੀਆਂ ਚਾਲਾਂ</span>, not ਚੋਣਾਂ = “elections”)."] },
+  "10.5": { "changed": [
+    "Slides 1 and 2 now show positions (2026-10-08): Philidor’s mate in two to picture, and the opponent’s back-rank check to look for.",
+    "Punjabi: “their reply / their checks” now name the opponent; “touch” is <span lang=\"pa\" class=\"pa\">ਛੂਹਣ</span>, as in 10.8; <span lang=\"pa\" class=\"pa\">ਇੱਕ ਵਾਰੀ ਹੋਰ</span>."] },
+  "10.6": { "changed": [
+    "Slide 1 now shows a position (2026-10-08): a lost-looking position saved by endless checks.",
+    "Punjabi: “their threat” names the opponent; practice and challenge tell the child what to do."] },
+  "10.7": { "changed": [
+    "Slides 1 and 2 now show positions (2026-10-08): Scholar’s mate, with the losing move marked, and a hanging piece to note in your book.",
+    "Punjabi: “the thing that is losing you games” had become “the thing that is beating games” (<span lang=\"pa\" class=\"pa\">ਹਰਾ ਰਹੀ</span>); now <span lang=\"pa\" class=\"pa\">ਜਿਸ ਕਾਰਨ ਤੁਸੀਂ ਖੇਡਾਂ ਹਾਰ ਰਹੇ ਹੋ</span>. <span lang=\"pa\" class=\"pa\">ਵਾਰ-ਵਾਰ</span> → <span lang=\"pa\" class=\"pa\">ਬਾਰ-ਬਾਰ</span>; “their threat” names the opponent."] },
+  "10.8": { "changed": [
+    "Slides now show positions (2026-10-08): the touched knight and its squares, writing Nf3, and the starting position.",
+    "Punjabi, “adjust”: <span lang=\"pa\" class=\"pa\">\"ਠੀਕ ਕਰਨਾ\"</span> means “repair”, and it wasn’t clear which word to say. Now the child says <b>adjust</b> before touching, with its meaning given, and is told the piece then needn’t move. Written gender-neutrally (the suggested ਕਰ ਰਿਹਾ ਹਾਂ would make every child speak as a boy).",
+    "Punjabi: the goal’s “be a good sport” read as “be a skilled player”; now <span lang=\"pa\" class=\"pa\">ਹਾਰ-ਜਿੱਤ ਵਿੱਚ ਨਿਮਰ ਰਹੋ</span>. “How long” is <span lang=\"pa\" class=\"pa\">ਕਿੰਨਾ ਚਿਰ</span>; “recapture” and “loudly” read naturally."] }
+}
