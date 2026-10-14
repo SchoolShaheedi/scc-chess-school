@@ -1,0 +1,32 @@
+{
+  "3.1": { "changed": [
+    "Punjabi, slide 2: <span lang=\"pa\" class=\"pa\">ਜਦੋਂ ਤੱਕ</span> can be heard as “until” where the English means “unless”. Now <span lang=\"pa\" class=\"pa\">ਜੇ ਕੋਈ ਉਸ ਨੂੰ ਰੋਕ ਜਾਂ ਮਾਰ ਨਾ ਸਕੇ</span>, and the bookish <span lang=\"pa\" class=\"pa\">ਵੱਲੋਂ ਦਿੱਤੀ</span> is gone.",
+    "Punjabi, slide 3: added the missing <span lang=\"pa\" class=\"pa\">ਹੈ</span>. Slide 4: <span lang=\"pa\" class=\"pa\">ਇਲਾਜ</span> (sounds medical) is now <span lang=\"pa\" class=\"pa\">ਹੱਲ</span>.",
+    "Punjabi, challenge: the prompt had no verb. Now ends <span lang=\"pa\" class=\"pa\">ਮਾਤ ਦਿਓ।</span>"] },
+  "3.2": { "changed": [
+    "Punjabi, slide 1: <span lang=\"pa\" class=\"pa\">ਆਪਣੇ ਆਪ</span> means “automatically”, not “on their own”. Now <span lang=\"pa\" class=\"pa\">ਕਿਸੇ ਹੋਰ ਮੋਹਰੇ ਦੀ ਮਦਦ ਬਿਨਾਂ</span>.",
+    "Punjabi, the try, practice 2 and the challenge had no verb. Each now ends with one (<span lang=\"pa\" class=\"pa\">ਸ਼ਹਿ-ਮਾਤ ਕਰੋ</span>, <span lang=\"pa\" class=\"pa\">ਸ਼ੁਰੂ ਕਰੋ</span>)."] },
+  "3.3": { "changed": [
+    "Punjabi, slide 3: <span lang=\"pa\" class=\"pa\">ਸ਼ਹਿ ਦੇਣੀ ਬੰਦ ਕਰੋ … ਧਿਆਨ ਰੱਖੋ:</span>",
+    "Punjabi, slide 4: the two kings were easy to mix up. Now <span lang=\"pa\" class=\"pa\">ਰਾਣੀ ਨੂੰ ਦੂਜੇ ਬਾਦਸ਼ਾਹ ਦੇ ਬਿਲਕੁਲ ਨਾਲ ਰੱਖੋ ਅਤੇ ਆਪਣੇ ਬਾਦਸ਼ਾਹ ਤੋਂ ਉਸ ਦੀ ਰਾਖੀ ਕਰਵਾਓ…</span>",
+    "Punjabi, practice 1 and the challenge: verbs added (<span lang=\"pa\" class=\"pa\">ਡੱਬਾ ਬਣਾਓ … ਮਾਤ ਦਿਓ</span>)."] },
+  "3.4": { "changed": [
+    "Teaching: the Try was the exact position whose answer slide 2 had just animated (Rh8#), so it could be copied. It is now the mirror image: king on d8, rook on a1. Ra8# is the only mate of 19 legal moves, so it has to be found.",
+    "Punjabi, slide 1: <span lang=\"pa\" class=\"pa\">ਰਾਹ ਕੱਟਦਾ</span> can mean “crosses its path” (the black-cat sense). Now <span lang=\"pa\" class=\"pa\">ਰਾਹ ਰੋਕਦਾ</span>. Slide 3: <span lang=\"pa\" class=\"pa\">ਖ਼ੁਦ ਥਾਂ</span> is now <span lang=\"pa\" class=\"pa\">ਆਪ ਹੀ ਸਹੀ ਥਾਂ</span>. Challenge: verb added."],
+    "ask": ["Not changed: the reviewer suggested replacing <span lang=\"pa\" class=\"pa\">ਅਜਿਹੀ ਕੰਧ … ਪਾਰ ਨਹੀਂ ਕਰ ਸਕਦਾ</span> with <span lang=\"pa\" class=\"pa\">ਇਹੋ ਜਿਹੀ ਕੰਧ … ਟੱਪ ਨਹੀਂ ਸਕਦਾ</span>. I kept it: ਅਜਿਹੀ is ordinary Punjabi and is used 8 times across the app. Mark Needs change if you prefer the plainer form."] },
+  "3.5": { "changed": [
+    "Punjabi goal: <span lang=\"pa\" class=\"pa\">ਰਾਖੀ ਸਮੇਤ</span> was formal and hard to follow aloud. Now <span lang=\"pa\" class=\"pa\">ਰਾਣੀ ਨੂੰ ਬਾਦਸ਼ਾਹ ਦੇ ਬਿਲਕੁਲ ਨਾਲ ਰੱਖੋ, ਜਿੱਥੇ ਉਸ ਦੀ ਰਾਖੀ ਹੋਵੇ, ਅਤੇ ਮਾਤ ਦਿਓ।</span>",
+    "Punjabi, slide 1 could be heard as “the queen is mate”. Now <span lang=\"pa\" class=\"pa\">ਜਦੋਂ ਰਾਣੀ ਬਾਦਸ਼ਾਹ ਦੇ ਬਿਲਕੁਲ ਨਾਲ ਹੋਵੇ ਅਤੇ ਤੁਹਾਡਾ ਕੋਈ ਹੋਰ ਮੋਹਰਾ ਉਸ ਦੀ ਰਾਖੀ ਕਰਦਾ ਹੋਵੇ, ਤਾਂ…</span>",
+    "Punjabi, challenge: verb added."] },
+  "3.6": { "changed": [
+    "Hint was wrong in both languages: “Which square <b>next to the king</b> can your knight jump to?” The answer, f7, is a knight’s jump from h8, not next to it. Now: <i>Which square can your knight jump to, to give check?</i> / <span lang=\"pa\" class=\"pa\">ਤੁਹਾਡਾ ਘੋੜਾ ਕਿਸ ਖਾਨੇ 'ਤੇ ਛਾਲ ਮਾਰ ਕੇ ਸ਼ਹਿ ਦੇ ਸਕਦਾ ਹੈ?</span>"],
+    "ask": ["Not changed: <span lang=\"pa\" class=\"pa\">ਅਜਿਹੀ ਸ਼ਹਿ</span> and the passive <span lang=\"pa\" class=\"pa\">ਸ਼ਹਿ ਰੋਕੀ ਨਹੀਂ ਜਾ ਸਕਦੀ</span>, both used elsewhere in the app. Say if you want them plainer everywhere."] },
+  "3.7": { "changed": [
+    "Punjabi, slide 1: the plural <span lang=\"pa\" class=\"pa\">ਸ਼ਹਿਆਂ</span> isn’t used in speech. Now <span lang=\"pa\" class=\"pa\">ਸ਼ਹਿ ਦੇਣ ਵਾਲੀਆਂ ਆਪਣੀਆਂ ਸਾਰੀਆਂ ਚਾਲਾਂ ਗਿਣੋ।</span>",
+    "Punjabi, slide 1: a colon broke the ਜੇ…ਤਾਂ sentence. Now <span lang=\"pa\" class=\"pa\">ਜੇ ਤਿੰਨਾਂ ਦਾ ਜਵਾਬ 'ਨਹੀਂ' ਹੈ, ਤਾਂ ਮਾਤ ਹੈ।</span>"],
+    "ask": ["The Punjabi title <span lang=\"pa\" class=\"pa\">ਇੱਕ ਚਾਲ ਵਿੱਚ ਮਾਤ</span> drops “mixed” and matches the prompt. I left it, as the titles follow the curriculum. Say if you want <span lang=\"pa\" class=\"pa\">ਇੱਕ ਚਾਲ ਵਿੱਚ ਮਾਤ: ਰਲਵੀਆਂ</span> or similar."] },
+  "3.8": { "changed": [
+    "Punjabi title: <span lang=\"pa\" class=\"pa\">ਆਪਣਾ ਬਚਾਅ</span> (“your own defence”) is now <span lang=\"pa\" class=\"pa\">ਮਾਤ ਤੋਂ ਬਚੋ</span>, closer to “Don’t get mated”.",
+    "Punjabi, try hint: <span lang=\"pa\" class=\"pa\">ਖੋਹ ਲਓ</span> (“snatch”) is now <span lang=\"pa\" class=\"pa\">ਬੰਦ ਕਰ ਦਿਓ</span>. Challenge: verb added."],
+    "ask": ["Not changed: <span lang=\"pa\" class=\"pa\">ਵਿਰੋਧੀ</span> for “opponent” (used 19 times across the app; the reviewer suggested <span lang=\"pa\" class=\"pa\">ਸਾਹਮਣੇ ਵਾਲਾ</span>), and <span lang=\"pa\" class=\"pa\">ਨਿਸ਼ਾਨਾ ਲਾਈ ਬੈਠੇ</span>, which is correct idiom. If you want ਸਾਹਮਣੇ ਵਾਲਾ, I’d change it everywhere at once."] }
+}

@@ -1,0 +1,15 @@
+{
+  "2.1": { "changed": ["Slide 5 now shows a position (earlier today): a knight pinned to its king, every one of its moves crossed out."] },
+  "2.2": { "changed": ["Slide 3 now shows a position (earlier today): two checks, Bxf7+ and Re8; only Re8 is mate."] },
+  "2.3": { "changed": [
+    "Slide 3 now shows a position (earlier today): the black king still has a7 to move to, so it is not stalemate.",
+    "Punjabi, slide 1: “ਜੇ ਜਿਸ ਦੀ ਵਾਰੀ ਹੈ ਉਸ ਕੋਲ…” stacked two clauses. Now: <span lang=\"pa\" class=\"pa\">ਜਿਸ ਦੀ ਵਾਰੀ ਹੋਵੇ, ਜੇ ਉਸ ਕੋਲ ਕੋਈ ਚਾਲ ਨਾ ਹੋਵੇ…</span>"] },
+  "2.4": { "changed": ["Slide 4 now shows a position (earlier today): an Italian Game with White castled."] },
+  "2.6": { "changed": ["Slide 3 now shows a position (earlier today): the en passant square crossed out once the chance has gone."] },
+  "2.7": { "changed": ["Slides 1–4 now show positions (earlier today): a stalemate, a level ending, two kings stepping back and forth, and locked pawns."] },
+  "2.8": { "changed": ["Slide 4 now shows a position (earlier today): bishop and knight against a rook."] },
+  "2.9": { "changed": ["Slides 2 and 4 now show positions (earlier today): the six pieces in a row, and Bxf7+ in an opening."] },
+  "2.10": { "changed": [
+    "English, practice: “block the queen, then <b>guard</b> f7 again” was wrong: ...Nf6 doesn’t guard f7, it blocks the queen’s path to it. Now: <i>then block her path to f7 again</i>, in both languages.",
+    "Punjabi goal: two of the four items had no verb. Now: <span lang=\"pa\" class=\"pa\">ਵਿਚਕਾਰ ਪਿਆਦਾ ਰੱਖੋ, ਮੋਹਰੇ ਕੱਢੋ, ਕਿਲ੍ਹੇਬੰਦੀ ਕਰੋ, ਅਤੇ ਸਕਾਲਰ ਮਾਤ ਵਿੱਚ ਨਾ ਫਸੋ।</span>"] }
+}

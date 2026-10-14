@@ -76,7 +76,7 @@ export const LEVEL2: Lesson[] = [
     goal: { en: "Tell stalemate from checkmate, and never stalemate a game you are winning.", pa: "ਖੜੋਤ ਅਤੇ ਸ਼ਹਿ-ਮਾਤ ਵਿੱਚ ਫ਼ਰਕ ਪਛਾਣੋ, ਅਤੇ ਜਿੱਤਦੀ ਖੇਡ ਵਿੱਚ ਕਦੇ ਖੜੋਤ ਨਾ ਕਰੋ।" },
     learn: [
       { text: { en: "If the side to move has no legal move, but its king is NOT in check, it is stalemate. The game ends as a draw.",
-                pa: "ਜੇ ਜਿਸ ਦੀ ਵਾਰੀ ਹੈ ਉਸ ਕੋਲ ਕੋਈ ਚਾਲ ਨਾ ਹੋਵੇ, ਪਰ ਉਸ ਦੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਸ਼ਹਿ ਨਾ ਹੋਵੇ, ਤਾਂ ਇਹ ਖੜੋਤ ਹੈ। ਖੇਡ ਬਰਾਬਰ ਖ਼ਤਮ ਹੁੰਦੀ ਹੈ।" },
+                pa: "ਜਿਸ ਦੀ ਵਾਰੀ ਹੋਵੇ, ਜੇ ਉਸ ਕੋਲ ਕੋਈ ਚਾਲ ਨਾ ਹੋਵੇ, ਪਰ ਉਸ ਦੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਸ਼ਹਿ ਨਾ ਹੋਵੇ, ਤਾਂ ਇਹ ਖੜੋਤ ਹੈ। ਖੇਡ ਬਰਾਬਰ ਖ਼ਤਮ ਹੁੰਦੀ ਹੈ।" },
         board: { fen: "7k/5Q2/6K1/8/8/8/8/8 b - - 0 1", crosses: ["g8", "g7", "h7"], highlights: ["h8"] } },
       { text: { en: "Stalemate is a trap for the side that is winning. White has a whole queen more, and threw the win away.",
                 pa: "ਖੜੋਤ ਜਿੱਤ ਰਹੇ ਪਾਸੇ ਲਈ ਇੱਕ ਫੰਦਾ ਹੈ। ਚਿੱਟੇ ਕੋਲ ਪੂਰੀ ਰਾਣੀ ਵੱਧ ਹੈ, ਫਿਰ ਵੀ ਜਿੱਤ ਗੁਆ ਲਈ।" },
@@ -345,7 +345,7 @@ export const LEVEL2: Lesson[] = [
   {
     id: "2.10", level: 2, status: "draft",
     title: { en: "Starting the game well", pa: "ਖੇਡ ਦੀ ਚੰਗੀ ਸ਼ੁਰੂਆਤ" },
-    goal: { en: "Centre, develop, castle, and don't fall for Scholar's mate.", pa: "ਵਿਚਕਾਰ, ਮੋਹਰੇ ਕੱਢੋ, ਕਿਲ੍ਹੇਬੰਦੀ, ਅਤੇ ਸਕਾਲਰ ਮਾਤ ਵਿੱਚ ਨਾ ਫਸੋ।" },
+    goal: { en: "Centre, develop, castle, and don't fall for Scholar's mate.", pa: "ਵਿਚਕਾਰ ਪਿਆਦਾ ਰੱਖੋ, ਮੋਹਰੇ ਕੱਢੋ, ਕਿਲ੍ਹੇਬੰਦੀ ਕਰੋ, ਅਤੇ ਸਕਾਲਰ ਮਾਤ ਵਿੱਚ ਨਾ ਫਸੋ।" },
     learn: [
       { text: { en: "Three jobs at the start: put a pawn in the centre, bring out your knights and bishops, and castle to keep your king safe.", pa: "ਸ਼ੁਰੂ ਵਿੱਚ ਤਿੰਨ ਕੰਮ: ਇੱਕ ਪਿਆਦਾ ਵਿਚਕਾਰ ਰੱਖੋ, ਆਪਣੇ ਘੋੜੇ ਅਤੇ ਊਠ ਕੱਢੋ, ਅਤੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਸੁਰੱਖਿਅਤ ਰੱਖਣ ਲਈ ਕਿਲ੍ਹੇਬੰਦੀ ਕਰੋ।" },
         board: { fen: "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2", highlights: ["d4", "e4", "d5", "e5"] } },
@@ -360,7 +360,7 @@ export const LEVEL2: Lesson[] = [
       ] },
     practise: [
       { kind: "line", side: "b", moves: ["e4", "e5", "Bc4", "Nc6", "Qh5", "g6", "Qf3", "Nf6"],
-        prompt: { en: "Play Black and stop Scholar's mate: block the queen, then guard f7 again.", pa: "ਕਾਲੇ ਨਾਲ ਖੇਡੋ ਅਤੇ ਸਕਾਲਰ ਮਾਤ ਰੋਕੋ: ਰਾਣੀ ਦਾ ਰਾਹ ਰੋਕੋ, ਫਿਰ f7 ਦੀ ਦੁਬਾਰਾ ਰਾਖੀ ਕਰੋ।" } },
+        prompt: { en: "Play Black and stop Scholar's mate: block the queen, then block her path to f7 again.", pa: "ਕਾਲੇ ਨਾਲ ਖੇਡੋ ਅਤੇ ਸਕਾਲਰ ਮਾਤ ਰੋਕੋ: ਰਾਣੀ ਦਾ ਰਾਹ ਰੋਕੋ, ਫਿਰ f7 ਵੱਲ ਉਸ ਦਾ ਰਾਹ ਦੁਬਾਰਾ ਰੋਕੋ।" } },
     ],
     challenge: { kind: "pack", pack: "opening-mate", count: 3,
       prompt: { en: "Real games: early mates. Spot them, so you can stop them.", pa: "ਅਸਲੀ ਖੇਡਾਂ: ਛੇਤੀ ਮਾਤਾਂ। ਉਨ੍ਹਾਂ ਨੂੰ ਪਛਾਣੋ, ਤਾਂ ਜੋ ਤੁਸੀਂ ਰੋਕ ਸਕੋ।" } },
