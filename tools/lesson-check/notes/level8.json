@@ -1,0 +1,25 @@
+{
+  "8.1": { "changed": [
+    "Slides 1 and 2 now show positions (2026-10-08): the corner knight with only two squares, and the route that improves it.",
+    "Punjabi: “improve” is <span lang=\"pa\" class=\"pa\">ਸੁਧਾਰੋ</span> throughout (the goal said <span lang=\"pa\" class=\"pa\">ਬਿਹਤਰ ਬਣਾਓ</span>); “tied for the fewest moves” is now <span lang=\"pa\" class=\"pa\">ਸਭ ਤੋਂ ਘੱਟ ਚਾਲਾਂ ਇੱਕੋ ਜਿੰਨੀਆਂ ਹਨ</span>; the challenge now tells the child what to do."] },
+  "8.2": { "changed": ["Slide 2 now shows a position (2026-10-08): doubled pawns on b2/b3 and a passed pawn on d5."] },
+  "8.3": { "changed": ["Punjabi: “the enemy half” is now <span lang=\"pa\" class=\"pa\">ਬਿਸਾਤ ਦੇ ਦੁਸ਼ਮਣ ਵਾਲੇ ਅੱਧ ਵਿੱਚ</span>, so a child hears “half of the board”."] },
+  "8.4": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): a rook on the half-open c-file.",
+    "<b>Punjabi, file vs rank:</b> the app settled file = <span lang=\"pa\" class=\"pa\">ਖੜ੍ਹੀ ਕਤਾਰ</span>, rank = <span lang=\"pa\" class=\"pa\">ਕਤਾਰ</span>, but this lesson called files a bare ਕਤਾਰ in six places, right beside “the 7th rank”. Every file in 8.4 now says <span lang=\"pa\" class=\"pa\">ਖੜ੍ਹੀ ਕਤਾਰ</span>, title included.",
+    "English and Punjabi, practice: “Careful: <b>one</b> is only half-open” was wrong; in that position two files are half-open (f for White, c for Black). Now <i>some are only half-open</i>."] },
+  "8.5": { "changed": ["Punjabi, challenge: “the stronger plan” lost its comparative; now <span lang=\"pa\" class=\"pa\">ਵੱਧ ਤਕੜੀ ਯੋਜਨਾ</span>."] },
+  "8.6": { "changed": [
+    "Slides 1 and 2 now show positions (2026-10-08): a knight on an outpost against a bishop hemmed in by its own pawns, and a bishop reaching both wings.",
+    "Punjabi: “at once” (<span lang=\"pa\" class=\"pa\">ਇਕੱਠਾ / ਇਕੱਠੇ</span>, which also mis-agreed) is now <span lang=\"pa\" class=\"pa\">ਇੱਕੋ ਵੇਲੇ</span>; the knight was <span lang=\"pa\" class=\"pa\">ਹੌਲਾ</span> (“light”, not “slow”), now <span lang=\"pa\" class=\"pa\">ਚਿਰ ਲੱਗਦਾ ਹੈ</span>; the challenge’s calque “small pieces at work” now tells the child to find the best move with knight and bishop."] },
+  "8.7": { "changed": [
+    "Slides 1 and 2 now show positions (2026-10-08): three attackers on h7, and a pawn storm against the king castled on the other side.",
+    "Punjabi, slide 2: “THEIR king” could be either king (the sentence names both); now <span lang=\"pa\" class=\"pa\">ਵਿਰੋਧੀ ਦੇ ਬਾਦਸ਼ਾਹ</span>, and <span lang=\"pa\" class=\"pa\">ਉਲਟ ਪਾਸਿਆਂ 'ਤੇ</span>. Practice and challenge: verbs added."] },
+  "8.8": { "changed": [
+    "Slide 1 now shows a position (2026-10-08): Black aims a rook at White’s isolated d-pawn.",
+    "Punjabi, slide 1: a hole was called <span lang=\"pa\" class=\"pa\">ਖਾਲੀ ਖਾਨਾ</span> (“an empty square”, wrong), while 8.9 says <span lang=\"pa\" class=\"pa\">ਛੇਕ</span>; now ਛੇਕ. “Their weakness … while they defend” now names the opponent, and “aim your pieces at it” is <span lang=\"pa\" class=\"pa\">ਨਿਸ਼ਾਨਾ ਉਸ 'ਤੇ ਲਾਓ</span>. Challenge: verb added."],
+    "ask": ["Not changed: <span lang=\"pa\" class=\"pa\">ਯੋਜਨਾ ਮੁਤਾਬਕ ਚੱਲੋ</span> (ਮੁਤਾਬਕ is used across the app) and the ੧) ੨) ੩) step markers (the castling rules in 2.4 use the same)."] },
+  "8.9": { "changed": [
+    "Slides 2 and 3 now show positions (2026-10-08): pawns giving White more space, and the bishop pair reaching both wings.",
+    "Punjabi: “they have bishop and knight” now names the opponent; <span lang=\"pa\" class=\"pa\">ਬਿਹਤਰ</span> → <span lang=\"pa\" class=\"pa\">ਵਧੀਆ</span>; “cover both colours” is now <span lang=\"pa\" class=\"pa\">ਦੋਵੇਂ ਰੰਗਾਂ ਦੇ ਖਾਨਿਆਂ 'ਤੇ ਪਹੁੰਚਦੇ ਹਨ</span>; <span lang=\"pa\" class=\"pa\">ਤੰਗੀ</span> (also “hardship”) is now <span lang=\"pa\" class=\"pa\">ਮੋਹਰੇ ਹੋਰ ਤੰਗ ਹੋ ਜਾਂਦੇ ਹਨ</span>."] }
+}

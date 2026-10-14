@@ -1,0 +1,33 @@
+{
+  "7.1": { "changed": [
+    "Slides 1 and 2 now show positions (2026-10-08): checks and captures to look at first, and Philidor’s mate in two (Qg8+! Rxg8 Nf7#).",
+    "Punjabi, the Try, practice and challenge were labels with no instruction; each now says what to do (<span lang=\"pa\" class=\"pa\">ਮਾਤ ਦਿਓ / ਲੱਭੋ</span>)."] },
+  "7.2": { "changed": [
+    "<b>Slides 1 and 2, the bishop sacrifice on h7:</b> Stockfish confirmed Bxh7+ is the best move, but showed White was already winning without it, because Black was simply missing a knight. The knight is back on c6: now material is even, and Bxh7+ is the <i>only</i> winning move (+4.9 against +1.3 for anything else). A real move order reaches the position (1.e4 e6 2.d4 d5 3.Nc3 Nf6 4.e5 Nfd7 5.Nf3 Bb4 6.Be2 Nc6 7.Bd3 O-O). The same position is on 7.9.",
+    "Punjabi prompts: verbs added."] },
+  "7.3": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): Boden’s mate, two bishops crossing.",
+    "Punjabi, slide 1: “a rook next to the king” now says it is the opponent’s king, guarded by the knight (<span lang=\"pa\" class=\"pa\">ਵਿਰੋਧੀ ਦੇ ਬਾਦਸ਼ਾਹ ਦੇ ਨਾਲ ਹਾਥੀ, ਜਿਸ ਦੀ ਰਾਖੀ ਘੋੜਾ ਕਰਦਾ ਹੈ</span>). Slide 2: <span lang=\"pa\" class=\"pa\">ਇੱਕ ਵਾਰ</span> (clashes with ਵਾਰ = strike) is now <span lang=\"pa\" class=\"pa\">ਜਦੋਂ ਇਨ੍ਹਾਂ ਨੂੰ ਜਾਣ ਲਓ</span>. Challenge: verb added."] },
+  "7.4": { "changed": [
+    "Slides 1 and 2 now show positions (2026-10-08): the queen lures the rook to g8, and the fork square that would trap the queen.",
+    "Punjabi, slide 2: “their king or queen” (<span lang=\"pa\" class=\"pa\">ਉਨ੍ਹਾਂ ਦਾ</span>) could be heard as your own; now <span lang=\"pa\" class=\"pa\">ਵਿਰੋਧੀ ਦਾ</span>. Practice and challenge: verbs added."],
+    "ask": ["Not changed: <span lang=\"pa\" class=\"pa\">ਚੋਗਾ ਇੱਕ ਮੋਹਰਾ ਪੇਸ਼ ਕਰਦਾ ਹੈ</span>. The reviewer called ਪੇਸ਼ Urdu-ised; it is the phrase 6.7 uses for “offers a pawn”, so I kept the two lessons alike."] },
+  "7.5": { "changed": [
+    "Slide 1 now shows a position (2026-10-08): Qxd6 Rxd6 Re8#, the rook pulled off the back row.",
+    "Punjabi: practice and challenge had no verb, and <span lang=\"pa\" class=\"pa\">ਤਿੰਨ ਵਾਰ</span> (“three times”) collides with ਵਾਰ = strike. Now <span lang=\"pa\" class=\"pa\">ਤਿੰਨ ਵਾਰੀ ਰਾਖੇ ਦਾ ਧਿਆਨ ਹਟਾਓ</span>."] },
+  "7.6": { "changed": [
+    "Slide 1 now shows a position (2026-10-08): Rxe8+ first, and only then bxc3.",
+    "Punjabi goal: <span lang=\"pa\" class=\"pa\">ਉਮੀਦ</span> means “hope”, not “expected”; now <span lang=\"pa\" class=\"pa\">ਵਾਪਸ ਮਾਰਨ ਤੋਂ ਪਹਿਲਾਂ</span>. Slide 1 read as an obligation (“it has to be played in between”) where the English says it <i>can</i> change everything. Practice and challenge: verbs added."] },
+  "7.7": { "changed": [
+    "Slides 1 and 2 now show positions (2026-10-08): a knight cutting a rook’s line, and a knight stepping aside to clear the queen’s line.",
+    "Punjabi, slide 2: “its square” pointed at the wrong piece (the other piece’s own square); now <span lang=\"pa\" class=\"pa\">ਹਟਾਏ ਹੋਏ ਮੋਹਰੇ ਦਾ ਖਾਨਾ ਜਾਂ ਲਕੀਰ</span>. Slide 1 is clearer and in the present tense. Practice and challenge: verbs added, <span lang=\"pa\" class=\"pa\">ਤਿੰਨ ਵਾਰੀ</span>."] },
+  "7.8": { "changed": [
+    "Slide 1 now shows a position (2026-10-08): the rook works through the knight towards the king.",
+    "Punjabi: <span lang=\"pa\" class=\"pa\">ਜਿਉਂ ਹੀ</span> (bookish) is now <span lang=\"pa\" class=\"pa\">ਜਦੋਂ … ਹਿੱਲ ਜਾਵੇ ਜਾਂ ਮਾਰਿਆ ਜਾਵੇ</span>. Practice and challenge: verbs added."] },
+  "7.9": { "changed": [
+    "Slide 1 uses the corrected bishop-sacrifice position described under 7.2.",
+    "Punjabi goal: “wins more” is now <span lang=\"pa\" class=\"pa\">ਹੋਰ ਵੀ ਵੱਧ ਮਿਲਦਾ ਹੈ</span>. Practice: <span lang=\"pa\" class=\"pa\">ਤੋਹਫ਼ਾ</span> broke from the lesson’s own “giving a piece” and had no verb; now <span lang=\"pa\" class=\"pa\">ਜਿਤਾਉਣ ਵਾਲਾ ਮੋਹਰਾ ਦਿਓ</span>."] },
+  "7.10": { "changed": [
+    "Slide 1 now shows a position (2026-10-08): the quiet Qb7, after which Black has only Kg8 and Qg7 mates.",
+    "Punjabi: a threat <span lang=\"pa\" class=\"pa\">ਨਾ ਰੁਕਣ ਵਾਲੀ</span> (“that doesn’t stop”) is now one <span lang=\"pa\" class=\"pa\">ਜੋ ਰੋਕੀ ਨਹੀਂ ਜਾ ਸਕਦੀ</span> (“that can’t be stopped”); <span lang=\"pa\" class=\"pa\">ਉੱਚੀ</span> (also “high”) is now <span lang=\"pa\" class=\"pa\">ਰੌਲੇ ਵਾਲੀ</span>; the challenge said <span lang=\"pa\" class=\"pa\">ਚੁੱਪ ਵਾਰ</span>, breaking from the lesson’s own term, now <span lang=\"pa\" class=\"pa\">ਤਿੰਨ ਚੁੱਪ ਚਾਲਾਂ ਲੱਭੋ</span>."] }
+}
