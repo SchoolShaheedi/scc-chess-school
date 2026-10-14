@@ -11,7 +11,7 @@ export const LEVEL4: Lesson[] = [
     title: { en: "Hanging pieces", pa: "ਬੇ-ਬਚਾਅ ਮੋਹਰੇ" },
     goal: { en: "Take what is free, and never leave your own pieces loose.", pa: "ਜੋ ਮੁਫ਼ਤ ਹੈ ਉਹ ਲਓ, ਅਤੇ ਆਪਣੇ ਮੋਹਰੇ ਕਦੇ ਬੇ-ਬਚਾਅ ਨਾ ਛੱਡੋ।" },
     learn: [
-      { text: { en: "A hanging piece is attacked and not defended. It can be taken for free.", pa: "ਬੇ-ਬਚਾਅ ਮੋਹਰੇ 'ਤੇ ਹਮਲਾ ਹੁੰਦਾ ਹੈ ਪਰ ਉਸ ਦੀ ਰਾਖੀ ਨਹੀਂ। ਉਸ ਨੂੰ ਮੁਫ਼ਤ ਮਾਰਿਆ ਜਾ ਸਕਦਾ ਹੈ।" },
+      { text: { en: "A hanging piece is attacked and not defended. It can be taken for free.", pa: "ਬੇ-ਬਚਾਅ ਮੋਹਰੇ 'ਤੇ ਹਮਲਾ ਹੁੰਦਾ ਹੈ ਪਰ ਉਸ ਦੀ ਰਾਖੀ ਕੋਈ ਨਹੀਂ ਕਰਦਾ। ਉਸ ਨੂੰ ਮੁਫ਼ਤ ਮਾਰਿਆ ਜਾ ਸਕਦਾ ਹੈ।" },
         board: { play: true, fen: "4k3/8/8/3n4/8/8/8/3RK3 w - - 0 1", arrows: [["d1", "d5"]], highlights: ["d5"] } },
       { text: { en: "Before every move, ask two questions: can I take something for free? And is any of MY pieces hanging?", pa: "ਹਰ ਚਾਲ ਤੋਂ ਪਹਿਲਾਂ ਦੋ ਸਵਾਲ ਪੁੱਛੋ: ਕੀ ਤੁਸੀਂ ਕੁਝ ਮੁਫ਼ਤ ਮਾਰ ਸਕਦੇ ਹੋ? ਅਤੇ ਕੀ ਤੁਹਾਡਾ ਕੋਈ ਮੋਹਰਾ ਬੇ-ਬਚਾਅ ਹੈ?" },
         board: { fen: "4k3/8/8/1b1n4/2N5/8/8/3RK3 w - - 0 1", arrows: [["d1","d5"],["b5","c4"]], highlights: ["d5","c4"] } },
@@ -30,15 +30,15 @@ export const LEVEL4: Lesson[] = [
   {
     id: "4.2", level: 4, status: "draft",
     title: { en: "Double attack", pa: "ਦੋ ਪਾਸੀ ਹਮਲਾ" },
-    goal: { en: "Make one move that threatens two things.", pa: "ਇੱਕ ਅਜਿਹੀ ਚਾਲ ਚੱਲੋ ਜੋ ਦੋ ਚੀਜ਼ਾਂ ਨੂੰ ਖ਼ਤਰਾ ਦੇਵੇ।" },
+    goal: { en: "Make one move that threatens two things.", pa: "ਇੱਕ ਅਜਿਹੀ ਚਾਲ ਚੱਲੋ ਜੋ ਦੋ ਚੀਜ਼ਾਂ ਨੂੰ ਖ਼ਤਰੇ ਵਿੱਚ ਪਾਵੇ।" },
     learn: [
-      { text: { en: "A double attack threatens two things with one move. Your opponent can usually save only one of them.", pa: "ਦੋ ਪਾਸੀ ਹਮਲਾ ਇੱਕ ਚਾਲ ਨਾਲ ਦੋ ਚੀਜ਼ਾਂ ਨੂੰ ਖ਼ਤਰਾ ਦਿੰਦਾ ਹੈ। ਵਿਰੋਧੀ ਆਮ ਤੌਰ 'ਤੇ ਸਿਰਫ਼ ਇੱਕ ਨੂੰ ਬਚਾ ਸਕਦਾ ਹੈ।" },
+      { text: { en: "A double attack threatens two things with one move. Your opponent can usually save only one of them.", pa: "ਦੋ ਪਾਸੀ ਹਮਲਾ ਇੱਕ ਚਾਲ ਨਾਲ ਦੋ ਚੀਜ਼ਾਂ ਨੂੰ ਖ਼ਤਰੇ ਵਿੱਚ ਪਾਉਂਦਾ ਹੈ। ਵਿਰੋਧੀ ਆਮ ਤੌਰ 'ਤੇ ਸਿਰਫ਼ ਇੱਕ ਨੂੰ ਬਚਾ ਸਕਦਾ ਹੈ।" },
         board: { fen: "4k3/8/8/n2Q3b/8/8/8/4K3 b - - 0 1", arrows: [["d5", "a5"], ["d5", "h5"]] } },
-      { text: { en: "The queen is the best double-attacker: she moves in eight directions.", pa: "ਰਾਣੀ ਸਭ ਤੋਂ ਵਧੀਆ ਦੋ ਪਾਸੀ ਹਮਲਾ ਕਰਦੀ ਹੈ: ਉਹ ਅੱਠ ਪਾਸਿਆਂ ਵੱਲ ਚੱਲਦੀ ਹੈ।" },
+      { text: { en: "The queen is the best double-attacker: she moves in eight directions.", pa: "ਦੋ ਪਾਸੀ ਹਮਲਾ ਕਰਨ ਵਿੱਚ ਰਾਣੀ ਸਭ ਤੋਂ ਵਧੀਆ ਹੈ: ਉਹ ਅੱਠ ਪਾਸਿਆਂ ਵੱਲ ਚੱਲਦੀ ਹੈ।" },
         board: { pieces: {d4:"wQ"}, arrows: [["d4","d8"],["d4","h8"],["d4","h4"],["d4","g1"],["d4","d1"],["d4","a1"],["d4","a4"],["d4","a7"]] } },
     ],
     try: { kind: "play", fen: "8/8/n7/7K/8/7Q/1k1b4/8 w - - 0 1", goal: "fork",
-      prompt: { en: "Attack both black pieces with one queen move, on a square where neither can hit back.", pa: "ਰਾਣੀ ਦੀ ਇੱਕ ਚਾਲ ਨਾਲ ਕਾਲੇ ਦੋਵਾਂ ਮੋਹਰਿਆਂ 'ਤੇ ਹਮਲਾ ਕਰੋ, ਉਸ ਖਾਨੇ ਤੋਂ ਜਿੱਥੇ ਕੋਈ ਵਾਪਸ ਨਾ ਮਾਰ ਸਕੇ।" },
+      prompt: { en: "Attack both black pieces with one queen move, on a square where neither can hit back.", pa: "ਰਾਣੀ ਦੀ ਇੱਕ ਚਾਲ ਨਾਲ ਦੋਵਾਂ ਕਾਲੇ ਮੋਹਰਿਆਂ 'ਤੇ ਹਮਲਾ ਕਰੋ, ਉਸ ਖਾਨੇ ਤੋਂ ਜਿੱਥੇ ਕੋਈ ਵਾਪਸ ਨਾ ਮਾਰ ਸਕੇ।" },
       hint: { en: "Find one square that sees the knight along a diagonal and the bishop straight down.", pa: "ਉਹ ਖਾਨਾ ਲੱਭੋ ਜਿੱਥੋਂ ਘੋੜਾ ਤਿਰਛੀ ਲਕੀਰ 'ਤੇ ਅਤੇ ਊਠ ਸਿੱਧਾ ਹੇਠਾਂ ਦਿਸੇ।" } },
     practise: [
       { kind: "play", fen: "2K5/8/8/4PP2/b7/3n3k/5R2/8 w - - 0 1", goal: "fork",
@@ -51,11 +51,11 @@ export const LEVEL4: Lesson[] = [
   {
     id: "4.3", level: 4, status: "draft",
     title: { en: "The knight fork", pa: "ਘੋੜੇ ਦਾ ਦੋਹਰਾ ਵਾਰ" },
-    goal: { en: "Use the knight to attack two pieces at once.", pa: "ਘੋੜੇ ਨਾਲ ਇੱਕੋ ਵਾਰ ਦੋ ਮੋਹਰਿਆਂ 'ਤੇ ਹਮਲਾ ਕਰੋ।" },
+    goal: { en: "Use the knight to attack two pieces at once.", pa: "ਘੋੜੇ ਨਾਲ ਇੱਕੋ ਵੇਲੇ ਦੋ ਮੋਹਰਿਆਂ 'ਤੇ ਹਮਲਾ ਕਰੋ।" },
     learn: [
       { text: { en: "Knights are fork experts. They attack in a ring, and their attack can't be blocked.", pa: "ਘੋੜੇ ਦੋਹਰੇ ਵਾਰ ਦੇ ਮਾਹਿਰ ਹਨ। ਉਹ ਘੇਰੇ ਵਿੱਚ ਹਮਲਾ ਕਰਦੇ ਹਨ, ਅਤੇ ਉਨ੍ਹਾਂ ਦਾ ਹਮਲਾ ਰੋਕਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ।" },
         board: { pieces: { d4: "wN" }, dots: ["c2", "e2", "b3", "f3", "b5", "f5", "c6", "e6"] } },
-      { text: { en: "A fork with check is the strongest: the king must move, and you take the other piece.", pa: "ਸ਼ਹਿ ਵਾਲਾ ਦੋਹਰਾ ਵਾਰ ਸਭ ਤੋਂ ਤਾਕਤਵਰ ਹੈ: ਬਾਦਸ਼ਾਹ ਨੂੰ ਹਟਣਾ ਪੈਂਦਾ ਹੈ, ਅਤੇ ਤੁਸੀਂ ਦੂਜਾ ਮੋਹਰਾ ਮਾਰ ਲੈਂਦੇ ਹੋ।" },
+      { text: { en: "A fork with check is the strongest: the king must move, and you take the other piece.", pa: "ਸ਼ਹਿ ਵਾਲਾ ਦੋਹਰਾ ਵਾਰ ਸਭ ਤੋਂ ਤਕੜਾ ਹੈ: ਬਾਦਸ਼ਾਹ ਨੂੰ ਹਟਣਾ ਪੈਂਦਾ ਹੈ, ਅਤੇ ਤੁਸੀਂ ਦੂਜਾ ਮੋਹਰਾ ਮਾਰ ਲੈਂਦੇ ਹੋ।" },
         board: { fen: "r3k3/2N5/8/8/8/8/8/4K3 b - - 0 1", arrows: [["c7", "e8"], ["c7", "a8"]] } },
     ],
     try: { kind: "play", fen: "r3k3/8/8/3N4/8/8/8/4K3 w - - 0 1", goal: "fork",
@@ -70,14 +70,14 @@ export const LEVEL4: Lesson[] = [
 
   {
     id: "4.4", level: 4, status: "draft",
-    title: { en: "Forks by other pieces", pa: "ਹੋਰ ਦੋਹਰੇ ਵਾਰ" },
+    title: { en: "Forks by other pieces", pa: "ਹੋਰ ਮੋਹਰਿਆਂ ਦੇ ਦੋਹਰੇ ਵਾਰ" },
     goal: { en: "Fork with a pawn, and even with the king.", pa: "ਪਿਆਦੇ ਨਾਲ, ਅਤੇ ਬਾਦਸ਼ਾਹ ਨਾਲ ਵੀ, ਦੋਹਰਾ ਵਾਰ ਕਰੋ।" },
     learn: [
       { text: { en: "Even a pawn can fork: one step forward, and it attacks two pieces diagonally.", pa: "ਪਿਆਦਾ ਵੀ ਦੋਹਰਾ ਵਾਰ ਕਰ ਸਕਦਾ ਹੈ: ਇੱਕ ਕਦਮ ਅੱਗੇ, ਅਤੇ ਉਹ ਦੋ ਮੋਹਰਿਆਂ 'ਤੇ ਤਿਰਛਾ ਹਮਲਾ ਕਰਦਾ ਹੈ।" },
         board: { fen: "4k3/8/8/3n1b2/4P3/3P4/8/4K3 b - - 0 1", arrows: [["e4", "d5"], ["e4", "f5"]] } },
-      { text: { en: "A pawn fork is deadly because the pawn is worth so little: whatever you win, you win big.", pa: "ਪਿਆਦੇ ਦਾ ਦੋਹਰਾ ਵਾਰ ਖ਼ਤਰਨਾਕ ਹੈ ਕਿਉਂਕਿ ਪਿਆਦੇ ਦਾ ਮੁੱਲ ਬਹੁਤ ਘੱਟ ਹੈ: ਜੋ ਵੀ ਜਿੱਤੋ, ਵੱਡਾ ਜਿੱਤਦੇ ਹੋ।" },
+      { text: { en: "A pawn fork is deadly because the pawn is worth so little: whatever you win, you win big.", pa: "ਪਿਆਦੇ ਦਾ ਦੋਹਰਾ ਵਾਰ ਖ਼ਤਰਨਾਕ ਹੈ ਕਿਉਂਕਿ ਪਿਆਦੇ ਦਾ ਮੁੱਲ ਬਹੁਤ ਘੱਟ ਹੈ: ਜੋ ਵੀ ਮਿਲੇ, ਤੁਹਾਡਾ ਫ਼ਾਇਦਾ ਵੱਡਾ ਹੁੰਦਾ ਹੈ।" },
         board: { fen: "4k3/8/8/2r1n3/3P4/8/8/4K3 b - - 0 1", arrows: [["d4","c5"],["d4","e5"]] } },
-      { text: { en: "The king can fork too, when two enemy pieces stand undefended next to it.", pa: "ਬਾਦਸ਼ਾਹ ਵੀ ਦੋਹਰਾ ਵਾਰ ਕਰ ਸਕਦਾ ਹੈ, ਜਦੋਂ ਦੁਸ਼ਮਣ ਦੇ ਦੋ ਬੇ-ਬਚਾਅ ਮੋਹਰੇ ਉਸ ਦੇ ਨਾਲ ਖੜ੍ਹੇ ਹੋਣ।" },
+      { text: { en: "The king can fork too, when two enemy pieces stand undefended next to it.", pa: "ਬਾਦਸ਼ਾਹ ਵੀ ਦੋਹਰਾ ਵਾਰ ਕਰ ਸਕਦਾ ਹੈ, ਜਦੋਂ ਦੁਸ਼ਮਣ ਦੇ ਦੋ ਬੇ-ਬਚਾਅ ਮੋਹਰੇ ਉਸ ਦੇ ਨਾਲ ਲੱਗਦੇ ਖਾਨਿਆਂ 'ਤੇ ਖੜ੍ਹੇ ਹੋਣ।" },
         board: { fen: "7k/8/2r5/3K4/4n3/8/8/8 b - - 0 1", arrows: [["d5","c6"],["d5","e4"]] } },
     ],
     try: { kind: "play", fen: "4k3/8/8/3n1b2/8/3PP3/8/4K3 w - - 0 1", goal: "fork",
@@ -95,7 +95,7 @@ export const LEVEL4: Lesson[] = [
     title: { en: "The pin", pa: "ਬੰਨ੍ਹ" },
     goal: { en: "Pin a piece so it can't move, then attack it again.", pa: "ਮੋਹਰੇ ਨੂੰ ਬੰਨ੍ਹੋ ਤਾਂ ਜੋ ਉਹ ਹਿੱਲ ਨਾ ਸਕੇ, ਫਿਰ ਉਸ 'ਤੇ ਦੁਬਾਰਾ ਹਮਲਾ ਕਰੋ।" },
     learn: [
-      { text: { en: "A pin: a piece is stuck. If the king stands behind it, it can't move at all. If a bigger piece stands behind it, it can move, but then that bigger piece is lost.", pa: "ਬੰਨ੍ਹ: ਮੋਹਰਾ ਫਸ ਜਾਂਦਾ ਹੈ। ਜੇ ਉਸ ਦੇ ਪਿੱਛੇ ਬਾਦਸ਼ਾਹ ਹੋਵੇ, ਤਾਂ ਉਹ ਹਿੱਲ ਹੀ ਨਹੀਂ ਸਕਦਾ। ਜੇ ਪਿੱਛੇ ਵੱਡਾ ਮੋਹਰਾ ਹੋਵੇ, ਤਾਂ ਉਹ ਹਿੱਲ ਸਕਦਾ ਹੈ, ਪਰ ਫਿਰ ਉਹ ਵੱਡਾ ਮੋਹਰਾ ਮਾਰਿਆ ਜਾਂਦਾ ਹੈ।" },
+      { text: { en: "A pin: a piece is stuck. If the king stands behind it, it can't move at all. If a bigger piece stands behind it, it can move, but then that bigger piece is lost.", pa: "ਬੰਨ੍ਹ: ਮੋਹਰਾ ਜਕੜਿਆ ਜਾਂਦਾ ਹੈ। ਜੇ ਉਸ ਦੇ ਪਿੱਛੇ ਬਾਦਸ਼ਾਹ ਹੋਵੇ, ਤਾਂ ਉਹ ਹਿੱਲ ਹੀ ਨਹੀਂ ਸਕਦਾ। ਜੇ ਪਿੱਛੇ ਵੱਡਾ ਮੋਹਰਾ ਹੋਵੇ, ਤਾਂ ਉਹ ਹਿੱਲ ਸਕਦਾ ਹੈ, ਪਰ ਫਿਰ ਉਹ ਵੱਡਾ ਮੋਹਰਾ ਮਾਰਿਆ ਜਾਂਦਾ ਹੈ।" },
         board: { fen: "4k3/8/2n5/1B6/8/8/8/4K3 b - - 0 1", arrows: [["b5", "e8"]], highlights: ["c6"] } },
       { text: { en: "If the king is behind it, the pinned piece may not move at all. That's the strongest pin.", pa: "ਜੇ ਪਿੱਛੇ ਬਾਦਸ਼ਾਹ ਹੋਵੇ, ਤਾਂ ਬੰਨ੍ਹਿਆ ਮੋਹਰਾ ਬਿਲਕੁਲ ਨਹੀਂ ਹਿੱਲ ਸਕਦਾ। ਇਹ ਸਭ ਤੋਂ ਤਕੜਾ ਬੰਨ੍ਹ ਹੈ।" },
         board: { fen: "4k3/3n4/8/1B6/8/8/8/4K3 b - - 0 1", arrows: [["b5","e8"]], crosses: ["b6","b8","c5","e5","f6","f8"] } },
@@ -140,7 +140,7 @@ export const LEVEL4: Lesson[] = [
     learn: [
       { text: { en: "Move one piece out of the way, and the piece behind it suddenly attacks.", pa: "ਇੱਕ ਮੋਹਰੇ ਨੂੰ ਰਾਹੋਂ ਹਟਾਓ, ਅਤੇ ਉਸ ਦੇ ਪਿੱਛੇ ਵਾਲਾ ਮੋਹਰਾ ਅਚਾਨਕ ਹਮਲਾ ਕਰਦਾ ਹੈ।" },
         board: { fen: "4k3/4q3/8/8/4N3/8/8/4RK2 w - - 0 1", arrows: [["e1", "e7"]], highlights: ["e4"] } },
-      { text: { en: "The piece that moves can make its own threat too. Two threats at once!", pa: "ਹਿੱਲਣ ਵਾਲਾ ਮੋਹਰਾ ਆਪ ਵੀ ਖ਼ਤਰਾ ਦੇ ਸਕਦਾ ਹੈ। ਇੱਕੋ ਵਾਰ ਦੋ ਖ਼ਤਰੇ!" },
+      { text: { en: "The piece that moves can make its own threat too. Two threats at once!", pa: "ਹਿੱਲਣ ਵਾਲਾ ਮੋਹਰਾ ਆਪ ਵੀ ਕਿਸੇ ਮੋਹਰੇ ਨੂੰ ਖ਼ਤਰੇ ਵਿੱਚ ਪਾ ਸਕਦਾ ਹੈ। ਇੱਕੋ ਵੇਲੇ ਦੋ ਖ਼ਤਰੇ!" },
         board: { fen: "7k/4q1p1/8/4N3/8/8/8/4R1K1 w - - 0 1", arrows: [["e5","g6"],["e1","e7"]] } },
     ],
     try: { kind: "play", fen: "4k3/4q3/8/8/4N3/8/8/4RK2 w - - 0 1", goal: "discover",
@@ -160,16 +160,16 @@ export const LEVEL4: Lesson[] = [
     learn: [
       { text: { en: "If the piece you move gives check, AND it uncovers a check from another piece, that is double check.", pa: "ਜੇ ਹਿੱਲਣ ਵਾਲਾ ਮੋਹਰਾ ਸ਼ਹਿ ਦੇਵੇ, ਅਤੇ ਨਾਲ ਹੀ ਦੂਜੇ ਮੋਹਰੇ ਦੀ ਸ਼ਹਿ ਵੀ ਖੋਲ੍ਹੇ, ਤਾਂ ਇਹ ਦੋਹਰੀ ਸ਼ਹਿ ਹੈ।" },
         board: { fen: "4k3/8/5N2/8/8/8/8/4RK2 b - - 0 1", arrows: [["f6", "e8"], ["e1", "e8"]] } },
-      { text: { en: "No block and no capture can stop two checks at once. Only the king can move.", pa: "ਕੋਈ ਰੋਕ ਜਾਂ ਮਾਰ ਇੱਕੋ ਵਾਰ ਦੋ ਸ਼ਹਿਆਂ ਨੂੰ ਨਹੀਂ ਰੋਕ ਸਕਦੀ। ਸਿਰਫ਼ ਬਾਦਸ਼ਾਹ ਹਿੱਲ ਸਕਦਾ ਹੈ।" },
+      { text: { en: "No block and no capture can stop two checks at once. Only the king can move.", pa: "ਵਿਚਕਾਰ ਮੋਹਰਾ ਰੱਖਣ ਜਾਂ ਸ਼ਹਿ ਦੇਣ ਵਾਲੇ ਨੂੰ ਮਾਰਨ ਨਾਲ ਦੋਹਰੀ ਸ਼ਹਿ ਨਹੀਂ ਰੁਕਦੀ। ਸਿਰਫ਼ ਬਾਦਸ਼ਾਹ ਹਿੱਲ ਸਕਦਾ ਹੈ।" },
         board: { fen: "4k3/8/5N2/8/8/8/8/4RK2 b - - 0 1", dots: ["d8","f7","f8"], crosses: ["d7","e7"] } },
     ],
     try: { kind: "play", fen: "4k3/8/8/8/4N3/8/8/4RK2 w - - 0 1", goal: "double-check",
       prompt: { en: "Give double check.", pa: "ਦੋਹਰੀ ਸ਼ਹਿ ਦਿਓ।" },
-      hint: { en: "The knight must check the king itself, and get off the rook's line.", pa: "ਘੋੜਾ ਆਪ ਬਾਦਸ਼ਾਹ ਨੂੰ ਸ਼ਹਿ ਦੇਵੇ, ਅਤੇ ਹਾਥੀ ਦੀ ਲਕੀਰ ਤੋਂ ਹਟ ਜਾਵੇ।" } },
+      hint: { en: "The knight must check the king itself, and get off the rook's line.", pa: "ਘੋੜੇ ਨੂੰ ਆਪ ਬਾਦਸ਼ਾਹ ਨੂੰ ਸ਼ਹਿ ਦੇਣੀ ਪਵੇਗੀ, ਅਤੇ ਹਾਥੀ ਦੀ ਲਕੀਰ ਤੋਂ ਹਟਣਾ ਪਵੇਗਾ।" } },
     practise: [
-      { kind: "pack", pack: "doublecheck-easy", count: 3, prompt: realGames("two checks at once.", "ਇੱਕੋ ਵਾਰ ਦੋ ਸ਼ਹਿ।") },
+      { kind: "pack", pack: "doublecheck-easy", count: 3, prompt: realGames("two checks at once.", "ਇੱਕੋ ਵੇਲੇ ਦੋ ਸ਼ਹਿ ਦਿਓ।") },
     ],
-    challenge: { kind: "pack", pack: "doublecheck-easy", count: 3, prompt: realGames("double check.", "ਦੋਹਰੀ ਸ਼ਹਿ।") },
+    challenge: { kind: "pack", pack: "doublecheck-easy", count: 3, prompt: realGames("double check.", "ਦੋਹਰੀ ਸ਼ਹਿ ਦਿਓ।") },
   },
 
   {
@@ -186,7 +186,7 @@ export const LEVEL4: Lesson[] = [
     practise: [
       { kind: "pack", pack: "defender-easy", count: 4, prompt: realGames("remove the defender.", "ਰਾਖਾ ਹਟਾਓ।") },
     ],
-    challenge: { kind: "pack", pack: "defender-easy", count: 4, prompt: realGames("no guard, no piece.", "ਰਾਖਾ ਨਹੀਂ, ਮੋਹਰਾ ਨਹੀਂ।") },
+    challenge: { kind: "pack", pack: "defender-easy", count: 4, prompt: realGames("no guard, no piece.", "ਰਾਖਾ ਗਿਆ, ਮੋਹਰਾ ਗਿਆ।") },
   },
 
   {
@@ -196,7 +196,7 @@ export const LEVEL4: Lesson[] = [
     learn: [
       { text: { en: "A piece with no safe squares is trapped. Attack it, and it is lost.", pa: "ਜਿਸ ਮੋਹਰੇ ਕੋਲ ਕੋਈ ਸੁਰੱਖਿਅਤ ਖਾਨਾ ਨਹੀਂ, ਉਹ ਫਸਿਆ ਹੋਇਆ ਹੈ। ਉਸ 'ਤੇ ਹਮਲਾ ਕਰੋ, ਅਤੇ ਉਹ ਗਿਆ।" },
         board: { fen: "4k3/8/8/8/8/8/7P/5K1n w - - 0 1", highlights: ["h1"], crosses: ["f2", "g3"] } },
-      { text: { en: "Knights and bishops on the edge get trapped easily. Keep yours near the middle.", pa: "ਕੰਢੇ ਵਾਲੇ ਘੋੜੇ ਅਤੇ ਊਠ ਸੌਖਿਆਂ ਫਸ ਜਾਂਦੇ ਹਨ। ਆਪਣਿਆਂ ਨੂੰ ਵਿਚਕਾਰ ਦੇ ਨੇੜੇ ਰੱਖੋ।" },
+      { text: { en: "Knights and bishops on the edge get trapped easily. Keep yours near the middle.", pa: "ਕੰਢੇ ਵਾਲੇ ਘੋੜੇ ਅਤੇ ਊਠ ਸੌਖਿਆਂ ਫਸ ਜਾਂਦੇ ਹਨ। ਆਪਣੇ ਘੋੜੇ ਅਤੇ ਊਠ ਵਿਚਕਾਰ ਦੇ ਨੇੜੇ ਰੱਖੋ।" },
         board: { pieces: {h1:"wN",d4:"wN"}, dots: ["f2","g3","b3","b5","c2","c6","e2","e6","f3","f5"] } },
     ],
     try: { kind: "pack", pack: "trapped-easy", count: 1, prompt: { en: "A piece is trapped. Win it.", pa: "ਇੱਕ ਮੋਹਰਾ ਫਸਿਆ ਹੈ। ਉਸ ਨੂੰ ਜਿੱਤੋ।" } },
@@ -210,9 +210,9 @@ export const LEVEL4: Lesson[] = [
   {
     id: "4.11", level: 4, status: "draft",
     title: { en: "Count before you capture", pa: "ਮਾਰਨ ਤੋਂ ਪਹਿਲਾਂ ਗਿਣੋ" },
-    goal: { en: "Know when a capture wins, trades or loses, by counting.", pa: "ਗਿਣ ਕੇ ਜਾਣੋ ਕਿ ਮਾਰਨਾ ਕਦੋਂ ਜਿਤਾਉਂਦਾ, ਬਰਾਬਰ ਕਰਦਾ ਜਾਂ ਹਰਾਉਂਦਾ ਹੈ।" },
+    goal: { en: "Know when a capture wins, trades or loses, by counting.", pa: "ਗਿਣ ਕੇ ਜਾਣੋ ਕਿ ਮਾਰਨ ਨਾਲ ਕਦੋਂ ਫ਼ਾਇਦਾ ਹੁੰਦਾ ਹੈ, ਕਦੋਂ ਵਟਾਂਦਰਾ, ਅਤੇ ਕਦੋਂ ਘਾਟਾ।" },
     learn: [
-      { text: { en: "Before you capture, count: how many of your pieces attack the square, and how many of theirs defend it?", pa: "ਮਾਰਨ ਤੋਂ ਪਹਿਲਾਂ ਗਿਣੋ: ਤੁਹਾਡੇ ਕਿੰਨੇ ਮੋਹਰੇ ਖਾਨੇ 'ਤੇ ਹਮਲਾ ਕਰਦੇ ਹਨ, ਅਤੇ ਉਨ੍ਹਾਂ ਦੇ ਕਿੰਨੇ ਰਾਖੀ ਕਰਦੇ ਹਨ?" },
+      { text: { en: "Before you capture, count: how many of your pieces attack the square, and how many of theirs defend it?", pa: "ਮਾਰਨ ਤੋਂ ਪਹਿਲਾਂ ਗਿਣੋ: ਤੁਹਾਡੇ ਕਿੰਨੇ ਮੋਹਰੇ ਖਾਨੇ 'ਤੇ ਹਮਲਾ ਕਰਦੇ ਹਨ, ਅਤੇ ਵਿਰੋਧੀ ਦੇ ਕਿੰਨੇ ਉਸ ਦੀ ਰਾਖੀ ਕਰਦੇ ਹਨ?" },
         board: { pieces: { e4: "wP", c3: "wN", d5: "bP", f6: "bN" }, arrows: [["e4", "d5"], ["c3", "d5"], ["f6", "d5"]] } },
       { text: { en: "More attackers than defenders: you win it. The same number: usually just a trade. Fewer: leave it alone.", pa: "ਰਾਖਿਆਂ ਨਾਲੋਂ ਵੱਧ ਹਮਲਾਵਰ: ਤੁਸੀਂ ਜਿੱਤਦੇ ਹੋ। ਬਰਾਬਰ: ਅਕਸਰ ਸਿਰਫ਼ ਵਟਾਂਦਰਾ। ਘੱਟ: ਰਹਿਣ ਦਿਓ।" },
         board: { pieces: {e4:"wP",c3:"wN",b3:"wB",d5:"bP",f6:"bN"}, arrows: [["e4","d5"],["c3","d5"],["b3","d5"],["f6","d5"]] } },
@@ -222,7 +222,7 @@ export const LEVEL4: Lesson[] = [
     try: { kind: "choose", board: { pieces: { e4: "wP", c3: "wN", d5: "bP", f6: "bN" } },
       prompt: { en: "Two white attackers, one black defender. Can White win the d5 pawn?", pa: "ਦੋ ਚਿੱਟੇ ਹਮਲਾਵਰ, ਇੱਕ ਕਾਲਾ ਰਾਖਾ। ਕੀ ਚਿੱਟਾ d5 ਵਾਲਾ ਪਿਆਦਾ ਜਿੱਤ ਸਕਦਾ ਹੈ?" },
       options: [
-        { text: { en: "Yes: exd5 Nxd5 Nxd5", pa: "ਹਾਂ: exd5 Nxd5 Nxd5" }, correct: true, why: { en: "Right: after the trades White is a pawn and a knight up for a pawn.", pa: "ਠੀਕ: ਵਟਾਂਦਰਿਆਂ ਤੋਂ ਬਾਅਦ ਚਿੱਟਾ ਇੱਕ ਪਿਆਦੇ ਬਦਲੇ ਪਿਆਦਾ ਅਤੇ ਘੋੜਾ ਅੱਗੇ ਹੈ।" } },
+        { text: { en: "Yes: exd5 Nxd5 Nxd5", pa: "ਹਾਂ: exd5 Nxd5 Nxd5" }, correct: true, why: { en: "Right: White gives one pawn and takes a pawn and a knight, so White wins a knight.", pa: "ਠੀਕ: ਚਿੱਟਾ ਇੱਕ ਪਿਆਦਾ ਦੇ ਕੇ ਪਿਆਦਾ ਅਤੇ ਘੋੜਾ ਲੈਂਦਾ ਹੈ, ਇਸ ਤਰ੍ਹਾਂ ਇੱਕ ਘੋੜਾ ਜਿੱਤਦਾ ਹੈ।" } },
         { text: { en: "No", pa: "ਨਹੀਂ" }, why: { en: "Count again: two attackers beat one defender.", pa: "ਫਿਰ ਗਿਣੋ: ਦੋ ਹਮਲਾਵਰ ਇੱਕ ਰਾਖੇ ਤੋਂ ਵੱਧ ਹਨ।" } },
       ] },
     practise: [
@@ -230,10 +230,10 @@ export const LEVEL4: Lesson[] = [
         prompt: { en: "Should White play Nxd5?", pa: "ਕੀ ਚਿੱਟੇ ਨੂੰ Nxd5 ਖੇਡਣਾ ਚਾਹੀਦਾ ਹੈ?" },
         options: [
           { text: { en: "No", pa: "ਨਹੀਂ" }, correct: true, why: { en: "Right: exd5 takes the knight. A knight for a pawn is a bad trade.", pa: "ਠੀਕ: exd5 ਘੋੜੇ ਨੂੰ ਮਾਰ ਦਿੰਦਾ ਹੈ। ਪਿਆਦੇ ਬਦਲੇ ਘੋੜਾ ਮਾੜਾ ਵਟਾਂਦਰਾ ਹੈ।" } },
-          { text: { en: "Yes, it wins a pawn", pa: "ਹਾਂ, ਇੱਕ ਪਿਆਦਾ ਜਿੱਤਦਾ ਹੈ" }, why: { en: "The e6 pawn defends d5: one attacker, one defender, and you lose the bigger piece.", pa: "e6 ਵਾਲਾ ਪਿਆਦਾ d5 ਦੀ ਰਾਖੀ ਕਰਦਾ ਹੈ: ਇੱਕ ਹਮਲਾਵਰ, ਇੱਕ ਰਾਖਾ, ਅਤੇ ਵੱਡਾ ਮੋਹਰਾ ਤੁਹਾਡਾ ਜਾਂਦਾ ਹੈ।" } },
+          { text: { en: "Yes, it wins a pawn", pa: "ਹਾਂ, ਇਸ ਨਾਲ ਇੱਕ ਪਿਆਦਾ ਜਿੱਤਿਆ ਜਾਂਦਾ ਹੈ" }, why: { en: "The e6 pawn defends d5: one attacker, one defender, and you lose the bigger piece.", pa: "e6 ਵਾਲਾ ਪਿਆਦਾ d5 ਦੀ ਰਾਖੀ ਕਰਦਾ ਹੈ: ਇੱਕ ਹਮਲਾਵਰ, ਇੱਕ ਰਾਖਾ, ਅਤੇ ਤੁਹਾਡਾ ਵੱਡਾ ਮੋਹਰਾ ਚਲਾ ਜਾਂਦਾ ਹੈ।" } },
         ] },
       { kind: "choose", board: { pieces: { b3: "wB", c3: "wN", d5: "bP", f6: "bN", e6: "bP", c6: "bP" } },
-        prompt: { en: "Two attackers on d5 against three defenders. Capture?", pa: "d5 'ਤੇ ਦੋ ਹਮਲਾਵਰ, ਤਿੰਨ ਰਾਖਿਆਂ ਵਿਰੁੱਧ। ਮਾਰੋ?" },
+        prompt: { en: "Two attackers on d5 against three defenders. Capture?", pa: "d5 'ਤੇ ਦੋ ਹਮਲਾਵਰ, ਤਿੰਨ ਰਾਖਿਆਂ ਦੇ ਮੁਕਾਬਲੇ। ਕੀ ਮਾਰਨਾ ਚਾਹੀਦਾ ਹੈ?" },
         options: [
           { text: { en: "No: fewer attackers than defenders", pa: "ਨਹੀਂ: ਰਾਖਿਆਂ ਨਾਲੋਂ ਘੱਟ ਹਮਲਾਵਰ" }, correct: true, why: { en: "Right: each capture is answered, and White runs out of attackers first.", pa: "ਠੀਕ: ਹਰ ਮਾਰ ਦਾ ਜਵਾਬ ਮਿਲਦਾ ਹੈ, ਅਤੇ ਚਿੱਟੇ ਦੇ ਹਮਲਾਵਰ ਪਹਿਲਾਂ ਮੁੱਕ ਜਾਂਦੇ ਹਨ।" } },
           { text: { en: "Yes", pa: "ਹਾਂ" }, why: { en: "Count: bishop and knight attack; two pawns and a knight defend.", pa: "ਗਿਣੋ: ਊਠ ਅਤੇ ਘੋੜਾ ਹਮਲਾ ਕਰਦੇ ਹਨ; ਦੋ ਪਿਆਦੇ ਅਤੇ ਇੱਕ ਘੋੜਾ ਰਾਖੀ ਕਰਦੇ ਹਨ।" } },

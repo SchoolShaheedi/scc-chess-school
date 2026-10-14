@@ -83,8 +83,11 @@ export function judge(fen: string, uci: string, goal: Goal): Verdict {
       : unsafe(after, move.to) ? { ok: false, why: "whyLosesPiece" } : { ok: true };
     case "skewer": return !lineTactic(after, move.to, "skewer") ? { ok: false, why: "whyNotSkewer" }
       : unsafe(after, move.to) ? { ok: false, why: "whyLosesPiece" } : { ok: true };
+    // the moved piece may hang only when the UNCOVERED piece gives check: then taking it doesn't answer the check.
+    // A check from the moved piece itself doesn't excuse it: Nd6+ Qxd6 takes the checker and steps off the line
+    // (lesson check 2026-10-14; it used to accept that).
     case "discover": return !discovered(fen, after, move) ? { ok: false, why: "whyNotDiscover" }
-      : unsafe(after, move.to) && !after.inCheck() ? { ok: false, why: "whyLosesPiece" } : { ok: true };
+      : unsafe(after, move.to) && !discoveredCheck(after, move) ? { ok: false, why: "whyLosesPiece" } : { ok: true };
     case "double-check": {
       const k = after.findPiece({ type: "k", color: after.turn() })[0];
       return after.attackers(k, after.turn() === "w" ? "b" : "w").length >= 2 ? { ok: true } : { ok: false, why: "whyNotDoubleCheck" };
@@ -181,6 +184,13 @@ export function lineTactic(after: Chess, sq: string, kind: "pin" | "skewer"): bo
 }
 
 /** A piece OTHER than the one that moved now attacks a worthwhile enemy target it did not attack before. */
+/** After `move`, is the side to move in check from a piece OTHER than the one that just moved? */
+function discoveredCheck(after: Chess, move: Move): boolean {
+  if (!after.inCheck()) return false;
+  const k = after.findPiece({ type: "k", color: after.turn() })[0];
+  return after.attackers(k, move.color).some(a => a !== move.to);
+}
+
 export function discovered(before: string, after: Chess, move: Move): boolean {
   const b = new Chess(before), mine = move.color, them = mine === "w" ? "b" : "w";
   for (const row of after.board()) for (const p of row) {

@@ -328,3 +328,16 @@ describe("learn slides", () => {
     expect(bad).toEqual([]);
   });
 });
+
+// Lesson check 2026-10-14: a discovered attack whose moving piece hangs is excused only by a discovered CHECK.
+describe("discovered attack goal", () => {
+  const fen = "4k3/4q3/8/8/4N3/8/8/4RK2 w - - 0 1";   // 4.7's Try: the knight uncovers the rook on the queen
+  it("rejects a knight check that the queen answers by taking the knight off the file", () => {
+    expect(judge(fen, "e4d6", "discover").ok).toBe(false);   // Nd6+ Qxd6
+    expect(judge(fen, "e4f6", "discover").ok).toBe(false);   // Nf6+ Qxf6
+  });
+  it("accepts a safe uncovering move, and a hanging piece when the uncovered piece gives check", () => {
+    expect(judge(fen, "e4c3", "discover").ok).toBe(true);
+    expect(judge("8/7k/8/8/8/3N4/8/1B2K3 w - - 0 1", "d3f4", "discover").ok).toBe(true);   // Nf4+, the bishop checks
+  });
+});

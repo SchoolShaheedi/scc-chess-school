@@ -1,0 +1,40 @@
+{
+  "4.1": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): your rook can take a free knight, and your own knight is hanging to a bishop.",
+    "Punjabi, slide 1: the second half had no verb (<span lang=\"pa\" class=\"pa\">ਪਰ ਉਸ ਦੀ ਰਾਖੀ ਨਹੀਂ</span>). Now <span lang=\"pa\" class=\"pa\">ਪਰ ਉਸ ਦੀ ਰਾਖੀ ਕੋਈ ਨਹੀਂ ਕਰਦਾ।</span>"] },
+  "4.2": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): the queen's eight directions.",
+    "Punjabi: <span lang=\"pa\" class=\"pa\">ਖ਼ਤਰਾ ਦੇਣਾ</span> (a calque of “threaten”) is now <span lang=\"pa\" class=\"pa\">ਖ਼ਤਰੇ ਵਿੱਚ ਪਾਉਣਾ</span>; “the queen is the best double-attacker” now names the queen, not the attack; <span lang=\"pa\" class=\"pa\">ਦੋਵਾਂ ਕਾਲੇ ਮੋਹਰਿਆਂ</span>."] },
+  "4.3": { "changed": [
+    "Punjabi: in this level <span lang=\"pa\" class=\"pa\">ਵਾਰ</span> is also the “strike” in <span lang=\"pa\" class=\"pa\">ਦੋਹਰਾ ਵਾਰ</span>, so <span lang=\"pa\" class=\"pa\">ਇੱਕੋ ਵਾਰ</span> (“at once”) could be heard as “one strike”. Now <span lang=\"pa\" class=\"pa\">ਇੱਕੋ ਵੇਲੇ</span> here and in 4.7 and 4.8.",
+    "Punjabi, slide 2: <span lang=\"pa\" class=\"pa\">ਤਾਕਤਵਰ</span> → <span lang=\"pa\" class=\"pa\">ਤਕੜਾ</span>, the word 4.5 and 4.6 use for “strongest”."],
+    "ask": ["Not changed: <span lang=\"pa\" class=\"pa\">ਘੋੜੇ ਦੋਹਰੇ ਵਾਰ ਦੇ ਮਾਹਿਰ ਹਨ</span>. The reviewer called ਮਾਹਿਰ Urdu-ised, but it is everyday Punjabi."] },
+  "4.4": { "changed": [
+    "Slides 2 and 3 now show positions (2026-10-08): a pawn forking rook and knight, and a king forking an undefended rook and knight.",
+    "Punjabi title: <span lang=\"pa\" class=\"pa\">ਹੋਰ ਦੋਹਰੇ ਵਾਰ</span> read as “more forks”; now <span lang=\"pa\" class=\"pa\">ਹੋਰ ਮੋਹਰਿਆਂ ਦੇ ਦੋਹਰੇ ਵਾਰ</span> (“forks by other pieces”).",
+    "Punjabi, slide 2: <span lang=\"pa\" class=\"pa\">ਵੱਡਾ ਜਿੱਤਦੇ ਹੋ</span> was a calque of “win big”. Now <span lang=\"pa\" class=\"pa\">ਜੋ ਵੀ ਮਿਲੇ, ਤੁਹਾਡਾ ਫ਼ਾਇਦਾ ਵੱਡਾ ਹੁੰਦਾ ਹੈ।</span> Slide 3: “next to it” is now <span lang=\"pa\" class=\"pa\">ਨਾਲ ਲੱਗਦੇ ਖਾਨਿਆਂ 'ਤੇ</span>."],
+    "ask": ["Not changed: <span lang=\"pa\" class=\"pa\">ਦੁਸ਼ਮਣ</span> (“enemy”), which the reviewer found harsh. Level 1 uses it throughout (“an enemy piece”), so I kept it; say if you want it softened everywhere."] },
+  "4.5": { "changed": [
+    "Slides 2 and 3 now show positions (2026-10-08): a knight pinned to the king with its moves crossed out, and a pawn coming to attack the pinned knight.",
+    "Punjabi, slide 1: the pin made the piece <span lang=\"pa\" class=\"pa\">ਫਸ</span>, the same word 4.10 uses for “trapped”, two ideas the level teaches as different. Now <span lang=\"pa\" class=\"pa\">ਮੋਹਰਾ ਜਕੜਿਆ ਜਾਂਦਾ ਹੈ</span>."] },
+  "4.6": { "changed": ["Slide 2 now shows a position (2026-10-08): a bishop skewering the king to the queen behind it."] },
+  "4.7": { "changed": [
+    "<b>Chess bug, fixed in the app's rules:</b> the Try accepted Nd6+ and Nf6+. After either one the queen just takes the checking knight, which also takes her off the rook's file, so White loses the knight for nothing. A moving piece may hang only when the UNCOVERED piece gives check; a check from the moving piece itself is no excuse. Now only the four safe knight moves count, and a test guards it.",
+    "Slide 2 now shows a position (2026-10-08): Ng6+ checks and uncovers the rook on the queen.",
+    "Punjabi, slide 2: <span lang=\"pa\" class=\"pa\">ਆਪ ਵੀ ਕਿਸੇ ਮੋਹਰੇ ਨੂੰ ਖ਼ਤਰੇ ਵਿੱਚ ਪਾ ਸਕਦਾ ਹੈ। ਇੱਕੋ ਵੇਲੇ ਦੋ ਖ਼ਤਰੇ!</span>"] },
+  "4.8": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): the king's only three squares after a double check.",
+    "Punjabi, slide 2: “a block or a capture” was hard to follow aloud (<span lang=\"pa\" class=\"pa\">ਕੋਈ ਰੋਕ … ਰੋਕ ਸਕਦੀ</span>). Now <span lang=\"pa\" class=\"pa\">ਵਿਚਕਾਰ ਮੋਹਰਾ ਰੱਖਣ ਜਾਂ ਸ਼ਹਿ ਦੇਣ ਵਾਲੇ ਨੂੰ ਮਾਰਨ ਨਾਲ ਦੋਹਰੀ ਸ਼ਹਿ ਨਹੀਂ ਰੁਕਦੀ।</span>",
+    "Punjabi, Try hint: “must” read as a wish; now <span lang=\"pa\" class=\"pa\">ਸ਼ਹਿ ਦੇਣੀ ਪਵੇਗੀ … ਹਟਣਾ ਪਵੇਗਾ</span>. Practice and challenge prompts: verb added."] },
+  "4.9": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): the bishop's job is guarding the knight.",
+    "Punjabi, challenge: <span lang=\"pa\" class=\"pa\">ਰਾਖਾ ਨਹੀਂ, ਮੋਹਰਾ ਨਹੀਂ</span> could be heard as a plain statement that neither exists. Now <span lang=\"pa\" class=\"pa\">ਰਾਖਾ ਗਿਆ, ਮੋਹਰਾ ਗਿਆ।</span>"] },
+  "4.10": { "changed": [
+    "Slide 2 now shows a position (2026-10-08): a knight in the corner has 2 squares; in the middle, 8.",
+    "Punjabi, slide 2: <span lang=\"pa\" class=\"pa\">ਆਪਣਿਆਂ</span> alone can mean “your own people”. Now <span lang=\"pa\" class=\"pa\">ਆਪਣੇ ਘੋੜੇ ਅਤੇ ਊਠ</span>."] },
+  "4.11": { "changed": [
+    "Slides 2 and 3 now show positions (2026-10-08): three attackers against one defender; capture with the pawn first.",
+    "Punjabi goal: <span lang=\"pa\" class=\"pa\">ਜਿਤਾਉਂਦਾ / ਹਰਾਉਂਦਾ</span> meant winning or losing the <i>game</i>. Now <span lang=\"pa\" class=\"pa\">ਕਦੋਂ ਫ਼ਾਇਦਾ ਹੁੰਦਾ ਹੈ, ਕਦੋਂ ਵਟਾਂਦਰਾ, ਅਤੇ ਕਦੋਂ ਘਾਟਾ</span>.",
+    "English and Punjabi, the Try's answer: “White is a pawn and a knight up for a pawn” is now <i>White gives one pawn and takes a pawn and a knight, so White wins a knight.</i>",
+    "Punjabi, practice: clearer subjects and word order, and <span lang=\"pa\" class=\"pa\">ਕੀ ਮਾਰਨਾ ਚਾਹੀਦਾ ਹੈ?</span> for “Capture?” (a bare <span lang=\"pa\" class=\"pa\">ਮਾਰੋ?</span> read as an order)."] }
+}
