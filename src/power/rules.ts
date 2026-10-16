@@ -1,0 +1,79 @@
+// Magical Chess · ਜਾਦੂਈ ਸ਼ਤਰੰਜ (DECISIONS #98–#101; spec: 02_Design/POWER-CHESS-SPEC.md).
+// Gold gems appear on the board. A gem works like a promotion: when a piece (never a king) lands on one, its player
+// decides at once whether that piece becomes the gem's piece for good, or stays as it is; the gem is used up either
+// way, and nothing is carried for later. Changing is part of the move, so it can give check and even checkmate.
+// Between moves the position is ordinary chess: chess.js judges every move, check and mate stay real.
+// Everything here is pure and seeded, so the bot, a friend and (later) the online server see the same gems.
+import { Chess, type Move, type Square } from "chess.js";
+
+export type OrbPiece = "n" | "b" | "r" | "q";
+export interface Orb { sq: Square; piece: OrbPiece }
+export interface PowerState { fen: string; orbs: Orb[]; seed: number; ply: number }
+
+export const ORB_CHANCE = 1 / 6, MAX_ORBS = 3;
+const WEIGHTS: [OrbPiece, number][] = [["n", 35], ["b", 35], ["r", 22], ["q", 8]];   // queen gems are rare
+
+/** A small seeded random (mulberry32): the same seed and ply always give the same numbers. */
+export function rng(seed: number, ply: number) {
+  let a = (seed ^ Math.imul(ply + 1, 0x9e3779b1)) >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let x = Math.imul(a ^ (a >>> 15), 1 | a);
+    x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
+    return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+export const newPower = (seed: number, fen = new Chess().fen()): PowerState => ({ fen, orbs: [], seed, ply: 0 });
+
+/** Squares a gem may appear on: empty, ranks 3 to 6, not already a gem, and not one the side to move could step
+ *  onto straight away (so a gem is never a free gift to whoever moves next). */
+export function spawnSquares(st: PowerState): Square[] {
+  const g = new Chess(st.fen), reach = new Set(g.moves({ verbose: true }).map(m => m.to));
+  const out: Square[] = [];
+  for (const f of "abcdefgh") for (const r of [3, 4, 5, 6]) {
+    const sq = `${f}${r}` as Square;
+    if (!g.get(sq) && !reach.has(sq) && !st.orbs.some(o => o.sq === sq)) out.push(sq);
+  }
+  return out;
+}
+
+/** After each move: now and then (about 1 in 6), a new gem, while there are fewer than 3. */
+export function maybeSpawn(st: PowerState): PowerState {
+  const r = rng(st.seed, st.ply);
+  if (st.orbs.length >= MAX_ORBS || r() >= ORB_CHANCE) return st;
+  const squares = spawnSquares(st);
+  if (!squares.length) return st;
+  const sq = squares[Math.floor(r() * squares.length)];
+  let pick = r() * 100, piece: OrbPiece = "n";
+  for (const [p, w] of WEIGHTS) { if (pick < w) { piece = p; break; } pick -= w; }
+  return { ...st, orbs: [...st.orbs, { sq, piece }] };
+}
+
+/** The gem a move would land on, if it is one its piece may take: any piece but a king. */
+export function gemFor(st: PowerState, m: Pick<Move, "to" | "piece">): Orb | undefined {
+  return m.piece === "k" ? undefined : st.orbs.find(o => o.sq === m.to);
+}
+
+/** The position with the piece on `sq` changed into `piece` (same side). The turn does not change: the change is
+ *  part of the move that just landed there. An en-passant square is cleared, since the piece may be a pawn no more. */
+export function changeFen(fen: string, sq: Square, piece: OrbPiece): string {
+  const [board, turn, castling, , , full] = fen.split(" ");
+  const rows = board.split("/").map(row => row.replace(/\d/g, d => "1".repeat(+d)).split(""));
+  const f = sq.charCodeAt(0) - 97, r = 8 - +sq[1], was = rows[r][f];
+  rows[r][f] = was === was.toUpperCase() ? piece.toUpperCase() : piece;
+  const packed = rows.map(row => row.join("").replace(/1+/g, ones => String(ones.length))).join("/");
+  return `${packed} ${turn} ${castling} - 0 ${full}`;
+}
+
+/** A normal move (already checked legal by chess.js) and, if it landed on a gem, the player's choice. The gem is
+ *  used up either way; a king walks over a gem and leaves it. */
+export function afterMove(st: PowerState, m: Move, fenAfter: string, change = false): PowerState {
+  const gem = gemFor(st, m);
+  let fen = fenAfter, orbs = st.orbs;
+  if (gem) {
+    orbs = orbs.filter(o => o !== gem);
+    if (change) { fen = changeFen(fenAfter, m.to, gem.piece); new Chess(fen); }   // throws if not a legal position
+  }
+  return maybeSpawn({ ...st, fen, orbs, ply: st.ply + 1 });
+}

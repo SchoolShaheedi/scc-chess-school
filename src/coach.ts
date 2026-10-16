@@ -1,5 +1,6 @@
 // Coach art: the user's illustrations (public/art/coach/, cut by tools/slice-art.py).
-// Young = Chidi the sparrow; Junior = the teen coach, Singh or Kaur by the learner's choice;
+// Young = Ghuggi the dove (DECISIONS #96; the in-code sparrow stands in until the art arrives); Junior = Hans the swan
+// or Koel the cuckoo by the learner's choice (stored as "singh"/"kaur");
 // Adult = no coach. The old in-code drawings below stay only as an offline fallback.
 import { type Look, store } from "./store";
 
@@ -41,12 +42,12 @@ function teen(mood: Mood): string {
   </svg>`;
 }
 
-/** Flip to true once the new Chidi sheet (no head covering) is sliced into public/art/coach/young-*.webp. */
-const CHIDI_ART_READY = false;
+/** The Young coach's art: Ghuggi the dove (DECISIONS #96), sliced into public/art/coach/young-*.webp on
+ *  2026-10-15. Kept as a switch: setting it false shows the in-code bird instead. */
+const CHIDI_ART_READY = true;
 
 export function coachHTML(look: Look, mood: Mood = "neutral"): string {
   if (look === "adult") return "";
-  // the supplied Chidi art wears a patka, which #49 rules out: use the in-code bird until new art arrives
   if (look === "young" && !CHIDI_ART_READY) return chidi(mood === "cheer" ? "happy" : mood);
   const who = look === "young" ? "young" : store.get().coach;
   const fallback = look === "young" ? chidi(mood === "cheer" ? "happy" : mood) : teen(mood === "cheer" ? "happy" : mood);

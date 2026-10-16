@@ -42,7 +42,7 @@ export function grade(moves: { san: string; uci: string }[], evals: { score: Sco
 /** One side's accuracy for the game: like Lichess, half the plain average and half the harmonic mean, so a few
  *  bad moves count for more (a plain average flatters the losing side, whose already-lost position can't drop
  *  much further). Lichess also weights moves by how sharp the position was; that refinement is left out. */
-export function accuracy(g: Graded[], side: "w" | "b"): number {
+export function accuracy(g: Pick<Graded, "by" | "drop">[], side: "w" | "b"): number {
   const a = g.filter(m => m.by === side).map(m => Math.max(1, moveAccuracy(m.drop)));
   if (!a.length) return 100;
   const mean = a.reduce((s, x) => s + x, 0) / a.length, harmonic = a.length / a.reduce((s, x) => s + 1 / x, 0);

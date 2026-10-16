@@ -7,10 +7,20 @@ import { account } from "../sync";
 import { classesBlock } from "../teach/screens";
 import { disableOnlineFor } from "../online/api";
 import { onlineBlock } from "../online/screens";
-import type { Look } from "../store";
+import { type Look, store } from "../store";
+import { animalHeroArt, heroArt } from "../heroes/heroes";
 
 export const avatarHTML = (p: Pick<Profile, "avatar" | "colour">, cls = "") =>
   `<span class="kidav ${cls}" style="--kc:${p.colour}">${icon(p.avatar as Avatar)}</span>`;
+
+/** The learner's picture on their OWN screens (DECISIONS #109): a hero they have won, if they chose one, else their
+ *  animal. Anything other people see (online, class boards) stays the animal and colour (#38). */
+export function myAvatarHTML(cls = ""): string {
+  const h = store.get().heroAvatar;
+  if (!h) return avatarHTML(family.current(), cls);
+  const src = h.startsWith("bot:") ? animalHeroArt(h.slice(4)) : heroArt(h);
+  return `<span class="kidav heroav ${cls}"><img src="${src}" alt=""></span>`;
+}
 
 export function familyScreen(root: HTMLElement, go: (h: string) => void) {
   const cur = family.current(), kids = family.list();

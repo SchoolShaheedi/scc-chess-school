@@ -357,7 +357,7 @@ export const LEVEL1: Lesson[] = [
         board: { fen: "k7/pp6/8/8/8/8/6P1/K7 w - - 0 1", arrows: [["g2","g8"]], highlights: ["g2"] } },
     ],
     try: { kind: "botGame", fen: "7k/ppp5/8/8/8/8/PPP5/7K w - - 0 1", bot: "nanhi-chidi", goal: "promote",
-      prompt: { en: "Three pawns each against Nanhi Chidi. Make a queen first!", pa: "ਨੰਨ੍ਹੀ ਚਿੜੀ ਵਿਰੁੱਧ ਤਿੰਨ-ਤਿੰਨ ਪਿਆਦੇ। ਪਹਿਲਾਂ ਰਾਣੀ ਬਣਾਓ!" } },
+      prompt: { en: "Three pawns each against Titli. Make a queen first!", pa: "ਤਿਤਲੀ ਵਿਰੁੱਧ ਤਿੰਨ-ਤਿੰਨ ਪਿਆਦੇ। ਪਹਿਲਾਂ ਰਾਣੀ ਬਣਾਓ!" } },
     practise: [
       { kind: "botGame", fen: "7k/pppp4/8/8/8/8/PPPP4/7K w - - 0 1", bot: "nanhi-chidi", goal: "promote",
         prompt: { en: "Four pawns each. Watch out for captures!", pa: "ਚਾਰ-ਚਾਰ ਪਿਆਦੇ। ਮਾਰ ਤੋਂ ਸਾਵਧਾਨ!" } },
@@ -382,6 +382,6 @@ export const LEVEL1: Lesson[] = [
         prompt: { en: "Your queen against four pawns.", pa: "ਤੁਹਾਡੀ ਰਾਣੀ ਚਾਰ ਪਿਆਦਿਆਂ ਵਿਰੁੱਧ।" } },
     ],
     challenge: { kind: "botGame", fen: "7k/pppppp2/8/8/8/8/8/R2Q3K w - - 0 1", bot: "nanhi-chidi", goal: "clear",
-      prompt: { en: "Rook and queen against six pawns. Leave Nanhi Chidi only her king!", pa: "ਹਾਥੀ ਅਤੇ ਰਾਣੀ ਛੇ ਪਿਆਦਿਆਂ ਵਿਰੁੱਧ। ਨੰਨ੍ਹੀ ਚਿੜੀ ਕੋਲ ਸਿਰਫ਼ ਉਸ ਦਾ ਬਾਦਸ਼ਾਹ ਛੱਡੋ!" } },
+      prompt: { en: "Rook and queen against six pawns. Leave Titli only her king!", pa: "ਹਾਥੀ ਅਤੇ ਰਾਣੀ ਛੇ ਪਿਆਦਿਆਂ ਵਿਰੁੱਧ। ਤਿਤਲੀ ਕੋਲ ਸਿਰਫ਼ ਉਸ ਦਾ ਬਾਦਸ਼ਾਹ ਛੱਡੋ!" } },
   },
 ];

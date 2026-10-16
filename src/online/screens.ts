@@ -240,6 +240,7 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
       <div class="extra" data-extra></div>
       <div class="actions" data-acts><button class="btn ghost" data-draw>${t("drawAgree")}</button><button class="btn ghost" data-resign>${t("resign")}</button></div></div>`;
     board = new Board(root.querySelector("[data-board]")!, { flip: mine === "b" });
+    root.querySelector(".screen")?.classList.add("gamescreen");   // DECISIONS #110 (look C): games are black and gold
     const extra = root.querySelector<HTMLElement>("[data-extra]")!, say = (h: string) => { root.querySelector("[data-state]")!.innerHTML = h; };
     const ctx = { board, extra, say: () => {}, status: () => {}, done: () => {} };
     const chess = () => { const c = new Chess(); for (const m of g.moves) c.move({ from: m.slice(0, 2), to: m.slice(2, 4), promotion: m[4] }); return c; };

@@ -6,11 +6,12 @@ import { placementFromFen } from "../chess/types";
 import { confetti } from "../celebrate";
 import { coachHTML, type Mood } from "../coach";
 import { expand, LEVELS } from "../content/levels";
+import { MINI_RACE, miniBot } from "../bots/bots";
 import { num, t, tx } from "../i18n";
 import { icon } from "../icons";
 import { learnId, promptId, speak, stopVoice, uiId, voiceOn } from "../voice";
 import { idOf, puzzleById } from "../puzzles/index";
-import { store } from "../store";
+import { devHost, store } from "../store";
 import { account, syncConfigured } from "../sync";
 import { sound } from "../sound";
 import { runExercise } from "./exercises";
@@ -70,7 +71,7 @@ export function playLesson(root: HTMLElement, lesson: Lesson, go: (hash: string)
     <div class="segbar" role="progressbar" aria-label="${t("lesson")}" aria-valuemin="0" aria-valuemax="4" aria-valuenow="${stepIndex()}">
       ${STEPS.map((_, i) => `<i class="${i < stepIndex() ? "done" : i === stepIndex() ? "on" : ""}"></i>`).join("")}</div>
     <div class="lessonhead">
-      ${lesson.status === "draft" ? `<span class="draft">${t("draft")}</span>` : ""}<p>${tx(lesson.goal)}</p>
+      ${lesson.status === "draft" && devHost() ? `<span class="draft">${t("draft")}</span>` : ""}<p>${tx(lesson.goal)}</p>
     </div>`;
 
   let demoTimer = 0;
@@ -116,6 +117,8 @@ export function playLesson(root: HTMLElement, lesson: Lesson, go: (hash: string)
       const { stars, gained } = phase, next = nextLessonId(lesson.id);
       sound.complete();
       const st = store.get();
+      // DECISIONS #94: every third lesson finished, a quick game (a short capture race) before going on
+      const mini = Object.keys(st.lessons).length % 3 === 0 ? miniBot(st.rating.r, st.stats.botWins) : null;
       // DECISIONS #67: dark walnut, a gold trophy, the XP counting up
       root.innerHTML = `<div class="screen donescreen"><div class="complete">
         <div class="trophy">${icon("trophy")}</div>
@@ -127,6 +130,8 @@ export function playLesson(root: HTMLElement, lesson: Lesson, go: (hash: string)
         ${look !== "adult" ? `<div class="av doneav">${coachHTML(look, "cheer")}</div>` : ""}
       </div>
       <div class="actions" style="flex-direction:column">
+        ${mini ? `<button class="minigame" data-mini>${icon("swords")}<span class="grow"><b>${t("miniTitle")}</b>
+          <small>${t("raceShort").replace("{n}", num(MINI_RACE)).replace("{bot}", tx(mini.name))}</small></span>${icon("arrowRight")}</button>` : ""}
         ${next ? `<button class="btn wide gold" data-nextlesson>${t("nextLesson")} ${icon("arrowRight")}</button>` : ""}
         <button class="btn ghost wide" data-home>${t("backHome")}</button>
         ${syncConfigured && !account.signedIn() ? `<a class="nudge" href="#/settings">${icon("lock")} ${t("saveNudge")}</a>` : ""}
@@ -135,6 +140,7 @@ export function playLesson(root: HTMLElement, lesson: Lesson, go: (hash: string)
       if (stars === 3) confetti(root.querySelector(".screen")!);
       root.querySelector<HTMLButtonElement>("[data-nextlesson]")?.addEventListener("click", () => go(`#/lesson/${next}`));
       root.querySelector<HTMLButtonElement>("[data-home]")!.onclick = () => go("#/");
+      root.querySelector<HTMLButtonElement>("[data-mini]")?.addEventListener("click", () => go(`#/play/${mini!.id}/race`));
     } else {
       const ex = phase.k === "try" ? tryEx : phase.k === "practise" ? practise[phase.i] : challenge[ci];
       const list = phase.k === "practise" ? practise : phase.k === "challenge" ? challenge : null;

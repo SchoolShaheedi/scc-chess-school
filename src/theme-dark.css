@@ -1,0 +1,45 @@
+/* The dark theme (DECISIONS #111): the whole app in the SWC logo's black and gold, the DEFAULT for everyone.
+   Settings → Colours can switch back to the light look (<html data-theme="light">). Started as a two-shade draft
+   (black / chess.com charcoal) shown on the real screens; the user chose black. */
+
+/* SWC black, measured from the logo */
+html[data-theme="dark"] { --bg: #141414; --surface: #1F1D1A; --surface-2: #2B2824; --ink: #F2EBDD; --muted: #A79E8E; --line: #34302A;
+  --tint: #2A2416; --tile: #2B2824; --tile-edge: #0E0D0C; color-scheme: dark; }
+
+html[data-theme="dark"] body, html[data-theme="dark"] { background: var(--bg); }
+html[data-theme="dark"] .gamescreen, html[data-theme="dark"]:has(.gamescreen), html[data-theme="dark"]:has(.gamescreen) body { background: var(--bg); }
+
+/* surfaces that were hard-coded light */
+html[data-theme="dark"] :is(.lvcard, .lslist, .botcard, .rushcard, .rc, .revnote, .slotcard, .goalcard, .numrow div, .ratingcard,
+  .botpick button, .kmoment, .rd, .revstats > div, .evalgraph, .nextcard, .lvprog, .group, .choice, .slidetext, .sets button,
+  .promo button, .emailform input, .mtile.goal, .htile img, .powerintro, .oppcard, .waychip, .unlockban, .nexttrophy, .rtile, .trp .c, .meav) {
+  background-color: var(--surface); border-color: var(--line); color: var(--ink); }
+html[data-theme="dark"] :is(.lvcard.on, .li.current, .botcard.on, .bigchoice[aria-pressed="true"], .kid.on .kidbtn) { background: var(--tint); }
+html[data-theme="dark"] :is(.parentcard, .raceline, .ratingcard > span, .movelist .mv.on) { background: var(--tint); color: var(--ink); border-color: var(--line); }
+html[data-theme="dark"] .bubble { background: var(--surface); color: var(--ink); }
+html[data-theme="dark"] .seg { background: var(--surface-2); } html[data-theme="dark"] .seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); }
+html[data-theme="dark"] .wlang button[aria-pressed="true"] { background: var(--surface); }
+html[data-theme="dark"] .lessonbar small, html[data-theme="dark"] .note, html[data-theme="dark"] .muted { color: var(--muted); }
+
+/* look C's light pieces, made dark: cream tiles and secondary buttons become raised dark tiles */
+html[data-theme="dark"] :is(.mtile, .mtile.t1, .mtile.t2, .mtile.t4) { background: var(--tile); color: var(--ink); box-shadow: 0 4px 0 var(--tile-edge); }
+html[data-theme="dark"] .mtile small { color: var(--muted); }
+html[data-theme="dark"] .mtile.goal { box-shadow: 0 4px 0 var(--tile-edge); }
+html[data-theme="dark"] .nextcard { box-shadow: 0 4px 0 var(--tile-edge); }
+html[data-theme="dark"] .btn.ghost, html[data-theme="dark"] [data-look="adult"] .btn.ghost { background: var(--tile); color: var(--ink); box-shadow: 0 4px 0 var(--tile-edge); }
+html[data-theme="dark"] .btn.ghost:active { box-shadow: 0 0 0 var(--tile-edge); }
+html[data-theme="dark"] .iconbtn { background: var(--surface-2); color: var(--ink); }
+html[data-theme="dark"] .tabbar { background: #0E0D0C; border-top-color: var(--line); }
+
+/* the chess.com charcoal shade keeps chess.com's green board as well */
+
+/* found on the real screens (2026-10-16): light leftovers and gold text too dim on dark */
+html[data-theme="dark"] { --gold-text: #F0C048; --gold-line: #5A4A22; }
+html[data-theme="dark"] .linkbtn { color: #F0C048; }
+html[data-theme="dark"] :is(.botcard small.rating, .botintro h2 small, .lessonbar h1 small, .rushcard .rushicon, .rushcard .best b, .slotcard .lineprog,
+  .trp .c, .parentcard .ic, .raceline .ic, .botbar .race, .ratingcard > span, .botpick small, .pbar b small, .gstate .race,
+  .oppcard h2 small, .revstats .gr b, .herointro .virtue, .botface small) { color: #F0C048; }
+html[data-theme="dark"] .parentcard small { color: var(--muted); }
+html[data-theme="dark"] .trp .c { background: var(--surface-2); }
+html[data-theme="dark"] .cal i { background: var(--surface-2); } html[data-theme="dark"] .cal i.y { background: #E9B54C; }
+html[data-theme="dark"] :is(.xpbar, .ubar, .lvprog .ubar, .testbar) { background: var(--surface-2); }

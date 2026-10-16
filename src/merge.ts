@@ -5,10 +5,12 @@ import { mergeCard } from "./openings/srs";
 
 /** What is saved to an account: progress only. Look, language, pieces and coach stay per device. */
 export type Saved = Pick<State, "xp" | "streak" | "lessons"> & { tests?: State["tests"]; placed?: number; daily?: State["daily"]; rushBest?: number; rep?: State["rep"]; active?: string[]; goal?: State["goal"]; stats?: State["stats"]; rating?: State["rating"]; missed?: State["missed"];
-  prating?: State["prating"]; hist?: State["hist"]; themeStats?: State["themeStats"]; results?: State["results"]; puzzlesByDay?: State["puzzlesByDay"] };
+  prating?: State["prating"]; hist?: State["hist"]; themeStats?: State["themeStats"]; results?: State["results"]; puzzlesByDay?: State["puzzlesByDay"];
+  unlocked?: string[]; freezes?: number; heroes?: string[]; boss?: Record<string, number>; heroAvatar?: string };
 
 export const savable = (s: Readonly<State>): Saved => ({ xp: s.xp, streak: s.streak, lessons: s.lessons, tests: s.tests, placed: s.placed, daily: s.daily, rushBest: s.rushBest, rep: s.rep, active: s.active, goal: s.goal, stats: s.stats, rating: s.rating, missed: s.missed,
-  prating: s.prating, hist: s.hist, themeStats: s.themeStats, results: s.results, puzzlesByDay: s.puzzlesByDay });
+  prating: s.prating, hist: s.hist, themeStats: s.themeStats, results: s.results, puzzlesByDay: s.puzzlesByDay,
+  unlocked: s.unlocked, freezes: s.freezes, heroes: s.heroes, boss: s.boss, heroAvatar: s.heroAvatar });
 
 const NO_GOAL = { date: "", n: 0 }, NO_STATS: State["stats"] = { botWins: {}, games: 0, dailies: 0, reviews: 0 };
 function mergeGoal(a: State["goal"] = NO_GOAL, b: State["goal"] = NO_GOAL): State["goal"] {
@@ -53,6 +55,11 @@ export function merge(a: Saved, b: Saved): Saved {
   const rep = { white: ra.white ?? rb.white, e4: ra.e4 ?? rb.e4, d4: ra.d4 ?? rb.d4, cards };
   return { xp: Math.max(a.xp, b.xp), streak, lessons, tests, placed: Math.max(a.placed ?? 0, b.placed ?? 0), daily, rushBest: Math.max(a.rushBest ?? 0, b.rushBest ?? 0), rep,
     active: [...new Set([...(a.active ?? []), ...(b.active ?? [])])].sort().slice(-120),
+    // DECISIONS #94: a reward earned on either device stays earned; the larger freeze bank
+    unlocked: [...new Set([...(a.unlocked ?? []), ...(b.unlocked ?? [])])], freezes: Math.max(a.freezes ?? 0, b.freezes ?? 0),
+    heroes: [...new Set([...(a.heroes ?? []), ...(b.heroes ?? [])])],
+    boss: Object.fromEntries([...new Set([...Object.keys(a.boss ?? {}), ...Object.keys(b.boss ?? {})])].map(k => [k, Math.max(a.boss?.[k] ?? 0, b.boss?.[k] ?? 0)])),
+    heroAvatar: a.heroAvatar ?? b.heroAvatar,
     goal: mergeGoal(a.goal, b.goal), stats: mergeStats(a.stats, b.stats),
     // the rating that has seen more results is the better estimate; banked puzzles: the card further along wins
     rating: (a.rating?.n ?? 0) >= (b.rating?.n ?? 0) ? a.rating ?? { r: 400, n: 0 } : b.rating!,

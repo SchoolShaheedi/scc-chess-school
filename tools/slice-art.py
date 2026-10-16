@@ -111,24 +111,71 @@ def pieces(sheet, set_id, size=256):
     print(f"pieces {set_id}: 12")
 
 
+def strip_slivers(img):
+    """Remove small pieces that touch the left or right edge of a cut: the tip of a NEIGHBOUR's wing caught in
+    the crop when two poses nearly touch (Koel's sheet, 2026-10-15). The figure and its own sparkles stay."""
+    from scipy import ndimage
+    arr = np.array(img); a = arr[:, :, 3] > 24
+    lab, n = ndimage.label(a)
+    if n < 2: return img
+    sizes = ndimage.sum(a, lab, range(1, n + 1)); big = sizes.max()
+    for k in range(1, n + 1):
+        ys, xs = np.where(lab == k)
+        if sizes[k - 1] < 0.15 * big and (xs.min() == 0 or xs.max() == a.shape[1] - 1):
+            arr[lab == k, 3] = 0
+    out = Image.fromarray(arr)
+    return out.crop(out.getbbox())
+
+
+def single(name, path, size):
+    """A whole picture (an action pose), trimmed to its content and fitted into a square, centred."""
+    im = Image.open(SRC / name).convert("RGBA")
+    save(im.crop(im.getbbox()), path, size, bottom=False)
+
+
 def sheet(name, rows, cols, names, folder, size, bottom=False):
     cs = cells(SRC / name, rows, cols)
     for c, n in zip(cs, names):
-        save(c, OUT / folder / f"{n}.webp", size, bottom=bottom)
+        save(strip_slivers(c), OUT / folder / f"{n}.webp", size, bottom=bottom)
     print(f"{folder}: {len(cs)} from {name}")
 
 
+# DECISIONS #96: the bots are cartoon animals now. The app's ids stay the OLD names (saved wins depend on them), so
+# each id is filled from its new animal's sheet. The old people sheets are in sheets/_Archive/2026-10-15/.
+BOT_SHEETS = {
+    "nanhi-chidi": "bot-titli.png", "kesri": "bot-chakor.png", "ghorsavaar": "bot-cheeta.png",
+    "teer": "bot-baaz-hawk.png", "sher": "bot-bhaalu.png", "baaz": "bot-sher-lion.png",
+}
+# the 2026-10-15 v2 piece sheets replace A, B and C (the old sheets are in sheets/_Archive/2026-10-15/)
+PIECE_SHEETS = {"A": "pieces-A-sheet-v2.png", "B": "pieces-B-sheet-v2.png", "B2": "chess.png", "C": "pieces-C-sheet-v2.png"}
+
 if __name__ == "__main__":
-    pieces("pieces-A-sheet.png", "A")
-    pieces("pieces-B-sheet.png", "B")
-    pieces("chess.png", "B2")
-    pieces("pieces-C-sheet.png", "C")
+    import sys
+    parts = set(sys.argv[1:]) or {"pieces", "coach", "bots", "heroes", "badges", "icons"}   # e.g. `slice-art.py bots pieces`
+    if "pieces" in parts:
+        for set_id, name in PIECE_SHEETS.items(): pieces(name, set_id)
     moods = ["neutral", "happy", "think", "oops", "cheer"]
-    sheet("coach-young-sheet.png", 1, 5, [f"young-{m}" for m in moods], "coach", 320, bottom=True)
-    sheet("coach-junior-sheet.png", 2, 5, [f"singh-{m}" for m in moods] + [f"kaur-{m}" for m in moods], "coach", 320, bottom=True)
-    for bot in ["nanhi-chidi", "teer", "kesri", "ghorsavaar", "sher", "baaz"]:
-        sheet(f"bot-{bot}.png", 1, 3, [f"{bot}-neutral", f"{bot}-win", f"{bot}-lose"], "bots", 256)
-    sheet("badges-sheet.png", 2, 5, [f"level-{n}" for n in range(1, 11)], "badges", 192)
+    if "coach" in parts:
+        # DECISIONS #96: the coaches are birds now. The file names keep the old keys the app stores:
+        # young = Ghuggi the dove, singh = Hans the swan, kaur = Koel the cuckoo
+        sheet("coach-ghuggi-sheet.png", 1, 5, [f"young-{m}" for m in moods], "coach", 320, bottom=True)
+        sheet("coach-hans-sheet.png", 1, 5, [f"singh-{m}" for m in moods], "coach", 320, bottom=True)
+        sheet("coach-koel-sheet.png", 1, 5, [f"kaur-{m}" for m in moods], "coach", 320, bottom=True)
+    if "bots" in parts:
+        for bot, name in BOT_SHEETS.items():
+            sheet(name, 1, 3, [f"{bot}-neutral", f"{bot}-win", f"{bot}-lose"], "bots", 256)
+    if "heroes" in parts:
+        # DECISIONS #109: the ten virtue heroes (comic style, the user's pick) and the six animal bots' hero versions
+        for h in ["himmat", "seva", "ekta", "dhyaan", "sabar", "utsaah", "imaan", "siaanap", "hausla", "nimrata"]:
+            sheet(f"heroes/hero-{h}-portrait.png", 1, 3, [f"{h}-neutral", f"{h}-win", f"{h}-lose"], "heroes", 256)
+            single(f"heroes/hero-{h}-action.png", OUT / "heroes" / f"{h}-action.webp", 560)
+        for animal, bot in [("titli", "nanhi-chidi"), ("chakor", "kesri"), ("cheeta", "ghorsavaar"), ("baaz", "teer"), ("bhaalu", "sher"), ("sher", "baaz")]:
+            sheet(f"heroes/herobot-{animal}-sheet.png", 1, 3, [f"{bot}-neutral", f"{bot}-win", f"{bot}-lose"], "herobots", 256)
+            single(f"heroes/herobot-{animal}-action.png", OUT / "herobots" / f"{bot}-action.webp", 560)
+    if "badges" not in parts and "icons" not in parts: raise SystemExit(0)
+    # 2026-10-15: phulkari borders (the old sheet had maple leaves); the two king badges had a cross on top,
+    # painted out and given a plain round top, as on the king pieces (DECISIONS #107)
+    sheet("badges-sheet-v2.png", 2, 5, [f"level-{n}" for n in range(1, 11)], "badges", 192)
     Image.open(SRC / "app-icon.png").convert("RGB").resize((512, 512), Image.LANCZOS).save(OUT / "app-icon-512.png")
     Image.open(SRC / "app-icon.png").convert("RGB").resize((192, 192), Image.LANCZOS).save(OUT / "app-icon-192.png")
     Image.open(SRC / "tex-phulkari.png").convert("RGB").save(OUT / "tex-phulkari.webp", "WEBP", quality=80)

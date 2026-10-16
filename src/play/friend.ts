@@ -58,6 +58,7 @@ function friendGame(root: HTMLElement, go: Go, startClock: Clock | null, turnBoa
       <button class="btn ghost" data-draw>${t("drawAgree")}</button>
       <button class="btn ghost" data-resign>${t("resign")}</button></div></div>`;
   const board = new Board(root.querySelector("[data-board]")!, {});
+  root.querySelector(".screen")?.classList.add("gamescreen");   // DECISIONS #110 (look C): games are black and gold
   const extra = root.querySelector<HTMLElement>("[data-extra]")!;
   const ctx = { board, extra, say: () => {}, status: () => {}, done: () => {} };
   const bottom = () => (turnBoard ? g.turn() : "w");

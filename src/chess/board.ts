@@ -12,6 +12,10 @@ export interface Marks {
   arrows?: [Square, Square][]; lastMove?: [Square, Square]; goal?: Square; flash?: { sq: Square; ok: boolean };
   check?: Square;             // a king in check glows red
   premove?: [Square, Square]; // a move queued while the other side thinks (DECISIONS #84)
+  /** Red arrows: what the opponent threatens (Play vs Coach, DECISIONS #108). */
+  threats?: [Square, Square][];
+  /** Extra HTML drawn inside a square, under the piece (Power Chess orbs and badges, DECISIONS #99). */
+  decor?: Partial<Record<Square, string>>;
 }
 
 export interface Interaction {
@@ -23,6 +27,8 @@ export interface Interaction {
   onMove?(from: Square, to: Square): void;
   /** A tap that is not part of a move (coordinate and placement drills). */
   onTap?(s: Square): void;
+  /** The picked-up piece changed (null = let go). */
+  onSelect?(s: Square | null): void;
 }
 
 export class Board {
@@ -42,6 +48,7 @@ export class Board {
   /** The learner's own drawings (right-click, as on chess.com): arrows and circles, cleared by the next left click. */
   private drawn: { arrows: [Square, Square][]; circles: Square[] } = { arrows: [], circles: [] };
   private rightFrom: Square | null = null;
+  private told: Square | null = null;
 
   constructor(host: HTMLElement, opts: { flip?: boolean; coords?: boolean } = {}) {
     this.flip = !!opts.flip;
@@ -125,9 +132,10 @@ export class Board {
         ? (s[1] === lastRow ? `<span class="co f">${s[0]}</span>` : "") + (s[0] === firstFile ? `<span class="co r">${s[1]}</span>` : "")
         : "";
       const label = `${s}${p ? ", " + pieceName(p) : ""}${s === this.selected ? ", " + t("srPicked") : ""}${dots.has(s) ? ", " + t("srCanGo") : ""}`;
-      return `<div class="${cls}" data-sq="${s}" role="button" tabindex="${s === this.cursor ? 0 : -1}" aria-label="${label}">${star}${name}${p ? pieceHTML(p) : ""}${co}</div>`;
+      return `<div class="${cls}" data-sq="${s}" role="button" tabindex="${s === this.cursor ? 0 : -1}" aria-label="${label}">${star}${name}${m.decor?.[s] ?? ""}${p ? pieceHTML(p) : ""}${co}</div>`;
     }).join("");
     this.drawArrows();
+    if (this.selected !== this.told) { this.told = this.selected; this.io.onSelect?.(this.selected); }
   }
 
   private xy(s: Square): [number, number] {
@@ -142,7 +150,8 @@ export class Board {
       return `<line x1="${x1}" y1="${y1}" x2="${x1 + (x2 - x1) * k}" y2="${y1 + (y2 - y1) * k}" stroke="${colour}" stroke-width="0.17" stroke-linecap="round" marker-end="url(#${head})" opacity=".85"/>`;
     };
     const marker = (id: string, colour: string) => `<marker id="${id}" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${colour}"/></marker>`;
-    this.overlay.innerHTML = `<defs>${marker("ah", "var(--arrow)")}${marker("uh", "var(--user-arrow)")}</defs>`
+    this.overlay.innerHTML = `<defs>${marker("ah", "var(--arrow)")}${marker("uh", "var(--user-arrow)")}${marker("th", "var(--threat)")}</defs>`
+      + (this.marks.threats ?? []).map(([a, b]) => line(a, b, "var(--threat)", "th")).join("")
       + (this.marks.arrows ?? []).map(([a, b]) => line(a, b, "var(--arrow)", "ah")).join("")
       + this.drawn.arrows.map(([a, b]) => line(a, b, "var(--user-arrow)", "uh")).join("");
   }
@@ -165,7 +174,7 @@ export class Board {
     pc.style.transition = "none";
     pc.style.transform = `translate(${a.left - b.left}px, ${a.top - b.top}px)`;
     requestAnimationFrame(() => requestAnimationFrame(() => {
-      pc.style.transition = "transform 220ms cubic-bezier(.2,.7,.2,1)";
+      pc.style.transition = "transform 350ms cubic-bezier(.45,0,.25,1)";   // DECISIONS #110: like chess.com (was 220ms, too quick)
       pc.style.transform = "";
     }));
   }

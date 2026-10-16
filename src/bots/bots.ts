@@ -17,25 +17,30 @@ export interface Bot {
   depth: number; spread: number; temp: number; careless: number;
   /** A playing style (chess review 2026-10-04): a bonus in centipawns for the moves this bot likes. */
   style?: "attack" | "knight";
+  /** Its picture, without the "-<mood>.webp" ending; unset = art/bots/<id>. A level's boss uses its hero's (DECISIONS #109). */
+  art?: string;
 }
 
+// DECISIONS #96: the bots are cartoon animals, renamed 2026-10-15. The ids are the OLD names and stay, so saved wins,
+// trophies and the Level 1 test keep working: nanhi-chidi = Titli, kesri = Chakor, ghorsavaar = Cheeta, teer = Baaz,
+// sher = Bhaalu, baaz = Sher. Art files are keyed by id (public/art/bots/<id>-<mood>.webp).
 export const BOTS: Bot[] = [
-  { id: "nanhi-chidi", name: { en: "Nanhi Chidi", pa: "ਨੰਨ੍ਹੀ ਚਿੜੀ" }, rating: 250, help: true,
+  { id: "nanhi-chidi", name: { en: "Titli", pa: "ਤਿਤਲੀ" }, rating: 250, help: true,
     about: { en: "Just learning. Often leaves pieces where you can take them.", pa: "ਹੁਣੇ ਸਿੱਖ ਰਹੀ ਹੈ। ਅਕਸਰ ਮੋਹਰੇ ਅਜਿਹੀ ਥਾਂ ਛੱਡਦੀ ਹੈ ਜਿੱਥੋਂ ਤੁਸੀਂ ਮਾਰ ਸਕੋ।" },
     depth: 1, spread: 8, temp: 450, careless: 0.45 },
-  { id: "kesri", name: { en: "Kesri", pa: "ਕੇਸਰੀ" }, rating: 600, help: true,
-    about: { en: "Knows the moves and loves to attack, but forgets to defend.", pa: "ਚਾਲਾਂ ਜਾਣਦੀ ਹੈ ਅਤੇ ਹਮਲਾ ਪਸੰਦ ਕਰਦੀ ਹੈ, ਪਰ ਬਚਾਅ ਭੁੱਲ ਜਾਂਦੀ ਹੈ।" },
+  { id: "kesri", name: { en: "Chakor", pa: "ਚਕੋਰ" }, rating: 600, help: true,
+    about: { en: "Knows the moves and loves to attack, but forgets to defend.", pa: "ਚਾਲਾਂ ਜਾਣਦਾ ਹੈ ਅਤੇ ਹਮਲਾ ਪਸੰਦ ਕਰਦਾ ਹੈ, ਪਰ ਬਚਾਅ ਭੁੱਲ ਜਾਂਦਾ ਹੈ।" },
     depth: 3, spread: 6, temp: 260, careless: 0.22, style: "attack" },
-  { id: "ghorsavaar", name: { en: "Ghorsavaar", pa: "ਘੋੜਸਵਾਰ" }, rating: 1000, help: true,
+  { id: "ghorsavaar", name: { en: "Cheeta", pa: "ਚੀਤਾ" }, rating: 1000, help: true,
     about: { en: "Quick with the knights. Sees one-move tricks.", pa: "ਘੋੜਿਆਂ ਨਾਲ ਫੁਰਤੀਲਾ। ਇੱਕ ਚਾਲ ਦੇ ਦਾਅ ਵੇਖ ਲੈਂਦਾ ਹੈ।" },
     depth: 5, spread: 5, temp: 150, careless: 0.1, style: "knight" },
-  { id: "teer", name: { en: "Teer", pa: "ਤੀਰ" }, rating: 1300, help: false,
+  { id: "teer", name: { en: "Baaz", pa: "ਬਾਜ਼" }, rating: 1300, help: false,
     about: { en: "Sharp and fast. Punishes loose pieces.", pa: "ਤਿੱਖਾ ਅਤੇ ਤੇਜ਼। ਖੁੱਲ੍ਹੇ ਛੱਡੇ ਮੋਹਰਿਆਂ ਦੀ ਸਜ਼ਾ ਦਿੰਦਾ ਹੈ।" },
     depth: 7, spread: 4, temp: 80, careless: 0.05 },
-  { id: "sher", name: { en: "Sher", pa: "ਸ਼ੇਰ" }, rating: 1700, help: false,
+  { id: "sher", name: { en: "Bhaalu", pa: "ਭਾਲੂ" }, rating: 1700, help: false,
     about: { en: "Strong in the middlegame. Plans ahead.", pa: "ਵਿਚਕਾਰਲੀ ਖੇਡ ਵਿੱਚ ਤਕੜਾ। ਅੱਗੇ ਦੀ ਯੋਜਨਾ ਬਣਾਉਂਦਾ ਹੈ।" },
     depth: 9, spread: 3, temp: 35, careless: 0.015 },
-  { id: "baaz", name: { en: "Baaz", pa: "ਬਾਜ਼" }, rating: 2100, help: false,
+  { id: "baaz", name: { en: "Sher", pa: "ਸ਼ੇਰ" }, rating: 2100, help: false,
     about: { en: "The final challenge. Rarely makes a mistake.", pa: "ਆਖ਼ਰੀ ਚੁਣੌਤੀ। ਬਹੁਤ ਘੱਟ ਗ਼ਲਤੀ ਕਰਦਾ ਹੈ।" },
     depth: 12, spread: 2, temp: 12, careless: 0 },
 ];
@@ -56,6 +61,8 @@ export function chooseMove(cands: Candidate[], legal: string[], bot: Pick<Bot, "
 
 const BOOK = book as Record<string, Record<string, number>>;
 export const BOOK_PLIES = 8;
+/** Is `san` a book move after this history (Game Review's "Book" label, DECISIONS #104)? */
+export const inBook = (history: string[], san: string) => history.length < BOOK_PLIES && !!BOOK[history.join(" ")]?.[san];
 
 /** A move from the opening book for this game so far (SAN history), weighted by how much theory goes through it.
  *  Sidelines under 3% of the position's lines are ignored, so no bot opens 1.a3 or 1.g4. Null once out of book. */
@@ -69,7 +76,7 @@ export function bookMove(history: string[], rand: () => number = Math.random): s
   return ok[0]?.[0] ?? null;
 }
 
-/** Style bonuses: Kesri likes checks and captures; Ghorsavaar likes knight moves. */
+/** Style bonuses: Chakor (kesri) likes checks and captures; Cheeta (ghorsavaar) likes knight moves. */
 function styleBonus(fen: string, style: Bot["style"]): (uci: string) => number {
   if (!style) return () => 0;
   return uci => {
@@ -91,3 +98,19 @@ export async function botMove(engine: Uci, fen: string, legal: string[], bot: Bo
   const cands = await engine.candidates(fen, { n: bot.spread, depth: bot.depth });
   return chooseMove(cands, legal, bot, rand, styleBonus(fen, bot.style));
 }
+
+/** "Your next opponent" (DECISIONS #94): the bot you have not beaten yet that is nearest a little above your
+ *  rating, so a strong newcomer is not sent to the beginner bot; once all are beaten, the nearest overall. */
+export function nextOpponent(rating: number, botWins: Record<string, number>): Bot {
+  const near = (list: Bot[]) => [...list].sort((a, b) => Math.abs(a.rating - (rating + 100)) - Math.abs(b.rating - (rating + 100)))[0];
+  const unbeaten = BOTS.filter(b => !(botWins[b.id] > 0));
+  return near(unbeaten.length ? unbeaten : BOTS);
+}
+
+/** The quick game offered every third lesson (DECISIONS #94): a 3-capture race against one of the three gentle
+ *  bots (take-backs allowed), the one that is your next opponent among them. */
+export const MINI_RACE = 3;
+export const miniBot = (rating: number, botWins: Record<string, number>): Bot => {
+  const gentle = BOTS.filter(b => b.help), pick = nextOpponent(rating, botWins);
+  return gentle.includes(pick) ? pick : gentle[gentle.length - 1];
+};

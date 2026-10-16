@@ -14,8 +14,19 @@ export interface State {
   look: Look;
   pieceSet: "A" | "C" | "B" | "B2" | "V" | "cburnett" | "merida" | "chessnut" | "spatial";   // DECISIONS #40, #84: A is the default
   /** The board's colours (DECISIONS #84); unset = walnut. */
-  boardTheme?: "walnut" | "forest" | "lake" | "slate" | "stone" | "contrast";
-  coach: "singh" | "kaur";                  // the Junior look's coach; Young always has Chidi
+  boardTheme?: "walnut" | "forest" | "lake" | "slate" | "stone" | "contrast" | "gold" | "river" | "night";
+  /** Rewards earned for good (DECISIONS #94, src/rewards.ts), the avatar frame chosen, and streak freezes in hand (max 2). */
+  unlocked?: string[];
+  frame?: string;
+  freezes?: number;
+  /** Superheroes (DECISIONS #109): heroes earned by beating a level's boss, boss rounds won per level (0-3), and the
+   *  picture shown for this learner on their own screens (a hero id, or "bot:<id>" for an animal hero). */
+  heroes?: string[];
+  boss?: Record<string, number>;
+  heroAvatar?: string;
+  /** The colours (DECISIONS #111): dark (SWC black and gold) by default, or the light look. Per device. */
+  themeMode?: "dark" | "light";
+  coach: "singh" | "kaur";                  // the Junior look's coach: "singh" = Hans the swan, "kaur" = Koel the cuckoo (#96); Young has Ghuggi the dove
   sound: boolean;                           // sound effects on/off (DECISIONS #43)
   /** The coach voice (DECISIONS #80); unset = on for the Young look only (see voice.ts). */
   voice?: boolean;
@@ -66,7 +77,12 @@ const fresh = (): State => ({
 function load(): State {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) return { ...fresh(), ...JSON.parse(raw) };
+    if (raw) {
+      const s: State = { ...fresh(), ...JSON.parse(raw) };
+      // DECISIONS #94: the illustrated Classic set became a reward; anyone already using it keeps it
+      if (s.pieceSet === "A" && !s.unlocked?.includes("pieces:A")) s.unlocked = [...(s.unlocked ?? []), "pieces:A"];
+      return s;
+    }
   } catch { /* private mode or blocked storage: start fresh, still works */ }
   return fresh();
 }
@@ -95,32 +111,39 @@ const today = () => new Date().toLocaleDateString("en-CA"); // YYYY-MM-DD in loc
 export const isPreview = () => preview !== null;
 /** On the developer's own computer only (localhost), a Settings switch opens every lesson, test and trainer for
  *  testing (2026-10-06). It can never be on for the live site. Previews are always unlocked. */
-export const devHost = () => ["localhost", "127.0.0.1"].includes(location.hostname);
+export const devHost = () => typeof location !== "undefined" && ["localhost", "127.0.0.1"].includes(location.hostname);
 export const UNLOCK_KEY = "scc-unlock-all";
 export const unlockAll = () => isPreview() || (devHost() && (() => { try { return localStorage.getItem(UNLOCK_KEY) === "1"; } catch { return false; } })());
 export { today };
 
 /** Anything practised today: the streak, the calendar day and the daily goal move together (DECISIONS #76). */
-function practised(): Pick<State, "streak" | "active" | "goal"> {
+function practised(): Pick<State, "streak" | "active" | "goal" | "freezes"> {
   const d = today();
   return {
-    streak: nextStreak(),
+    ...nextStreak(),
     active: state.active.at(-1) === d ? state.active : [...state.active, d].slice(-120),
     goal: { date: d, n: state.goal.date === d ? state.goal.n + 1 : 1 },
   };
 }
 
 /** Today counts as a day of practice. The streak goes up if the last practice was yesterday OR the day before:
- *  one rest day never breaks it, so a missed day isn't a punishment for a child (full check 2026-10-05). */
-function nextStreak(): State["streak"] {
-  const d = today();
-  let { days, last } = state.streak;
+ *  one rest day never breaks it, so a missed day isn't a punishment for a child (full check 2026-10-05).
+ *  Each streak freeze (DECISIONS #94) covers one more missed day; finishing the daily goal earns one (max 2). */
+export const FREEZE_MAX = 2;
+function nextStreak(): Pick<State, "streak" | "freezes"> {
+  const d = today(), goalNow = state.goal.date === d ? state.goal.n : 0;
+  let { days, last } = state.streak, freezes = state.freezes ?? 0;
   if (last !== d) {
-    const back = (n: number) => { const x = new Date(); x.setDate(x.getDate() - n); return x.toLocaleDateString("en-CA"); };
-    days = last === back(1) || last === back(2) ? days + 1 : 1;
+    const gap = last ? Math.round((Date.parse(d) - Date.parse(last)) / 86400000) : Infinity;   // 1 = yesterday
+    const spare = gap - 2;                                                                       // missed days beyond the free rest day
+    if (gap <= 2) days += 1;
+    else if (spare <= freezes) { freezes -= spare; days += 1; }
+    else days = 1;
     last = d;
   }
-  return { days, last };
+  // this practice completes today's goal: a freeze for the bank
+  if (goalNow + 1 === GOAL) freezes = Math.min(FREEZE_MAX, freezes + 1);
+  return { streak: { days, last }, freezes };
 }
 
 const hist = (): NonNullable<State["hist"]> => state.hist ?? { play: [], puz: [] };
@@ -214,9 +237,12 @@ export const store = {
     store.set({ ...practised(), ...(kind === "review" ? { stats: { ...state.stats, reviews: state.stats.reviews + 1 } } : {}) });
   },
   /** Progress merged in from the signed-in account (sync.ts). */
-  replaceProgress(p: Pick<State, "xp" | "streak" | "lessons" | "tests" | "placed" | "daily" | "rushBest" | "rep" | "active" | "goal" | "stats" | "rating" | "missed" | "prating" | "hist" | "themeStats" | "results" | "puzzlesByDay">) {
+  replaceProgress(p: Pick<State, "xp" | "streak" | "lessons" | "tests" | "placed" | "daily" | "rushBest" | "rep" | "active" | "goal" | "stats" | "rating" | "missed" | "prating" | "hist" | "themeStats" | "results" | "puzzlesByDay"
+    | "unlocked" | "freezes" | "heroes" | "boss" | "heroAvatar">) {
+    // rewards, freezes and heroes are per child too: without them, switching child kept the last child's (fixed 2026-10-16)
     store.set({ xp: p.xp, streak: p.streak, lessons: p.lessons, tests: p.tests, placed: p.placed, daily: p.daily, rushBest: p.rushBest, rep: p.rep, active: p.active, goal: p.goal, stats: p.stats, rating: p.rating, missed: p.missed,
-      prating: p.prating, hist: p.hist, themeStats: p.themeStats, results: p.results, puzzlesByDay: p.puzzlesByDay });
+      prating: p.prating, hist: p.hist, themeStats: p.themeStats, results: p.results, puzzlesByDay: p.puzzlesByDay,
+      unlocked: p.unlocked, freezes: p.freezes, heroes: p.heroes, boss: p.boss, heroAvatar: p.heroAvatar });
   },
   /** A level test result: the best score is kept, and a pass is never lost. */
   recordTest(level: number, score: number, passed: boolean) {

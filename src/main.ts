@@ -10,6 +10,7 @@ import "@fontsource/mukta-mahee/600.css";
 import "@fontsource/mukta-mahee/700.css";
 import "./fonts.css";
 import "./styles.css";
+import "./theme-dark.css";   // DECISIONS #111: dark by default; Settings can switch to light
 import { registerSW } from "virtual:pwa-register";
 import { premovesOn } from "./play/gamekit";
 import { ladderScreen, onlineGame, onlineLobby } from "./online/screens";
@@ -24,20 +25,26 @@ import { icon } from "./icons";
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 import { num, t, tx } from "./i18n";
 import { playLesson } from "./lesson/player";
+import { bossRound, bossScreen, heroIntro } from "./heroes/screens";
+import { bossOpen, hasHero, heroArt, heroLessons, heroOf } from "./heroes/heroes";
 import { playTest } from "./lesson/testplayer";
 import { playPlacement } from "./lesson/placement";
 import { playBank, playDaily, playRush, puzzleHub, playRated, themesScreen } from "./puzzles/screens";
 import { reviewGame } from "./review/screen";
 import { chooseOpening, dueCount, openingsHub, openingsOpen, trainOpenings } from "./openings/screens";
-import { BOTS, botById } from "./bots/bots";
+import { botById, MINI_RACE, nextOpponent } from "./bots/bots";
 import { botList, playBot } from "./bots/play";
+import { powerSetup } from "./power/screen";
 import { friendSetup } from "./play/friend";
 import { analysisBoard } from "./analysis/screen";
 import { GOAL, isPreview, type Look, store, today, unlockAll, devHost, UNLOCK_KEY } from "./store";
 import { tabbar } from "./tabbar";
 import { voiceOn } from "./voice";
 import { mePage } from "./me/screen";
-import { familyScreen } from "./me/family";
+import { avatarHTML, familyScreen } from "./me/family";
+import { family } from "./family";
+import { firstTouch } from "./firsttouch";
+import { allowed, collect, rewardFor, type RewardKind } from "./rewards";
 import { isTeacher } from "./teach/api";
 import { classView, homeworkCard, joinScreen, teacherHome } from "./teach/screens";
 import { mountAccount } from "./accountui";
@@ -63,8 +70,11 @@ function applyTheme() {
   document.documentElement.lang = s.lang;
   document.documentElement.dataset.look = s.look;
   document.documentElement.dataset.board = s.boardTheme ?? "walnut";
+  // DECISIONS #111: dark (SWC black and gold) unless the learner chose light in Settings
+  const mode = s.themeMode ?? "dark";
+  document.documentElement.dataset.theme = mode;
   document.title = t("appName");
-  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#FFFFFF");
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", mode === "dark" ? "#141414" : "#FFFFFF");
 }
 
 /** A lesson is open once the one before it is finished; the first lesson is always open. */
@@ -99,7 +109,7 @@ function welcome() {
     `<div class="${(Math.floor(i / 4) + i) % 2 ? "d" : "l"}">${p ? pieceHTML(p as "wK", "A") : ""}</div>`).join("");
   // DECISIONS #76: the walnut look, so the first screen matches the app behind it; content as chosen in #48
   app.innerHTML = `<div class="screen wscreen"><div class="welcome wb wwal">
-    <div class="wtop"><div class="wbrand"><img class="wlogo" src="art/logo-shaheedi-bunga.webp" alt="Shaheedi Bunga"><span>${t("fromSB")}</span></div>
+    <div class="wtop"><div class="wbrand"><img class="wlogo swc" src="art/swc-mark.webp" alt="Sikh World Championships"><span>${t("fromSB")}</span></div>
       <div class="wlang" role="group" aria-label="${t("language")}">
         <button data-l="pa" aria-pressed="${s.lang === "pa"}" lang="pa">ਪੰਜਾਬੀ</button><button data-l="en" aria-pressed="${s.lang === "en"}" lang="en">English</button></div></div>
     <div class="wart"><div class="wboard">${board}</div><div class="wchidi">${coachHTML("junior", "happy")}</div></div>
@@ -157,7 +167,11 @@ function onboarding(step = 0) {
         `<button class="bigchoice" data-look="${look}" aria-pressed="${s.look === look}"><span class="em">${pieceHTML(em, "A")}</span><span>${t(k as "ageYoung")}<small>${t(`${k}Sub` as "ageYoungSub")}</small></span></button>`).join("")}</div>
       <div class="actions"><button class="btn ghost" data-back>${t("back")}</button></div></div>`;
     app.querySelectorAll<HTMLButtonElement>("[data-look]").forEach(b => b.onclick = () => {
-      store.set({ look: b.dataset.look as Look }); applyTheme(); onboarding(2);
+      // DECISIONS #94: a new 10-15 learner starts on the clear Classic flat pieces and earns the illustrated set
+      const look = b.dataset.look as Look;
+      store.set({ look, ...(look === "junior" && !s.onboarded ? { pieceSet: "cburnett" as const } : {}) }); applyTheme();
+      // DECISIONS #94: a piece in the hand before any reading, for a new learner only
+      if (s.onboarded) onboarding(2); else firstTouch(app, () => onboarding(2));
     });
     app.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/");
   } else {
@@ -197,22 +211,51 @@ function learnerLevel(): number {
   return (current ?? all.find(l => !s.lessons[l.id]))?.level ?? LEVELS.length;
 }
 
-/** Today's goal ring and the four practice tiles (DECISIONS #76). */
-function practiceBlock(s: ReturnType<typeof store.get>): string {
-  const n = s.goal.date === today() ? Math.min(s.goal.n, GOAL) : 0, deg = Math.round((n / GOAL) * 360);
+// ---------- the lighter home (DECISIONS #94, trial A): one big next step, three small tiles, the level's progress,
+// and the full level and lesson list one tap away ----------
+const ALL_KEY = "scc-home-all";
+const showAll = () => { try { return sessionStorage.getItem(ALL_KEY) === "1"; } catch { return false; } };
+const setShowAll = (on: boolean) => { try { sessionStorage.setItem(ALL_KEY, on ? "1" : "0"); } catch { /* blocked */ } };
+
+function nextCard(l: Lesson, s: ReturnType<typeof store.get>): string {
+  const lv = LEVELS[l.level - 1], minutes = 2 + Math.round((l.learn.length + l.practise.length) * 0.7);
+  return `<button class="nextcard" data-go="${l.id}">
+    <span class="nexttop">${s.look !== "adult" ? `<span class="nextcoach">${coachHTML(s.look, "cheer")}</span>` : thumb(lessonFen(l))}
+      <span class="grow"><small>${s.lessons[LEVELS[0].lessons[0].id] ? t("continue") : t("start")} · ${t("level")} ${num(l.level)}</small>
+        <b>${num(l.id)} · ${tx(l.title)}</b>
+        <small>${t("lessonOf").replace("{i}", num(lv.lessons.indexOf(l) + 1)).replace("{n}", num(lv.lessons.length))} · ${t("aboutMin").replace("{n}", num(minutes))}</small></span></span>
+    <span class="nextgo">${s.lessons[LEVELS[0].lessons[0].id] ? t("continue") : t("start")} ${icon("arrowRight")}</span></button>`;
+}
+
+/** Today's puzzle, the next bot and the daily goal; the openings trainer joins once it is open. */
+function miniTiles(s: ReturnType<typeof store.get>): string {
+  const n = s.goal.date === today() ? Math.min(s.goal.n, GOAL) : 0;
   const dailyDone = s.daily.date === today() && s.daily.solved;
-  const nextBot = BOTS.find(b => !(s.stats.botWins[b.id] > 0)) ?? BOTS[BOTS.length - 1];
+  const nextBot = nextOpponent(s.rating.r, s.stats.botWins);
   const tile = (href: string, cls: string, ic: Parameters<typeof icon>[0], title: string, sub: string) =>
-    `<button class="ptile ${cls}" data-href="${href}">${icon(ic)}<b>${title}</b><small>${sub}</small></button>`;
-  return `<div class="goalcard"><span class="goalring" style="--deg:${deg}deg"><span>${num(n)}/${num(GOAL)}</span></span>
-      <span class="grow"><b>${n >= GOAL ? t("goalDone") : t("goalTitle")}</b><small>${n >= GOAL ? t("goalDoneSub") : t("goalSub")}</small></span></div>
-    <h2 class="sec">${t("practiceTitle")}</h2>
-    <div class="ptiles">
-      ${tile("#/puzzles/daily", "t1", dailyDone ? "check" : "target", t("dailyTitle"), dailyDone ? t("dailyDone") : t("dailyReward"))}
-      ${tile("#/openings", "t2", openingsOpen() ? "book" : "lock", t("openTitle"), !openingsOpen() ? t("openLockedShort") : dueCount() ? t("openDueHome").replace("{n}", num(dueCount())) : t("openNoneDueShort"))}
-      ${tile("#/puzzles/rush", "t3", "timer", t("rushTitle"), `${t("rushBest")}: ${num(s.rushBest)}`)}
-      ${tile(`#/play/${nextBot.id}`, "t4", "swords", t("playBot").replace("{bot}", tx(nextBot.name)), t("playNextSub"))}
-    </div>`;
+    `<button class="mtile ${cls}" data-href="${href}">${icon(ic)}<b>${title}</b><small>${sub}</small></button>`;
+  return `<div class="mtiles ${openingsOpen() ? "four" : ""}">
+    ${tile("#/puzzles/daily", "t1", dailyDone ? "check" : "target", t("dailyTitle"), dailyDone ? t("dailyDone") : t("dailyReward"))}
+    ${tile(`#/play/${nextBot.id}`, "t4", "swords", t("playBot").replace("{bot}", tx(nextBot.name)), t("playNextSub"))}
+    <div class="mtile goal"><span class="goalring" style="--deg:${Math.round((n / GOAL) * 360)}deg"><span>${num(n)}/${num(GOAL)}</span></span><b>${n >= GOAL ? t("goalDone") : t("goalTitle")}</b></div>
+    ${openingsOpen() ? tile("#/openings", "t2", "book", t("openTitle"), dueCount() ? t("openDueHome").replace("{n}", num(dueCount())) : t("openNoneDueShort")) : ""}
+  </div>`;
+}
+
+function levelProgress(lv: Level, s: ReturnType<typeof store.get>): string {
+  const got = lv.lessons.filter(l => s.lessons[l.id]).length, pct = Math.round((got / lv.lessons.length) * 100);
+  return `<div class="lvprog"><div class="lvprogtop"><b>${t("level")} ${num(lv.n)} · ${tx(lv.title)}</b><span>${num(got)} / ${num(lv.lessons.length)}</span></div>
+    <div class="ubar"><i style="width:${pct}%"></i></div>
+    ${heroRow(lv.n)}
+    <button class="linkbtn" data-seeall>${showAll() ? t("hideLessons") : t("seeAllLessons")}</button></div>`;
+}
+
+/** DECISIONS #109 (option A): the level's hero on its card, with the boss battle (or the hero, once won). */
+function heroRow(n: number): string {
+  const h = heroOf(n), mine = hasHero(h.id), open = bossOpen(n, k => testState(k) !== "locked");
+  return `<div class="lvhero"><img class="heroface" src="${heroArt(h.id)}" alt="">
+    <span class="grow"><b>${tx(h.name)}</b><small>${tx(h.virtue)}</small></span>
+    <button class="bossbtn ${open ? "" : "off"}" data-boss="${n}">${mine ? `${icon("check")} ${tx(h.name)}` : t("bossBattle")}</button></div>`;
 }
 
 function home() {
@@ -228,22 +271,16 @@ function home() {
     `<span class="ring" style="--p:${pct}%;--c:${color}"><span>${ic}</span></span>`;
   app.innerHTML = `<div class="screen club tabbed">
     <header class="clubhead">
-      <div class="clubtop"><span class="clubbrand">${icon("crown", "gold")}${t("appName")}</span>
+      <div class="clubtop"><span class="clubbrand"><img class="swcmark" src="art/swc-mark.webp" alt="Sikh World Championships">${t("appName")}</span>
         <button class="iconbtn dark" data-settings aria-label="${t("settings")}">${icon("settings")}</button></div>
       <h1>${s.lessons[all[0].id] ? t("welcomeBack") : t("welcomeNew")}</h1>
-      <div class="clubstats">
-        <div><small>${t("statStreak")}</small><b>${icon("flame")}${num(s.streak.days)}</b></div>
-        <div><small>${t("xp")}</small><b>${icon("xp")}${num(s.xp)}</b></div>
-        <div><small>${t("level")}</small><b>${icon("trophy")}${num(curLevel)}</b></div>
-      </div>
+      <div class="homechips"><span>${icon("flame")}${num(s.streak.days)}</span><span>${icon("xp")}${num(s.xp)}</span><span>${icon("trophy")}${t("level")} ${num(curLevel)}</span></div>
     </header>
-    ${current ? `<button class="contcard" data-go="${current.id}">${thumb(lessonFen(current))}
-      <span class="grow"><small>${s.lessons[all[0].id] ? t("continue") : t("start")} · ${t("level")} ${num(current.level)}</small>
-        <b>${num(current.id)} · ${tx(current.title)}</b>
-        <small>${t("lessonOf").replace("{i}", num(current.id.split(".")[1])).replace("{n}", num(LEVELS[current.level - 1].lessons.length))}</small></span>
-      <span class="playbtn">${icon("play")}</span></button>` : ""}
+    ${current ? nextCard(current, s) : ""}
     <div data-homework></div>
-    ${practiceBlock(s)}
+    ${miniTiles(s)}
+    ${levelProgress(LEVELS[curLevel - 1], s)}
+    <div class="homeall" data-all ${showAll() ? "" : "hidden"}>
     <h2 class="sec">${t("levelsTitle")}</h2>
     <div class="lvrow" role="tablist">${LEVELS.map(lv => {
       const open = lv.n <= curLevel || unlockAll(), cls = lv.n === shown.n ? "on" : open ? "" : "lock";
@@ -270,11 +307,18 @@ function home() {
         ${ring(s.tests[shown.n]?.passed ? 100 : 0, "var(--gold)", icon(st === "locked" ? "lock" : "trophy"))}
         <span class="grow"><b>${t("levelTest")}</b><small>${(shown.race ? t("raceShort").replace("{n}", num(shown.race)) : t("botTestShort")).replace("{bot}", tx(bot.name))}</small></span></button>`;
     })() : ""}</div>
+    </div>
   </div>${tabbar("learn")}`;
+  app.querySelector<HTMLButtonElement>("[data-boss]")?.addEventListener("click", e => go(`#/boss/${(e.currentTarget as HTMLElement).dataset.boss}`));
+  app.querySelector<HTMLButtonElement>("[data-seeall]")?.addEventListener("click", () => {
+    const box = app.querySelector<HTMLElement>("[data-all]")!; box.hidden = !box.hidden; setShowAll(!box.hidden);
+    app.querySelector("[data-seeall]")!.textContent = box.hidden ? t("seeAllLessons") : t("hideLessons");
+    if (!box.hidden) { const row = app.querySelector<HTMLElement>(".lvrow"), on = app.querySelector<HTMLElement>(".lvcard.on"); if (row && on) row.scrollLeft = on.offsetLeft - (row.clientWidth - on.offsetWidth) / 2; }
+  });
   const shake = (b: HTMLElement) => b.animate([{ transform: "translateX(-4px)" }, { transform: "translateX(4px)" }, { transform: "none" }], 250);
   app.querySelectorAll<HTMLButtonElement>("[data-level]").forEach(b => b.onclick = () => {
     if (+b.dataset.level! > curLevel && !unlockAll()) return void shake(b);
-    homeLevel = +b.dataset.level!; home();
+    homeLevel = +b.dataset.level!; setShowAll(true); home();
   });
   // centre the current level's card by scrolling the row sideways only (scrollIntoView also scrolled the page down)
   const row = app.querySelector<HTMLElement>(".lvrow"), on = app.querySelector<HTMLElement>(".lvcard.on");
@@ -298,6 +342,16 @@ function home() {
 }
 
 // ---------- settings ----------
+// rewards (DECISIONS #94): one not yet earned shows a lock and what unlocks it; the one in use is never locked out
+const lockedOut = (kind: RewardKind, v: string) => {
+  const s = store.get(), inUse = (kind === "pieces" && s.pieceSet === v) || (kind === "board" && (s.boardTheme ?? "walnut") === v) || (kind === "frame" && s.frame === v);
+  return !inUse && !allowed(kind, v);
+};
+const lockAttr = (kind: RewardKind, v: string) => lockedOut(kind, v) ? ` class="locked" aria-disabled="true"` : "";
+const lockLabel = (kind: RewardKind, v: string, name: string) => lockedOut(kind, v) ? `${name}<br>${tx(rewardFor(kind, v)!.need)}` : name;
+const shakeIt = (b: HTMLElement) => b.animate([{ transform: "translateX(-4px)" }, { transform: "translateX(4px)" }, { transform: "none" }], 250);
+const lockPip = (kind: RewardKind, v: string) => lockedOut(kind, v) ? `<span class="lockpip">${icon("lock")}</span>` : "";
+
 function settings() {
   const s = store.get();
   const seg = (name: string, cur: string, items: [string, string][]) =>
@@ -308,12 +362,16 @@ function settings() {
     <div class="group"><h2>${icon("languages")} ${t("language")}</h2>${seg("lang", s.lang, [["pa", "ਪੰਜਾਬੀ"], ["en", "English"]])}</div>
     <div class="group"><h2>${icon("user")} ${t("look")}</h2>${seg("look", s.look, [["young", t("lookYoung")], ["junior", t("lookJunior")], ["adult", t("lookAdult")]])}</div>
     <div class="group"><h2>${icon("crown")} ${t("pieces")}</h2>
-      <div class="sets" role="group" data-seg="pieceSet">${PIECE_SETS.map(k => `<button data-v="${k}" aria-pressed="${s.pieceSet === k}">
-        <span class="setrow">${(["wK", "wN", "bQ", "bP"] as const).map(p => pieceHTML(p, k)).join("")}</span><small>${t(`set${k}` as "setA")}</small></button>`).join("")}</div>
+      <div class="sets" role="group" data-seg="pieceSet">${PIECE_SETS.map(k => `<button data-v="${k}" aria-pressed="${s.pieceSet === k}"${lockAttr("pieces", k)}>
+        <span class="setrow">${(["wK", "wN", "bQ", "bP"] as const).map(p => pieceHTML(p, k)).join("")}</span><small>${lockLabel("pieces", k, t(`set${k}` as "setA"))}</small>${lockPip("pieces", k)}</button>`).join("")}</div>
       <p class="note">${t("pieceCredits")}</p></div>
     <div class="group"><h2>${icon("grid")} ${t("boardLabel2")}</h2>
-      <div class="themes" role="group" data-seg="boardTheme">${(["walnut", "forest", "lake", "slate", "stone", "contrast"] as const).map(k => `<button data-v="${k}" aria-pressed="${(s.boardTheme ?? "walnut") === k}">
-        <span class="swatch" data-th="${k}"><i></i><i></i><i></i><i></i></span><small>${t(`th${k}`)}</small></button>`).join("")}</div></div>
+      <div class="themes" role="group" data-seg="boardTheme">${(["walnut", "forest", "lake", "slate", "stone", "contrast", "gold", "river", "night"] as const).map(k => `<button data-v="${k}" aria-pressed="${(s.boardTheme ?? "walnut") === k}"${lockAttr("board", k)}>
+        <span class="swatch" data-th="${k}"><i></i><i></i><i></i><i></i></span><small>${lockLabel("board", k, t(`th${k}`))}</small>${lockPip("board", k)}</button>`).join("")}</div></div>
+    ${s.look !== "adult" ? `<div class="group"><h2>${icon("medal")} ${t("frameLabel")}</h2>
+      <div class="themes" role="group" data-seg="frame">${(["", "gold", "phulkari"] as const).map(k => `<button data-v="${k}" aria-pressed="${(s.frame ?? "") === k}"${k ? lockAttr("frame", k) : ""}>
+        ${avatarHTML(family.current(), k ? `fr-${k}` : "")}<small>${k ? lockLabel("frame", k, tx(rewardFor("frame", k)!.name)) : t("frameNone")}</small>${k ? lockPip("frame", k) : ""}</button>`).join("")}</div></div>` : ""}
+    <div class="group"><h2>${icon("sun")} ${t("themeLabel")}</h2>${seg("themeMode", s.themeMode ?? "dark", [["dark", t("themeDark")], ["light", t("themeLight")]])}</div>
     <div class="group"><h2>${icon("music")} ${t("soundLabel")}</h2>${seg("sound", String(s.sound), [["true", t("soundOn")], ["false", t("soundOff")]])}</div>
     <div class="group"><h2>${icon("sound")} ${t("voiceLabel")}</h2>${seg("voice", String(voiceOn()), [["true", t("soundOn")], ["false", t("soundOff")]])}<p class="note">${t("voiceNote")}</p></div>
     <div class="group"><h2>${icon("vibrate")} ${t("buzzLabel")}</h2>${seg("buzz", String(s.buzz), [["true", t("soundOn")], ["false", t("soundOff")]])}</div>
@@ -328,6 +386,7 @@ function settings() {
     <div class="group"><p class="note">${t(syncConfigured ? "progressNoteAccount" : "progressNote")}</p><button class="danger" data-reset>${t("resetProgress")}</button></div>
   </div>`;
   app.querySelectorAll<HTMLElement>("[data-seg]").forEach(g => g.querySelectorAll<HTMLButtonElement>("button").forEach(b => b.onclick = () => {
+    if (b.classList.contains("locked")) return void shakeIt(b);   // a reward not yet earned: its label says how (DECISIONS #94)
     const v = b.dataset.v === "true" ? true : b.dataset.v === "false" ? false : b.dataset.v;
     if (g.dataset.seg === "unlock") { try { localStorage.setItem(UNLOCK_KEY, v ? "1" : "0"); } catch { /* blocked */ } teardown?.(); return settings(); }
     store.set({ [g.dataset.seg!]: v } as Partial<ReturnType<typeof store.get>>); applyTheme(); teardown?.(); settings();
@@ -343,6 +402,7 @@ function settings() {
 
 function route() {
   teardown?.(); teardown = null;
+  collect();   // rewards earned since the last screen stay earned (DECISIONS #94)
   applyTheme();
   const [, page, arg, sub] = location.hash.split("?")[0].split("/");
   if (new URLSearchParams(location.search).has("welcome")) return welcome();   // screenshots / design trials
@@ -358,7 +418,16 @@ function route() {
   }
   if (page === "lesson" && arg) {
     const lesson = findLesson(arg);
-    if (lesson && lessonState(arg) !== "locked") { teardown = playLesson(app, lesson, go); return; }
+    if (lesson && lessonState(arg) !== "locked") {
+      // DECISIONS #109: the level's hero opens its first lesson and its key lesson, once on each device
+      const lv = parseInt(arg), seenKey = `scc-hero-seen-${arg}`;
+      let seen = true; try { seen = !!localStorage.getItem(seenKey); } catch { /* blocked: skip the card */ }
+      if (!seen && heroLessons(lv).includes(arg)) {
+        heroIntro(app, lv, () => { try { localStorage.setItem(seenKey, "1"); } catch { /* blocked */ } teardown = playLesson(app, lesson, go); });
+        return;
+      }
+      teardown = playLesson(app, lesson, go); return;
+    }
   }
   if (page === "settings") return settings();
   if (page === "me") return mePage(app, go);
@@ -387,6 +456,13 @@ function route() {
   }
   if (page === "placement") { teardown = playPlacement(app, go); return; }
   if (page === "play" && arg === "friend") { teardown = friendSetup(app, go); return; }
+  if (page === "power") { teardown = powerSetup(app, go, arg); return; }
+  // the boss battle (DECISIONS #109): #/boss/<level>, and #/boss/<level>/<round>
+  if (page === "boss" && arg && LEVELS[parseInt(arg) - 1]) {
+    const n = parseInt(arg), open = bossOpen(n, k => testState(k) !== "locked");
+    if (sub) { teardown = bossRound(app, n, parseInt(sub), open, go); return; }
+    return bossScreen(app, n, open, go);
+  }
   if (page === "online") { teardown = arg === "game" && sub ? onlineGame(app, sub, go) : arg === "ladder" ? ladderScreen(app, go) : onlineLobby(app, go); return; }
   if (page === "class" && arg) return void classBoardScreen(app, arg, go);
   if (page === "tourney") return arg ? tourneyView(app, arg, go) : tourneyHome(app, go);
@@ -397,6 +473,10 @@ function route() {
     // the Level 1 test is a game against its bot (DECISIONS #69); it opens once the level's lessons are done
     const lv = sub === "test" ? LEVELS.find(l => l.botTest === bot.id) : undefined;
     if (lv && testState(lv.n) === "locked") return home();
+    // the quick game after every third lesson (DECISIONS #94): a short capture race, not a test
+    if (sub === "race") { teardown = playBot(app, bot, go, undefined, MINI_RACE); return; }
+    // Play vs Coach (DECISIONS #108): the coach explains every move; unrated
+    if (sub === "coach") { teardown = playBot(app, bot, go, undefined, undefined, true); return; }
     teardown = playBot(app, bot, go, lv?.n, lv?.race); return;
   }
   home();

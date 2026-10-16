@@ -3,12 +3,12 @@ import {
   ArrowLeft, ArrowRight, BookOpen, Check, ChevronLeft, ChevronRight, CircleCheck, CircleX, Crown, Flame, GraduationCap, House,
   Languages, Lightbulb, Lock, LogIn, Mail, Medal, Music, Play, Puzzle, RotateCcw, Search, Settings, ShieldCheck, Star, Swords,
   Target, Timer, Trophy, UserRound, Vibrate, Volume2, WifiOff, X, Zap, Cat, Dog, Rabbit, Bird, Fish, Turtle, Squirrel, Snail,
-  Plus, Trash2, Users, Grid3x3, type IconNode,
+  Plus, Trash2, Users, Grid3x3, SunMoon, type IconNode,
 } from "lucide";
 
 const ICONS = {
   arrowLeft: ArrowLeft, arrowRight: ArrowRight, book: BookOpen, check: Check, chevronLeft: ChevronLeft, ok: CircleCheck, no: CircleX,
-  crown: Crown, flame: Flame, hint: Lightbulb, lock: Lock, play: Play, again: RotateCcw, settings: Settings, star: Star,
+  sun: SunMoon, crown: Crown, flame: Flame, hint: Lightbulb, lock: Lock, play: Play, again: RotateCcw, settings: Settings, star: Star,
   target: Target, timer: Timer, trophy: Trophy, sound: Volume2, close: X, xp: Zap,
   chevronRight: ChevronRight, grad: GraduationCap, home: House, languages: Languages, login: LogIn, mail: Mail, medal: Medal,
   music: Music, puzzle: Puzzle, search: Search, shield: ShieldCheck, swords: Swords, user: UserRound, vibrate: Vibrate, offline: WifiOff,
