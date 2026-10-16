@@ -4,6 +4,7 @@
 // through the game. Unrated: it never moves the playing rating, but it counts as practice for the streak.
 import { Chess, type Move, type Square } from "chess.js";
 import { Board } from "../chess/board";
+import { gameMenuButton, wireGameMenu } from "../play/gamesettings";
 import { placementFromFen } from "../chess/types";
 import { confetti } from "../celebrate";
 import { getEngine } from "../engine/browser";
@@ -84,8 +85,10 @@ function powerGame(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) =
       <button class="iconbtn" data-next aria-label="${t("moveNext")}">${icon("chevronRight")}</button></div>
     <div class="actions" data-acts><button class="btn ghost" data-resign>${t("resign")}</button></div></div>`;
   const wrap = root.querySelector<HTMLElement>("[data-board]")!, bubble = root.querySelector<HTMLElement>("[data-use]")!;
-  const board = new Board(wrap, { flip: me === "b" });
+  const board = new Board(wrap, { flip: me === "b", game: true });
   root.querySelector(".screen")?.classList.add("gamescreen");   // DECISIONS #110 (look C): games are black and gold
+  root.querySelector(".lessonbar")!.insertAdjacentHTML("beforeend", gameMenuButton());   // DECISIONS #115
+  wireGameMenu(root, board);
   const stateEl = root.querySelector<HTMLElement>("[data-state]")!;
   const say = (html: string) => { stateEl.innerHTML = html; };
   const ctx = { board, extra: root.querySelector<HTMLElement>("[data-moves]")!, say: () => {}, status: () => {}, done: () => {} };
@@ -230,6 +233,7 @@ function powerGame(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) =
       return p && p.color === me && g.turn() === me ? true : t("whyNotYours");
     },
     targets: s => new Chess(st.fen).moves({ square: s as Square, verbose: true }).map(m => m.to),
+    confirmable: () => !busy && !over && view === null,
     // a tap while looking at an old move goes back to the live game
     onTap: () => { if (view !== null) look(Infinity); },
     onMove: async (from, to) => {

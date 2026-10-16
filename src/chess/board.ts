@@ -4,6 +4,7 @@
 import { sound } from "../sound";
 import { t } from "../i18n";
 import { store } from "../store";
+import { icon } from "../icons";
 import { pieceHTML } from "./pieces";
 import { ALL_SQUARES, FILES, type Placement, type Square, fileOf, isLight, rankOf } from "./types";
 
@@ -25,6 +26,8 @@ export interface Interaction {
   targets?(s: Square): Square[];
   /** The learner moved a piece (by drag or tap-tap). */
   onMove?(from: Square, to: Square): void;
+  /** Games (DECISIONS #115): may this move be held for a ✓ / ✕ first? Only legal moves of your own, never a premove. */
+  confirmable?(): boolean;
   /** A tap that is not part of a move (coordinate and placement drills). */
   onTap?(s: Square): void;
   /** The picked-up piece changed (null = let go). */
@@ -49,9 +52,14 @@ export class Board {
   private drawn: { arrows: [Square, Square][]; circles: Square[] } = { arrows: [], circles: [] };
   private rightFrom: Square | null = null;
   private told: Square | null = null;
+  /** A game board (DECISIONS #115): it follows the confirm-move and legal-dots settings; other boards (lessons) don't. */
+  private game = false;
+  /** A move waiting for ✓ (confirm each move): drawn as played, not yet sent. */
+  private pending: [Square, Square] | null = null;
 
-  constructor(host: HTMLElement, opts: { flip?: boolean; coords?: boolean } = {}) {
+  constructor(host: HTMLElement, opts: { flip?: boolean; coords?: boolean; game?: boolean } = {}) {
     this.flip = !!opts.flip;
+    this.game = !!opts.game;
     this.coords = opts.coords ?? true;
     this.el = document.createElement("div");
     this.el.className = "board";
@@ -74,10 +82,13 @@ export class Board {
     window.removeEventListener("pointerup", this.upHandler);
     window.removeEventListener("pointercancel", this.cancelHandler);
     this.drag?.ghost.remove(); this.drag = null;
+    this.clearPending();
     this.el.remove();
   }
 
   setFlip(flip: boolean) { this.flip = flip; this.render(); }
+  /** Draw again after a setting changed (the ⋯ menu in a game). */
+  refresh() { this.render(); }
   interact(io: Interaction) { this.io = io; this.selected = null; this.render(); }
   position() { return this.pos; }
 
@@ -87,7 +98,7 @@ export class Board {
       const captured = !!this.pos[animate[1]] || Object.keys(this.pos).length > Object.keys(pos).length;
       if (marks.check) sound.check(); else if (captured) sound.capture(); else sound.move();
     }
-    this.pos = pos; this.marks = marks; this.selected = null;
+    this.pos = pos; this.marks = marks; this.selected = null; this.clearPending();
     if (animate) this.drawn = { arrows: [], circles: [] };   // a move played clears what was drawn
     this.render();
     if (animate) this.slide(animate[0], animate[1]);
@@ -114,21 +125,27 @@ export class Board {
   private cell(s: Square) { return this.grid.querySelector<HTMLElement>(`[data-sq="${s}"]`); }
 
   private render() {
-    const m = this.marks, dots = new Set(this.selected && this.io.targets ? this.io.targets(this.selected) : m.dots ?? []);
+    const st = store.get(), showDots = !this.game || st.legalDots !== false;
+    const m = this.marks, dots = new Set(this.selected && this.io.targets ? (showDots ? this.io.targets(this.selected) : []) : m.dots ?? []);
     const has = (list: Square[] | undefined, s: Square) => !!list?.includes(s);
     const lastRow = this.flip ? "8" : "1", firstFile = this.flip ? "h" : "a";
+    // the coordinates setting (DECISIONS #115) reaches every board that shows coordinates at all
+    const coordsMode = this.coords ? st.coordsMode ?? "in" : "off";
+    this.el.classList.toggle("co-out", coordsMode === "out");
+    // a move waiting for ✓ is drawn as if played
+    const pos = this.pending ? (() => { const q = { ...this.pos }; q[this.pending![1]] = q[this.pending![0]]; delete q[this.pending![0]]; return q; })() : this.pos;
     this.grid.innerHTML = this.order().map(s => {
-      const p = this.pos[s];
+      const p = pos[s];
       const cls = ["sq", isLight(s) ? "l" : "d",
         has(m.highlights, s) && "hl", has(m.lastMove, s) && "last", s === this.selected && "sel",
         dots.has(s) && (p ? "cap" : "dot"), has(m.crosses, s) && "cross", m.goal === s && "goal",
         m.flash?.sq === s && (m.flash.ok ? "ok" : "no"), m.check === s && "incheck", p && this.io.canPick?.(s) === true && "pickable",
-        has(m.premove, s) && "pre", this.drawn.circles.includes(s) && "circled"]
+        has(m.premove, s) && "pre", this.drawn.circles.includes(s) && "circled", has(this.pending ?? undefined, s) && "pending"]
         .filter(Boolean).join(" ");
       const star = has(m.stars, s) ? `<span class="star" aria-hidden="true">★</span>` : "";
       // a marked EMPTY square also shows its name, so a learner sees both where it is and what it is called (#83)
       const name = !p && has(m.highlights, s) ? `<b class="sqname" aria-hidden="true">${s}</b>` : "";
-      const co = this.coords
+      const co = coordsMode !== "off"
         ? (s[1] === lastRow ? `<span class="co f">${s[0]}</span>` : "") + (s[0] === firstFile ? `<span class="co r">${s[1]}</span>` : "")
         : "";
       const label = `${s}${p ? ", " + pieceName(p) : ""}${s === this.selected ? ", " + t("srPicked") : ""}${dots.has(s) ? ", " + t("srCanGo") : ""}`;
@@ -184,9 +201,30 @@ export class Board {
     return el && this.grid.contains(el) ? el.dataset.sq! : null;
   }
 
+  /** A move the learner made. With "confirm each move" on, a legal move in a game waits for ✓ (DECISIONS #115). */
+  private request(from: Square, to: Square) {
+    if (this.game && store.get().confirmMoves && this.io.confirmable?.() && this.io.targets?.(from).includes(to)) {
+      this.pending = [from, to]; this.render(); this.showConfirm(from, to); return;
+    }
+    this.io.onMove?.(from, to);
+  }
+  private showConfirm(from: Square, to: Square) {
+    this.bar?.remove();
+    const bar = this.bar = document.createElement("div");
+    bar.className = "confirmbar";
+    bar.innerHTML = `<button class="no" aria-label="${t("gsUndoMove")}">${icon("close")}</button><b>${t("gsPlayMove").replace("{m}", `${from}–${to}`)}</b><button class="yes" aria-label="${t("gsConfirm")}">${icon("check")}</button>`;
+    (this.el.closest(".frame") ?? this.el.parentElement ?? this.el).insertAdjacentElement("afterend", bar);
+    bar.querySelector<HTMLButtonElement>(".no")!.onclick = () => { this.clearPending(); this.render(); };
+    bar.querySelector<HTMLButtonElement>(".yes")!.onclick = () => { this.clearPending(); this.render(); this.io.onMove?.(from, to); };
+    bar.querySelector<HTMLButtonElement>(".yes")!.focus();
+  }
+  private bar: HTMLElement | null = null;
+  private clearPending() { this.pending = null; this.bar?.remove(); this.bar = null; }
+
   private down(e: PointerEvent) {
     const s = (e.target as HTMLElement).closest<HTMLElement>("[data-sq]")?.dataset.sq;
     if (!s || !ALL_SQUARES.includes(s) || !e.isPrimary) return;
+    if (this.pending) { this.clearPending(); this.render(); return; }   // a tap on the board while a move waits: take it back
     if (e.button === 2) { this.rightFrom = s; return; }
     if (this.drawn.arrows.length || this.drawn.circles.length) { this.drawn = { arrows: [], circles: [] }; this.render(); }
     if (this.drag) this.dropDrag();   // a drag whose end never arrived: let go of it rather than lock the board
@@ -196,7 +234,7 @@ export class Board {
     // a second tap on a target finishes a tap-tap move
     if (this.selected && s !== this.selected && !(this.pos[s] && this.io.canPick?.(s) === true)) {
       const from = this.selected; this.selected = null; this.render();
-      this.io.onMove?.(from, s);
+      this.request(from, s);
       return;
     }
     if (this.pos[s] && this.io.canPick) {
@@ -243,7 +281,7 @@ export class Board {
     const say = (msg: string) => { this.el.querySelector(".sronly")!.textContent = msg; };
     if (this.selected && s !== this.selected && !(this.pos[s] && this.io.canPick?.(s) === true)) {
       const from = this.selected; this.selected = null; this.render();
-      this.io.onMove?.(from, s);
+      this.request(from, s);
       this.cell(this.cursor)?.focus();
       return;
     }
@@ -289,7 +327,7 @@ export class Board {
     if (!d.moved) { if (d.wasSelected) { this.selected = null; this.render(); } return; } // a tap: stays selected for tap-tap
     const to = this.squareAt(e.clientX, e.clientY);
     this.selected = null; this.render();
-    if (to && to !== d.from) this.io.onMove?.(d.from, to);
+    if (to && to !== d.from) this.request(d.from, to);
   };
 }
 

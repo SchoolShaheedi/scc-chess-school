@@ -14,6 +14,8 @@ import { avatarHTML } from "../me/family";
 import { captured, movesFor, positionAt, promotion } from "../play/gamekit";
 import { fmt } from "../play/clock";
 import { saveGame } from "../play/history";
+import { shareButton, wireShare } from "../play/share";
+import { gameMenuButton, wireGameMenu } from "../play/gamesettings";
 import { setLastGame } from "../review/screen";
 import { sound } from "../sound";
 import {
@@ -239,7 +241,9 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
       <div class="reactions" role="group" aria-label="${t("reactLabel")}">${REACTIONS.map(r => `<button class="pill" data-react="${r}">${reactionText(r)}</button>`).join("")}</div>
       <div class="extra" data-extra></div>
       <div class="actions" data-acts><button class="btn ghost" data-draw>${t("drawAgree")}</button><button class="btn ghost" data-resign>${t("resign")}</button></div></div>`;
-    board = new Board(root.querySelector("[data-board]")!, { flip: mine === "b" });
+    board = new Board(root.querySelector("[data-board]")!, { flip: mine === "b", game: true });
+    root.querySelector(".lessonbar")!.insertAdjacentHTML("beforeend", gameMenuButton());   // DECISIONS #115
+    wireGameMenu(root, board);
     root.querySelector(".screen")?.classList.add("gamescreen");   // DECISIONS #110 (look C): games are black and gold
     const extra = root.querySelector<HTMLElement>("[data-extra]")!, say = (h: string) => { root.querySelector("[data-state]")!.innerHTML = h; };
     const ctx = { board, extra, say: () => {}, status: () => {}, done: () => {} };
@@ -285,6 +289,7 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
       if (r === "won" && !alreadyOver) { sound.complete(); confetti(root.querySelector(".screen")!); }
       const buttons = `${g.moves.length >= 2 ? `<button class="btn wide gold" data-review>${icon("target")} ${t("reviewTitle")}</button>` : ""}
         <button class="btn ghost wide" data-lobby>${t("onlineBackToLobby")}</button>
+        ${g.moves.length >= 2 ? shareButton() : ""}
         ${rated && oppId ? `<button class="linkbtn" data-block>${t("adultBlock")}</button>` : ""}`;
       const card = root.querySelector<HTMLElement>("[data-card]")!;
       card.innerHTML = `<button class="iconbtn x" data-x aria-label="${t("close")}">${icon("close")}</button>${avatarHTML(opp, "big")}
@@ -293,6 +298,8 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
       const acts = root.querySelector<HTMLElement>("[data-acts]")!; acts.innerHTML = `<div class="resultacts">${buttons}</div>`; acts.hidden = true;
       root.querySelectorAll<HTMLButtonElement>("[data-review]").forEach(b => b.onclick = () => go("#/review"));
       root.querySelectorAll<HTMLButtonElement>("[data-lobby]").forEach(b => b.onclick = () => go("#/online"));
+      wireShare(root, () => { const c = chess(), last = g.moves.at(-1);   // DECISIONS #115
+        return { pos: placementFromFen(c.fen()), lastMove: last ? [last.slice(0, 2), last.slice(2, 4)] : undefined, flip: mine === "b", result: r, how, opp: { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" }, moves: Math.ceil(g.moves.length / 2) }; });
       card.querySelector<HTMLButtonElement>("[data-x]")!.onclick = () => { card.hidden = true; acts.hidden = false; };
       root.querySelectorAll<HTMLButtonElement>("[data-block]").forEach(b => b.onclick = async () => {
         if (!oppId || !confirm(t("adultBlockConfirm"))) return;
@@ -329,6 +336,7 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
         return p && p.color === mine ? true : t("whyNotYours");
       },
       targets: s => chess().moves({ square: s as CjSquare, verbose: true }).map(m => m.to),
+      confirmable: () => !busy && view === null && g.status === "active",
       onTap: () => { if (view !== null) { view = null; show(); } },
       onMove: async (from, to) => {
         if (view !== null) { view = null; return show(); }

@@ -12,6 +12,8 @@ import { checkSquare, refusal } from "../lesson/exercises";
 import { captured, flagOutcome, movesFor, positionAt, premoveTargets, premovesOn, promotion } from "../play/gamekit";
 import { type Clock, flagged, fmt, newClock, press, remaining } from "../play/clock";
 import { saveGame } from "../play/history";
+import { shareButton, wireShare } from "../play/share";
+import { gameMenuButton, wireGameMenu } from "../play/gamesettings";
 import { pieceHTML } from "../chess/pieces";
 import type { PieceCode } from "../chess/types";
 import { myAvatarHTML } from "../me/family";
@@ -153,8 +155,10 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
       ${help && !testLevel ? `<button class="btn ghost" data-hint>${icon("hint")} ${t("hint")}</button>` : ""}
       <button class="btn ghost" data-resign>${t("resign")}</button>
     </div></div>`;
-  const board = new Board(root.querySelector("[data-board]")!, { flip: me === "b" });
+  const board = new Board(root.querySelector("[data-board]")!, { flip: me === "b", game: true });
   root.querySelector(".screen")?.classList.add("gamescreen");   // DECISIONS #110 (look C): games are black and gold
+  root.querySelector(".lessonbar")!.insertAdjacentHTML("beforeend", gameMenuButton());   // DECISIONS #115
+  wireGameMenu(root, board, coachMode);
   const extra = root.querySelector<HTMLElement>("[data-extra]")!;
   const stateEl = root.querySelector<HTMLElement>("[data-state]")!;
   const say = (html: string) => { stateEl.innerHTML = html; };
@@ -305,7 +309,7 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     setLastGame({ uci: uciOf(), me, botName: bot.name, oppRating: bot.rating, back: location.hash.split("?")[0], startFen });
     const buttons = `${g.history().length >= 2 ? `<button class="btn wide gold" data-review>${icon("target")} ${t("reviewTitle")}</button>` : ""}
       <div class="two"><button class="btn ghost" data-again>${t("rematch")}</button><button class="btn ghost" data-other>${bossDone ? t("bossBack") : testLevel ? t("backHome") : t("newBot")}</button></div>
-      <button class="linkbtn" data-pgn>${t("copyPgn")}</button><div data-pgnbox></div>`;
+      ${g.history().length >= 2 ? shareButton() : ""}<button class="linkbtn" data-pgn>${t("copyPgn")}</button><div data-pgnbox></div>`;
     const card = root.querySelector<HTMLElement>("[data-card]")!;
     card.innerHTML = `<button class="iconbtn x" data-x aria-label="${t("close")}">${icon("close")}</button>
       ${art(bot, r === "won" ? "lose" : r === "lost" ? "win" : "neutral")}
@@ -316,6 +320,9 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     root.querySelector<HTMLElement>("[data-acts]")!.hidden = true;
     if (r === "won") confetti(root.querySelector(".screen")!);
     root.querySelectorAll<HTMLButtonElement>("[data-review]").forEach(b => b.onclick = () => go("#/review"));
+    // DECISIONS #115: the final position as a picture, with the learner's animal and no names
+    wireShare(root, () => { const last = g.history({ verbose: true }).at(-1);
+      return { pos: placementFromFen(g.fen()), lastMove: last ? [last.from, last.to] : undefined, flip: me === "b", result: r, how, opp: bot.name, moves: Math.ceil(g.history().length / 2) }; });
     root.querySelectorAll<HTMLButtonElement>("[data-again]").forEach(b => b.onclick = () => go(`${location.hash.split("?")[0]}?${Date.now()}`));
     root.querySelectorAll<HTMLButtonElement>("[data-other]").forEach(b => b.onclick = () => go(back));
     root.querySelectorAll<HTMLButtonElement>("[data-pgn]").forEach(b => b.onclick = () => {
@@ -334,6 +341,7 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
       return mine ? true : t("whyNotYours");
     },
     targets: s => (busy ? premoveTargets(g.fen(), s) : g.moves({ square: s as CjSquare, verbose: true }).map(m => m.to)),
+    confirmable: () => !busy && !over && view === null,
     // a tap off your pieces: back to the live game if looking at an old move, and it cancels a premove
     onTap: () => { if (over) return; if (view !== null) look(Infinity); else if (pre) { pre = null; show(); } },
     onMove: async (from, to) => {

@@ -39,13 +39,15 @@ describe("switching children", () => {
     expect(family.list().length).toBe(1);
   });
   it("rewards, streak freezes and heroes stay with their own child (2026-10-16 bug: a sibling inherited them)", () => {
-    store.set({ unlocked: ["board:gold"], freezes: 2, heroes: ["himmat"], boss: { "1": 3 }, heroAvatar: "himmat" });
+    store.set({ unlocked: ["board:gold"], freezes: 2, heroes: ["himmat"], boss: { "1": 3 }, heroAvatar: "himmat", soloPath: [3, 2], survivalBest: 9 });
     const first = family.current().id;
     const second = family.add("fish", "#1D4ED8", "young")!;
     expect(store.get().unlocked ?? []).toEqual([]); expect(store.get().freezes ?? 0).toBe(0);
     expect(store.get().heroes ?? []).toEqual([]); expect(store.get().heroAvatar).toBeUndefined();
+    expect(store.get().soloPath ?? []).toEqual([]); expect(store.get().survivalBest ?? 0).toBe(0);
     family.switchTo(first);
     expect(store.get().unlocked).toEqual(["board:gold"]); expect(store.get().heroes).toEqual(["himmat"]); expect(store.get().heroAvatar).toBe("himmat");
+    expect(store.get().soloPath).toEqual([3, 2]); expect(store.get().survivalBest).toBe(9);
     family.remove(second);
   });
 });

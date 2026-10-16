@@ -1,5 +1,6 @@
 // The Puzzles tab (DECISIONS #72): a hub, the daily puzzle (matched to the learner's level), and Puzzle Race
 // (3 minutes, 3 misses, climbing in difficulty). Puzzles are real Lichess positions (CC0), already in the app.
+import { Chess } from "chess.js";
 import { Board } from "../chess/board";
 import { placementFromFen } from "../chess/types";
 import { pieceHTML } from "../chess/pieces";
@@ -45,6 +46,11 @@ export function puzzleHub(root: HTMLElement, level: number, go: Go) {
       ${s.look === "young" ? "" : `<span class="best"><small>${t("puzzleRating")}</small><b>${num((s.prating ?? s.rating).r)}</b></span>`}</button>
     <button class="rushcard" data-themes><span class="rushicon">${icon("target")}</span>
       <span class="grow"><b>${t("themesTitle")}</b><small>${t("themesAbout").split(/[.।]/)[0]}</small></span>${icon("arrowRight")}</button>
+    <button class="rushcard" data-survival><span class="rushicon">${icon("heart")}</span>
+      <span class="grow"><b>${t("survTitle")}</b><small>${t("survAbout")}</small></span>
+      <span class="best"><small>${t("rushBest")}</small><b>${num(s.survivalBest ?? 0)}</b></span></button>
+    <button class="rushcard" data-solo><span class="rushicon">${icon("grid")}</span>
+      <span class="grow"><b>${t("soloTitle")}</b><small>${t("soloAbout")}</small></span>${icon("arrowRight")}</button>
     <button class="rushcard" data-rush><span class="rushicon">${icon("timer")}</span>
       <span class="grow"><b>${t("rushTitle")}</b><small>${t("rushAbout")}</small></span>
       <span class="best"><small>${t("rushBest")}</small><b>${num(s.rushBest)}</b></span></button>
@@ -52,6 +58,8 @@ export function puzzleHub(root: HTMLElement, level: number, go: Go) {
   root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/");
   root.querySelector<HTMLButtonElement>("[data-daily]")!.onclick = () => go("#/puzzles/daily");
   root.querySelector<HTMLButtonElement>("[data-rush]")!.onclick = () => go("#/puzzles/rush");
+  root.querySelector<HTMLButtonElement>("[data-survival]")!.onclick = () => go("#/puzzles/survival");
+  root.querySelector<HTMLButtonElement>("[data-solo]")!.onclick = () => go("#/puzzles/solo");
   root.querySelector<HTMLButtonElement>("[data-rated]")!.onclick = () => go("#/puzzles/rated");
   root.querySelector<HTMLButtonElement>("[data-themes]")!.onclick = () => go("#/puzzles/themes");
   root.querySelector<HTMLButtonElement>("[data-bank]")?.addEventListener("click", () => go("#/puzzles/bank"));
@@ -205,6 +213,89 @@ export function playRush(root: HTMLElement, go: Go): () => void {
         <button class="btn ghost wide" data-hub>${t("puzzlesTitle")}</button></div></div>`;
     if (record) confetti(root.querySelector(".screen")!);
     root.querySelector<HTMLButtonElement>("[data-again]")!.onclick = () => go(`#/puzzles/rush?${Date.now()}`);
+    root.querySelector<HTMLButtonElement>("[data-hub]")!.onclick = () => go("#/puzzles");
+  }
+
+  intro();
+  return teardown;
+}
+
+// ---------- Puzzle Survival (DECISIONS #115, option B) ----------
+const SURV_LIVES = 3, SURV_STEP = 60;
+/** Puzzles from the big bank with no clock and three lives, starting a little below the learner's puzzle rating and
+ *  climbing 60 points a solve. A lost life shows the right move before the next puzzle. Unrated, like the Race. */
+export function playSurvival(root: HTMLElement, go: Go): () => void {
+  const used = new Set<string>(), first = Math.max(400, puzzleRating().r - 200);
+  let r = first, score = 0, lives = SURV_LIVES, over = false, alive = true;
+  let cleanup: (() => void) | null = null, ui: ReturnType<typeof puzzleScreen> | null = null;
+  const teardown = () => { alive = false; cleanup?.(); cleanup = null; ui?.board.destroy(); ui = null; };
+  const head = () => `<span class="pill rushhead"><span class="hearts" aria-label="${lives === 1 ? t("survLife1") : t("survLives").replace("{n}", num(lives))}">${Array.from({ length: SURV_LIVES }, (_, i) => icon("heart", i < lives ? "full" : "lost")).join("")}</span>
+    <b data-score>${num(score)}</b></span>`;
+
+  function intro() {
+    root.innerHTML = `<div class="screen">${bar(t("survTitle"))}
+      <div class="hero"><div class="trophy light">${icon("heart")}</div><h1>${t("survTitle")}</h1><p>${t("survIntro")}</p>
+        <p><b>${t("rushBest")}: ${num(store.get().survivalBest ?? 0)}</b></p></div>
+      <div class="actions"><button class="btn wide" data-go>${t("start")}</button></div></div>`;
+    root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/puzzles");
+    root.querySelector<HTMLButtonElement>("[data-go]")!.onclick = () => void next();
+  }
+
+  async function next() {
+    if (over || !alive) return;
+    cleanup?.(); cleanup = null; ui?.board.destroy();
+    ui = puzzleScreen(root, t("survTitle"), head());
+    // the difficulty bar: how far the run has climbed (a full bar is 1,200 points above the start)
+    root.querySelector(".lessonbar")!.insertAdjacentHTML("afterend", `<div class="ramp"><i style="width:${Math.min(100, ((r - first) / 1200) * 100 + 4)}%"></i>
+      <span>${young() ? t("survRampYoung") : t("survRamp").replace("{r}", num(r))}</span></div>`);
+    root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => { teardown(); go("#/puzzles"); };
+    let p: BankPuzzle | null = null;
+    try { p = await nearRating(r, used); } catch { /* offline and never opened: end the run */ }
+    if (!alive || !ui) return;
+    if (!p) return finish();
+    used.add(p.id);
+    const pz = p, here = ui;
+    let decided = false, solvedMoves = 0;
+    const decide = (ok: boolean) => {
+      if (decided || over) return; decided = true;
+      store.recordPuzzle(undefined, undefined, ok, pz.themes);
+      if (ok) { score++; r += SURV_STEP; sound.correct(); here.say(t("correct"), "ok"); return void setTimeout(next, 450); }
+      lives--; sound.wrong();
+      // the right move, from where the learner went wrong: the setup move, then each correct move and its reply
+      const g = new Chess(pz.fen);
+      for (const u of pz.moves.slice(0, 1 + 2 * solvedMoves)) g.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+      const right = pz.moves[1 + 2 * solvedMoves];
+      here.board.interact({});
+      here.board.set(placementFromFen(g.fen()), { arrows: [[right.slice(0, 2), right.slice(2, 4)]] });
+      here.say(t("survLost"), "no");
+      const h = root.querySelector(".rushhead"); if (h) h.outerHTML = head();
+      setTimeout(() => (lives <= 0 ? finish() : void next()), 1800);
+    };
+    cleanup = runExercise(bankExercise(pz), {
+      board: here.board, extra: here.extra, status: here.status,
+      say: (text, tone = "info") => {
+        if (tone === "no" && text === t("puzzleWrong")) return decide(false);
+        if (tone === "ok" && text === t("correct")) solvedMoves++;
+        if (!decided) here.say(text, tone);
+      },
+      done: mistakes => decide(mistakes === 0),
+    });
+  }
+
+  function finish() {
+    if (over) return; over = true;
+    const best = store.get().survivalBest ?? 0, record = score > best;
+    store.recordSurvival(score);
+    teardown();
+    root.innerHTML = `<div class="screen ${record ? "donescreen" : ""}"><div class="complete">
+      <div class="trophy ${record ? "" : "light"}">${icon(record ? "trophy" : "heart")}</div>
+      <h1>${num(score)}</h1><p>${t("rushSolved")}</p>
+      <p class="${record ? "testmsg" : ""}">${record ? t("rushRecord") : `${t("rushBest")}: ${num(Math.max(best, score))}`}</p></div>
+      <div class="actions" style="flex-direction:column">
+        <button class="btn wide ${record ? "gold" : ""}" data-again>${t("playAgain")}</button>
+        <button class="btn ghost wide" data-hub>${t("puzzlesTitle")}</button></div></div>`;
+    if (record) confetti(root.querySelector(".screen")!);
+    root.querySelector<HTMLButtonElement>("[data-again]")!.onclick = () => go(`#/puzzles/survival?${Date.now()}`);
     root.querySelector<HTMLButtonElement>("[data-hub]")!.onclick = () => go("#/puzzles");
   }
 

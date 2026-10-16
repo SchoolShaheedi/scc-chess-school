@@ -29,7 +29,7 @@ import { bossRound, bossScreen, heroIntro } from "./heroes/screens";
 import { bossOpen, hasHero, heroArt, heroLessons, heroOf } from "./heroes/heroes";
 import { playTest } from "./lesson/testplayer";
 import { playPlacement } from "./lesson/placement";
-import { playBank, playDaily, playRush, puzzleHub, playRated, themesScreen } from "./puzzles/screens";
+import { playBank, playDaily, playRush, playSurvival, puzzleHub, playRated, themesScreen } from "./puzzles/screens";
 import { reviewGame } from "./review/screen";
 import { chooseOpening, dueCount, openingsHub, openingsOpen, trainOpenings } from "./openings/screens";
 import { botById, MINI_RACE, nextOpponent } from "./bots/bots";
@@ -50,6 +50,9 @@ import { classView, homeworkCard, joinScreen, teacherHome } from "./teach/screen
 import { mountAccount } from "./accountui";
 import { account, startSync, syncConfigured } from "./sync";
 import { insightsScreen } from "./insights/screen";
+import { boardEditor } from "./analysis/editor";
+import { soloScreen } from "./solo/screen";
+import { gameSettingsHTML, wireGameSettings } from "./play/gamesettings";
 
 registerSW({ immediate: true });
 // image fallbacks (full check 2026-10-08): the site's security policy blocks inline onerror="…" handlers, so one
@@ -377,6 +380,7 @@ function settings() {
     <div class="group"><h2>${icon("sound")} ${t("voiceLabel")}</h2>${seg("voice", String(voiceOn()), [["true", t("soundOn")], ["false", t("soundOff")]])}<p class="note">${t("voiceNote")}</p></div>
     <div class="group"><h2>${icon("vibrate")} ${t("buzzLabel")}</h2>${seg("buzz", String(s.buzz), [["true", t("soundOn")], ["false", t("soundOff")]])}</div>
     <div class="group"><h2>${icon("crown")} ${t("autoQueenLabel")}</h2>${seg("autoQueen", String(!!s.autoQueen), [["true", t("soundOn")], ["false", t("soundOff")]])}<p class="note">${t("autoQueenNote")}</p></div>
+    <div class="group gsgroup" data-gsgroup><h2>${icon("grid")} ${t("gsGroup")}</h2>${gameSettingsHTML()}</div>
     <div class="group"><h2>${icon("swords")} ${t("premoveLabel")}</h2>${seg("premove", String(premovesOn()), [["true", t("soundOn")], ["false", t("soundOff")]])}<p class="note">${t("premoveNote")}</p></div>
     ${s.look === "junior" ? `<div class="group"><h2>${t("coachLabel")}</h2>${seg("coach", s.coach, [["singh", t("coachSingh")], ["kaur", t("coachKaur")]])}</div>` : ""}
     <div class="group" data-teacher hidden><h2>${icon("users")} ${t("teachTitle")}</h2><p class="note">${t("teachSettings")}</p><button class="btn ghost wide" data-teach>${t("teachOpen")}</button></div>
@@ -392,6 +396,7 @@ function settings() {
     if (g.dataset.seg === "unlock") { try { localStorage.setItem(UNLOCK_KEY, v ? "1" : "0"); } catch { /* blocked */ } teardown?.(); return settings(); }
     store.set({ [g.dataset.seg!]: v } as Partial<ReturnType<typeof store.get>>); applyTheme(); teardown?.(); settings();
   }));
+  wireGameSettings(app.querySelector("[data-gsgroup]")!, () => {});   // DECISIONS #115
   teardown = mountAccount(app.querySelector("[data-account]")!);
   app.querySelector<HTMLButtonElement>("[data-home]")!.onclick = () => go("#/me");
   app.querySelector<HTMLButtonElement>("[data-placement]")?.addEventListener("click", () => go("#/placement"));
@@ -456,6 +461,8 @@ function route() {
   if (page === "puzzles") {
     if (arg === "daily") { teardown = playDaily(app, learnerLevel(), go); return; }
     if (arg === "rush") { teardown = playRush(app, go); return; }
+    if (arg === "survival") { teardown = playSurvival(app, go); return; }   // DECISIONS #115
+    if (arg === "solo") { teardown = soloScreen(app, go); return; }
     if (arg === "bank") { teardown = playBank(app, go); return; }
     if (arg === "rated") { teardown = playRated(app, go); return; }
     if (arg === "themes") return themesScreen(app, go);
@@ -475,6 +482,7 @@ function route() {
   if (page === "class" && arg) return void classBoardScreen(app, arg, go);
   if (page === "tourney") return arg ? tourneyView(app, arg, go) : tourneyHome(app, go);
   if (page === "analysis") { teardown = analysisBoard(app, go); return; }
+  if (page === "editor") { teardown = boardEditor(app, go); return; }   // DECISIONS #115
   if (page === "play") {
     const bot = arg ? botById(arg) : undefined;
     if (!bot) return botList(app, go);

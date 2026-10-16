@@ -1049,12 +1049,15 @@ textarea.textin { resize: vertical; }
 /* the game screen: black and gold, player bars above and below the board, the move strip, an icon row */
 html:has(.gamescreen), html:has(.gamescreen) body { background: var(--swc-black); }
 .gamescreen { background: var(--swc-black); color: var(--swc-ivory); }
+/* games are always dark (look C), even in the Light look: the colour tokens follow, so bubbles, bars and sheets inside a game
+   never come out white with ivory text (found by the contrast check, 2026-10-16) */
+.gamescreen { --bg: #141414; --surface: #1F1D1A; --surface-2: #2B2824; --ink: #F2EBDD; --muted: #A79E8E; --line: #34302A; --tint: #2A2416; }
 .gamescreen .lessonbar h1, .gamescreen .pbar b { color: var(--swc-ivory); }
 .gamescreen .lessonbar small, .gamescreen .pbar small, .gamescreen .gstate, .gamescreen .note { color: var(--swc-muted); }
 .gamescreen .gstate b { color: var(--swc-ivory); } .gamescreen .gstate b.warn { color: #FF8A5B; }
 .gamescreen .iconbtn { background: #2B2824; color: var(--swc-ivory); }
 .gamescreen .pbar { background: var(--swc-panel); border-radius: 12px; padding: 6px 8px; }
-.gamescreen .movelist { color: var(--swc-muted); } .gamescreen .movelist i { color: #6E675C; }
+.gamescreen .movelist { color: var(--swc-muted); } .gamescreen .movelist i { color: #A39C90; }
 .gamescreen .movelist span, .gamescreen .movelist .mv { color: var(--swc-ivory); background: none; }
 .gamescreen .movelist .mv.on { background: color-mix(in srgb, var(--swc-saffron) 30%, transparent); border-radius: 6px; }
 .gamescreen .btn.ghost { background: #2B2824; color: var(--swc-ivory); box-shadow: 0 4px 0 #0E0D0C; }
@@ -1113,3 +1116,53 @@ html:not([data-theme="dark"]) .trp.off { color: #6B6B74; }
 .inspractise { border-color: var(--gold); } .inspractise small { display: block; color: var(--muted); font-size: 12px; font-weight: 700; }
 .inslink > .ic:first-child { font-size: 22px; color: var(--gold); flex: none; } .inslink small { display: block; color: var(--muted); font-size: 12.5px; }
 .inslink .grow, .inspractise .grow, .insopen .grow { flex: 1; min-width: 0; }
+
+/* game settings (DECISIONS #115) */
+.sq.pending::before { content: ""; position: absolute; inset: 0; background: rgba(240,192,72,.5); }
+.confirmbar { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 8px; margin-top: 8px; }
+.confirmbar b { flex: 1; text-align: center; }
+.confirmbar button { width: 56px; height: 44px; border: 0; border-radius: 12px; display: grid; place-items: center; font-size: 22px; cursor: pointer; }
+.confirmbar .no { background: var(--surface-2); color: var(--ink); } .confirmbar .yes { background: #81B64C; color: #fff; box-shadow: 0 3px 0 #45753C; }
+.gsrow { display: grid; gap: 4px; padding: 6px 0; } .gsrow + .gsrow { border-top: 1px solid var(--line); padding-top: 10px; }
+.gsrow small { color: var(--muted); font-size: 13px; } .gsrow .seg { margin-top: 4px; }
+.gsheet { position: fixed; left: 50%; bottom: 0; transform: translateX(-50%); width: min(100%, 520px); z-index: 50; background: var(--surface);
+  border-top: 3px solid var(--gold); border-radius: 18px 18px 0 0; padding: 14px 16px calc(16px + env(safe-area-inset-bottom)); box-shadow: 0 -10px 30px rgba(0,0,0,.45); }
+.gshead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.lessonbar [data-gmenu] { margin-left: auto; }
+/* focus mode: games show the board, the clocks, the moves and the buttons only */
+.screen.focus .gcoach, .screen.focus .caps, .screen.focus .reactions { display: none; }
+/* coordinates outside the board */
+.boardwrap:has(> .board.co-out) { overflow: visible; margin: 0 0 16px 14px; }
+.board.co-out .sq .co { color: var(--muted); font-size: 11px; }
+.board.co-out .sq .co.f { right: auto; left: 50%; bottom: -15px; transform: translateX(-50%); }
+.board.co-out .sq .co.r { left: -12px; top: 50%; transform: translateY(-50%); }
+.gamescreen .frame .board.co-out .sq .co { color: #C9B48A; }
+/* the coach's coloured words inside a game, light enough on the game's black in both looks */
+.gamescreen .gcoach .bubble b.idea { color: #8FD19E; } .gamescreen .gcoach .bubble b.warn { color: #FF8A5B; }
+/* board editor (DECISIONS #115, option C) */
+.edtray { display: flex; gap: 4px; background: #D9CCB2; border-radius: 12px; padding: 5px; }
+.edpc { flex: 1; aspect-ratio: 1; max-width: 52px; border: 0; border-radius: 9px; background: none; display: grid; place-items: center; padding: 3px; cursor: pointer; }
+.edpc .pc { width: 100%; height: 100%; } .edpc[aria-pressed="true"] { background: var(--gold); box-shadow: 0 0 0 2px #B07A10 inset; }
+.edpc.er { color: #B3261E; font-size: 22px; background: #EFE4CF; } .edpc.er[aria-pressed="true"] { background: #F3B9A8; }
+.editor .row3 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; } .editor .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.edstate { margin: 0; border-radius: 10px; padding: 8px 10px; font-weight: 700; font-size: 14px; display: flex; gap: 6px; align-items: flex-start; }
+.edstate.ok { background: color-mix(in srgb, #81B64C 18%, transparent); } .edstate.bad { background: color-mix(in srgb, #E06A4A 18%, transparent); }
+.edfen { display: flex; gap: 8px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 6px 8px; }
+.edfen code { flex: 1; min-width: 0; font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+.editor .btn:disabled { opacity: .45; }
+/* Solo Chess and Puzzle Survival (DECISIONS #115) */
+.sbdg { position: absolute; right: 2px; top: 2px; z-index: 3; min-width: 17px; height: 17px; padding: 0 3px; border-radius: 9px; background: #F0C048; color: #1A1206;
+  font: 800 11px/17px var(--font); font-style: normal; text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,.4); pointer-events: none; }
+.sbdg.zero { background: #5A534A; color: #F2EBDD; }
+.solo .sub { margin: 0; font-size: 14.5px; } .solo .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.solo .seg button { font-size: 13px; padding: 8px 4px; }
+.solo .stars { color: #F0C048; letter-spacing: 2px; }
+.solopath { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.solopath .sp { aspect-ratio: 1; border-radius: 50%; border: 0; background: var(--surface-2); color: var(--muted); display: grid; place-content: center; text-align: center; cursor: pointer; font: inherit; }
+.solopath .sp b { font-size: 20px; } .solopath .sp small { font-size: 11px; color: #B07A10; letter-spacing: 1px; min-height: 13px; }
+.solopath .sp.open { outline: 3px solid var(--gold); color: var(--ink); } .solopath .sp.done { background: var(--gold); color: #1A1206; } .solopath .sp.done small { color: #5A3A00; }
+.solopath .sp:disabled { opacity: .55; cursor: default; }
+.hearts { display: inline-flex; gap: 3px; } .hearts .full { color: #E06A4A; fill: #E06A4A; } .hearts .lost { color: var(--muted); opacity: .5; }
+.ramp { position: relative; height: 24px; background: var(--surface-2); border-radius: 12px; overflow: hidden; }
+.ramp i { position: absolute; inset: 0 auto 0 0; background: color-mix(in srgb, #F0C048 55%, transparent); }
+.ramp span { position: relative; font-size: 12.5px; font-weight: 700; padding-left: 10px; line-height: 24px; color: var(--ink); }

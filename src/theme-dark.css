@@ -59,3 +59,5 @@ html[data-theme="dark"] .gcoach .bubble b.warn { color: #FF8A5B; }
 /* the welcome screen: the light look's cream chips and the chosen language */
 html[data-theme="dark"] .wwal .wreasons.chips li { background: var(--surface); color: var(--ink); border-color: var(--line); }
 html[data-theme="dark"] .wwal .wlang button[aria-pressed="true"] { background: #F0C048; color: #1A1206; }
+/* the score in the Race and Survival header pill (dark green on the dark pill, 2.3:1) */
+html[data-theme="dark"] .rushhead b { color: #8FD19E; }

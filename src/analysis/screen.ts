@@ -14,6 +14,7 @@ import { movesFor, promotion } from "../play/gamekit";
 import { copyText, pgnOf } from "../play/pgn";
 import { whiteWin } from "../review/grade";
 import { explorerHTML } from "./explorer";
+import { editFrom } from "./editor";
 
 type Go = (h: string) => void;
 const START = new Chess().fen();
@@ -41,6 +42,7 @@ export function analysisBoard(root: HTMLElement, go: Go): () => void {
       <button class="btn ghost" data-last aria-label="${t("anaEnd")}">${icon("arrowRight")}${icon("arrowRight")}</button></div>
     <div class="anatools">
       <button class="btn ghost" data-best>${icon("hint")} <span data-besttxt></span></button>
+      <button class="btn ghost" data-edit>${icon("grid")} ${t("edTitle")}</button>
       <button class="btn ghost" data-load>${t("anaLoad")}</button>
       <button class="btn ghost" data-pgn>${t("copyPgn")}</button>
       <button class="btn" data-playfrom>${icon("swords")} ${t("anaPlayFrom")}</button>
@@ -125,6 +127,7 @@ export function analysisBoard(root: HTMLElement, go: Go): () => void {
   root.querySelector<HTMLButtonElement>("[data-flip]")!.onclick = () => { flip = !flip; render(); };
   root.querySelector<HTMLButtonElement>("[data-best]")!.onclick = () => { showBest = !showBest; refresh(); };
   root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/play");
+  root.querySelector<HTMLButtonElement>("[data-edit]")!.onclick = () => { editFrom(pos().fen()); go("#/editor"); };   // DECISIONS #115
   root.querySelector<HTMLButtonElement>("[data-pgn]")!.onclick = () =>
     void copyText(pgnOf(line, "?", "?", "*", start === START ? undefined : start), root.querySelector("[data-pgnbox]")!);
   // load a FEN (a position) or a PGN (a game)

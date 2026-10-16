@@ -10,6 +10,8 @@ import { icon } from "../icons";
 import { checkSquare, refusal } from "../lesson/exercises";
 import { captured, flagOutcome, movesFor, promotion } from "./gamekit";
 import { saveGame } from "./history";
+import { shareButton, wireShare } from "./share";
+import { gameMenuButton, wireGameMenu } from "./gamesettings";
 import { pieceHTML } from "../chess/pieces";
 import type { PieceCode } from "../chess/types";
 import { setLastGame } from "../review/screen";
@@ -57,7 +59,9 @@ function friendGame(root: HTMLElement, go: Go, startClock: Clock | null, turnBoa
       <button class="btn ghost" data-undo>${icon("again")} ${t("takeback")}</button>
       <button class="btn ghost" data-draw>${t("drawAgree")}</button>
       <button class="btn ghost" data-resign>${t("resign")}</button></div></div>`;
-  const board = new Board(root.querySelector("[data-board]")!, {});
+  const board = new Board(root.querySelector("[data-board]")!, { game: true });
+  root.querySelector(".lessonbar")!.insertAdjacentHTML("beforeend", gameMenuButton());   // DECISIONS #115
+  wireGameMenu(root, board);
   root.querySelector(".screen")?.classList.add("gamescreen");   // DECISIONS #110 (look C): games are black and gold
   const extra = root.querySelector<HTMLElement>("[data-extra]")!;
   const ctx = { board, extra, say: () => {}, status: () => {}, done: () => {} };
@@ -98,7 +102,7 @@ function friendGame(root: HTMLElement, go: Go, startClock: Clock | null, turnBoa
       // the result as a card over the final position (DECISIONS #84); closing it shows the same buttons below
       const buttons = `${uci.length >= 2 ? `<button class="btn wide gold" data-review>${icon("target")} ${t("reviewTitle")}</button>` : ""}
         <button class="btn ghost wide" data-again>${t("rematch")}</button>
-        <button class="linkbtn" data-pgn>${t("copyPgn")}</button><div data-pgnbox></div>`;
+        ${uci.length >= 2 ? shareButton() : ""}<button class="linkbtn" data-pgn>${t("copyPgn")}</button><div data-pgnbox></div>`;
       const card = root.querySelector<HTMLElement>("[data-card]")!, acts = root.querySelector<HTMLElement>(".friendacts")!;
       card.innerHTML = `<button class="iconbtn x" data-x aria-label="${t("close")}">${icon("close")}</button>
         <div class="trophy light">${icon("trophy")}</div><h2>${title}</h2><p>${how}</p>${buttons}`;
@@ -106,6 +110,9 @@ function friendGame(root: HTMLElement, go: Go, startClock: Clock | null, turnBoa
       acts.innerHTML = `<div class="resultacts">${buttons}</div>`; acts.hidden = true;
       if (result !== "1/2-1/2") confetti(root.querySelector(".screen")!);
       root.querySelectorAll<HTMLButtonElement>("[data-review]").forEach(b => b.onclick = () => go("#/review"));
+      // DECISIONS #115: kept from White's side, like the game list
+      wireShare(root, () => { const last = g.history({ verbose: true }).at(-1);
+        return { pos: placementFromFen(g.fen()), lastMove: last ? [last.from, last.to] : undefined, flip: false, result: result === "1-0" ? "won" : result === "0-1" ? "lost" : "draw", how, opp: { en: "Black", pa: "ਕਾਲਾ" }, moves: Math.ceil(uci.length / 2) }; });
       root.querySelectorAll<HTMLButtonElement>("[data-pgn]").forEach(b => b.onclick = () => void copyText(pgnOf(uci, t("colourWhite"), t("colourBlack"), result), b.nextElementSibling as HTMLElement));
       root.querySelectorAll<HTMLButtonElement>("[data-again]").forEach(b => b.onclick = () => go(`#/play/friend?${Date.now()}`));
       card.querySelector<HTMLButtonElement>("[data-x]")!.onclick = () => { card.hidden = true; acts.hidden = false; };
@@ -119,6 +126,7 @@ function friendGame(root: HTMLElement, go: Go, startClock: Clock | null, turnBoa
   board.interact({
     canPick: s => { if (over) return t("playAgain"); const p = g.get(s as CjSquare); return p && p.color === g.turn() ? true : t("notYourTurn"); },
     targets: s => g.moves({ square: s as CjSquare, verbose: true }).map(m => m.to),
+    confirmable: () => !over,
     onTap: () => {},
     onMove: async (from, to) => {
       if (over) return;
