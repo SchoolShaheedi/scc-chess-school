@@ -243,6 +243,7 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
     root.querySelector(".screen")?.classList.add("gamescreen");   // DECISIONS #110 (look C): games are black and gold
     const extra = root.querySelector<HTMLElement>("[data-extra]")!, say = (h: string) => { root.querySelector("[data-state]")!.innerHTML = h; };
     const ctx = { board, extra, say: () => {}, status: () => {}, done: () => {} };
+    const times: (number | null)[] = [];   // Insights (DECISIONS #113): thinking time per move, by ply
     const chess = () => { const c = new Chess(); for (const m of g.moves) c.move({ from: m.slice(0, 2), to: m.slice(2, 4), promotion: m[4] }); return c; };
 
     // the clocks come from the server; between updates the side to move counts down here
@@ -278,7 +279,8 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
       const won = (g.result === "1-0") === (mine === "w") && g.result !== "1/2-1/2", draw = g.result === "1/2-1/2";
       const r: "won" | "lost" | "draw" = draw ? "draw" : won ? "won" : "lost";
       const how = t(`byOnline_${g.reason}` as "byOnline_mate");
-      if (!alreadyOver) saveGame({ at: new Date().toISOString(), opp: { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" }, me: mine, result: r, tc: g.tc_min ? (g.tc_inc ? `${g.tc_min}+${g.tc_inc}` : String(g.tc_min)) : undefined, uci: g.moves });
+      if (!alreadyOver) saveGame({ at: new Date().toISOString(), opp: { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" }, me: mine, result: r, tc: g.tc_min ? (g.tc_inc ? `${g.tc_min}+${g.tc_inc}` : String(g.tc_min)) : undefined, uci: g.moves,
+        ms: g.moves.map((_, i) => times[i] ?? null) });
       setLastGame({ uci: g.moves, me: mine, botName: { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" }, back: "#/online" });
       if (r === "won" && !alreadyOver) { sound.complete(); confetti(root.querySelector(".screen")!); }
       const buttons = `${g.moves.length >= 2 ? `<button class="btn wide gold" data-review>${icon("target")} ${t("reviewTitle")}</button>` : ""}
@@ -335,6 +337,7 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
         if (!legal.length) { board!.shake(to); say(refusal(c.fen(), from, to)); return; }
         const pr = legal[0].promotion ? await promotion(ctx, mine) : undefined;
         const uci = legal[0].from + legal[0].to + (pr ?? "");
+        if (g.turn_since) times[g.moves.length] = Math.max(0, Date.now() - Date.parse(g.turn_since));   // Insights (#113)
         // show it at once; the server's answer (by the live update) confirms it, or puts the board back
         busy = true; busySince = Date.now();
         const optimistic = { ...g, moves: [...g.moves, uci] };

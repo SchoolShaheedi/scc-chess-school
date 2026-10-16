@@ -123,6 +123,9 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
   let busy = false, alive = true, over = false, timer = 0;
   // DECISIONS #84: a premove queued while the bot thinks, and the move being looked at (null = the live game)
   let pre: [Square, Square] | null = null, view: number | null = null;
+  // Insights (DECISIONS #113): your thinking time per move, by ply; your turn starts when the bot's move lands
+  const times: (number | null)[] = [];
+  let turnAt = Date.now();
   // a game with a take-back or a hint, or a capture race, doesn't move the playing rating (full check 2026-10-08)
   // a game with the coach explaining every move (DECISIONS #108) is unrated, like one with take-backs
   let helped = coachMode;
@@ -215,7 +218,7 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     try { mv = await botMove(await engine, g.fen(), legal, bot, Math.random, g.history()); }
     catch { mv = legal[Math.floor(Math.random() * legal.length)]; }
     if (!alive || over) return;   // resigned, out of time, or left while the bot was thinking: its move must not land
-    g.move({ from: mv.slice(0, 2), to: mv.slice(2, 4), promotion: mv[4] }); tick();
+    g.move({ from: mv.slice(0, 2), to: mv.slice(2, 4), promotion: mv[4] }); tick(); turnAt = Date.now();
     const queued = pre; pre = null;
     busy = false; show(true);   // not busy BEFORE drawing, so your pieces are drawn as pick-up-able
     if (checkEnd()) return;
@@ -232,6 +235,7 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     const pr = legal[0].promotion ? promo ?? await promotion(ctx, me) : undefined;
     if (over) return;   // the clock ran out while the promotion choice was open
     const before = new Set(hanging(g.fen(), me).map(h => h.sq));
+    times[g.history().length] = Date.now() - turnAt;
     const m = g.move({ from: legal[0].from, to: legal[0].to, promotion: pr }); tick(); show(true);
     if (!g.isGameOver()) {
       // a newly hanging piece outranks praise: warn only where a take-back is on, and never in a level test
@@ -286,7 +290,8 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     lastResult = won ? "won" : lost ? "lost" : "draw";
     bossDone?.(lastResult);
     coach(t(won ? "gcWon" : lost ? "gcLost" : "gcDraw"), won ? "cheer" : lost ? "think" : "happy", won ? "ok" : "");
-    saveGame({ at: new Date().toISOString(), opp: bot.name, oppRating: bot.rating, me, result: lastResult, tc: clock ? tc : undefined, uci: uciOf(), startFen });
+    saveGame({ at: new Date().toISOString(), opp: bot.name, oppRating: bot.rating, me, result: lastResult, tc: clock ? tc : undefined, uci: uciOf(), startFen,
+      ms: uciOf().map((_, i) => times[i] ?? null) });
     setTimeout(() => alive && result(lastResult!, how), 600);
     return true;
   }
@@ -343,7 +348,7 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
   root.querySelector<HTMLButtonElement>("[data-undo]")?.addEventListener("click", () => {
     if (busy || over || g.history().length < (me === "w" ? 2 : 3)) return;
     view = null; pre = null; helped = true;
-    g.undo(); g.undo(); show(); turnText(); void explain();   // the bot's reply and your move
+    g.undo(); g.undo(); times.length = g.history().length; turnAt = Date.now(); show(); turnText(); void explain();   // the bot's reply and your move
   });
   root.querySelector<HTMLButtonElement>("[data-hint]")?.addEventListener("click", async () => {
     if (busy || over) return;

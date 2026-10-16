@@ -54,6 +54,7 @@ export function mePage(root: HTMLElement, go: (h: string) => void) {
     ${statsHTML()}
     <div data-onlineratings></div>
     <div data-classboards></div>
+    <button class="inslink" data-insights>${icon("chart")}<span class="grow"><b>${t("insTitle")}</b><small>${t("insMeSub")}</small></span>${icon("chevronRight")}</button>
     <h2 class="sec">${t("meGames")} <span>${num(list.length)}</span></h2>
     ${list.length ? `<div class="gamelist">${list.slice(0, 20).map((g, i) => `<button class="gamerow" data-game="${i}">
       <span class="res ${g.result}">${t(g.result === "won" ? "resWon" : g.result === "lost" ? "resLost" : "resDraw")}</span>
@@ -67,6 +68,7 @@ export function mePage(root: HTMLElement, go: (h: string) => void) {
     go("#/review");
   });
   root.querySelector<HTMLButtonElement>("[data-settings]")!.onclick = () => go("#/settings");
+  root.querySelector<HTMLButtonElement>("[data-insights]")!.onclick = () => go("#/insights");
   // DECISIONS #109: tap a hero you have won to use it as your picture; tap it again for your animal
   root.querySelectorAll<HTMLButtonElement>("[data-heroav]").forEach(b => b.onclick = () => {
     if (b.classList.contains("off")) return void b.animate([{ transform: "translateX(-4px)" }, { transform: "translateX(4px)" }, { transform: "none" }], 250);

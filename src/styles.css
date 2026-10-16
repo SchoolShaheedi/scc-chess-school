@@ -464,7 +464,7 @@ html:has(.donescreen), html:has(.donescreen) body { background: #2A1D13; }
 
 /* ---------- game review (DECISIONS #73) ---------- */
 :root { --l-best: #1F7A5C; --l-good: #7DA88F; --l-inaccuracy: #D9A520; --l-mistake: #E07B24; --l-blunder: #C2410C;
-  --l-brilliant: #18A8A0; --l-great: #2F7FC1; --l-book: #9C7A55; --l-miss: #B04A8C; }
+  --l-brilliant: #0F7A74; --l-great: #2A6FA8; --l-book: #7E5A34; --l-miss: #B04A8C; }   /* white labels need 4.5:1 (contrast audit 2026-10-16) */
 .testbar.wide { width: 100%; max-width: 280px; height: 10px; }
 .revsum { display: flex; gap: 10px; }
 .revbig { flex: 1; text-align: center; border-radius: 18px; padding: 16px 8px; background: linear-gradient(160deg, var(--wal-2), var(--wal)); color: #F4EAD6; }
@@ -871,7 +871,7 @@ textarea.textin { resize: vertical; }
 .ftsq.sel { box-shadow: inset 0 0 0 4px var(--gold); }
 .ftsq > img, .ftsq > svg, .ftsq > * > img { position: absolute; inset: 7%; width: 86%; height: 86%; object-fit: contain; pointer-events: none; }
 .ftsq.dot::after { content: ""; position: absolute; width: 26%; height: 26%; border-radius: 50%; background: rgba(31, 42, 36, .3); }
-.ftstar { font-size: clamp(28px, 9vw, 44px); color: #D9A520; text-shadow: 0 1px 0 #6b4e10; pointer-events: none; }
+.ftstar { font-size: clamp(28px, 9vw, 44px); color: #F0C048; text-shadow: 0 0 2px #3a2a08, 0 1px 0 #3a2a08, 0 0 6px rgba(0,0,0,.45); pointer-events: none; }
 .ftrule { text-align: center; }
 
 /* ---------- the lighter home (DECISIONS #94, trial A) ---------- */
@@ -1006,7 +1006,7 @@ textarea.textin { resize: vertical; }
 .rounds { display: grid; gap: 8px; }
 .rd { display: grid; grid-template-columns: 30px 1fr; column-gap: 10px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 9px 11px; }
 .rd span { grid-row: span 2; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--surface-2); color: var(--muted); }
-.rd.done span { background: var(--good); color: #fff; } .rd.now { border: 2px solid var(--gold); } .rd.now span { background: var(--gold); color: #fff; }
+.rd.done span { background: var(--good); color: #fff; } .rd.now { border: 2px solid var(--gold); } .rd.now span { background: var(--gold); color: #1A1206; }
 .rd small { color: var(--muted); font-size: 12.5px; }
 .heroprize { display: grid; justify-items: center; gap: 6px; text-align: center; background: #16294B; color: #FFF4D6; border-radius: 16px; padding: 14px; }
 .heroprize .heroface { width: 96px; height: 96px; border: 4px solid #FFD86B; box-shadow: 0 0 0 6px rgba(255,216,107,.25), 0 0 30px rgba(255,216,107,.6); }
@@ -1086,3 +1086,30 @@ html:has(.gamescreen), html:has(.gamescreen) body { background: var(--swc-black)
 .tabbar { background: var(--swc-black); border-top-color: #2B2824; }
 .tab, .tab.on { color: #CFC8BB; } .tab.on { color: var(--swc-saffron); }
 .tab .dotbadge { box-shadow: 0 0 0 2px var(--swc-black); }
+
+/* labels on light colours read in dark text (contrast audit 2026-10-16: white on these was 2.3-3.0 : 1) */
+.tag.good, .tag.inaccuracy, .tag.mistake { color: #1A1206; }
+
+/* the Light look: a locked trophy stays readable (2.6:1 before) */
+html:not([data-theme="dark"]) .trp.off { color: #6B6B74; }
+
+/* Insights (DECISIONS #113, look A): coach first, then three cards of simple bars */
+.insights .inscount { margin: -4px 0 0; color: var(--muted); font-weight: 700; font-size: 14px; }
+.inscard { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 10px; }
+.inscard .note { margin: 0; }
+.insopen { display: flex; align-items: center; gap: 10px; }
+.insopen .grow { min-width: 0; } .insopen .grow b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.insopen small, .insrow small { display: block; color: var(--muted); font-size: 12px; }
+.inswdl { display: flex; width: 84px; height: 10px; border-radius: 5px; overflow: hidden; flex: none; }
+.insopen .pct { width: 42px; text-align: right; }
+.inslegend { display: flex; gap: 12px; font-size: 12px; color: var(--muted); }
+.inslegend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; }
+.insrow { display: grid; grid-template-columns: minmax(84px, auto) 1fr 44px; gap: 6px 10px; align-items: center; font-size: 14px; }
+.insrow > b { text-align: right; } .insrow em { grid-column: 2 / 4; color: var(--muted); font-size: 13px; font-style: normal; }
+.insrow small { grid-column: 2 / 4; margin-top: -4px; }
+.insbar { height: 10px; border-radius: 5px; background: var(--surface-2, #E8E2D6); overflow: hidden; } .insbar i { display: block; height: 100%; }
+.inspractise, .inslink { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; font: inherit; color: var(--ink);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; cursor: pointer; }
+.inspractise { border-color: var(--gold); } .inspractise small { display: block; color: var(--muted); font-size: 12px; font-weight: 700; }
+.inslink > .ic:first-child { font-size: 22px; color: var(--gold); flex: none; } .inslink small { display: block; color: var(--muted); font-size: 12.5px; }
+.inslink .grow, .inspractise .grow, .insopen .grow { flex: 1; min-width: 0; }

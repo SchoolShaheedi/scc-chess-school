@@ -11,6 +11,9 @@ export interface SavedGame {
   result: "won" | "lost" | "draw";
   tc?: string;                        // "10", "5", "3+2"; absent = untimed
   uci: string[]; startFen?: string;
+  /** Insights (DECISIONS #113): how long each move took, in ms, by ply; null where it was not measured (the
+   *  opponent's moves, or an online move made in an earlier visit). Absent on games saved before 2026-10-16. */
+  ms?: (number | null)[];
 }
 const MAX = 50;
 const key = () => `scc-games-${family.current().id}`;
@@ -22,7 +25,7 @@ export function saveGame(g: SavedGame) {
   if (isPreview() || g.uci.length < 2) return;   // previews never save; a game with no real moves is not worth keeping
   try { localStorage.setItem(key(), JSON.stringify([g, ...games()].slice(0, MAX))); } catch { /* storage full or blocked */ }
 }
-/** Sign-out on a shared device wipes every child's games too (sync.ts forgetDevice). */
+/** Sign-out on a shared device wipes every child's games too (sync.ts forgetDevice), and their Insights grades. */
 export function forgetGames() {
-  try { for (const k of Object.keys(localStorage)) if (k.startsWith("scc-games-")) localStorage.removeItem(k); } catch { /* blocked */ }
+  try { for (const k of Object.keys(localStorage)) if (k.startsWith("scc-games-") || k.startsWith("scc-insights-")) localStorage.removeItem(k); } catch { /* blocked */ }
 }

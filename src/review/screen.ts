@@ -96,9 +96,11 @@ export function reviewGame(root: HTMLElement, go: (h: string) => void): () => vo
       <div class="revcounts">${LABELS.filter(l => count(l)).map(l => `<div class="rc ${l}"><span class="dot"></span>${lbl(l)}<b>${num(count(l))}</b></div>`).join("")}</div>
       <div class="actions" style="flex-direction:column">
         <button class="btn wide" data-walk>${t("reviewWalk")} ${icon("arrowRight")}</button>
+        <button class="inslink" data-insights>${icon("chart")}<span class="grow"><b>${t("insFromReview")}</b></span>${icon("chevronRight")}</button>
       </div></div>`;
     root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go(game!.back);
     root.querySelector<HTMLButtonElement>("[data-walk]")!.onclick = () => walk(r, 0);
+    root.querySelector<HTMLButtonElement>("[data-insights]")!.onclick = () => go("#/insights");
     root.querySelectorAll<HTMLElement>("[data-km]").forEach(b => b.addEventListener("click", () => walk(r, +b.dataset.km!)));
   }
 

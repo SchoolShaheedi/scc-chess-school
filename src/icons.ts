@@ -3,7 +3,7 @@ import {
   ArrowLeft, ArrowRight, BookOpen, Check, ChevronLeft, ChevronRight, CircleCheck, CircleX, Crown, Flame, GraduationCap, House,
   Languages, Lightbulb, Lock, LogIn, Mail, Medal, Music, Play, Puzzle, RotateCcw, Search, Settings, ShieldCheck, Star, Swords,
   Target, Timer, Trophy, UserRound, Vibrate, Volume2, WifiOff, X, Zap, Cat, Dog, Rabbit, Bird, Fish, Turtle, Squirrel, Snail,
-  Plus, Trash2, Users, Grid3x3, SunMoon, type IconNode,
+  Plus, Trash2, Users, Grid3x3, SunMoon, ChartColumn, type IconNode,
 } from "lucide";
 
 const ICONS = {
@@ -12,7 +12,7 @@ const ICONS = {
   target: Target, timer: Timer, trophy: Trophy, sound: Volume2, close: X, xp: Zap,
   chevronRight: ChevronRight, grad: GraduationCap, home: House, languages: Languages, login: LogIn, mail: Mail, medal: Medal,
   music: Music, puzzle: Puzzle, search: Search, shield: ShieldCheck, swords: Swords, user: UserRound, vibrate: Vibrate, offline: WifiOff,
-  cat: Cat, dog: Dog, rabbit: Rabbit, bird: Bird, fish: Fish, turtle: Turtle, squirrel: Squirrel, snail: Snail, plus: Plus, trash: Trash2, users: Users, grid: Grid3x3,
+  cat: Cat, dog: Dog, rabbit: Rabbit, bird: Bird, fish: Fish, turtle: Turtle, squirrel: Squirrel, snail: Snail, plus: Plus, trash: Trash2, users: Users, grid: Grid3x3, chart: ChartColumn,
 } satisfies Record<string, IconNode>;
 export type IconName = keyof typeof ICONS;
 

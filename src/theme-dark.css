@@ -43,3 +43,19 @@ html[data-theme="dark"] .parentcard small { color: var(--muted); }
 html[data-theme="dark"] .trp .c { background: var(--surface-2); }
 html[data-theme="dark"] .cal i { background: var(--surface-2); } html[data-theme="dark"] .cal i.y { background: #E9B54C; }
 html[data-theme="dark"] :is(.xpbar, .ubar, .lvprog .ubar, .testbar) { background: var(--surface-2); }
+
+/* contrast audit (2026-10-16, "some of the writing is too light"): every text measured on every screen against
+   WCAG AA (4.5:1, or 3:1 for large text); these failed and are fixed here */
+html[data-theme="dark"] .stats .kpis div { background: var(--surface); border-color: var(--line); }
+html[data-theme="dark"] .stats .kpis small { color: #F0C048; }
+html[data-theme="dark"] .wdl .w, html[data-theme="dark"] .wdl .d { color: #1F1A12; }
+html[data-theme="dark"] .draft { color: #FF9DB5; background: color-mix(in srgb, #FF9DB5 14%, transparent); }
+html[data-theme="dark"] .rd.now span { color: #1A1206; }
+html[data-theme="dark"] .slotcard b.pick { color: #F0C048; }
+html[data-theme="dark"] .danger { color: #FF8A5B; }
+html[data-theme="dark"] .gamescreen .movelist i, html[data-theme="dark"] .movelist i { color: #A39C90; }
+html[data-theme="dark"] .gcoach .bubble b.idea { color: #8FD19E; }
+html[data-theme="dark"] .gcoach .bubble b.warn { color: #FF8A5B; }
+/* the welcome screen: the light look's cream chips and the chosen language */
+html[data-theme="dark"] .wwal .wreasons.chips li { background: var(--surface); color: var(--ink); border-color: var(--line); }
+html[data-theme="dark"] .wwal .wlang button[aria-pressed="true"] { background: #F0C048; color: #1A1206; }

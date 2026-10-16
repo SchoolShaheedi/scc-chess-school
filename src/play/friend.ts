@@ -61,6 +61,8 @@ function friendGame(root: HTMLElement, go: Go, startClock: Clock | null, turnBoa
   root.querySelector(".screen")?.classList.add("gamescreen");   // DECISIONS #110 (look C): games are black and gold
   const extra = root.querySelector<HTMLElement>("[data-extra]")!;
   const ctx = { board, extra, say: () => {}, status: () => {}, done: () => {} };
+  const times: (number | null)[] = [];   // Insights (DECISIONS #113): thinking time per move, by ply
+  let turnAt = Date.now();
   const bottom = () => (turnBoard ? g.turn() : "w");
   const side = (s: "w" | "b") => t(s === "w" ? "colourWhite" : "colourBlack");
 
@@ -88,7 +90,8 @@ function friendGame(root: HTMLElement, go: Go, startClock: Clock | null, turnBoa
     const title = result === "1/2-1/2" ? t("gameDrawn") : t("sideWins").replace("{side}", side(result === "1-0" ? "w" : "b"));
     // kept in Your games from White's side (DECISIONS #84)
     saveGame({ at: new Date().toISOString(), opp: { en: "Black", pa: "ਕਾਲਾ" }, me: "w", meName: { en: "White", pa: "ਚਿੱਟਾ" },
-      result: result === "1-0" ? "won" : result === "0-1" ? "lost" : "draw", tc: clock ? choice.tc : undefined, uci });
+      result: result === "1-0" ? "won" : result === "0-1" ? "lost" : "draw", tc: clock ? choice.tc : undefined, uci,
+      ms: uci.map((_, i) => i % 2 === 0 ? times[i] ?? null : null) });
     setTimeout(() => {
       if (!alive) return;   // the player has already left this screen
       drawClocks();
@@ -122,14 +125,15 @@ function friendGame(root: HTMLElement, go: Go, startClock: Clock | null, turnBoa
       const legal = movesFor(g, from, to);
       if (!legal.length) { board.shake(to); root.querySelector("[data-state]")!.textContent = refusal(g.fen(), from, to); return; }
       const promo = legal[0].promotion ? await promotion(ctx, g.turn()) : undefined;
-      g.move({ from: legal[0].from, to: legal[0].to, promotion: promo });
+      times[g.history().length] = Date.now() - turnAt;
+      g.move({ from: legal[0].from, to: legal[0].to, promotion: promo }); turnAt = Date.now();
       if (clock) clock = press(clock, Date.now());
       show(true); checkEnd();
     },
   });
   root.querySelector<HTMLButtonElement>("[data-undo]")!.onclick = () => {
     if (over || !g.history().length) return;
-    g.undo(); if (clock) clock = undoTurn(clock, Date.now()); show();
+    g.undo(); times.length = g.history().length; turnAt = Date.now(); if (clock) clock = undoTurn(clock, Date.now()); show();
   };
   root.querySelector<HTMLButtonElement>("[data-draw]")!.onclick = () => { if (!over && confirm(t("drawConfirm"))) end("1/2-1/2", t("byAgreement")); };
   root.querySelector<HTMLButtonElement>("[data-resign]")!.onclick = () => {

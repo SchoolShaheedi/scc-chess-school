@@ -49,6 +49,7 @@ import { isTeacher } from "./teach/api";
 import { classView, homeworkCard, joinScreen, teacherHome } from "./teach/screens";
 import { mountAccount } from "./accountui";
 import { account, startSync, syncConfigured } from "./sync";
+import { insightsScreen } from "./insights/screen";
 
 registerSW({ immediate: true });
 // image fallbacks (full check 2026-10-08): the site's security policy blocks inline onerror="…" handlers, so one
@@ -445,6 +446,13 @@ function route() {
     return openingsHub(app, go);
   }
   if (page === "review") { teardown = reviewGame(app, go); return; }
+  // Insights (DECISIONS #113): practise goes to the level's next open lesson, or nowhere if the level is still locked
+  if (page === "insights") {
+    teardown = insightsScreen(app, go, n => { const ls = LEVELS[n - 1].lessons;
+      const l = ls.find(x => lessonState(x.id) === "current") ?? ls.find(x => lessonState(x.id) !== "locked");
+      return l ? `#/lesson/${l.id}` : null; });
+    return;
+  }
   if (page === "puzzles") {
     if (arg === "daily") { teardown = playDaily(app, learnerLevel(), go); return; }
     if (arg === "rush") { teardown = playRush(app, go); return; }
