@@ -50,11 +50,14 @@ import { classView, homeworkCard, joinScreen, teacherHome } from "./teach/screen
 import { mountAccount } from "./accountui";
 import { account, startSync, syncConfigured } from "./sync";
 import { insightsScreen } from "./insights/screen";
+import { NATIVE, nativeBackButton, nativeBars } from "./native";
 import { boardEditor } from "./analysis/editor";
 import { soloScreen } from "./solo/screen";
 import { gameSettingsHTML, wireGameSettings } from "./play/gamesettings";
 
-registerSW({ immediate: true });
+// the Android app (DECISIONS #121) carries every file inside it: no service worker
+if (!NATIVE) registerSW({ immediate: true });
+if (NATIVE) nativeBackButton();
 // image fallbacks (full check 2026-10-08): the site's security policy blocks inline onerror="…" handlers, so one
 // listener does it: an image marked data-hide-on-error disappears, one with data-fallback is replaced by its fallback
 document.addEventListener("error", e => {
@@ -79,6 +82,7 @@ function applyTheme() {
   document.documentElement.dataset.theme = mode;
   document.title = t("appName");
   document.querySelector('meta[name="theme-color"]')?.setAttribute("content", mode === "dark" ? "#141414" : "#FFFFFF");
+  if (NATIVE) nativeBars();   // the Android status-bar icons follow the look (DECISIONS #121)
 }
 
 /** A lesson is open once the one before it is finished; the first lesson is always open. */
@@ -120,12 +124,16 @@ function welcome() {
     <h1 class="wtitle">${t("appName")}${s.lang === "en" ? `<span lang="pa">ਸ਼ਤਰੰਜ ਪਾਠਸ਼ਾਲਾ</span>` : `<span lang="en">Chess School</span>`}</h1><p class="wtag">${t("tagline")}</p>
     <ul class="wreasons chips">${reasons}</ul>
     <div class="wcta"><button class="btn wide gold" data-go="new">${t("getStarted")}</button>
-      <button class="linkbtn" data-go="have">${t("haveAccount")}</button></div>
+      ${NATIVE ? "" : `<button class="linkbtn" data-go="have">${t("haveAccount")}</button>`}</div>
   </div></div>`;
   app.querySelectorAll<HTMLButtonElement>(".wlang [data-l]").forEach(b => b.onclick = () => {
     store.set({ lang: b.dataset.l as "en" | "pa" }); applyTheme(); welcome();
   });
-  app.querySelectorAll<HTMLButtonElement>("[data-go]").forEach(b => b.onclick = () => go(b.dataset.go === "have" ? "#/signin/have" : "#/signin"));
+  app.querySelectorAll<HTMLButtonElement>("[data-go]").forEach(b => b.onclick = () => {
+    // the Android app has no sign-in in version 1 (DECISIONS #121): straight into onboarding, saved on the phone
+    if (NATIVE) { localOnly = true; return onboarding(1); }
+    go(b.dataset.go === "have" ? "#/signin/have" : "#/signin");
+  });
 }
 
 // ---------- sign-in, required (DECISIONS #50) ----------
@@ -181,7 +189,7 @@ function onboarding(step = 0) {
   } else {
     const look = s.look;
     app.innerHTML = `<div class="screen">
-      <div class="hero">${look !== "adult" ? `<div style="width:120px;height:120px">${coachHTML(look, "happy")}</div>` : `<img src="art/app-icon-192.png" alt="" width="84" height="84" style="border-radius:20px">`}
+      <div class="hero">${look !== "adult" ? `<div class="herocoach">${coachHTML(look, "happy")}</div>` : `<img src="art/app-icon-192.png" alt="" width="84" height="84" style="border-radius:20px">`}
         <h1>${t("appName")}</h1><p>${look === "young" ? t("coachHi") : t("welcome")}</p></div>
       <p class="note" style="text-align:center">${t(syncConfigured ? "progressNoteAccount" : "progressNote")}</p>
       <div class="actions" style="flex-direction:column"><button class="btn wide" data-start>${t("start")}</button>
@@ -402,7 +410,8 @@ function settings() {
     store.set({ [g.dataset.seg!]: v } as Partial<ReturnType<typeof store.get>>); applyTheme(); teardown?.(); settings();
   }));
   wireGameSettings(app.querySelector("[data-gsgroup]")!, () => {});   // DECISIONS #115
-  teardown = mountAccount(app.querySelector("[data-account]")!);
+  if (NATIVE) app.querySelector<HTMLElement>("[data-account]")!.hidden = true;   // no accounts in the Android app yet
+  else teardown = mountAccount(app.querySelector("[data-account]")!);
   app.querySelector<HTMLButtonElement>("[data-home]")!.onclick = () => go("#/me");
   app.querySelector<HTMLButtonElement>("[data-placement]")?.addEventListener("click", () => go("#/placement"));
   // teacher tools only for approved teachers (the database decides: is_teacher())
@@ -423,6 +432,8 @@ function route() {
   const gated = syncConfigured ? !account.signedIn() && !isPreview() && !localOnly : !store.get().onboarded && !localOnly;
   if (gated) return page === "signin" ? signInScreen(arg === "have") : welcome();
   if (!store.get().onboarded) return onboarding(1);
+  // the Android app has nothing online in version 1 (DECISIONS #121): those screens are never opened there
+  if (NATIVE && ["online", "teach", "class", "join", "signin"].includes(page)) { go("#/"); return; }
   if (page === "test" && arg) {
     const lv = LEVELS[parseInt(arg) - 1];
     if (lv?.test && testState(lv.n) !== "locked") { teardown = playTest(app, lv, go); return; }

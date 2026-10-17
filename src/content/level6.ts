@@ -11,7 +11,7 @@ const play = (en: string, pa: string) => ({ en, pa });
 
 export const LEVEL6: Lesson[] = [
   {
-    id: "6.1", level: 6, status: "draft",
+    id: "6.1", level: 6, status: "checked",
     title: { en: "The three rules", pa: "ਤਿੰਨ ਅਸੂਲ" },
     goal: { en: "Open every game well: centre, develop, castle.", pa: "ਹਰ ਖੇਡ ਚੰਗੀ ਤਰ੍ਹਾਂ ਸ਼ੁਰੂ ਕਰੋ: ਵਿਚਕਾਰ ਲਓ, ਮੋਹਰੇ ਕੱਢੋ, ਕਿਲ੍ਹੇਬੰਦੀ ਕਰੋ।" },
     learn: [
@@ -48,7 +48,7 @@ export const LEVEL6: Lesson[] = [
   },
 
   {
-    id: "6.2", level: 6, status: "draft",
+    id: "6.2", level: 6, status: "checked",
     title: { en: "Don't move twice", pa: "ਇੱਕ ਮੋਹਰਾ, ਇੱਕ ਵਾਰ" },
     goal: { en: "Develop every piece once before moving any piece twice.", pa: "ਕਿਸੇ ਮੋਹਰੇ ਨੂੰ ਦੂਜੀ ਵਾਰ ਚਲਾਉਣ ਤੋਂ ਪਹਿਲਾਂ ਹਰ ਮੋਹਰੇ ਨੂੰ ਇੱਕ ਵਾਰ ਕੱਢੋ।" },
     learn: [
@@ -63,7 +63,7 @@ export const LEVEL6: Lesson[] = [
   },
 
   {
-    id: "6.3", level: 6, status: "draft",
+    id: "6.3", level: 6, status: "checked",
     title: { en: "Opening traps", pa: "ਸ਼ੁਰੂਆਤੀ ਫੰਦੇ" },
     goal: { en: "Stop the quick mates, and spring a trap of your own.", pa: "ਤੇਜ਼ ਮਾਤਾਂ ਰੋਕੋ, ਅਤੇ ਆਪਣਾ ਫੰਦਾ ਲਾਓ।" },
     learn: [
@@ -85,7 +85,7 @@ export const LEVEL6: Lesson[] = [
   },
 
   {
-    id: "6.4", level: 6, status: "draft",
+    id: "6.4", level: 6, status: "checked",
     title: { en: "The Italian Game", pa: "ਇਤਾਲਵੀ ਖੇਡ" },
     goal: { en: "Play the Italian Game as White.", pa: "ਚਿੱਟੇ ਵਜੋਂ ਇਤਾਲਵੀ ਖੇਡ ਖੇਡੋ।" },
     learn: [
@@ -107,7 +107,7 @@ export const LEVEL6: Lesson[] = [
   },
 
   {
-    id: "6.5", level: 6, status: "draft",
+    id: "6.5", level: 6, status: "checked",
     title: { en: "The London System", pa: "ਲੰਡਨ ਪ੍ਰਣਾਲੀ" },
     goal: { en: "One reliable set-up for White after 1. d4.", pa: "1. d4 ਤੋਂ ਬਾਅਦ ਚਿੱਟੇ ਲਈ ਇੱਕ ਭਰੋਸੇ ਵਾਲੀ ਬਣਤਰ।" },
     learn: [
@@ -127,7 +127,7 @@ export const LEVEL6: Lesson[] = [
   },
 
   {
-    id: "6.6", level: 6, status: "draft",
+    id: "6.6", level: 6, status: "checked",
     title: { en: "Answering 1. e4", pa: "1. e4 ਦਾ ਜਵਾਬ" },
     goal: { en: "Meet 1. e4 with 1... e5 and solid development.", pa: "1. e4 ਦਾ ਜਵਾਬ 1... e5 ਨਾਲ ਦਿਓ, ਅਤੇ ਮੋਹਰੇ ਪੱਕੀ ਤਰ੍ਹਾਂ ਕੱਢੋ।" },
     learn: [
@@ -147,7 +147,7 @@ export const LEVEL6: Lesson[] = [
   },
 
   {
-    id: "6.7", level: 6, status: "draft",
+    id: "6.7", level: 6, status: "checked",
     title: { en: "Answering 1. d4", pa: "1. d4 ਦਾ ਜਵਾਬ" },
     goal: { en: "Meet 1. d4 with the Queen's Gambit Declined set-up.", pa: "1. d4 ਦਾ ਜਵਾਬ ਰਾਣੀ ਦੇ ਗੈਂਬਿਟ ਨੂੰ ਨਾਂਹ ਕਰਨ ਵਾਲੀ ਬਣਤਰ ਨਾਲ ਦਿਓ।" },
     learn: [
@@ -167,7 +167,7 @@ export const LEVEL6: Lesson[] = [
   },
 
   {
-    id: "6.8", level: 6, status: "draft",
+    id: "6.8", level: 6, status: "checked",
     title: { en: "From opening to plan", pa: "ਸ਼ੁਰੂਆਤ ਤੋਂ ਯੋਜਨਾ" },
     goal: { en: "Know what to do once the opening is over.", pa: "ਜਾਣੋ ਕਿ ਸ਼ੁਰੂਆਤ ਖ਼ਤਮ ਹੋਣ 'ਤੇ ਕੀ ਕਰਨਾ ਹੈ।" },
     learn: [

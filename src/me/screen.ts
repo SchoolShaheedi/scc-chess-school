@@ -4,7 +4,7 @@ import { family } from "../family";
 import { avatarHTML, myAvatarHTML } from "./family";
 import { animalHeroArt, animalHeroEarned, hasHero, heroArt, HEROES } from "../heroes/heroes";
 import { BOTS } from "../bots/bots";
-import { num, t, tx } from "../i18n";
+import { movesN, num, t, tx } from "../i18n";
 import { icon } from "../icons";
 import { store, today, unlockAll } from "../store";
 import { tabbar } from "../tabbar";
@@ -59,7 +59,7 @@ export function mePage(root: HTMLElement, go: (h: string) => void) {
     ${list.length ? `<div class="gamelist">${list.slice(0, 20).map((g, i) => `<button class="gamerow" data-game="${i}">
       <span class="res ${g.result}">${t(g.result === "won" ? "resWon" : g.result === "lost" ? "resLost" : "resDraw")}</span>
       <span class="grow"><b>${t("vsWord")} ${tx(g.opp)}${g.oppRating ? ` ~${num(g.oppRating)}` : ""}</b>
-        <small>${new Date(g.at).toLocaleDateString(s.lang === "pa" ? "pa-IN" : "en-GB", { day: "numeric", month: "short" })} · ${g.tc ? (g.tc.includes("+") ? g.tc.split("+").map(x => num(+x)).join(" + ") : `${num(+g.tc)} ${t("minutes")}`) : t("untimed")} · ${num(Math.ceil(g.uci.length / 2))} ${t("movesWord")}</small></span>
+        <small>${new Date(g.at).toLocaleDateString(s.lang === "pa" ? "pa-IN" : "en-GB", { day: "numeric", month: "short" })} · ${g.tc ? (g.tc.includes("+") ? g.tc.split("+").map(x => num(+x)).join(" + ") : `${num(+g.tc)} ${t("minutes")}`) : t("untimed")} · ${movesN(Math.ceil(g.uci.length / 2))}</small></span>
       ${icon("arrowRight")}</button>`).join("")}</div>` : `<p class="note">${t("gamesNone")}</p>`}
   </div>${tabbar("me")}`;
   root.querySelectorAll<HTMLButtonElement>("[data-game]").forEach(b => b.onclick = () => {

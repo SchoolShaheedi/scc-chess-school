@@ -505,9 +505,9 @@ html:has(.donescreen), html:has(.donescreen) body { background: #2A1D13; }
 /* ---------- tab bar, daily goal, Me (DECISIONS #76) ---------- */
 /* room for the fixed tab bar, so the last item can scroll clear of it. The :has rule covers any screen that forgets
    the class (the Learn home did, 2026-10-08: its last lessons sat behind the bar). */
-.tabbed, .screen:has(+ .tabbar) { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+.tabbed, .screen:has(+ .tabbar) { padding-bottom: 96px; }   /* + the body's own gesture-bar allowance below */
 .tabbar { position: fixed; left: 50%; bottom: 0; transform: translateX(-50%); width: 100%; max-width: 520px; z-index: 20;
-  display: flex; justify-content: space-around; padding: 8px 6px calc(10px + env(safe-area-inset-bottom)); background: var(--wal);
+  display: flex; justify-content: space-around; padding: 8px 6px calc(10px + var(--sab)); background: var(--wal);
   border-radius: 20px 20px 0 0; box-shadow: 0 -6px 20px rgba(0,0,0,.12); }
 .tab { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 64px; min-height: 48px; justify-content: center;
   font-size: 12px; font-weight: 600; color: #B5A386; text-decoration: none; position: relative; border-radius: 12px; }
@@ -1126,7 +1126,7 @@ html:not([data-theme="dark"]) .trp.off { color: #6B6B74; }
 .gsrow { display: grid; gap: 4px; padding: 6px 0; } .gsrow + .gsrow { border-top: 1px solid var(--line); padding-top: 10px; }
 .gsrow small { color: var(--muted); font-size: 13px; } .gsrow .seg { margin-top: 4px; }
 .gsheet { position: fixed; left: 50%; bottom: 0; transform: translateX(-50%); width: min(100%, 520px); z-index: 50; background: var(--surface);
-  border-top: 3px solid var(--gold); border-radius: 18px 18px 0 0; padding: 14px 16px calc(16px + env(safe-area-inset-bottom)); box-shadow: 0 -10px 30px rgba(0,0,0,.45); }
+  border-top: 3px solid var(--gold); border-radius: 18px 18px 0 0; padding: 14px 16px calc(16px + var(--sab)); box-shadow: 0 -10px 30px rgba(0,0,0,.45); }
 .gshead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
 .lessonbar [data-gmenu] { margin-left: auto; }
 /* focus mode: games show the board, the clocks, the moves and the buttons only */
@@ -1177,3 +1177,18 @@ html:not([data-theme="dark"]) .trp.off { color: #6B6B74; }
 .endbanner.out { opacity: 0; }
 @keyframes bannerin { from { transform: translateY(-50%) scaleX(.3); opacity: 0; } to { transform: translateY(-50%) scaleX(1); opacity: 1; } }
 .clubtop .topbtns { display: flex; gap: 8px; }
+
+/* the system bars (DECISIONS #121): the Android app draws edge to edge and Capacitor gives the bar heights as
+   --safe-area-inset-*; a browser gives them as env(); either way the page keeps clear of the clock and the gesture bar */
+:root { --sat: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); --sab: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)); }
+body { padding-top: var(--sat); padding-bottom: var(--sab); }
+/* full-height screens fill what is left between the system bars, so their last button never hides behind one */
+.welcome { min-height: calc(100vh - var(--sat) - var(--sab)); }
+.wwal, .donescreen { min-height: calc(100dvh - var(--sat) - var(--sab)); }
+.wwal, .donescreen { padding-bottom: calc(16px + var(--sab)); }
+/* the coach on the last onboarding screen: held to its box (it overflowed over the words, found on Android 2026-10-17) */
+.herocoach { width: 120px; height: 120px; margin: 0 auto; }
+.herocoach img, .herocoach svg { width: 100%; height: 100%; object-fit: contain; display: block; }
+/* behind the status bar: a solid strip, so text scrolling up never runs under the clock (seen on Android 2026-10-17) */
+body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: var(--sat); background: var(--bg); z-index: 60; pointer-events: none; }
+html:has(.gamescreen) body::before { background: #141414; }

@@ -357,7 +357,7 @@ export const UI = {
   otherBots: { en: "Choose another bot", pa: "ਹੋਰ ਬੋਟ ਚੁਣੋ" },
   rematch: { en: "Rematch", pa: "ਦੁਬਾਰਾ ਖੇਡੋ" },
   newBot: { en: "New bot", pa: "ਨਵਾਂ ਬੋਟ" },
-  movesWord: { en: "moves", pa: "ਚਾਲਾਂ" },
+  movesWord: { en: "moves", pa: "ਚਾਲਾਂ" }, moveWord: { en: "move", pa: "ਚਾਲ" },
   timedNoHelp: { en: "With a clock there are no take-backs or hints, so the clock stays fair.", pa: "ਘੜੀ ਨਾਲ ਖੇਡਦਿਆਂ ਚਾਲ ਵਾਪਸ ਲੈਣ ਜਾਂ ਇਸ਼ਾਰੇ ਦੀ ਸਹੂਲਤ ਨਹੀਂ ਹੁੰਦੀ, ਤਾਂ ਜੋ ਘੜੀ ਨਿਆਂ ਵਾਲੀ ਰਹੇ।" },
   meGames: { en: "Your games", pa: "ਤੁਹਾਡੀਆਂ ਖੇਡਾਂ" },
   onlineTitle: { en: "Play friends online", pa: "ਦੋਸਤਾਂ ਨਾਲ ਔਨਲਾਈਨ ਖੇਡੋ" },
@@ -800,7 +800,7 @@ export const UI = {
   shareBtn: { en: "Share as a picture", pa: "ਤਸਵੀਰ ਵਜੋਂ ਭੇਜੋ" }, shareSaved: { en: "Picture saved", pa: "ਤਸਵੀਰ ਸੰਭਾਲੀ ਗਈ" },
   shareBrand: { en: "SWC Chess School", pa: "SWC ਸ਼ਤਰੰਜ ਪਾਠਸ਼ਾਲਾ" },
   shareWon: { en: "Won {how}", pa: "{how} ਜਿੱਤ" }, shareLost: { en: "Lost {how}", pa: "{how} ਹਾਰ" }, shareDraw: { en: "Drawn {how}", pa: "{how} ਬਰਾਬਰੀ" },
-  shareSub: { en: "against {opp} · {n} moves · {date}", pa: "{opp} ਦੇ ਵਿਰੁੱਧ · {n} ਚਾਲਾਂ · {date}" },
+  shareSub: { en: "against {opp} · {moves} · {date}", pa: "{opp} ਦੇ ਵਿਰੁੱਧ · {moves} · {date}" },
   // the game-over banner (DECISIONS #117) and the home screen's light/dark button
   endMate: { en: "Checkmate", pa: "ਸ਼ਹਿ-ਮਾਤ" }, endStalemate: { en: "Stalemate", pa: "ਖੜੋਤ" }, endDraw: { en: "Draw", pa: "ਬਰਾਬਰੀ" },
   endResign: { en: "{side} resigned", pa: "{side} ਨੇ ਹਾਰ ਮੰਨ ਲਈ" }, endTime: { en: "{side} ran out of time", pa: "{side} ਦਾ ਸਮਾਂ ਮੁੱਕ ਗਿਆ" },
@@ -817,6 +817,8 @@ export type UIKey = keyof typeof UI;
 export const lang = (): Lang => store.get().lang;
 export const t = (k: UIKey): string => UI[k][lang()];
 export const tx = (x: Text): string => x[lang()];
+/** "1 move", "24 moves" (a one-move game said "1 moves", found on Android 2026-10-17). */
+export const movesN = (n: number): string => `${num(n)} ${t(n === 1 ? "moveWord" : "movesWord")}`;
 
 const GURMUKHI_DIGITS = "੦੧੨੩੪੫੬੭੮੯";
 /** Numbers in Gurmukhi prose use Gurmukhi numerals (house rule from the book projects). */

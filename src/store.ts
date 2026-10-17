@@ -1,6 +1,7 @@
 // Everything the app remembers, kept on this device only. Phases 1-3 have no accounts on
 // purpose (LEARNING-PLAN.md §7): no child's data leaves the phone. We store no name and no
 // exact age - only which of the three age bands was picked.
+import { NATIVE } from "./native";
 import { fromLevel as ratingFromLevel, update as updateRating } from "./me/rating";
 import { addDays, review } from "./openings/srs";
 
@@ -120,7 +121,8 @@ const today = () => new Date().toLocaleDateString("en-CA"); // YYYY-MM-DD in loc
 export const isPreview = () => preview !== null;
 /** On the developer's own computer only (localhost), a Settings switch opens every lesson, test and trainer for
  *  testing (2026-10-06). It can never be on for the live site. Previews are always unlocked. */
-export const devHost = () => typeof location !== "undefined" && ["localhost", "127.0.0.1"].includes(location.hostname);
+// the Android app is served from https://localhost too (Capacitor), but it is never the developer's computer (#121)
+export const devHost = () => !NATIVE && typeof location !== "undefined" && ["localhost", "127.0.0.1"].includes(location.hostname);
 export const UNLOCK_KEY = "scc-unlock-all";
 export const unlockAll = () => isPreview() || (devHost() && (() => { try { return localStorage.getItem(UNLOCK_KEY) === "1"; } catch { return false; } })());
 export { today };

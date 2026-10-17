@@ -1,0 +1,10 @@
+{
+  "appId": "com.sikhworldchampionship.chess",
+  "appName": "SWC Chess School",
+  "webDir": "www",
+  "backgroundColor": "#141414",
+  "android": {
+    "backgroundColor": "#141414",
+    "allowMixedContent": false
+  }
+}

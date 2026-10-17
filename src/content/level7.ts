@@ -9,7 +9,7 @@ const many = (pack: string, count: number, en: string, pa: string) => ({ kind: "
 
 export const LEVEL7: Lesson[] = [
   {
-    id: "7.1", level: 7, status: "draft",
+    id: "7.1", level: 7, status: "checked",
     title: { en: "Mate in two", pa: "ਦੋ ਚਾਲਾਂ ਵਿੱਚ ਮਾਤ" },
     goal: { en: "Find a checkmate that takes two moves.", pa: "ਦੋ ਚਾਲਾਂ ਵਾਲੀ ਸ਼ਹਿ-ਮਾਤ ਲੱਭੋ।" },
     learn: [
@@ -23,7 +23,7 @@ export const LEVEL7: Lesson[] = [
     challenge: many("mate2", 4, "four mates in two.", "ਦੋ ਚਾਲਾਂ ਵਾਲੀਆਂ ਚਾਰ ਮਾਤਾਂ ਲੱਭੋ।"),
   },
   {
-    id: "7.2", level: 7, status: "draft",
+    id: "7.2", level: 7, status: "checked",
     title: { en: "Mate in three", pa: "ਤਿੰਨ ਚਾਲਾਂ ਵਿੱਚ ਮਾਤ" },
     goal: { en: "Calculate a forcing line three moves deep.", pa: "ਮਜਬੂਰ ਕਰਨ ਵਾਲੀਆਂ ਚਾਲਾਂ ਦੀ ਲੜੀ ਤਿੰਨ ਚਾਲਾਂ ਡੂੰਘੀ ਗਿਣੋ।" },
     learn: [
@@ -37,7 +37,7 @@ export const LEVEL7: Lesson[] = [
     challenge: many("mate3", 3, "three mates in three.", "ਤਿੰਨ ਚਾਲਾਂ ਵਾਲੀਆਂ ਤਿੰਨ ਮਾਤਾਂ ਲੱਭੋ।"),
   },
   {
-    id: "7.3", level: 7, status: "draft",
+    id: "7.3", level: 7, status: "checked",
     title: { en: "Mating patterns", pa: "ਮਾਤ ਦੇ ਨਮੂਨੇ" },
     goal: { en: "Recognise the famous mating patterns at a glance.", pa: "ਮਸ਼ਹੂਰ ਮਾਤ ਦੇ ਨਮੂਨੇ ਇੱਕ ਨਜ਼ਰ ਵਿੱਚ ਪਛਾਣੋ।" },
     learn: [
@@ -51,7 +51,7 @@ export const LEVEL7: Lesson[] = [
     challenge: many("mate-patterns", 4, "four patterns.", "ਚਾਰ ਨਮੂਨੇ ਪਛਾਣੋ।"),
   },
   {
-    id: "7.4", level: 7, status: "draft",
+    id: "7.4", level: 7, status: "checked",
     title: { en: "Decoy", pa: "ਚੋਗਾ" },
     goal: { en: "Lure a piece onto a bad square.", pa: "ਕਿਸੇ ਮੋਹਰੇ ਨੂੰ ਮਾੜੇ ਖਾਨੇ 'ਤੇ ਲੁਭਾਓ।" },
     learn: [
@@ -65,7 +65,7 @@ export const LEVEL7: Lesson[] = [
     challenge: many("attraction", 3, "three decoys.", "ਤਿੰਨ ਚੋਗੇ ਲੱਭੋ।"),
   },
   {
-    id: "7.5", level: 7, status: "draft",
+    id: "7.5", level: 7, status: "checked",
     title: { en: "Deflection", pa: "ਧਿਆਨ ਹਟਾਉਣਾ" },
     goal: { en: "Pull a defender away from its job.", pa: "ਰਾਖੇ ਨੂੰ ਉਸ ਦੇ ਕੰਮ ਤੋਂ ਦੂਰ ਖਿੱਚੋ।" },
     learn: [
@@ -77,7 +77,7 @@ export const LEVEL7: Lesson[] = [
     challenge: many("deflection", 3, "three deflections.", "ਤਿੰਨ ਵਾਰੀ ਰਾਖੇ ਦਾ ਧਿਆਨ ਹਟਾਓ।"),
   },
   {
-    id: "7.6", level: 7, status: "draft",
+    id: "7.6", level: 7, status: "checked",
     title: { en: "In-between move", pa: "ਵਿਚਕਾਰਲੀ ਚਾਲ" },
     goal: { en: "Play a surprise move before the expected recapture.", pa: "ਵਾਪਸ ਮਾਰਨ ਤੋਂ ਪਹਿਲਾਂ ਇੱਕ ਹੈਰਾਨੀ ਵਾਲੀ ਚਾਲ ਚੱਲੋ।" },
     learn: [
@@ -89,7 +89,7 @@ export const LEVEL7: Lesson[] = [
     challenge: many("intermezzo", 3, "three surprises.", "ਤਿੰਨ ਹੈਰਾਨੀ ਵਾਲੀਆਂ ਚਾਲਾਂ ਲੱਭੋ।"),
   },
   {
-    id: "7.7", level: 7, status: "draft",
+    id: "7.7", level: 7, status: "checked",
     title: { en: "Interference & clearance", pa: "ਰੋਕ ਤੇ ਰਾਹ ਖੋਲ੍ਹਣਾ" },
     goal: { en: "Cut a defender's line, or clear a square for your own piece.", pa: "ਰਾਖੇ ਦੀ ਲਕੀਰ ਕੱਟੋ, ਜਾਂ ਆਪਣੇ ਮੋਹਰੇ ਲਈ ਖਾਨਾ ਖਾਲੀ ਕਰੋ।" },
     learn: [
@@ -103,7 +103,7 @@ export const LEVEL7: Lesson[] = [
     challenge: many("clearance", 3, "three clearances.", "ਤਿੰਨ ਵਾਰੀ ਰਾਹ ਖੋਲ੍ਹੋ।"),
   },
   {
-    id: "7.8", level: 7, status: "draft",
+    id: "7.8", level: 7, status: "checked",
     title: { en: "X-ray", pa: "ਆਰ-ਪਾਰ ਹਮਲਾ" },
     goal: { en: "Attack or defend through another piece.", pa: "ਕਿਸੇ ਹੋਰ ਮੋਹਰੇ ਦੇ ਆਰ-ਪਾਰ ਹਮਲਾ ਜਾਂ ਰਾਖੀ ਕਰੋ।" },
     learn: [
@@ -115,7 +115,7 @@ export const LEVEL7: Lesson[] = [
     challenge: many("xray", 3, "three x-rays.", "ਤਿੰਨ ਆਰ-ਪਾਰ ਹਮਲੇ ਲੱਭੋ।"),
   },
   {
-    id: "7.9", level: 7, status: "draft",
+    id: "7.9", level: 7, status: "checked",
     title: { en: "Giving up material", pa: "ਜਾਣ-ਬੁੱਝ ਕੇ ਮੋਹਰਾ ਦੇਣਾ" },
     goal: { en: "Know when giving a piece away wins more.", pa: "ਜਾਣੋ ਕਦੋਂ ਮੋਹਰਾ ਦੇਣ ਨਾਲ ਹੋਰ ਵੀ ਵੱਧ ਮਿਲਦਾ ਹੈ।" },
     learn: [
@@ -127,7 +127,7 @@ export const LEVEL7: Lesson[] = [
     challenge: many("sacrifice", 4, "four brave moves.", "ਚਾਰ ਦਲੇਰ ਚਾਲਾਂ ਲੱਭੋ।"),
   },
   {
-    id: "7.10", level: 7, status: "draft",
+    id: "7.10", level: 7, status: "checked",
     title: { en: "Quiet moves", pa: "ਚੁੱਪ ਚਾਲ" },
     goal: { en: "Find the strong move that is not a check or capture.", pa: "ਉਹ ਤਕੜੀ ਚਾਲ ਲੱਭੋ ਜੋ ਨਾ ਸ਼ਹਿ ਹੈ ਨਾ ਮਾਰ।" },
     learn: [

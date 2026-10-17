@@ -6,12 +6,13 @@ import { Board } from "../chess/board";
 import { placementFromFen, type Square } from "../chess/types";
 import { confetti } from "../celebrate";
 import { getEngine } from "../engine/browser";
-import { num, t, tx } from "../i18n";
+import { movesN, num, t, tx } from "../i18n";
 import { icon } from "../icons";
 import { checkSquare, refusal } from "../lesson/exercises";
 import { captured, flagOutcome, movesFor, positionAt, premoveTargets, premovesOn, promotion } from "../play/gamekit";
 import { type Clock, flagged, fmt, newClock, press, remaining } from "../play/clock";
 import { saveGame } from "../play/history";
+import { NATIVE } from "../native";
 import { shareButton, wireShare } from "../play/share";
 import { announceEnd, END_PAUSE, kindOf } from "../play/gameover";
 import { gameMenuButton, wireGameMenu } from "../play/gamesettings";
@@ -60,7 +61,7 @@ export function botList(root: HTMLElement, go: (h: string) => void) {
       ${beaten(b) ? `<i class="tick">${icon("check")}</i>` : ""}<span>${tx(b.name)}</span><small>~${num(b.rating)}</small></button>`).join("")}</div>
     <h2 class="sec">${t("otherWays")}</h2>
     <div class="ways">
-      ${chip("data-online", "users", t("onlineTitle"))}
+      ${NATIVE ? "" : chip("data-online", "users", t("onlineTitle"))}
       ${chip("data-friend", "swords", t("friendTitle"))}
       ${young ? "" : chip("data-tourney", "trophy", t("tnTitle"))}
       ${chip("data-analysis", "search", t("anaTitle"))}
@@ -68,7 +69,7 @@ export function botList(root: HTMLElement, go: (h: string) => void) {
   root.querySelector<HTMLButtonElement>("[data-home]")!.onclick = () => go("#/");
   root.querySelectorAll<HTMLButtonElement>("[data-bot]").forEach(b => b.onclick = () => go(`#/play/${b.dataset.bot}`));
   root.querySelector<HTMLButtonElement>("[data-friend]")!.onclick = () => go("#/play/friend");
-  root.querySelector<HTMLButtonElement>("[data-online]")!.onclick = () => go("#/online");
+  root.querySelector<HTMLButtonElement>("[data-online]")?.addEventListener("click", () => go("#/online"));
   root.querySelector<HTMLButtonElement>("[data-tourney]")?.addEventListener("click", () => go("#/tourney"));
   root.querySelector<HTMLButtonElement>("[data-analysis]")!.onclick = () => go("#/analysis");
   root.querySelector<HTMLButtonElement>("[data-power]")!.onclick = () => go("#/power");
@@ -316,7 +317,7 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     const card = root.querySelector<HTMLElement>("[data-card]")!;
     card.innerHTML = `<button class="iconbtn x" data-x aria-label="${t("close")}">${icon("close")}</button>
       ${art(bot, r === "won" ? "lose" : r === "lost" ? "win" : "neutral")}
-      <h2>${r === "won" ? t("gameWon") : r === "lost" ? fill(t("gameLost"), bot) : t("gameDrawn")}</h2><p>${how} · ${num(Math.ceil(g.history().length / 2))} ${t("movesWord")}</p>
+      <h2>${r === "won" ? t("gameWon") : r === "lost" ? fill(t("gameLost"), bot) : t("gameDrawn")}</h2><p>${how} · ${movesN(Math.ceil(g.history().length / 2))}</p>
       ${r === "won" && testLevel ? `<p class="testmsg">${t("botTestPassed")}</p>` : ""}${buttons}`;
     card.hidden = false;
     root.querySelector<HTMLElement>("[data-acts]")!.innerHTML = `<div class="resultacts">${buttons}</div>`;

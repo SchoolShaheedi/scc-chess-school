@@ -7,7 +7,7 @@ const realGames = (en: string, pa: string) => ({ en: `Real games: ${en}`, pa: `�
 
 export const LEVEL4: Lesson[] = [
   {
-    id: "4.1", level: 4, status: "draft",
+    id: "4.1", level: 4, status: "checked",
     title: { en: "Hanging pieces", pa: "ਬੇ-ਬਚਾਅ ਮੋਹਰੇ" },
     goal: { en: "Take what is free, and never leave your own pieces loose.", pa: "ਜੋ ਮੁਫ਼ਤ ਹੈ ਉਹ ਲਓ, ਅਤੇ ਆਪਣੇ ਮੋਹਰੇ ਕਦੇ ਬੇ-ਬਚਾਅ ਨਾ ਛੱਡੋ।" },
     learn: [
@@ -28,7 +28,7 @@ export const LEVEL4: Lesson[] = [
   },
 
   {
-    id: "4.2", level: 4, status: "draft",
+    id: "4.2", level: 4, status: "checked",
     title: { en: "Double attack", pa: "ਦੋ ਪਾਸੀ ਹਮਲਾ" },
     goal: { en: "Make one move that threatens two things.", pa: "ਇੱਕ ਅਜਿਹੀ ਚਾਲ ਚੱਲੋ ਜੋ ਦੋ ਚੀਜ਼ਾਂ ਨੂੰ ਖ਼ਤਰੇ ਵਿੱਚ ਪਾਵੇ।" },
     learn: [
@@ -49,7 +49,7 @@ export const LEVEL4: Lesson[] = [
   },
 
   {
-    id: "4.3", level: 4, status: "draft",
+    id: "4.3", level: 4, status: "checked",
     title: { en: "The knight fork", pa: "ਘੋੜੇ ਦਾ ਦੋਹਰਾ ਵਾਰ" },
     goal: { en: "Use the knight to attack two pieces at once.", pa: "ਘੋੜੇ ਨਾਲ ਇੱਕੋ ਵੇਲੇ ਦੋ ਮੋਹਰਿਆਂ 'ਤੇ ਹਮਲਾ ਕਰੋ।" },
     learn: [
@@ -69,7 +69,7 @@ export const LEVEL4: Lesson[] = [
   },
 
   {
-    id: "4.4", level: 4, status: "draft",
+    id: "4.4", level: 4, status: "checked",
     title: { en: "Forks by other pieces", pa: "ਹੋਰ ਮੋਹਰਿਆਂ ਦੇ ਦੋਹਰੇ ਵਾਰ" },
     goal: { en: "Fork with a pawn, and even with the king.", pa: "ਪਿਆਦੇ ਨਾਲ, ਅਤੇ ਬਾਦਸ਼ਾਹ ਨਾਲ ਵੀ, ਦੋਹਰਾ ਵਾਰ ਕਰੋ।" },
     learn: [
@@ -91,7 +91,7 @@ export const LEVEL4: Lesson[] = [
   },
 
   {
-    id: "4.5", level: 4, status: "draft",
+    id: "4.5", level: 4, status: "checked",
     title: { en: "The pin", pa: "ਬੰਨ੍ਹ" },
     goal: { en: "Pin a piece so it can't move, then attack it again.", pa: "ਮੋਹਰੇ ਨੂੰ ਬੰਨ੍ਹੋ ਤਾਂ ਜੋ ਉਹ ਹਿੱਲ ਨਾ ਸਕੇ, ਫਿਰ ਉਸ 'ਤੇ ਦੁਬਾਰਾ ਹਮਲਾ ਕਰੋ।" },
     learn: [
@@ -113,7 +113,7 @@ export const LEVEL4: Lesson[] = [
   },
 
   {
-    id: "4.6", level: 4, status: "draft",
+    id: "4.6", level: 4, status: "checked",
     title: { en: "The skewer", pa: "ਪਿਛਲਾ ਵਾਰ" },
     goal: { en: "Attack a big piece and win the one behind it.", pa: "ਵੱਡੇ ਮੋਹਰੇ 'ਤੇ ਹਮਲਾ ਕਰੋ ਅਤੇ ਉਸ ਦੇ ਪਿੱਛੇ ਵਾਲਾ ਜਿੱਤੋ।" },
     learn: [
@@ -134,7 +134,7 @@ export const LEVEL4: Lesson[] = [
   },
 
   {
-    id: "4.7", level: 4, status: "draft",
+    id: "4.7", level: 4, status: "checked",
     title: { en: "Discovered attack", pa: "ਲੁਕਵਾਂ ਹਮਲਾ" },
     goal: { en: "Move one piece to uncover an attack by another.", pa: "ਇੱਕ ਮੋਹਰਾ ਹਿਲਾ ਕੇ ਦੂਜੇ ਦਾ ਹਮਲਾ ਖੋਲ੍ਹੋ।" },
     learn: [
@@ -154,7 +154,7 @@ export const LEVEL4: Lesson[] = [
   },
 
   {
-    id: "4.8", level: 4, status: "draft",
+    id: "4.8", level: 4, status: "checked",
     title: { en: "Double check", pa: "ਦੋਹਰੀ ਸ਼ਹਿ" },
     goal: { en: "Give check with two pieces at once.", pa: "ਦੋ ਮੋਹਰਿਆਂ ਨਾਲ ਇਕੱਠੀ ਸ਼ਹਿ ਦਿਓ।" },
     learn: [
@@ -173,7 +173,7 @@ export const LEVEL4: Lesson[] = [
   },
 
   {
-    id: "4.9", level: 4, status: "draft",
+    id: "4.9", level: 4, status: "checked",
     title: { en: "Removing the defender", pa: "ਰਾਖਾ ਹਟਾਉਣਾ" },
     goal: { en: "Take away a guard, then win what it guarded.", pa: "ਰਾਖੇ ਨੂੰ ਹਟਾਓ, ਫਿਰ ਉਹ ਜਿੱਤੋ ਜਿਸ ਦੀ ਉਹ ਰਾਖੀ ਕਰਦਾ ਸੀ।" },
     learn: [
@@ -190,7 +190,7 @@ export const LEVEL4: Lesson[] = [
   },
 
   {
-    id: "4.10", level: 4, status: "draft",
+    id: "4.10", level: 4, status: "checked",
     title: { en: "Trapped pieces", pa: "ਫਸਿਆ ਮੋਹਰਾ" },
     goal: { en: "Win a piece that has no safe squares.", pa: "ਉਹ ਮੋਹਰਾ ਜਿੱਤੋ ਜਿਸ ਕੋਲ ਕੋਈ ਸੁਰੱਖਿਅਤ ਖਾਨਾ ਨਹੀਂ।" },
     learn: [
@@ -208,7 +208,7 @@ export const LEVEL4: Lesson[] = [
 
   // 4.11 (full check 2026-10-05): the "exchange" skill, counting attackers against defenders before a capture
   {
-    id: "4.11", level: 4, status: "draft",
+    id: "4.11", level: 4, status: "checked",
     title: { en: "Count before you capture", pa: "ਮਾਰਨ ਤੋਂ ਪਹਿਲਾਂ ਗਿਣੋ" },
     goal: { en: "Know when a capture wins, trades or loses, by counting.", pa: "ਗਿਣ ਕੇ ਜਾਣੋ ਕਿ ਮਾਰਨ ਨਾਲ ਕਦੋਂ ਫ਼ਾਇਦਾ ਹੁੰਦਾ ਹੈ, ਕਦੋਂ ਵਟਾਂਦਰਾ, ਅਤੇ ਕਦੋਂ ਘਾਟਾ।" },
     learn: [

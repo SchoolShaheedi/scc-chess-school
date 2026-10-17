@@ -9,14 +9,15 @@ import { icon } from "../icons";
 import type { Text } from "../lesson/types";
 import { store } from "../store";
 import { FILES, type Placement } from "../chess/types";
+import { NATIVE, nativeSharePicture } from "../native";
 
 export interface ShareGame { pos: Placement; lastMove?: [string, string]; flip: boolean; result: "won" | "lost" | "draw"; how: string; opp: Text; moves: number }
 
 /** The card's two lines of words. Pure, so it is tested (test/share.test.ts). */
-export function shareLines(g: Pick<ShareGame, "result" | "how" | "opp" | "moves">, date: Date, lang: "en" | "pa", tr: (k: "shareWon" | "shareLost" | "shareDraw" | "shareSub") => string, n: (x: number | string) => string): [string, string] {
+export function shareLines(g: Pick<ShareGame, "result" | "how" | "opp" | "moves">, date: Date, lang: "en" | "pa", tr: (k: "shareWon" | "shareLost" | "shareDraw" | "shareSub" | "moveWord" | "movesWord") => string, n: (x: number | string) => string): [string, string] {
   const head = tr(g.result === "won" ? "shareWon" : g.result === "lost" ? "shareLost" : "shareDraw").replace("{how}", g.how);
   const day = date.toLocaleDateString(lang === "pa" ? "pa-IN" : "en-GB", { day: "numeric", month: "short", year: "numeric" });
-  return [head, tr("shareSub").replace("{opp}", g.opp[lang]).replace("{n}", n(g.moves)).replace("{date}", n(day))];
+  return [head, tr("shareSub").replace("{opp}", g.opp[lang]).replace("{moves}", `${n(g.moves)} ${tr(g.moves === 1 ? "moveWord" : "movesWord")}`).replace("{date}", n(day))];
 }
 
 const load = (src: string) => new Promise<HTMLImageElement>((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; });
@@ -64,6 +65,8 @@ export async function shareCard(g: ShareGame): Promise<"shared" | "saved" | "can
   const canvas = await drawCard(g);
   const blob = await new Promise<Blob>(ok => canvas.toBlob(b => ok(b!), "image/png"));
   const file = new File([blob], "chess-game.png", { type: "image/png" });
+  // the Android app: the phone's own share sheet (a web view can't share files the web way)
+  if (NATIVE) { try { return (await nativeSharePicture(blob, file.name, t("shareBrand"))) ? "shared" : "cancelled"; } catch { return "cancelled"; } }
   if (navigator.canShare?.({ files: [file] })) {
     try { await navigator.share({ files: [file], title: t("shareBrand") }); return "shared"; } catch { return "cancelled"; }
   }

@@ -39,7 +39,8 @@ export default defineConfig({
           { urlPattern: /\/explorer\/.+\.json$/, handler: "StaleWhileRevalidate", options: { cacheName: "explorer", expiration: { maxEntries: 4 } } },
         ],
         // design-trial pages sit beside the app in previews; the offline fallback must not swallow them
-        navigateFallbackDenylist: [/-options\.html$/, /trial/],
+        // the privacy page is its own page, never the app (Google links to it from the Play listing, DECISIONS #121)
+        navigateFallbackDenylist: [/-options\.html$/, /trial/, /privacy\.html$/],
       },
     }),
   ],

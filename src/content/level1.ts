@@ -7,7 +7,7 @@ const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 export const LEVEL1: Lesson[] = [
   {
-    id: "1.1", level: 1, status: "draft",
+    id: "1.1", level: 1, status: "checked",
     title: { en: "The board", pa: "ਬਿਸਾਤ" },
     goal: { en: "Know the board and name any square.", pa: "ਬਿਸਾਤ ਨੂੰ ਜਾਣੋ ਅਤੇ ਕਿਸੇ ਵੀ ਖਾਨੇ ਦਾ ਨਾਮ ਦੱਸੋ।" },
     learn: [
@@ -49,7 +49,7 @@ export const LEVEL1: Lesson[] = [
   },
 
   {
-    id: "1.2", level: 1, status: "draft",
+    id: "1.2", level: 1, status: "checked",
     title: { en: "The rook", pa: "ਹਾਥੀ" },
     goal: { en: "Move the rook in straight lines and capture with it.", pa: "ਹਾਥੀ ਨੂੰ ਸਿੱਧੀਆਂ ਲਕੀਰਾਂ ਵਿੱਚ ਚਲਾਓ ਅਤੇ ਉਸ ਨਾਲ ਮਾਰੋ।" },
     learn: [
@@ -78,7 +78,7 @@ export const LEVEL1: Lesson[] = [
   },
 
   {
-    id: "1.3", level: 1, status: "draft",
+    id: "1.3", level: 1, status: "checked",
     title: { en: "The bishop", pa: "ਊਠ" },
     goal: { en: "Move the bishop on diagonals, and see that it keeps to one colour.", pa: "ਊਠ ਨੂੰ ਤਿਰਛਾ ਚਲਾਓ, ਅਤੇ ਵੇਖੋ ਕਿ ਇਹ ਇੱਕੋ ਰੰਗ 'ਤੇ ਰਹਿੰਦਾ ਹੈ।" },
     learn: [
@@ -113,7 +113,7 @@ export const LEVEL1: Lesson[] = [
   },
 
   {
-    id: "1.4", level: 1, status: "draft",
+    id: "1.4", level: 1, status: "checked",
     title: { en: "The queen", pa: "ਰਾਣੀ" },
     goal: { en: "Move the queen like a rook and a bishop together.", pa: "ਰਾਣੀ ਨੂੰ ਹਾਥੀ ਅਤੇ ਊਠ ਦੋਵਾਂ ਵਾਂਗ ਚਲਾਓ।" },
     learn: [
@@ -139,7 +139,7 @@ export const LEVEL1: Lesson[] = [
   },
 
   {
-    id: "1.5", level: 1, status: "draft",
+    id: "1.5", level: 1, status: "checked",
     title: { en: "The king", pa: "ਬਾਦਸ਼ਾਹ" },
     goal: { en: "Move the king one square, and never into attack.", pa: "ਬਾਦਸ਼ਾਹ ਨੂੰ ਇੱਕ ਖਾਨਾ ਚਲਾਓ, ਅਤੇ ਕਦੇ ਵੀ ਹਮਲੇ ਵਾਲੇ ਖਾਨੇ 'ਤੇ ਨਾ ਜਾਓ।" },
     learn: [
@@ -167,7 +167,7 @@ export const LEVEL1: Lesson[] = [
   },
 
   {
-    id: "1.6", level: 1, status: "draft",
+    id: "1.6", level: 1, status: "checked",
     title: { en: "The knight", pa: "ਘੋੜਾ" },
     goal: { en: "Jump the knight in an L, over anything in its way.", pa: "ਘੋੜੇ ਨੂੰ L ਵਾਂਗ ਛਾਲ ਮਰਵਾਓ, ਰਾਹ ਵਿੱਚ ਜੋ ਵੀ ਹੋਵੇ ਉਸ ਦੇ ਉੱਤੋਂ।" },
     learn: [
@@ -203,7 +203,7 @@ export const LEVEL1: Lesson[] = [
   },
 
   {
-    id: "1.7", level: 1, status: "draft",
+    id: "1.7", level: 1, status: "checked",
     title: { en: "The pawn", pa: "ਪਿਆਦਾ" },
     goal: { en: "Move pawns forward and capture diagonally.", pa: "ਪਿਆਦਿਆਂ ਨੂੰ ਅੱਗੇ ਚਲਾਓ ਅਤੇ ਤਿਰਛਾ ਮਾਰੋ।" },
     learn: [
@@ -241,7 +241,7 @@ export const LEVEL1: Lesson[] = [
   },
 
   {
-    id: "1.8", level: 1, status: "draft",
+    id: "1.8", level: 1, status: "checked",
     title: { en: "Setting up", pa: "ਮੋਹਰੇ ਸਜਾਉਣਾ" },
     goal: { en: "Set up the board correctly, every time.", pa: "ਹਰ ਵਾਰ ਬਿਸਾਤ ਠੀਕ ਤਰ੍ਹਾਂ ਸਜਾਓ।" },
     learn: [
@@ -288,7 +288,7 @@ export const LEVEL1: Lesson[] = [
   },
 
   {
-    id: "1.9", level: 1, status: "draft",
+    id: "1.9", level: 1, status: "checked",
     title: { en: "Capturing & defending", pa: "ਮਾਰਨਾ ਤੇ ਬਚਾਉਣਾ" },
     goal: { en: "See what is attacked and what is defended, and take free pieces.", pa: "ਵੇਖੋ ਕਿਸ 'ਤੇ ਹਮਲਾ ਹੈ ਅਤੇ ਕਿਸ ਦਾ ਬਚਾਅ ਹੈ, ਅਤੇ ਮੁਫ਼ਤ ਮੋਹਰੇ ਮਾਰੋ।" },
     learn: [
@@ -322,7 +322,7 @@ export const LEVEL1: Lesson[] = [
   // 1.10–1.12 (full check 2026-10-05): play before reading, and check taught BEFORE the capture-race test,
   // which is played under full chess rules. The mini-games run against Nanhi Chidi (botGame).
   {
-    id: "1.10", level: 1, status: "draft",
+    id: "1.10", level: 1, status: "checked",
     title: { en: "Check!", pa: "ਸ਼ਹਿ!" },
     goal: { en: "When your king is attacked, save it.", pa: "ਜਦੋਂ ਤੁਹਾਡੇ ਬਾਦਸ਼ਾਹ 'ਤੇ ਹਮਲਾ ਹੋਵੇ, ਉਸ ਨੂੰ ਬਚਾਓ।" },
     learn: [
@@ -347,7 +347,7 @@ export const LEVEL1: Lesson[] = [
       ] },
   },
   {
-    id: "1.11", level: 1, status: "draft",
+    id: "1.11", level: 1, status: "checked",
     title: { en: "Pawn wars", pa: "ਪਿਆਦਿਆਂ ਦੀ ਜੰਗ" },
     goal: { en: "A game with only pawns: the first to make a queen wins.", pa: "ਸਿਰਫ਼ ਪਿਆਦਿਆਂ ਵਾਲੀ ਖੇਡ: ਜੋ ਪਹਿਲਾਂ ਰਾਣੀ ਬਣਾਏ, ਉਸ ਦੀ ਜਿੱਤ।" },
     learn: [
@@ -366,7 +366,7 @@ export const LEVEL1: Lesson[] = [
       prompt: { en: "The big pawn war: six pawns each.", pa: "ਪਿਆਦਿਆਂ ਦੀ ਵੱਡੀ ਜੰਗ: ਛੇ-ਛੇ ਪਿਆਦੇ।" } },
   },
   {
-    id: "1.12", level: 1, status: "draft",
+    id: "1.12", level: 1, status: "checked",
     title: { en: "Catch the pawns", pa: "ਪਿਆਦੇ ਫੜੋ" },
     goal: { en: "Use a strong piece to stop pawns before they become queens.", pa: "ਤਕੜੇ ਮੋਹਰੇ ਨਾਲ ਪਿਆਦਿਆਂ ਨੂੰ ਰਾਣੀ ਬਣਨ ਤੋਂ ਪਹਿਲਾਂ ਰੋਕੋ।" },
     learn: [

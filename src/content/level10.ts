@@ -11,7 +11,7 @@ const CARLSBAD = "r1bqr1k1/pp1nbppp/2p2n2/3p4/1P1P4/2NBPN2/P4PPP/1RBQ1RK1 b - - 
 
 export const LEVEL10: Lesson[] = [
   {
-    id: "10.1", level: 10, status: "draft",
+    id: "10.1", level: 10, status: "checked",
     title: { en: "Building a repertoire", pa: "ਆਪਣੀ ਸ਼ੁਰੂਆਤ ਚੁਣਨੀ" },
     goal: { en: "Pick one opening for White, and one answer each to 1.e4 and 1.d4.", pa: "ਚਿੱਟੇ ਲਈ ਇੱਕ ਸ਼ੁਰੂਆਤ ਚੁਣੋ, ਅਤੇ 1.e4 ਅਤੇ 1.d4 ਦਾ ਇੱਕ-ਇੱਕ ਜਵਾਬ ਵੀ ਚੁਣੋ।" },
     learn: [
@@ -35,7 +35,7 @@ export const LEVEL10: Lesson[] = [
       prompt: { en: "Against 1.e4: a Sicilian. Play Black.", pa: "1.e4 ਵਿਰੁੱਧ: ਸਿਸਿਲੀਅਨ। ਕਾਲੇ ਨਾਲ ਖੇਡੋ।" } },
   },
   {
-    id: "10.2", level: 10, status: "draft",
+    id: "10.2", level: 10, status: "checked",
     title: { en: "Sicilian ideas", pa: "ਸਿਸਿਲੀਅਨ ਦੇ ਵਿਚਾਰ" },
     goal: { en: "Understand why Black plays ...c5 and swaps it for White's d-pawn.", pa: "ਸਮਝੋ ਕਿ ਕਾਲਾ ...c5 ਕਿਉਂ ਖੇਡਦਾ ਹੈ ਅਤੇ ਉਸ ਪਿਆਦੇ ਨੂੰ ਚਿੱਟੇ ਦੇ d ਪਿਆਦੇ ਨਾਲ ਕਿਉਂ ਵਟਾਉਂਦਾ ਹੈ।" },
     learn: [
@@ -59,7 +59,7 @@ export const LEVEL10: Lesson[] = [
       prompt: { en: "Now from White's side: the English Attack against the Najdorf.", pa: "ਹੁਣ ਚਿੱਟੇ ਵੱਲੋਂ ਖੇਡੋ: ਨਾਈਦੋਰਫ਼ ਵਿਰੁੱਧ ਇੰਗਲਿਸ਼ ਹਮਲਾ।" } },
   },
   {
-    id: "10.3", level: 10, status: "draft",
+    id: "10.3", level: 10, status: "checked",
     title: { en: "Queen's Gambit ideas", pa: "ਰਾਣੀ ਦੇ ਗੈਂਬਿਟ ਦੇ ਵਿਚਾਰ" },
     goal: { en: "The minority attack, and playing with or against an isolated pawn.", pa: "ਘੱਟ-ਗਿਣਤੀ ਹਮਲਾ, ਅਤੇ ਇਕੱਲੇ ਪਿਆਦੇ ਨਾਲ ਜਾਂ ਉਸ ਦੇ ਵਿਰੁੱਧ ਖੇਡਣਾ।" },
     learn: [
@@ -84,7 +84,7 @@ export const LEVEL10: Lesson[] = [
       ] },
   },
   {
-    id: "10.4", level: 10, status: "draft",
+    id: "10.4", level: 10, status: "checked",
     title: { en: "Candidate moves", pa: "ਚੋਣਵੀਆਂ ਚਾਲਾਂ" },
     goal: { en: "List your options before you calculate any of them.", pa: "ਕਿਸੇ ਇੱਕ ਦੀ ਗਿਣਤੀ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਸਾਰੀਆਂ ਚੋਣਵੀਆਂ ਚਾਲਾਂ ਦੀ ਸੂਚੀ ਬਣਾਓ।" },
     learn: [
@@ -98,7 +98,7 @@ export const LEVEL10: Lesson[] = [
     challenge: { kind: "pack", pack: "long", count: 4, prompt: real("four long combinations.", "ਚਾਲਾਂ ਦੀਆਂ ਚਾਰ ਲੰਮੀਆਂ ਲੜੀਆਂ ਲੱਭੋ।") },
   },
   {
-    id: "10.5", level: 10, status: "draft",
+    id: "10.5", level: 10, status: "checked",
     title: { en: "Calculating deeper", pa: "ਡੂੰਘੀ ਗਿਣਤੀ" },
     goal: { en: "See four or five moves ahead, and check your line before you play.", pa: "ਚਾਰ-ਪੰਜ ਚਾਲਾਂ ਅੱਗੇ ਵੇਖੋ, ਅਤੇ ਖੇਡਣ ਤੋਂ ਪਹਿਲਾਂ ਆਪਣੀ ਲਾਈਨ ਜਾਂਚੋ।" },
     learn: [
@@ -112,7 +112,7 @@ export const LEVEL10: Lesson[] = [
     challenge: { kind: "pack", pack: "mate-hard", count: 4, prompt: real("four hard mates.", "ਚਾਰ ਔਖੀਆਂ ਮਾਤਾਂ ਲੱਭੋ।") },
   },
   {
-    id: "10.6", level: 10, status: "draft",
+    id: "10.6", level: 10, status: "checked",
     title: { en: "Defending bad positions", pa: "ਮਾੜੀ ਹਾਲਤ ਵਿੱਚ ਬਚਾਅ" },
     goal: { en: "When you're worse, make every move hard for your opponent.", pa: "ਜਦੋਂ ਤੁਹਾਡੀ ਹਾਲਤ ਮਾੜੀ ਹੋਵੇ, ਵਿਰੋਧੀ ਲਈ ਹਰ ਚਾਲ ਔਖੀ ਬਣਾਓ।" },
     learn: [
@@ -124,7 +124,7 @@ export const LEVEL10: Lesson[] = [
     challenge: { kind: "pack", pack: "defend-hard", count: 4, prompt: real("four saves.", "ਚਾਰ ਬਚਾਅ ਲੱਭੋ।") },
   },
   {
-    id: "10.7", level: 10, status: "draft",
+    id: "10.7", level: 10, status: "checked",
     title: { en: "Learning from your games", pa: "ਆਪਣੀਆਂ ਖੇਡਾਂ ਤੋਂ ਸਿੱਖਣਾ" },
     goal: { en: "Look back at your own games and find the mistakes you keep making.", pa: "ਆਪਣੀਆਂ ਖੇਡਾਂ ਮੁੜ ਵੇਖੋ ਅਤੇ ਉਹ ਗ਼ਲਤੀਆਂ ਲੱਭੋ ਜੋ ਤੁਸੀਂ ਬਾਰ-ਬਾਰ ਕਰਦੇ ਹੋ।" },
     learn: [
@@ -148,7 +148,7 @@ export const LEVEL10: Lesson[] = [
     challenge: { kind: "pack", pack: "defend-hard", count: 3, prompt: real("spot their threat first.", "ਪਹਿਲਾਂ ਵਿਰੋਧੀ ਦੀ ਧਮਕੀ ਪਛਾਣੋ।") },
   },
   {
-    id: "10.8", level: 10, status: "draft",
+    id: "10.8", level: 10, status: "checked",
     title: { en: "Playing a tournament", pa: "ਟੂਰਨਾਮੈਂਟ ਖੇਡਣਾ" },
     goal: { en: "Use your clock, write your moves, and be a good sport.", pa: "ਘੜੀ ਵਰਤੋ, ਆਪਣੀਆਂ ਚਾਲਾਂ ਲਿਖੋ, ਅਤੇ ਹਾਰ-ਜਿੱਤ ਵਿੱਚ ਨਿਮਰ ਰਹੋ।" },
     learn: [

@@ -10,7 +10,7 @@ const PHILIDOR = "8/8/8/8/3kp3/R7/1r6/4K3 w - - 0 1";
 
 export const LEVEL9: Lesson[] = [
   {
-    id: "9.1", level: 9, status: "draft",
+    id: "9.1", level: 9, status: "checked",
     title: { en: "Rook endgames: the rules", pa: "ਹਾਥੀ ਦੀ ਅੰਤਲੀ ਖੇਡ: ਨਿਯਮ" },
     goal: { en: "Learn the three rules that win most rook endgames.", pa: "ਉਹ ਤਿੰਨ ਨਿਯਮ ਸਿੱਖੋ ਜੋ ਹਾਥੀ ਦੀਆਂ ਬਹੁਤੀਆਂ ਅੰਤਲੀਆਂ ਖੇਡਾਂ ਜਿਤਾਉਂਦੇ ਹਨ।" },
     learn: [
@@ -33,7 +33,7 @@ export const LEVEL9: Lesson[] = [
     challenge: { kind: "pack", pack: "rook-endgame", count: 4, prompt: real("four rook endgames.", "ਹਾਥੀ ਦੀਆਂ ਚਾਰ ਅੰਤਲੀਆਂ ਖੇਡਾਂ ਵਿੱਚ ਸਭ ਤੋਂ ਵਧੀਆ ਚਾਲ ਲੱਭੋ।") },
   },
   {
-    id: "9.2", level: 9, status: "draft",
+    id: "9.2", level: 9, status: "checked",
     title: { en: "Lucena position", pa: "ਲੂਸੇਨਾ" },
     goal: { en: "Win with rook and pawn by building a bridge.", pa: "ਪੁਲ ਬਣਾ ਕੇ ਹਾਥੀ ਅਤੇ ਪਿਆਦੇ ਨਾਲ ਜਿੱਤੋ।" },
     learn: [
@@ -58,7 +58,7 @@ export const LEVEL9: Lesson[] = [
       prompt: { en: "The same idea on the d-file. Build the bridge.", pa: "d ਖੜ੍ਹੀ ਕਤਾਰ 'ਤੇ ਉਹੀ ਵਿਚਾਰ। ਪੁਲ ਬਣਾਓ।" } },
   },
   {
-    id: "9.3", level: 9, status: "draft",
+    id: "9.3", level: 9, status: "checked",
     title: { en: "Philidor position", pa: "ਫ਼ਿਲੀਡੋਰ" },
     goal: { en: "Draw a rook endgame a pawn down with the third-rank defence.", pa: "ਤੀਜੀ ਲੇਟਵੀਂ ਕਤਾਰ ਦੇ ਬਚਾਅ ਨਾਲ ਇੱਕ ਪਿਆਦਾ ਘੱਟ ਹੋ ਕੇ ਵੀ ਬਰਾਬਰੀ ਬਚਾਓ।" },
     learn: [
@@ -81,7 +81,7 @@ export const LEVEL9: Lesson[] = [
       prompt: { en: "A different pawn, the same defence. Hold for 12 moves.", pa: "ਹੋਰ ਪਿਆਦਾ, ਉਹੀ ਬਚਾਅ। ੧੨ ਚਾਲਾਂ ਤੱਕ ਬਰਾਬਰੀ ਬਚਾਓ।" } },
   },
   {
-    id: "9.4", level: 9, status: "draft",
+    id: "9.4", level: 9, status: "checked",
     title: { en: "Zugzwang", pa: "ਮਜਬੂਰੀ ਦੀ ਚਾਲ" },
     goal: { en: "Win by making your opponent move when every move hurts.", pa: "ਵਿਰੋਧੀ ਨੂੰ ਉਦੋਂ ਚਾਲ ਚੱਲਣ 'ਤੇ ਮਜਬੂਰ ਕਰਕੇ ਜਿੱਤੋ ਜਦੋਂ ਹਰ ਚਾਲ ਨੁਕਸਾਨ ਕਰੇ।" },
     learn: [
@@ -95,7 +95,7 @@ export const LEVEL9: Lesson[] = [
     challenge: { kind: "pack", pack: "zugzwang", count: 4, prompt: real("four zugzwangs.", "ਮਜਬੂਰੀ ਦੀਆਂ ਚਾਰ ਚਾਲਾਂ ਲੱਭੋ।") },
   },
   {
-    id: "9.5", level: 9, status: "draft",
+    id: "9.5", level: 9, status: "checked",
     title: { en: "Minor-piece endgames", pa: "ਛੋਟੇ ਮੋਹਰਿਆਂ ਦੀ ਅੰਤਲੀ ਖੇਡ" },
     goal: { en: "Bishop against knight, and the wrong-coloured bishop.", pa: "ਊਠ ਬਨਾਮ ਘੋੜਾ, ਅਤੇ ਗ਼ਲਤ ਰੰਗ ਦਾ ਊਠ।" },
     learn: [
@@ -114,7 +114,7 @@ export const LEVEL9: Lesson[] = [
     challenge: { kind: "pack", pack: "bishop-endgame", count: 3, prompt: real("three minor-piece endgames.", "ਛੋਟੇ ਮੋਹਰਿਆਂ ਦੀਆਂ ਤਿੰਨ ਅੰਤਲੀਆਂ ਖੇਡਾਂ ਵਿੱਚ ਸਭ ਤੋਂ ਵਧੀਆ ਚਾਲ ਲੱਭੋ।") },
   },
   {
-    id: "9.6", level: 9, status: "draft",
+    id: "9.6", level: 9, status: "checked",
     title: { en: "Queen endgames", pa: "ਰਾਣੀ ਦੀ ਅੰਤਲੀ ਖੇਡ" },
     goal: { en: "Hide your king from checks, and use endless checks to save a lost game.", pa: "ਆਪਣੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਸ਼ਹਿ ਤੋਂ ਲੁਕਾਓ, ਅਤੇ ਹਾਰੀ ਖੇਡ ਬਚਾਉਣ ਲਈ ਲਗਾਤਾਰ ਸ਼ਹਿ ਵਰਤੋ।" },
     learn: [
@@ -128,7 +128,7 @@ export const LEVEL9: Lesson[] = [
     challenge: { kind: "pack", pack: "queen-endgame-hard", count: 4, prompt: real("four queen endgames.", "ਰਾਣੀ ਦੀਆਂ ਚਾਰ ਅੰਤਲੀਆਂ ਖੇਡਾਂ ਵਿੱਚ ਸਭ ਤੋਂ ਵਧੀਆ ਚਾਲ ਲੱਭੋ।") },
   },
   {
-    id: "9.7", level: 9, status: "draft",
+    id: "9.7", level: 9, status: "checked",
     title: { en: "Converting an advantage", pa: "ਜਿੱਤ ਪੱਕੀ ਕਰਨੀ" },
     goal: { en: "When you're ahead, trade pieces, not pawns.", pa: "ਜਦੋਂ ਤੁਸੀਂ ਅੱਗੇ ਹੋ, ਮੋਹਰੇ ਵਟਾਓ, ਪਿਆਦੇ ਨਹੀਂ।" },
     learn: [
@@ -148,7 +148,7 @@ export const LEVEL9: Lesson[] = [
 
   // 9.8 (full check 2026-10-05): the outside passed pawn, the decoy that wins most king-and-pawn endgames
   {
-    id: "9.8", level: 9, status: "draft",
+    id: "9.8", level: 9, status: "checked",
     title: { en: "The outside passed pawn", pa: "ਬਾਹਰੀ ਆਜ਼ਾਦ ਪਿਆਦਾ" },
     goal: { en: "Use a far-away passed pawn to pull the enemy king away, then win on the other side.", pa: "ਦੂਰ ਵਾਲੇ ਆਜ਼ਾਦ ਪਿਆਦੇ ਨਾਲ ਦੁਸ਼ਮਣ ਦੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਖਿੱਚੋ, ਫਿਰ ਦੂਜੇ ਪਾਸੇ ਜਿੱਤੋ।" },
     learn: [
@@ -174,7 +174,7 @@ export const LEVEL9: Lesson[] = [
 
   // 9.9 (full check 2026-10-05): opposite-coloured bishops, the great drawing weapon (holds engine-proved)
   {
-    id: "9.9", level: 9, status: "draft",
+    id: "9.9", level: 9, status: "checked",
     title: { en: "Opposite-coloured bishops", pa: "ਉਲਟ ਰੰਗਾਂ ਦੇ ਊਠ" },
     goal: { en: "Save a pawn-down endgame when the bishops run on different colours.", pa: "ਜਦੋਂ ਊਠ ਉਲਟ ਰੰਗਾਂ 'ਤੇ ਚੱਲਣ, ਇੱਕ ਪਿਆਦਾ ਘੱਟ ਵਾਲੀ ਅੰਤਲੀ ਖੇਡ ਬਚਾਓ।" },
     learn: [

@@ -7,7 +7,7 @@ const mate1 = { en: "Checkmate in one move.", pa: "ਇੱਕ ਚਾਲ ਵਿੱ
 
 export const LEVEL3: Lesson[] = [
   {
-    id: "3.1", level: 3, status: "draft",
+    id: "3.1", level: 3, status: "checked",
     title: { en: "Back-rank mate", pa: "ਪਿਛਲੀ ਕਤਾਰ ਦੀ ਮਾਤ" },
     goal: { en: "Mate a king trapped behind its own pawns, and protect your own.", pa: "ਆਪਣੇ ਹੀ ਪਿਆਦਿਆਂ ਪਿੱਛੇ ਫਸੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਮਾਤ ਦਿਓ, ਅਤੇ ਆਪਣੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਬਚਾਓ।" },
     learn: [
@@ -33,7 +33,7 @@ export const LEVEL3: Lesson[] = [
   },
 
   {
-    id: "3.2", level: 3, status: "draft",
+    id: "3.2", level: 3, status: "checked",
     title: { en: "The ladder", pa: "ਪੌੜੀ ਮਾਤ" },
     goal: { en: "Mate a lone king with two rooks, walking it to the edge.", pa: "ਦੋ ਹਾਥੀਆਂ ਨਾਲ ਇਕੱਲੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਕੰਢੇ ਵੱਲ ਧੱਕ ਕੇ ਮਾਤ ਦਿਓ।" },
     learn: [
@@ -58,7 +58,7 @@ export const LEVEL3: Lesson[] = [
   },
 
   {
-    id: "3.3", level: 3, status: "draft",
+    id: "3.3", level: 3, status: "checked",
     title: { en: "Queen + king mate", pa: "ਰਾਣੀ ਨਾਲ ਮਾਤ" },
     goal: { en: "Mate a lone king with queen and king, without stalemate.", pa: "ਰਾਣੀ ਅਤੇ ਬਾਦਸ਼ਾਹ ਨਾਲ ਇਕੱਲੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਮਾਤ ਦਿਓ, ਖੜੋਤ ਤੋਂ ਬਿਨਾਂ।" },
     learn: [
@@ -83,7 +83,7 @@ export const LEVEL3: Lesson[] = [
   },
 
   {
-    id: "3.4", level: 3, status: "draft",
+    id: "3.4", level: 3, status: "checked",
     title: { en: "Rook + king mate", pa: "ਹਾਥੀ ਨਾਲ ਮਾਤ" },
     goal: { en: "Mate a lone king with rook and king.", pa: "ਹਾਥੀ ਅਤੇ ਬਾਦਸ਼ਾਹ ਨਾਲ ਇਕੱਲੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਮਾਤ ਦਿਓ।" },
     learn: [
@@ -105,7 +105,7 @@ export const LEVEL3: Lesson[] = [
   },
 
   {
-    id: "3.5", level: 3, status: "draft",
+    id: "3.5", level: 3, status: "checked",
     title: { en: "Kiss of death", pa: "ਰਾਣੀ ਦੀ ਚੁੰਮੀ" },
     goal: { en: "Mate with the queen right next to the king, guarded.", pa: "ਰਾਣੀ ਨੂੰ ਬਾਦਸ਼ਾਹ ਦੇ ਬਿਲਕੁਲ ਨਾਲ ਰੱਖੋ, ਜਿੱਥੇ ਉਸ ਦੀ ਰਾਖੀ ਹੋਵੇ, ਅਤੇ ਮਾਤ ਦਿਓ।" },
     learn: [
@@ -124,7 +124,7 @@ export const LEVEL3: Lesson[] = [
   },
 
   {
-    id: "3.6", level: 3, status: "draft",
+    id: "3.6", level: 3, status: "checked",
     title: { en: "Smothered mate", pa: "ਘਿਰੀ ਹੋਈ ਮਾਤ" },
     goal: { en: "Mate with a knight when the king is boxed in by its own pieces.", pa: "ਜਦੋਂ ਬਾਦਸ਼ਾਹ ਆਪਣੇ ਹੀ ਮੋਹਰਿਆਂ ਵਿੱਚ ਘਿਰਿਆ ਹੋਵੇ, ਘੋੜੇ ਨਾਲ ਮਾਤ ਦਿਓ।" },
     learn: [
@@ -142,7 +142,7 @@ export const LEVEL3: Lesson[] = [
   },
 
   {
-    id: "3.7", level: 3, status: "draft",
+    id: "3.7", level: 3, status: "checked",
     title: { en: "Mate in one, mixed", pa: "ਇੱਕ ਚਾਲ ਵਿੱਚ ਮਾਤ" },
     goal: { en: "Spot mate in one in any position.", pa: "ਕਿਸੇ ਵੀ ਹਾਲਤ ਵਿੱਚ ਇੱਕ ਚਾਲ ਦੀ ਮਾਤ ਲੱਭੋ।" },
     learn: [
@@ -158,7 +158,7 @@ export const LEVEL3: Lesson[] = [
   },
 
   {
-    id: "3.8", level: 3, status: "draft",
+    id: "3.8", level: 3, status: "checked",
     title: { en: "Don't get mated", pa: "ਮਾਤ ਤੋਂ ਬਚੋ" },
     goal: { en: "See your opponent's mate threat first, and stop it.", pa: "ਵਿਰੋਧੀ ਦੀ ਮਾਤ ਦੀ ਧਮਕੀ ਪਹਿਲਾਂ ਵੇਖੋ, ਅਤੇ ਉਸ ਨੂੰ ਰੋਕੋ।" },
     learn: [

@@ -11,7 +11,7 @@ const square = (corner: string, side: number, up: boolean) => {
 
 export const LEVEL5: Lesson[] = [
   {
-    id: "5.1", level: 5, status: "draft",
+    id: "5.1", level: 5, status: "checked",
     title: { en: "Rule of the square", pa: "ਵਰਗ ਦਾ ਨਿਯਮ" },
     goal: { en: "See at a glance whether a king can catch a pawn.", pa: "ਇੱਕ ਨਜ਼ਰ ਵਿੱਚ ਵੇਖੋ ਕਿ ਬਾਦਸ਼ਾਹ ਪਿਆਦੇ ਨੂੰ ਫੜ ਸਕਦਾ ਹੈ ਜਾਂ ਨਹੀਂ।" },
     learn: [
@@ -39,7 +39,7 @@ export const LEVEL5: Lesson[] = [
   },
 
   {
-    id: "5.2", level: 5, status: "draft",
+    id: "5.2", level: 5, status: "checked",
     title: { en: "King activity", pa: "ਸਰਗਰਮ ਬਾਦਸ਼ਾਹ" },
     goal: { en: "Use your king as a fighting piece in the endgame.", pa: "ਅੰਤਲੀ ਖੇਡ ਵਿੱਚ ਬਾਦਸ਼ਾਹ ਨੂੰ ਲੜਨ ਵਾਲੇ ਮੋਹਰੇ ਵਜੋਂ ਵਰਤੋ।" },
     learn: [
@@ -60,7 +60,7 @@ export const LEVEL5: Lesson[] = [
   },
 
   {
-    id: "5.3", level: 5, status: "draft",
+    id: "5.3", level: 5, status: "checked",
     title: { en: "Opposition", pa: "ਆਹਮੋ-ਸਾਹਮਣਾ" },
     goal: { en: "Make the other king give way.", pa: "ਦੂਜੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਰਾਹ ਛੱਡਣ ਲਈ ਮਜਬੂਰ ਕਰੋ।" },
     learn: [
@@ -84,7 +84,7 @@ export const LEVEL5: Lesson[] = [
   },
 
   {
-    id: "5.4", level: 5, status: "draft",
+    id: "5.4", level: 5, status: "checked",
     title: { en: "King + pawn vs king", pa: "ਬਾਦਸ਼ਾਹ-ਪਿਆਦਾ ਬਨਾਮ ਬਾਦਸ਼ਾਹ" },
     goal: { en: "Win with king and pawn by reaching a key square.", pa: "ਮੁੱਖ ਖਾਨੇ 'ਤੇ ਪਹੁੰਚ ਕੇ ਬਾਦਸ਼ਾਹ ਅਤੇ ਪਿਆਦੇ ਨਾਲ ਜਿੱਤੋ।" },
     learn: [
@@ -104,7 +104,7 @@ export const LEVEL5: Lesson[] = [
   },
 
   {
-    id: "5.5", level: 5, status: "draft",
+    id: "5.5", level: 5, status: "checked",
     title: { en: "The rook pawn", pa: "ਕੰਢੇ ਦਾ ਪਿਆਦਾ" },
     goal: { en: "Know why an a- or h-pawn is often only a draw.", pa: "ਜਾਣੋ ਕਿ a ਜਾਂ h ਵਾਲਾ ਪਿਆਦਾ ਅਕਸਰ ਸਿਰਫ਼ ਬਰਾਬਰੀ ਕਿਉਂ ਹੁੰਦਾ ਹੈ।" },
     learn: [
@@ -127,7 +127,7 @@ export const LEVEL5: Lesson[] = [
   },
 
   {
-    id: "5.6", level: 5, status: "draft",
+    id: "5.6", level: 5, status: "checked",
     title: { en: "Passed pawns", pa: "ਆਜ਼ਾਦ ਪਿਆਦਾ" },
     goal: { en: "Make a passed pawn, push it, and stop theirs.", pa: "ਆਜ਼ਾਦ ਪਿਆਦਾ ਬਣਾਓ, ਅੱਗੇ ਵਧਾਓ, ਅਤੇ ਵਿਰੋਧੀ ਦੇ ਆਜ਼ਾਦ ਪਿਆਦੇ ਨੂੰ ਰੋਕੋ।" },
     learn: [
@@ -144,7 +144,7 @@ export const LEVEL5: Lesson[] = [
   },
 
   {
-    id: "5.7", level: 5, status: "draft",
+    id: "5.7", level: 5, status: "checked",
     title: { en: "Breakthrough", pa: "ਲਾਂਘਾ" },
     goal: { en: "Give up a pawn to make a passed pawn.", pa: "ਆਜ਼ਾਦ ਪਿਆਦਾ ਬਣਾਉਣ ਲਈ ਇੱਕ ਪਿਆਦਾ ਦਿਓ।" },
     learn: [
@@ -163,7 +163,7 @@ export const LEVEL5: Lesson[] = [
   },
 
   {
-    id: "5.8", level: 5, status: "draft",
+    id: "5.8", level: 5, status: "checked",
     title: { en: "Queen vs pawn", pa: "ਰਾਣੀ ਬਨਾਮ ਪਿਆਦਾ" },
     goal: { en: "Stop a pawn on the 7th with your queen, and win it.", pa: "ਸੱਤਵੀਂ ਕਤਾਰ ਵਾਲੇ ਪਿਆਦੇ ਨੂੰ ਰਾਣੀ ਨਾਲ ਰੋਕੋ, ਅਤੇ ਉਸ ਨੂੰ ਮਾਰ ਲਓ।" },
     learn: [

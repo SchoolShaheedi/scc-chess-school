@@ -8,7 +8,7 @@ const real = (en: string, pa: string): Text => ({ en: `Real games: ${en}`, pa: `
 
 export const LEVEL8: Lesson[] = [
   {
-    id: "8.1", level: 8, status: "draft",
+    id: "8.1", level: 8, status: "checked",
     title: { en: "Good and bad pieces", pa: "ਚੰਗੇ ਤੇ ਮਾੜੇ ਮੋਹਰੇ" },
     goal: { en: "Find your worst piece and make it better.", pa: "ਆਪਣਾ ਸਭ ਤੋਂ ਮਾੜਾ ਮੋਹਰਾ ਲੱਭੋ ਅਤੇ ਉਸ ਨੂੰ ਸੁਧਾਰੋ।" },
     learn: [
@@ -27,7 +27,7 @@ export const LEVEL8: Lesson[] = [
     challenge: { kind: "pack", pack: "advantage", count: 3, prompt: real("three quiet positions.", "ਤਿੰਨ ਸ਼ਾਂਤ ਹਾਲਤਾਂ ਵਿੱਚ ਸਭ ਤੋਂ ਵਧੀਆ ਚਾਲ ਲੱਭੋ।") },
   },
   {
-    id: "8.2", level: 8, status: "draft",
+    id: "8.2", level: 8, status: "checked",
     title: { en: "Pawn structure", pa: "ਪਿਆਦਿਆਂ ਦੀ ਬਣਤਰ" },
     goal: { en: "Spot isolated, doubled and passed pawns.", pa: "ਇਕੱਲੇ, ਦੋਹਰੇ ਅਤੇ ਆਜ਼ਾਦ ਪਿਆਦੇ ਪਛਾਣੋ।" },
     learn: [
@@ -47,7 +47,7 @@ export const LEVEL8: Lesson[] = [
     challenge: { kind: "pack", pack: "passed-pawn", count: 3, prompt: real("use the structure.", "ਬਣਤਰ ਵਰਤੋ।") },
   },
   {
-    id: "8.3", level: 8, status: "draft",
+    id: "8.3", level: 8, status: "checked",
     title: { en: "Outposts", pa: "ਪੱਕਾ ਟਿਕਾਣਾ" },
     goal: { en: "Find a square no enemy pawn can ever attack, for your knight.", pa: "ਆਪਣੇ ਘੋੜੇ ਲਈ ਉਹ ਖਾਨਾ ਲੱਭੋ ਜਿਸ 'ਤੇ ਦੁਸ਼ਮਣ ਦਾ ਕੋਈ ਪਿਆਦਾ ਕਦੇ ਹਮਲਾ ਨਾ ਕਰ ਸਕੇ।" },
     learn: [
@@ -63,7 +63,7 @@ export const LEVEL8: Lesson[] = [
     challenge: { kind: "pack", pack: "advantage", count: 3, prompt: real("put your pieces on strong squares.", "ਮੋਹਰੇ ਤਕੜੇ ਖਾਨਿਆਂ 'ਤੇ ਰੱਖੋ।") },
   },
   {
-    id: "8.4", level: 8, status: "draft",
+    id: "8.4", level: 8, status: "checked",
     title: { en: "Open files", pa: "ਖੁੱਲ੍ਹੀ ਖੜ੍ਹੀ ਕਤਾਰ" },
     goal: { en: "Put your rooks on open files.", pa: "ਆਪਣੇ ਹਾਥੀ ਖੁੱਲ੍ਹੀਆਂ ਖੜ੍ਹੀਆਂ ਕਤਾਰਾਂ 'ਤੇ ਰੱਖੋ।" },
     learn: [
@@ -81,7 +81,7 @@ export const LEVEL8: Lesson[] = [
     challenge: { kind: "pack", pack: "advantage", count: 3, prompt: real("rooks on open files.", "ਖੁੱਲ੍ਹੀਆਂ ਖੜ੍ਹੀਆਂ ਕਤਾਰਾਂ 'ਤੇ ਹਾਥੀ ਰੱਖੋ।") },
   },
   {
-    id: "8.5", level: 8, status: "draft",
+    id: "8.5", level: 8, status: "checked",
     title: { en: "Good and bad bishop", pa: "ਚੰਗਾ ਤੇ ਮਾੜਾ ਊਠ" },
     goal: { en: "Tell a good bishop from one blocked by its own pawns.", pa: "ਚੰਗੇ ਊਠ ਅਤੇ ਆਪਣੇ ਹੀ ਪਿਆਦਿਆਂ ਨਾਲ ਰੁਕੇ ਊਠ ਵਿੱਚ ਫ਼ਰਕ ਪਛਾਣੋ।" },
     learn: [
@@ -101,7 +101,7 @@ export const LEVEL8: Lesson[] = [
     challenge: { kind: "pack", pack: "advantage", count: 3, prompt: real("find the stronger plan.", "ਵੱਧ ਤਕੜੀ ਯੋਜਨਾ ਲੱਭੋ।") },
   },
   {
-    id: "8.6", level: 8, status: "draft",
+    id: "8.6", level: 8, status: "checked",
     title: { en: "Knight vs bishop", pa: "ਘੋੜਾ ਬਨਾਮ ਊਠ" },
     goal: { en: "Know when a knight beats a bishop, and when it's the other way round.", pa: "ਜਾਣੋ ਕਦੋਂ ਘੋੜਾ ਊਠ ਤੋਂ ਵਧੀਆ ਹੈ, ਅਤੇ ਕਦੋਂ ਉਲਟ।" },
     learn: [
@@ -125,7 +125,7 @@ export const LEVEL8: Lesson[] = [
     challenge: { kind: "pack", pack: "advantage", count: 3, prompt: real("minor pieces at work.", "ਘੋੜੇ ਅਤੇ ਊਠ ਨਾਲ ਸਭ ਤੋਂ ਵਧੀਆ ਚਾਲ ਲੱਭੋ।") },
   },
   {
-    id: "8.7", level: 8, status: "draft",
+    id: "8.7", level: 8, status: "checked",
     title: { en: "Attacking the king", pa: "ਬਾਦਸ਼ਾਹ 'ਤੇ ਹਮਲਾ" },
     goal: { en: "Bring pieces towards the enemy king and break its shelter.", pa: "ਮੋਹਰਿਆਂ ਨੂੰ ਦੁਸ਼ਮਣ ਦੇ ਬਾਦਸ਼ਾਹ ਵੱਲ ਲਿਆਓ ਅਤੇ ਉਸ ਦੀ ਆੜ ਤੋੜੋ।" },
     learn: [
@@ -142,7 +142,7 @@ export const LEVEL8: Lesson[] = [
     challenge: { kind: "pack", pack: "exposed-king", count: 3, prompt: real("three attacks.", "ਤਿੰਨ ਹਮਲੇ ਲੱਭੋ।") },
   },
   {
-    id: "8.8", level: 8, status: "draft",
+    id: "8.8", level: 8, status: "checked",
     title: { en: "Making a plan", pa: "ਯੋਜਨਾ ਬਣਾਉਣੀ" },
     goal: { en: "Find a weakness, choose a target, improve your worst piece.", pa: "ਕਮਜ਼ੋਰੀ ਲੱਭੋ, ਨਿਸ਼ਾਨਾ ਚੁਣੋ, ਆਪਣਾ ਸਭ ਤੋਂ ਮਾੜਾ ਮੋਹਰਾ ਸੁਧਾਰੋ।" },
     learn: [
@@ -157,7 +157,7 @@ export const LEVEL8: Lesson[] = [
 
   // 8.9 (full check 2026-10-05): weak squares (holes), space and the bishop pair
   {
-    id: "8.9", level: 8, status: "draft",
+    id: "8.9", level: 8, status: "checked",
     title: { en: "Weak squares and the bishop pair", pa: "ਕਮਜ਼ੋਰ ਖਾਨੇ ਅਤੇ ਊਠਾਂ ਦੀ ਜੋੜੀ" },
     goal: { en: "Spot holes in a pawn chain, and know when two bishops are worth more.", pa: "ਪਿਆਦਿਆਂ ਦੀ ਲੜੀ ਵਿੱਚ ਛੇਕ ਪਛਾਣੋ, ਅਤੇ ਜਾਣੋ ਕਦੋਂ ਦੋ ਊਠ ਵੱਧ ਕੀਮਤੀ ਹਨ।" },
     learn: [

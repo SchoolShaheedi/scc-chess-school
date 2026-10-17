@@ -9,7 +9,7 @@ const tellChoose = { en: "Choose the right answer.", pa: "ਸਹੀ ਜਵਾਬ
 
 export const LEVEL2: Lesson[] = [
   {
-    id: "2.1", level: 2, status: "draft",
+    id: "2.1", level: 2, status: "checked",
     title: { en: "Check", pa: "ਸ਼ਹਿ" },
     goal: { en: "Know when a king is in check, and the three ways out.", pa: "ਜਾਣੋ ਬਾਦਸ਼ਾਹ ਨੂੰ ਸ਼ਹਿ ਕਦੋਂ ਹੁੰਦੀ ਹੈ, ਅਤੇ ਬਚਣ ਦੇ ਤਿੰਨ ਰਾਹ।" },
     learn: [
@@ -48,7 +48,7 @@ export const LEVEL2: Lesson[] = [
   },
 
   {
-    id: "2.2", level: 2, status: "draft",
+    id: "2.2", level: 2, status: "checked",
     title: { en: "Checkmate", pa: "ਸ਼ਹਿ-ਮਾਤ" },
     goal: { en: "Know checkmate, and find mate in one move.", pa: "ਸ਼ਹਿ-ਮਾਤ ਨੂੰ ਜਾਣੋ, ਅਤੇ ਇੱਕ ਚਾਲ ਵਿੱਚ ਮਾਤ ਲੱਭੋ।" },
     learn: [
@@ -71,7 +71,7 @@ export const LEVEL2: Lesson[] = [
   },
 
   {
-    id: "2.3", level: 2, status: "draft",
+    id: "2.3", level: 2, status: "checked",
     title: { en: "Stalemate", pa: "ਖੜੋਤ" },
     goal: { en: "Tell stalemate from checkmate, and never stalemate a game you are winning.", pa: "ਖੜੋਤ ਅਤੇ ਸ਼ਹਿ-ਮਾਤ ਵਿੱਚ ਫ਼ਰਕ ਪਛਾਣੋ, ਅਤੇ ਜਿੱਤਦੀ ਖੇਡ ਵਿੱਚ ਕਦੇ ਖੜੋਤ ਨਾ ਕਰੋ।" },
     learn: [
@@ -115,7 +115,7 @@ export const LEVEL2: Lesson[] = [
   },
 
   {
-    id: "2.4", level: 2, status: "draft",
+    id: "2.4", level: 2, status: "checked",
     title: { en: "Castling", pa: "ਕਿਲ੍ਹੇਬੰਦੀ" },
     goal: { en: "Castle on both sides, and know the four rules that forbid it.", pa: "ਦੋਵੇਂ ਪਾਸੇ ਕਿਲ੍ਹੇਬੰਦੀ ਕਰੋ, ਅਤੇ ਉਹ ਚਾਰ ਨਿਯਮ ਜਾਣੋ ਜੋ ਇਸ ਨੂੰ ਰੋਕਦੇ ਹਨ।" },
     learn: [
@@ -157,7 +157,7 @@ export const LEVEL2: Lesson[] = [
   },
 
   {
-    id: "2.5", level: 2, status: "draft",
+    id: "2.5", level: 2, status: "checked",
     title: { en: "Promotion", pa: "ਤਰੱਕੀ" },
     goal: { en: "Promote a pawn, and choose the right new piece.", pa: "ਪਿਆਦੇ ਨੂੰ ਤਰੱਕੀ ਦਿਓ, ਅਤੇ ਸਹੀ ਨਵਾਂ ਮੋਹਰਾ ਚੁਣੋ।" },
     learn: [
@@ -188,7 +188,7 @@ export const LEVEL2: Lesson[] = [
   },
 
   {
-    id: "2.6", level: 2, status: "draft",
+    id: "2.6", level: 2, status: "checked",
     title: { en: "En passant", pa: "ਲੰਘਦਿਆਂ ਮਾਰਨਾ" },
     goal: { en: "Capture a pawn that has just jumped past yours.", pa: "ਉਸ ਪਿਆਦੇ ਨੂੰ ਮਾਰੋ ਜੋ ਹੁਣੇ ਤੁਹਾਡੇ ਪਿਆਦੇ ਦੇ ਕੋਲੋਂ ਛਾਲ ਮਾਰ ਕੇ ਲੰਘਿਆ ਹੈ।" },
     learn: [
@@ -220,7 +220,7 @@ export const LEVEL2: Lesson[] = [
   },
 
   {
-    id: "2.7", level: 2, status: "draft",
+    id: "2.7", level: 2, status: "checked",
     title: { en: "Draws", pa: "ਬਰਾਬਰੀ" },
     goal: { en: "Know the ways a game ends with nobody winning.", pa: "ਉਹ ਤਰੀਕੇ ਜਾਣੋ ਜਿਨ੍ਹਾਂ ਨਾਲ ਖੇਡ ਬਿਨਾਂ ਕਿਸੇ ਦੀ ਜਿੱਤ ਦੇ ਖ਼ਤਮ ਹੁੰਦੀ ਹੈ।" },
     learn: [
@@ -269,7 +269,7 @@ export const LEVEL2: Lesson[] = [
   },
 
   {
-    id: "2.8", level: 2, status: "draft",
+    id: "2.8", level: 2, status: "checked",
     title: { en: "Piece values", pa: "ਮੋਹਰਿਆਂ ਦਾ ਮੁੱਲ" },
     goal: { en: "Count material, and tell a good trade from a bad one.", pa: "ਮੋਹਰਿਆਂ ਦਾ ਮੁੱਲ ਗਿਣੋ, ਅਤੇ ਚੰਗੇ ਤੇ ਮਾੜੇ ਵਟਾਂਦਰੇ ਵਿੱਚ ਫ਼ਰਕ ਪਛਾਣੋ।" },
     learn: [
@@ -312,7 +312,7 @@ export const LEVEL2: Lesson[] = [
 
   // 2.9–2.10 (full check 2026-10-05): notation is used from Level 3 on, and opening basics can't wait until Level 6
   {
-    id: "2.9", level: 2, status: "draft",
+    id: "2.9", level: 2, status: "checked",
     title: { en: "Writing moves down", pa: "ਚਾਲਾਂ ਲਿਖਣੀਆਂ" },
     goal: { en: "Read and write moves the way every chess book does.", pa: "ਚਾਲਾਂ ਉਸੇ ਤਰ੍ਹਾਂ ਪੜ੍ਹੋ ਅਤੇ ਲਿਖੋ ਜਿਵੇਂ ਹਰ ਸ਼ਤਰੰਜ ਦੀ ਕਿਤਾਬ ਵਿੱਚ ਹੁੰਦਾ ਹੈ।" },
     learn: [
@@ -343,7 +343,7 @@ export const LEVEL2: Lesson[] = [
       prompt: { en: "Play White's moves from the notation: 1. e4 e5 2. Nf3 Nc6 3. Bc4", pa: "ਲਿਖੀਆਂ ਚਾਲਾਂ ਮੁਤਾਬਕ ਚਿੱਟੇ ਦੀਆਂ ਚਾਲਾਂ ਖੇਡੋ: 1. e4 e5 2. Nf3 Nc6 3. Bc4" } },
   },
   {
-    id: "2.10", level: 2, status: "draft",
+    id: "2.10", level: 2, status: "checked",
     title: { en: "Starting the game well", pa: "ਖੇਡ ਦੀ ਚੰਗੀ ਸ਼ੁਰੂਆਤ" },
     goal: { en: "Centre, develop, castle, and don't fall for Scholar's mate.", pa: "ਵਿਚਕਾਰ ਪਿਆਦਾ ਰੱਖੋ, ਮੋਹਰੇ ਕੱਢੋ, ਕਿਲ੍ਹੇਬੰਦੀ ਕਰੋ, ਅਤੇ ਸਕਾਲਰ ਮਾਤ ਵਿੱਚ ਨਾ ਫਸੋ।" },
     learn: [
