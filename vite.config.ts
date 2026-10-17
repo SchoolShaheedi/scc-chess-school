@@ -40,7 +40,7 @@ export default defineConfig({
         ],
         // design-trial pages sit beside the app in previews; the offline fallback must not swallow them
         // the privacy page is its own page, never the app (Google links to it from the Play listing, DECISIONS #121)
-        navigateFallbackDenylist: [/-options\.html$/, /trial/, /privacy\.html$/],
+        navigateFallbackDenylist: [/-options\.html$/, /trial/, /\/privacy(\.html)?$/],
       },
     }),
   ],

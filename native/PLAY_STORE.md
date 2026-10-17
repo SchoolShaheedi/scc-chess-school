@@ -4,7 +4,7 @@ Drafted 2026-10-17 for version 1.0.0 (DECISIONS #121). Read the Panjabi before i
 approved and published before the app is submitted (Google checks the link).
 
 ## Before you start (only you can do these)
-1. **Approve the privacy page.** Then I publish it at `https://scc-chess-school.pages.dev/privacy.html`.
+1. **Approve the privacy page.** Then I publish it at `https://scc-chess-school.pages.dev/privacy`.
 2. **Build the signed bundle in Android Studio.** Open `native/android` (`npm run open`), then
    **Build → Generate Signed App Bundle / APK → Android App Bundle**. Choose the **same key file and password as the
    Sikhi Calendar**, build variant **release**. The file appears in `native/android/app/release/app-release.aab`.
@@ -20,7 +20,7 @@ approved and published before the app is submitted (Google checks the link).
 | Category | Education (alternative: Board games) |
 | Contact email | gurmat@shaheedibunga.com |
 | Website | https://scc-chess-school.pages.dev |
-| Privacy policy | https://scc-chess-school.pages.dev/privacy.html |
+| Privacy policy | https://scc-chess-school.pages.dev/privacy |
 | Price | Free · no ads · no in-app purchases |
 
 ## Short description (80 characters max)
