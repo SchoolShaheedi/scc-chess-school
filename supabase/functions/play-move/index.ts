@@ -4,12 +4,14 @@
 // cheat. It also ends the game on mate, stalemate, repetition, the fifty-move rule, dead material, or time.
 //
 // POST { game, player, uci }           a move
+// POST { game, player, uci, change }   a Magical Chess move; change = the piece becomes its gem's piece (Stage 2)
 // POST { game, player, claim: "time" } the opponent's clock has run out
 //
 // The database write uses Supabase's server key, which Supabase gives every server function automatically
 // (SUPABASE_SERVICE_ROLE_KEY). It exists only on Supabase's servers: it is never in the app or in this repository.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { Chess } from "npm:chess.js@1.4.0";
+import { playMagical, replayMagical } from "./power/online.ts";   // a copy of the app's own rules (tools/sync-magical.mjs)
 
 // only the app's own addresses may call it from a browser: the live site, this computer's test address, and any
 // others set in ALLOWED_ORIGINS (comma-separated; e.g. a custom domain later)
@@ -28,9 +30,9 @@ Deno.serve(async req => {
   const asUser = createClient(url, Deno.env.get("SUPABASE_ANON_KEY")!, { global: { headers: { Authorization: req.headers.get("Authorization") ?? "" } } });
   const { data: { user } } = await asUser.auth.getUser();
   if (!user) return reply(401, { error: "sign in first" });
-  let body: { game?: string; player?: string; uci?: string; claim?: string };
+  let body: { game?: string; player?: string; uci?: string; claim?: string; change?: boolean };
   try { body = await req.json(); } catch { return reply(400, { error: "bad request" }); }
-  const { game: gameId, player, uci, claim } = body;
+  const { game: gameId, player, uci, claim, change } = body;
   if (!gameId || !player || (!uci && claim !== "time")) return reply(400, { error: "bad request" });
   if (uci && !/^[a-h][1-8][a-h][1-8][qrbn]?$/.test(uci)) return reply(400, { error: "bad move" });
 
@@ -42,9 +44,11 @@ Deno.serve(async req => {
   if (g.white !== player && g.black !== player) return reply(403, { error: "not your game" });
   if (g.status !== "active") return reply(409, { error: "the game is over" });
 
-  // replay from the start, so repetition and the fifty-move rule are judged on the whole game
-  const chess = new Chess();
-  for (const m of g.moves as string[]) chess.move({ from: m.slice(0, 2), to: m.slice(2, 4), promotion: m[4] });
+  // replay from the start, so repetition and the fifty-move rule are judged on the whole game. A Magical Chess game
+  // is replayed with its gems from its seed instead: the position can't be rebuilt from the moves alone.
+  const magical = g.variant === "magical";
+  const chess = magical ? new Chess(replayMagical(g.seed, g.moves, g.changes ?? []).fen) : new Chess();
+  if (!magical) for (const m of g.moves as string[]) chess.move({ from: m.slice(0, 2), to: m.slice(2, 4), promotion: m[4] });
   const turn = chess.turn(), now = Date.now();
   const timed = g.tc_min > 0, since = g.turn_since ? Date.parse(g.turn_since) : null;
   const left = (side: "w" | "b") => {
@@ -79,19 +83,31 @@ Deno.serve(async req => {
   const mySide = g.white === player ? "w" : "b";
   if (mySide !== turn) return reply(409, { error: "not your turn" });
   if (timed && left(turn) <= 0) return finish(flagResult(turn), "time", { [turn === "w" ? "white_ms" : "black_ms"]: 0 });
-  let mv;
-  try { mv = chess.move({ from: uci!.slice(0, 2), to: uci!.slice(2, 4), promotion: uci![4] }); } catch { return reply(422, { error: "illegal move" }); }
+  let lan: string, end: Chess;
+  const patch: Record<string, unknown> = { draw_offer: null, updated_at: new Date(now).toISOString() };
+  if (magical) {
+    // checked by the same rules the app plays by: legal, and a change only where a piece (never a king) landed on a gem
+    const r = playMagical(g.seed, g.moves, g.changes ?? [], uci!, !!change);
+    if (!r.ok) return reply(422, { error: r.error });
+    lan = r.lan; end = new Chess(r.st.fen);
+    Object.assign(patch, { fen: r.st.fen, orbs: r.st.orbs, ...(r.changed ? { changes: [...(g.changes ?? []), g.moves.length] } : {}) });
+  } else {
+    if (change) return reply(422, { error: "not a Magical Chess game" });
+    try { lan = chess.move({ from: uci!.slice(0, 2), to: uci!.slice(2, 4), promotion: uci![4] }).lan; } catch { return reply(422, { error: "illegal move" }); }
+    end = chess; patch.fen = chess.fen();
+  }
+  patch.moves = [...g.moves, lan];
 
   // the clock: White's first move starts it (nobody loses time settling in); then the mover is charged and gets the increment
-  const patch: Record<string, unknown> = { moves: [...g.moves, mv.lan], fen: chess.fen(), draw_offer: null, updated_at: new Date(now).toISOString() };
   if (timed && since !== null) patch[turn === "w" ? "white_ms" : "black_ms"] = Math.max(0, left(turn)) + g.tc_inc * 1000;
   patch.turn_since = timed ? new Date(now).toISOString() : null;
 
-  if (chess.isCheckmate()) return finish(turn === "w" ? "1-0" : "0-1", "mate", patch);
-  if (chess.isStalemate()) return finish("1/2-1/2", "stalemate", patch);
-  if (chess.isThreefoldRepetition()) return finish("1/2-1/2", "repetition", patch);
-  if (chess.isInsufficientMaterial()) return finish("1/2-1/2", "material", patch);
-  if (chess.isDraw()) return finish("1/2-1/2", "fifty", patch);
+  // Magical Chess: a change can make positions differ, so repetition is not judged there (as against the bots)
+  if (end.isCheckmate()) return finish(turn === "w" ? "1-0" : "0-1", "mate", patch);
+  if (end.isStalemate()) return finish("1/2-1/2", "stalemate", patch);
+  if (!magical && end.isThreefoldRepetition()) return finish("1/2-1/2", "repetition", patch);
+  if (end.isInsufficientMaterial()) return finish("1/2-1/2", "material", patch);
+  if (end.isDraw() && !end.isThreefoldRepetition()) return finish("1/2-1/2", "fifty", patch);
 
   const { data, error } = await db.from("games").update(patch).eq("id", g.id).eq("status", "active").eq("updated_at", g.updated_at).select("id");
   return error || !data?.length ? reply(409, { error: "the game changed, try again" }) : reply(200, { ok: true });

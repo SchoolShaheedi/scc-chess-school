@@ -18,16 +18,22 @@ import { shareButton, wireShare } from "../play/share";
 import { announceEnd, END_PAUSE, endBadges } from "../play/gameover";
 import { gameMenuButton, wireGameMenu } from "../play/gamesettings";
 import { setLastGame } from "../review/screen";
+import { magicalLine } from "../power/online";
+import { gemFor } from "../power/rules";
+import { askChange, burstAt, gemDecor } from "../power/ui";
 import { sound } from "../sound";
 import {
   activeGames, addFriend, adultLadder, answerChallenge, blockPlayer, enableOnlineAdult, findGame, gamePlayers, stopSeeking, cancelChallenge, challenges, claimTime, disableOnline, enableOnline, type Game, gameAction,
   answerFriend, friendRequests, getGame, type Me, myPlayer, newFriendCode, opponents, type Opponent, REACTIONS, removeFriend, sendChallenge, sendMove, signedIn, watchChallenges, watchGame,
+  MAGICAL_ONLINE, type Variant,
 } from "./api";
 
 type Go = (h: string) => void;
 const bar = (title: string) => `<div class="lessonbar"><button class="iconbtn" data-back aria-label="${t("back")}">${icon("chevronLeft")}</button><h1 class="grow">${title}</h1></div>`;
 const reactionText = (code: string) => t(`react_${code}` as "react_gl");
 const tcLabel = (tc: string) => tc === "none" ? t("clockNone") : tc.includes("+") ? tc.split("+").map(n => num(+n)).join(" + ") : `${num(+tc)} ${t("minutes")}`;
+/** "Magical Chess · " before the clock, for a Magical Chess challenge or game (Stage 2). */
+const vLabel = (v?: Variant) => (v === "magical" ? `${t("powerTitle")} · ` : "");
 
 // ---------- the parent's switch, on the family screen ----------
 /** A grown-up question before online play is switched on: a times-table sum a young child is unlikely to know. */
@@ -121,7 +127,7 @@ function strangers(box: HTMLElement, me: Me, go: Go, alive: () => boolean) {
 }
 
 // ---------- the lobby ----------
-let tc = "10", colour = "random";
+let tc = "10", colour = "random", variant: Variant = "chess";
 export function onlineLobby(root: HTMLElement, go: Go): () => void {
   let alive = true, unwatch: (() => void) | null = null;
   const leave = () => { alive = false; unwatch?.(); };
@@ -152,18 +158,19 @@ export function onlineLobby(root: HTMLElement, go: Go): () => void {
         <div class="li"><span>${avatarHTML(family.current(), "")}</span><span class="grow"><small>${t("onlineCode")}</small><b class="codetxt big">${me.friend_code}</b></span></div>
         <p class="note">${t("onlineCodeNote")}</p>
         ${games.length ? `<h2 class="sec">${t("onlineYourGames")}</h2>${games.map(g => `<button class="botcard" data-game="${g.id}">${face(g.white === me.id ? g.black : g.white)}
-          <span class="grow"><b>${t("onlineGameOn")}</b><small>${tcLabel(g.tc_min ? (g.tc_inc ? `${g.tc_min}+${g.tc_inc}` : String(g.tc_min)) : "none")}</small></span>${icon("arrowRight")}</button>`).join("")}` : ""}
+          <span class="grow"><b>${t("onlineGameOn")}</b><small>${vLabel(g.variant)}${tcLabel(g.tc_min ? (g.tc_inc ? `${g.tc_min}+${g.tc_inc}` : String(g.tc_min)) : "none")}</small></span>${icon("arrowRight")}</button>`).join("")}` : ""}
         ${reqs.length ? `<h2 class="sec">${t("onlineFriendRequests")}</h2><p class="note">${t("onlineFriendRequestsNote")}</p>${reqs.map(r => `<div class="botcard">${avatarHTML(r)}
           <span class="grow"><b>${t("onlineWantsFriend")}</b></span>
           <button class="btn" data-befriend="${r.player}">${t("onlineAccept")}</button><button class="btn ghost" data-refuse="${r.player}">${t("onlineDecline")}</button></div>`).join("")}` : ""}
         ${incoming.length ? `<h2 class="sec">${t("onlineIncoming")}</h2>${incoming.map(c => `<div class="botcard">${face(c.from_player)}
-          <span class="grow"><b>${t("onlineWantsToPlay")}</b><small>${tcLabel(c.tc)}</small></span>
+          <span class="grow"><b>${t("onlineWantsToPlay")}</b><small>${vLabel(c.variant)}${tcLabel(c.tc)}</small></span>
           <button class="btn" data-accept="${c.id}">${t("onlineAccept")}</button><button class="btn ghost" data-decline="${c.id}">${t("onlineDecline")}</button></div>`).join("")}` : ""}
         ${outgoing.length ? `<h2 class="sec">${t("onlineWaiting")}</h2>${outgoing.map(c => `<div class="botcard">${face(c.to_player)}
-          <span class="grow"><b>${t("onlineWaitingFor")}</b><small>${tcLabel(c.tc)}</small></span><button class="btn ghost" data-cancel="${c.id}">${t("cancel")}</button></div>`).join("")}` : ""}
+          <span class="grow"><b>${t("onlineWaitingFor")}</b><small>${vLabel(c.variant)}${tcLabel(c.tc)}</small></span><button class="btn ghost" data-cancel="${c.id}">${t("cancel")}</button></div>`).join("")}` : ""}
         ${me.adult ? `<h2 class="sec">${t("adultPlayTitle")}</h2><div data-strangers></div>
           <button class="btn ghost wide" data-ladder>${icon("trophy")} ${t("ladderTitle")}</button>` : ""}
         <h2 class="sec">${t("onlinePlayWho")}</h2>
+        ${MAGICAL_ONLINE ? `<div class="seg variants" role="group">${(["chess", "magical"] as const).map(v => `<button data-variant="${v}" aria-pressed="${variant === v}">${v === "chess" ? t("chessPlain") : `✨ ${t("powerTitle")}`}</button>`).join("")}</div>` : ""}
         <div class="seg tcs" role="group">${["none", "10", "5", "3+2"].map(x => `<button data-tc="${x}" aria-pressed="${tc === x}">${tcLabel(x)}</button>`).join("")}</div>
         <div class="seg colours" role="group">${(["w", "random", "b"] as const).map(c => `<button data-c="${c}" aria-pressed="${colour === c}"><span class="kingdot ${c}"></span>${t(c === "w" ? "colourWhite" : c === "b" ? "colourBlack" : "colourRandom")}</button>`).join("")}</div>
         ${opps.length ? `<div class="botlist">${opps.map((o: Opponent) => `<div class="botcard">${avatarHTML(o)}
@@ -181,9 +188,10 @@ export function onlineLobby(root: HTMLElement, go: Go): () => void {
       root.querySelectorAll<HTMLButtonElement>("[data-tc]").forEach(b => b.onclick = () => { tc = b.dataset.tc!; void render(); });
       root.querySelector<HTMLButtonElement>("[data-ladder]")?.addEventListener("click", () => go("#/online/ladder"));
       root.querySelectorAll<HTMLButtonElement>("[data-c]").forEach(b => b.onclick = () => { colour = b.dataset.c!; void render(); });
+      root.querySelectorAll<HTMLButtonElement>("[data-variant]").forEach(b => b.onclick = () => { variant = b.dataset.variant as Variant; void render(); });
       root.querySelectorAll<HTMLButtonElement>("[data-game]").forEach(b => b.onclick = () => go(`#/online/game/${b.dataset.game}`));
       root.querySelectorAll<HTMLButtonElement>("[data-challenge]").forEach(b => b.onclick = async () => {
-        const e = await sendChallenge(me.id, b.dataset.challenge!, tc, colour); if (e) errBox.textContent = e; else void render();
+        const e = await sendChallenge(me.id, b.dataset.challenge!, tc, colour, MAGICAL_ONLINE ? variant : "chess"); if (e) errBox.textContent = e; else void render();
       });
       root.querySelectorAll<HTMLButtonElement>("[data-accept]").forEach(b => b.onclick = async () => {
         const r = await answerChallenge(me.id, b.dataset.accept!, true);
@@ -231,10 +239,13 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
     if (!alive) return;
     const oppSide = sides.find(x => x.side === theirs), mySide = sides.find(x => x.side === mine);
     const opp = { avatar: oppSide?.avatar ?? "cat", colour: oppSide?.colour ?? "#9AA39E" }, oppId = oppSide?.player ?? null;
+    // Magical Chess with friends (Stage 2): the position comes from the seed, the moves and the changes, not the moves alone
+    const magical = first.variant === "magical";
+    const line = () => magicalLine(g.seed ?? 0, g.moves, g.changes ?? []);
     const rated = !!first.rated, ratingOf = (x?: { rating: number | null }) => (rated && x?.rating ? ` <small>~${num(x.rating)}</small>` : "");
     root.innerHTML = `<div class="screen">${bar(t("onlineTitle"))}
       <div class="pbar" data-top></div>
-      <div class="frame"><div class="boardwrap" data-board></div><div class="overcard" data-card hidden></div></div>
+      <div class="frame"><div class="boardwrap ${magical ? "powerwrap" : ""}" data-board>${magical ? `<div class="usebubble" data-use hidden></div>` : ""}</div><div class="overcard" data-card hidden></div></div>
       <div class="pbar" data-bottom></div>
       <p class="gstate" data-state aria-live="polite"></p>
       <div class="moverow"><button class="iconbtn" data-prev aria-label="${t("movePrev")}">${icon("chevronLeft")}</button>
@@ -249,7 +260,10 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
     const extra = root.querySelector<HTMLElement>("[data-extra]")!, say = (h: string) => { root.querySelector("[data-state]")!.innerHTML = h; };
     const ctx = { board, extra, say: () => {}, status: () => {}, done: () => {} };
     const times: (number | null)[] = [];   // Insights (DECISIONS #113): thinking time per move, by ply
-    const chess = () => { const c = new Chess(); for (const m of g.moves) c.move({ from: m.slice(0, 2), to: m.slice(2, 4), promotion: m[4] }); return c; };
+    const chess = () => {
+      if (magical) return new Chess(line().states.at(-1)!.fen);
+      const c = new Chess(); for (const m of g.moves) c.move({ from: m.slice(0, 2), to: m.slice(2, 4), promotion: m[4] }); return c;
+    };
 
     // the clocks come from the server; between updates the side to move counts down here
     const left = (side: "w" | "b") => {
@@ -265,10 +279,12 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
       root.querySelector("[data-bottom]")!.innerHTML = `<span class="av">${avatarHTML(family.current())}</span><div class="grow"><b>${t("you")}${ratingOf(mySide)}</b><div class="caps">${caps(mine)}</div></div>${clk(mine)}`;
     }
     function show(anim = false) {
-      const c = chess(), n = g.moves.length, at = view ?? n, p = positionAt(c, at);
-      board!.set(placementFromFen(p.fen), { lastMove: p.last, check: at === n ? checkSquare(c) : undefined }, anim && view === null && p.last ? p.last : undefined);
+      const c = chess(), n = g.moves.length, at = view ?? n, ml = magical ? line() : null;
+      const p = ml ? { fen: ml.states[at].fen, last: at ? ml.last[at - 1] as [CjSquare, CjSquare] : undefined } : positionAt(c, at);
+      board!.set(placementFromFen(p.fen), { lastMove: p.last, check: at === n ? checkSquare(c) : undefined, ...(ml ? { decor: gemDecor(ml.states[at].orbs) } : {}) },
+        anim && view === null && p.last ? p.last : undefined);
       const list = root.querySelector<HTMLElement>("[data-moves]")!;
-      list.innerHTML = c.history().map((m, i) => `${i % 2 ? "" : `<i>${num(i / 2 + 1)}.</i>`}<button class="mv ${i === at - 1 && view !== null ? "on" : ""}" data-ply="${i + 1}">${m}</button>`).join(" ");
+      list.innerHTML = (ml ? ml.sans : c.history()).map((m: string, i: number) => `${i % 2 ? "" : `<i>${num(i / 2 + 1)}.</i>`}<button class="mv ${i === at - 1 && view !== null ? "on" : ""}" data-ply="${i + 1}">${m}</button>`).join(" ");
       list.querySelectorAll<HTMLButtonElement>("[data-ply]").forEach(b => b.onclick = () => { view = +b.dataset.ply! >= n ? null : +b.dataset.ply!; show(); });
       if (view === null) list.scrollLeft = 1e6;
       bars();
@@ -288,11 +304,12 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
       const kind = g.reason === "mate" ? "mate" : g.reason === "resign" ? "resign" : g.reason === "time" ? (draw ? "draw" : "time") : g.reason === "stalemate" ? "stalemate" : draw ? "draw" : "other";
       const loser = draw ? null : won ? theirs : mine;
       if (alreadyOver) board!.setEnd(endBadges(kind, loser)); else announceEnd(board!, kind, loser);
-      if (!alreadyOver) saveGame({ at: new Date().toISOString(), opp: { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" }, me: mine, result: r, tc: g.tc_min ? (g.tc_inc ? `${g.tc_min}+${g.tc_inc}` : String(g.tc_min)) : undefined, uci: g.moves,
+      // a Magical Chess game is not kept in Your games or reviewed: those replay it as plain chess, which it is not
+      if (!alreadyOver && !magical) saveGame({ at: new Date().toISOString(), opp: { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" }, me: mine, result: r, tc: g.tc_min ? (g.tc_inc ? `${g.tc_min}+${g.tc_inc}` : String(g.tc_min)) : undefined, uci: g.moves,
         ms: g.moves.map((_, i) => times[i] ?? null) });
-      setLastGame({ uci: g.moves, me: mine, botName: { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" }, back: "#/online" });
+      if (!magical) setLastGame({ uci: g.moves, me: mine, botName: { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" }, back: "#/online" });
       if (r === "won" && !alreadyOver) { sound.complete(); confetti(root.querySelector(".screen")!); }
-      const buttons = `${g.moves.length >= 2 ? `<button class="btn wide gold" data-review>${icon("target")} ${t("reviewTitle")}</button>` : ""}
+      const buttons = `${g.moves.length >= 2 && !magical ? `<button class="btn wide gold" data-review>${icon("target")} ${t("reviewTitle")}</button>` : ""}
         <button class="btn ghost wide" data-lobby>${t("onlineBackToLobby")}</button>
         ${g.moves.length >= 2 ? shareButton() : ""}
         ${rated && oppId ? `<button class="linkbtn" data-block>${t("adultBlock")}</button>` : ""}`;
@@ -353,9 +370,20 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
         if (g.turn_since) times[g.moves.length] = Math.max(0, Date.now() - Date.parse(g.turn_since));   // Insights (#113)
         // show it at once; the server's answer (by the live update) confirms it, or puts the board back
         busy = true; busySince = Date.now();
-        const optimistic = { ...g, moves: [...g.moves, uci] };
-        const before = g; g = optimistic; show(true);
-        const e = await sendMove(g.id, me!.id, uci);
+        const before = g; g = { ...g, moves: [...g.moves, uci] }; show(true);
+        // Magical Chess: a piece (never a king) that lands on a gem asks at once, change or stay (Stage 2). The
+        // watchdog that re-syncs a move stuck for 6 s waits while the child decides.
+        let change = false;
+        const gem = magical ? gemFor(line().states.at(-2)!, legal[0]) : undefined;
+        if (gem) {
+          busySince = Date.now() + 1e9;
+          const wrap = root.querySelector<HTMLElement>("[data-board]")!;
+          change = await askChange(wrap, wrap.querySelector<HTMLElement>("[data-use]")!, legal[0].to, legal[0].piece, gem.piece);
+          if (!alive) return;
+          if (change) { g = { ...g, changes: [...(g.changes ?? []), before.moves.length] }; show(); burstAt(wrap, legal[0].to); sound.correct(); }
+          busySince = Date.now();
+        }
+        const e = await sendMove(g.id, me!.id, uci, change);
         if (e) { g = before; busy = false; show(); say(`<b class="warn">${e}</b>`); }
       },
     });

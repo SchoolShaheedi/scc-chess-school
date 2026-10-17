@@ -7,11 +7,17 @@ import { dbClient } from "../sync";
 
 export interface Me { id: string; friend_code: string; avatar: string; colour: string; adult: boolean; paused: boolean; rapid_r: number; rapid_n: number; blitz_r: number; blitz_n: number }
 export interface Opponent { player: string; avatar: string; colour: string; friend: boolean; classmate: boolean }
-export interface Challenge { id: string; from_player: string; to_player: string; tc: string; colour: string; status: string; game: string | null; created_at: string }
+export interface Challenge { id: string; from_player: string; to_player: string; tc: string; colour: string; status: string; game: string | null; created_at: string; variant?: Variant }
+/** Normal chess, or Magical Chess (Stage 2, 02_Design/MAGICAL-ONLINE-PLAN.md). Rows from before have no variant: chess. */
+export type Variant = "chess" | "magical";
+/** Magical Chess online is switched on only once the database and play-move have their Stage 2 changes (the plan's
+ *  step 3). Until then the app offers normal chess only, exactly as now. */
+export const MAGICAL_ONLINE = false;
 export interface Game {
   id: string; white: string; black: string; tc_min: number; tc_inc: number; moves: string[]; fen: string;
   white_ms: number; black_ms: number; turn_since: string | null; status: "active" | "finished";
   rated?: boolean; category?: "rapid" | "blitz" | null; white_before?: number | null; black_before?: number | null;
+  variant?: Variant; seed?: number | null; orbs?: { sq: string; piece: "n" | "b" | "r" | "q" }[]; changes?: number[];
   result: string | null; reason: string | null; draw_offer: string | null; reaction: { by: string; code: string; at: string } | null; updated_at: string;
 }
 export const REACTIONS = ["gl", "gg", "ty", "wp"] as const;
@@ -82,8 +88,10 @@ export async function challenges(player: string): Promise<Challenge[]> {
     .gt("created_at", new Date(Date.now() - 10 * 60000).toISOString()).order("created_at", { ascending: false });
   return (data as Challenge[]) ?? [];
 }
-export async function sendChallenge(player: string, to: string, tc: string, colour: string): Promise<string | null> {
-  const { error } = await db()!.rpc("challenge", { p_player: player, p_to: to, p_tc: tc, p_colour: colour }); return err(error);
+export async function sendChallenge(player: string, to: string, tc: string, colour: string, variant: Variant = "chess"): Promise<string | null> {
+  // normal chess sends the same four arguments as always, so it works before and after the Stage 2 database change
+  const { error } = await db()!.rpc("challenge", { p_player: player, p_to: to, p_tc: tc, p_colour: colour, ...(variant === "magical" ? { p_variant: variant } : {}) });
+  return err(error);
 }
 export async function answerChallenge(player: string, id: string, accept: boolean): Promise<{ game: string | null; error: string | null }> {
   const { data, error } = await db()!.rpc("answer_challenge", { p_player: player, p_challenge: id, p_accept: accept });
@@ -98,8 +106,8 @@ export async function getGame(id: string): Promise<Game | null> {
   const { data } = await db()!.from("games").select("*").eq("id", id).maybeSingle(); return (data as Game) ?? null;
 }
 /** A move, or a claim that the opponent's time has run out: checked on the server (play-move). */
-export async function sendMove(game: string, player: string, uci: string): Promise<string | null> {
-  const { data, error } = await db()!.functions.invoke("play-move", { body: { game, player, uci } });
+export async function sendMove(game: string, player: string, uci: string, change = false): Promise<string | null> {
+  const { data, error } = await db()!.functions.invoke("play-move", { body: { game, player, uci, ...(change ? { change } : {}) } });
   return error ? (data?.error ?? error.message) : null;
 }
 export async function claimTime(game: string, player: string) {

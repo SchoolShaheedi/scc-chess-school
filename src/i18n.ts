@@ -808,6 +808,7 @@ export const UI = {
   // the colour before ਨੇ / ਦਾ takes the oblique form: ਚਿੱਟੇ ਨੇ, ਕਾਲੇ ਦਾ (translator check 2026-10-17)
   colourWhiteObl: { en: "White", pa: "ਚਿੱਟੇ" }, colourBlackObl: { en: "Black", pa: "ਕਾਲੇ" },
   themeToLight: { en: "Switch to the light look", pa: "ਹਲਕੀ ਦਿੱਖ ਵਰਤੋ" }, themeToDark: { en: "Switch to the dark look", pa: "ਗੂੜ੍ਹੀ ਦਿੱਖ ਵਰਤੋ" },
+  chessPlain: { en: "Chess", pa: "ਸ਼ਤਰੰਜ" },   // beside "Magical Chess" when challenging a friend (Stage 2)
   gsPlayMove: { en: "Play {m}?", pa: "ਚਾਲ {m} ਚੱਲਣੀ ਹੈ?" }, gsConfirm: { en: "Play this move", pa: "ਇਹ ਚਾਲ ਚੱਲੋ" }, gsUndoMove: { en: "Take it back", pa: "ਵਾਪਸ ਲਓ" },
 } satisfies Record<string, Text>;
 

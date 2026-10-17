@@ -18,12 +18,11 @@ import { store } from "../store";
 import { type Bot, BOTS, botById, nextOpponent } from "../bots/bots";
 import { botPowerAction } from "./bot";
 import { afterMove, gemFor, newPower, type Orb, type OrbPiece, type PowerState } from "./rules";
+import { askChange as ask, burstAt as burst, gemDecor, gemPiece, pieceWord } from "./ui";
 
 // in Magical Chess the bots appear as their superhero versions (DECISIONS #109); a boss brings its own hero's art
 const art = (b: Bot, mood: "neutral" | "win" | "lose") => `<img class="botart" src="${b.art ?? `art/herobots/${b.id}`}-${mood}.webp" alt="">`;
 const fill = (s: string, b: Bot) => s.replace("{bot}", tx(b.name));
-const gemPiece = (p: OrbPiece) => `<img class="gp" src="art/pieces/cburnett/w${p.toUpperCase()}.svg" alt="" draggable="false">`;
-const pieceWord = (p: string) => t(`pc${p.toUpperCase()}` as Parameters<typeof t>[0]);
 const wait = (ms: number) => new Promise(r => setTimeout(r, ms));
 
 /** Choose the bot and a colour. `botId` preselects a bot (the next opponent otherwise). */
@@ -94,7 +93,7 @@ function powerGame(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) =
   const say = (html: string) => { stateEl.innerHTML = html; };
   const ctx = { board, extra: root.querySelector<HTMLElement>("[data-moves]")!, say: () => {}, status: () => {}, done: () => {} };
 
-  const decor = (orbs: Orb[]) => Object.fromEntries(orbs.map(o => [o.sq, `<span class="orbgem">${gemPiece(o.piece)}</span>`]));
+  const decor = gemDecor;
   function show(anim?: [Square, Square]) {
     const at = view ?? snaps.length - 1, sn = snaps[at];
     board.set(placementFromFen(sn.fen), { lastMove: sn.last, check: at === snaps.length - 1 ? checkSquare(new Chess(sn.fen)) : undefined, decor: decor(sn.orbs) },
@@ -111,37 +110,10 @@ function powerGame(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) =
     show();
     if (view !== null) say(`<span class="muted">${t("viewingPast")}</span>`); else if (!over && !busy) turnText();
   }
-  /** The gold burst of a change: added once to the square, not part of the board's marks, so a redraw never replays it. */
-  function burstAt(sq: Square) {
-    const cell = wrap.querySelector<HTMLElement>(`[data-sq="${sq}"]`);
-    if (!cell) return;
-    const b = document.createElement("span"); b.className = "tburst"; cell.appendChild(b);
-    setTimeout(() => b.remove(), 1000);
-  }
+  const burstAt = (sq: Square) => burst(wrap, sq);
   const turnText = () => { const g = new Chess(st.fen); say(g.inCheck() ? `<b class="warn">${t("inCheckNow")}</b>` : `<b>${t("yourMove")}</b>`); };
 
-  /** The choice, asked the moment your piece lands on a gem: change into the gem's piece, or stay as it is. */
-  function askChange(sq: Square, from: string, to: OrbPiece): Promise<boolean> {
-    return new Promise(resolve => {
-      bubble.innerHTML = `<span>${t("powerBecome").replace("{orb}", pieceWord(to))}<small>${t("powerOnce")}</small></span>
-        <div class="ubtns"><button data-yes>✨ ${t("powerYes")}</button><button class="stay" data-no>${t("powerStay").replace("{piece}", pieceWord(from))}</button></div>`;
-      bubble.hidden = false;
-      const cell = wrap.querySelector<HTMLElement>(`[data-sq="${sq}"]`)!, wr = wrap.getBoundingClientRect(), cr = cell.getBoundingClientRect();
-      // centred on the square but kept inside the board (its tail still points at the square); below the square,
-      // since pieces move up the screen, unless the square is on the bottom row
-      const cx = cr.left - wr.left + cr.width / 2, half = bubble.offsetWidth / 2;
-      const x = Math.min(Math.max(cx, half + 4), wr.width - half - 4);
-      const below = cr.bottom - wr.top < wr.height - cr.height / 2;
-      bubble.style.left = `${x}px`;
-      bubble.style.setProperty("--tail", `${cx - x}px`);
-      bubble.style.top = below ? `${cr.bottom - wr.top + 6}px` : "";
-      bubble.style.bottom = below ? "" : `${wr.bottom - cr.top + 6}px`;
-      bubble.classList.toggle("below", below);
-      const done = (yes: boolean) => { bubble.hidden = true; resolve(yes); };
-      bubble.querySelector<HTMLButtonElement>("[data-yes]")!.onclick = () => done(true);
-      bubble.querySelector<HTMLButtonElement>("[data-no]")!.onclick = () => done(false);
-    });
-  }
+  const askChange = (sq: Square, from: string, to: OrbPiece) => ask(wrap, bubble, sq, from, to);
 
   /** A move (and its gem choice) joins the game: the record, the move list, the burst, and a line about the bot's choice. */
   function land(m: Move, fenAfter: string, change: boolean, mine: boolean): string | undefined {
