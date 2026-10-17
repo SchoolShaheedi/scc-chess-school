@@ -5,6 +5,7 @@
 import { Chess, type Move, type Square } from "chess.js";
 import { Board } from "../chess/board";
 import { gameMenuButton, wireGameMenu } from "../play/gamesettings";
+import { announceEnd, END_PAUSE } from "../play/gameover";
 import { placementFromFen } from "../chess/types";
 import { confetti } from "../celebrate";
 import { getEngine } from "../engine/browser";
@@ -198,7 +199,8 @@ function powerGame(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) =
     const won = !resigned && g.isCheckmate() && g.turn() !== me;
     const lost = resigned || (g.isCheckmate() && g.turn() === me);
     store.recordPractice();   // unrated (DECISIONS #98): practice for the streak, never the rating
-    setTimeout(() => { if (alive) result(won ? "won" : lost ? "lost" : "draw"); }, 600);
+    announceEnd(board, resigned ? "resign" : g.isCheckmate() ? "mate" : g.isStalemate() ? "stalemate" : "draw", won ? (me === "w" ? "b" : "w") : lost ? me : null);   // DECISIONS #117
+    setTimeout(() => { if (alive) result(won ? "won" : lost ? "lost" : "draw"); }, END_PAUSE);
     return true;
   }
   function result(r: "won" | "lost" | "draw") {

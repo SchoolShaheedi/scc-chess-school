@@ -13,6 +13,7 @@ import { captured, flagOutcome, movesFor, positionAt, premoveTargets, premovesOn
 import { type Clock, flagged, fmt, newClock, press, remaining } from "../play/clock";
 import { saveGame } from "../play/history";
 import { shareButton, wireShare } from "../play/share";
+import { announceEnd, END_PAUSE, kindOf } from "../play/gameover";
 import { gameMenuButton, wireGameMenu } from "../play/gamesettings";
 import { pieceHTML } from "../chess/pieces";
 import type { PieceCode } from "../chess/types";
@@ -296,7 +297,9 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     coach(t(won ? "gcWon" : lost ? "gcLost" : "gcDraw"), won ? "cheer" : lost ? "think" : "happy", won ? "ok" : "");
     saveGame({ at: new Date().toISOString(), opp: bot.name, oppRating: bot.rating, me, result: lastResult, tc: clock ? tc : undefined, uci: uciOf(), startFen,
       ms: uciOf().map((_, i) => times[i] ?? null) });
-    setTimeout(() => alive && result(lastResult!, how), 600);
+    // DECISIONS #117: the badges and the banner on the board first, then the result card
+    announceEnd(board, kindOf(how, lastResult === "draw"), won ? them : lost ? me : null);
+    setTimeout(() => alive && result(lastResult!, how), END_PAUSE);
     return true;
   }
   const uciOf = () => g.history({ verbose: true }).map(m => m.from + m.to + (m.promotion ?? ""));

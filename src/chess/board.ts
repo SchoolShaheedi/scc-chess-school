@@ -5,6 +5,7 @@ import { sound } from "../sound";
 import { t } from "../i18n";
 import { store } from "../store";
 import { icon } from "../icons";
+import type { Badge, EndBadges } from "../play/gameover";
 import { pieceHTML } from "./pieces";
 import { ALL_SQUARES, FILES, type Placement, type Square, fileOf, isLight, rankOf } from "./types";
 
@@ -149,7 +150,8 @@ export class Board {
         ? (s[1] === lastRow ? `<span class="co f">${s[0]}</span>` : "") + (s[0] === firstFile ? `<span class="co r">${s[1]}</span>` : "")
         : "";
       const label = `${s}${p ? ", " + pieceName(p) : ""}${s === this.selected ? ", " + t("srPicked") : ""}${dots.has(s) ? ", " + t("srCanGo") : ""}`;
-      return `<div class="${cls}" data-sq="${s}" role="button" tabindex="${s === this.cursor ? 0 : -1}" aria-label="${label}">${star}${name}${m.decor?.[s] ?? ""}${p ? pieceHTML(p) : ""}${co}</div>`;
+      const badge = this.end && p?.[1] === "K" ? this.end[p[0] as "w" | "b"] : undefined;
+      return `<div class="${cls}" data-sq="${s}" role="button" tabindex="${s === this.cursor ? 0 : -1}" aria-label="${label}">${star}${name}${m.decor?.[s] ?? ""}${p ? pieceHTML(p) : ""}${co}${badge ? badgeHTML(badge) : ""}</div>`;
     }).join("");
     this.drawArrows();
     if (this.selected !== this.told) { this.told = this.selected; this.io.onSelect?.(this.selected); }
@@ -219,6 +221,17 @@ export class Board {
     bar.querySelector<HTMLButtonElement>(".yes")!.focus();
   }
   private bar: HTMLElement | null = null;
+  /** The game is over (DECISIONS #117): each king's badge, drawn on whatever square that king stands on. */
+  private end: EndBadges | null = null;
+  setEnd(end: EndBadges | null) { this.end = end; this.render(); }
+  /** A gold banner across the board for a moment, saying how the game ended. */
+  banner(text: string, ms = 1500) {
+    this.el.querySelector(".endbanner")?.remove();
+    const b = document.createElement("div");
+    b.className = "endbanner"; b.setAttribute("role", "status"); b.textContent = text;
+    this.el.appendChild(b);
+    setTimeout(() => { b.classList.add("out"); setTimeout(() => b.remove(), 400); }, ms);
+  }
   private clearPending() { this.pending = null; this.bar?.remove(); this.bar = null; }
 
   private down(e: PointerEvent) {
@@ -330,6 +343,8 @@ export class Board {
     if (to && to !== d.from) this.request(d.from, to);
   };
 }
+
+const badgeHTML = (b: Badge) => `<em class="kbadge ${b}" aria-hidden="true">${b === "mate" ? "#" : b === "win" ? icon("crown") : b === "resign" ? icon("flag") : b === "time" ? icon("timer") : "½"}</em>`;
 
 /** "white knight" / "ਚਿੱਟਾ ਘੋੜਾ" for a screen reader; the queen takes the feminine colour word in Punjabi. */
 export function pieceName(p: string): string {

@@ -11,6 +11,7 @@ import { checkSquare, refusal } from "../lesson/exercises";
 import { captured, flagOutcome, movesFor, promotion } from "./gamekit";
 import { saveGame } from "./history";
 import { shareButton, wireShare } from "./share";
+import { announceEnd, END_PAUSE, kindOf } from "./gameover";
 import { gameMenuButton, wireGameMenu } from "./gamesettings";
 import { pieceHTML } from "../chess/pieces";
 import type { PieceCode } from "../chess/types";
@@ -89,6 +90,7 @@ function friendGame(root: HTMLElement, go: Go, startClock: Clock | null, turnBoa
   }
   function end(result: "1-0" | "0-1" | "1/2-1/2", how: string) {
     over = true; clearInterval(timer); sound.complete();
+    announceEnd(board, kindOf(how, result === "1/2-1/2"), result === "1-0" ? "b" : result === "0-1" ? "w" : null);   // DECISIONS #117
     const uci = g.history({ verbose: true }).map(m => m.from + m.to + (m.promotion ?? ""));
     setLastGame({ uci, me: "w", meName: { en: "White", pa: "ਚਿੱਟਾ" }, botName: { en: "Black", pa: "ਕਾਲਾ" }, back: "#/play/friend" });
     const title = result === "1/2-1/2" ? t("gameDrawn") : t("sideWins").replace("{side}", side(result === "1-0" ? "w" : "b"));
@@ -116,7 +118,7 @@ function friendGame(root: HTMLElement, go: Go, startClock: Clock | null, turnBoa
       root.querySelectorAll<HTMLButtonElement>("[data-pgn]").forEach(b => b.onclick = () => void copyText(pgnOf(uci, t("colourWhite"), t("colourBlack"), result), b.nextElementSibling as HTMLElement));
       root.querySelectorAll<HTMLButtonElement>("[data-again]").forEach(b => b.onclick = () => go(`#/play/friend?${Date.now()}`));
       card.querySelector<HTMLButtonElement>("[data-x]")!.onclick = () => { card.hidden = true; acts.hidden = false; };
-    }, 600);
+    }, END_PAUSE);
   }
   function checkEnd(): boolean {
     if (g.isCheckmate()) { end(g.turn() === "w" ? "0-1" : "1-0", t("byMate")); return true; }

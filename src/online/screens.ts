@@ -15,6 +15,7 @@ import { captured, movesFor, positionAt, promotion } from "../play/gamekit";
 import { fmt } from "../play/clock";
 import { saveGame } from "../play/history";
 import { shareButton, wireShare } from "../play/share";
+import { announceEnd, END_PAUSE, endBadges } from "../play/gameover";
 import { gameMenuButton, wireGameMenu } from "../play/gamesettings";
 import { setLastGame } from "../review/screen";
 import { sound } from "../sound";
@@ -283,6 +284,10 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
       const won = (g.result === "1-0") === (mine === "w") && g.result !== "1/2-1/2", draw = g.result === "1/2-1/2";
       const r: "won" | "lost" | "draw" = draw ? "draw" : won ? "won" : "lost";
       const how = t(`byOnline_${g.reason}` as "byOnline_mate");
+      // DECISIONS #117: the king badges always; the banner only when the game ends while watching it
+      const kind = g.reason === "mate" ? "mate" : g.reason === "resign" ? "resign" : g.reason === "time" ? (draw ? "draw" : "time") : g.reason === "stalemate" ? "stalemate" : draw ? "draw" : "other";
+      const loser = draw ? null : won ? theirs : mine;
+      if (alreadyOver) board!.setEnd(endBadges(kind, loser)); else announceEnd(board!, kind, loser);
       if (!alreadyOver) saveGame({ at: new Date().toISOString(), opp: { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" }, me: mine, result: r, tc: g.tc_min ? (g.tc_inc ? `${g.tc_min}+${g.tc_inc}` : String(g.tc_min)) : undefined, uci: g.moves,
         ms: g.moves.map((_, i) => times[i] ?? null) });
       setLastGame({ uci: g.moves, me: mine, botName: { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" }, back: "#/online" });
@@ -294,7 +299,7 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
       const card = root.querySelector<HTMLElement>("[data-card]")!;
       card.innerHTML = `<button class="iconbtn x" data-x aria-label="${t("close")}">${icon("close")}</button>${avatarHTML(opp, "big")}
         <h2>${r === "won" ? t("gameWon") : r === "lost" ? t("onlineLost") : t("gameDrawn")}</h2><p>${how}</p>${buttons}`;
-      card.hidden = false;
+      card.hidden = true; if (alreadyOver) card.hidden = false; else setTimeout(() => { if (alive) card.hidden = false; }, END_PAUSE);
       const acts = root.querySelector<HTMLElement>("[data-acts]")!; acts.innerHTML = `<div class="resultacts">${buttons}</div>`; acts.hidden = true;
       root.querySelectorAll<HTMLButtonElement>("[data-review]").forEach(b => b.onclick = () => go("#/review"));
       root.querySelectorAll<HTMLButtonElement>("[data-lobby]").forEach(b => b.onclick = () => go("#/online"));

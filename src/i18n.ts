@@ -801,6 +801,11 @@ export const UI = {
   shareBrand: { en: "SWC Chess School", pa: "SWC ਸ਼ਤਰੰਜ ਪਾਠਸ਼ਾਲਾ" },
   shareWon: { en: "Won {how}", pa: "{how} ਜਿੱਤ" }, shareLost: { en: "Lost {how}", pa: "{how} ਹਾਰ" }, shareDraw: { en: "Drawn {how}", pa: "{how} ਬਰਾਬਰੀ" },
   shareSub: { en: "against {opp} · {n} moves · {date}", pa: "{opp} ਦੇ ਵਿਰੁੱਧ · {n} ਚਾਲਾਂ · {date}" },
+  // the game-over banner (DECISIONS #117) and the home screen's light/dark button
+  endMate: { en: "Checkmate", pa: "ਸ਼ਹਿ-ਮਾਤ" }, endStalemate: { en: "Stalemate", pa: "ਖੜੋਤ" }, endDraw: { en: "Draw", pa: "ਬਰਾਬਰੀ" },
+  endResign: { en: "{side} resigned", pa: "{side} ਨੇ ਹਾਰ ਮੰਨ ਲਈ" }, endTime: { en: "{side} ran out of time", pa: "{side} ਦਾ ਸਮਾਂ ਮੁੱਕ ਗਿਆ" },
+  endWins: { en: "{side} wins", pa: "{side} ਦੀ ਜਿੱਤ" },
+  themeToLight: { en: "Switch to the light look", pa: "ਹਲਕੀ ਦਿੱਖ ਲਗਾਓ" }, themeToDark: { en: "Switch to the dark look", pa: "ਗੂੜ੍ਹੀ ਦਿੱਖ ਲਗਾਓ" },
   gsPlayMove: { en: "Play {m}?", pa: "ਚਾਲ {m} ਚੱਲਣੀ ਹੈ?" }, gsConfirm: { en: "Play this move", pa: "ਇਹ ਚਾਲ ਚੱਲੋ" }, gsUndoMove: { en: "Take it back", pa: "ਵਾਪਸ ਲਓ" },
 } satisfies Record<string, Text>;
 

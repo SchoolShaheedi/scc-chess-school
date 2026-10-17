@@ -1166,3 +1166,14 @@ html:not([data-theme="dark"]) .trp.off { color: #6B6B74; }
 .ramp { position: relative; height: 24px; background: var(--surface-2); border-radius: 12px; overflow: hidden; }
 .ramp i { position: absolute; inset: 0 auto 0 0; background: color-mix(in srgb, #F0C048 55%, transparent); }
 .ramp span { position: relative; font-size: 12.5px; font-weight: 700; padding-left: 10px; line-height: 24px; color: var(--ink); }
+/* the game is over (DECISIONS #117): king badges and the banner */
+.kbadge { position: absolute; right: -2px; top: -2px; z-index: 4; width: 42%; max-width: 24px; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center;
+  font: 900 13px/1 var(--font); font-style: normal; box-shadow: 0 1px 4px rgba(0,0,0,.6); border: 2px solid #fff; pointer-events: none; animation: pop .35s cubic-bezier(.2,1.2,.4,1) both; }
+.kbadge svg { width: 62%; height: 62%; }
+.kbadge.mate, .kbadge.resign, .kbadge.time { background: #D9342B; color: #fff; } .kbadge.win { background: #F0C048; color: #1A1206; } .kbadge.draw { background: #8A847A; color: #fff; }
+.endbanner { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); z-index: 15; pointer-events: none; text-align: center;
+  background: linear-gradient(90deg, transparent, #F0C048 14%, #F0C048 86%, transparent); color: #1A1206; font: 900 clamp(18px, 5.5vw, 26px)/1.2 var(--display); padding: 12px 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.45); animation: bannerin .35s cubic-bezier(.2,1.2,.4,1) both; transition: opacity .35s; }
+.endbanner.out { opacity: 0; }
+@keyframes bannerin { from { transform: translateY(-50%) scaleX(.3); opacity: 0; } to { transform: translateY(-50%) scaleX(1); opacity: 1; } }
+.clubtop .topbtns { display: flex; gap: 8px; }

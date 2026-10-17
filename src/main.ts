@@ -276,7 +276,8 @@ function home() {
   app.innerHTML = `<div class="screen club tabbed">
     <header class="clubhead">
       <div class="clubtop"><span class="clubbrand"><img class="swcmark" src="art/swc-mark.webp" alt="Sikh World Championships">${t("appName")}</span>
-        <button class="iconbtn dark" data-settings aria-label="${t("settings")}">${icon("settings")}</button></div>
+        <span class="topbtns"><button class="iconbtn dark" data-themeflip aria-label="${t((s.themeMode ?? "dark") === "dark" ? "themeToLight" : "themeToDark")}">${icon((s.themeMode ?? "dark") === "dark" ? "light" : "dark")}</button>
+        <button class="iconbtn dark" data-settings aria-label="${t("settings")}">${icon("settings")}</button></span></div>
       <h1>${s.lessons[all[0].id] ? t("welcomeBack") : t("welcomeNew")}</h1>
       <div class="homechips"><span>${icon("flame")}${num(s.streak.days)}</span><span>${icon("xp")}${num(s.xp)}</span><span>${icon("trophy")}${t("level")} ${num(curLevel)}</span></div>
     </header>
@@ -336,6 +337,10 @@ function home() {
     go(`#/lesson/${b.dataset.go}`);
   });
   app.querySelector<HTMLButtonElement>("[data-settings]")!.onclick = () => go("#/settings");
+  // DECISIONS #117: one tap swaps the look, from the top of the home screen
+  app.querySelector<HTMLButtonElement>("[data-themeflip]")!.onclick = () => {
+    store.set({ themeMode: (store.get().themeMode ?? "dark") === "dark" ? "light" : "dark" }); applyTheme(); route();
+  };
   app.querySelectorAll<HTMLButtonElement>("[data-href]").forEach(b => b.onclick = () => go(b.dataset.href!));
   if (account.signedIn()) void homeworkCard(app.querySelector<HTMLElement>("[data-homework]")!, go);
   app.querySelector<HTMLButtonElement>("[data-bottest]")?.addEventListener("click", e => {
