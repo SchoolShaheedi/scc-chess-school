@@ -24,5 +24,11 @@ describe("game over", () => {
     expect(bannerText("mate", "w")).toBe("Checkmate · 0–1");
     expect(bannerText("resign", "b")).toBe("Black resigned · 1–0");
     expect(bannerText("draw", null)).toBe("Draw · ½–½");
+    // Punjabi: the colour goes oblique before ਨੇ and ਦਾ
+    store.set({ lang: "pa" });
+    expect(bannerText("resign", "w")).toBe("ਚਿੱਟੇ ਨੇ ਹਾਰ ਮੰਨ ਲਈ · 0–1");
+    expect(bannerText("time", "b")).toBe("ਕਾਲੇ ਦਾ ਸਮਾਂ ਮੁੱਕ ਗਿਆ · 1–0");
+    expect(bannerText("other", "b")).toBe("ਚਿੱਟਾ ਜਿੱਤ ਗਿਆ · 1–0");
+    store.set({ lang: "en" });
   });
 });

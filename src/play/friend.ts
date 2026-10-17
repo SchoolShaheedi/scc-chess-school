@@ -85,7 +85,7 @@ function friendGame(root: HTMLElement, go: Go, startClock: Clock | null, turnBoa
     board.set(placementFromFen(g.fen()), { lastMove: last ? [last.from, last.to] : undefined, check: checkSquare(g) }, anim && last ? [last.from, last.to] : undefined);
     root.querySelector("[data-moves]")!.innerHTML = g.history().map((m, i) => `${i % 2 ? "" : `<i>${num(i / 2 + 1)}.</i>`}<span>${m}</span>`).join(" ");
     root.querySelector("[data-moves]")!.scrollLeft = 1e6;
-    root.querySelector("[data-state]")!.innerHTML = over ? "" : `<b>${t("toMove").replace("{side}", side(g.turn()))}</b>${g.inCheck() ? ` · <b class="warn">${t("checkWord")}</b>` : ""}`;
+    root.querySelector("[data-state]")!.innerHTML = over ? "" : `<b>${t("toMove").replace("{side}", t(g.turn() === "w" ? "colourWhiteObl" : "colourBlackObl"))}</b>${g.inCheck() ? ` · <b class="warn">${t("checkWord")}</b>` : ""}`;
     drawClocks();
   }
   function end(result: "1-0" | "0-1" | "1/2-1/2", how: string) {

@@ -804,8 +804,10 @@ export const UI = {
   // the game-over banner (DECISIONS #117) and the home screen's light/dark button
   endMate: { en: "Checkmate", pa: "ਸ਼ਹਿ-ਮਾਤ" }, endStalemate: { en: "Stalemate", pa: "ਖੜੋਤ" }, endDraw: { en: "Draw", pa: "ਬਰਾਬਰੀ" },
   endResign: { en: "{side} resigned", pa: "{side} ਨੇ ਹਾਰ ਮੰਨ ਲਈ" }, endTime: { en: "{side} ran out of time", pa: "{side} ਦਾ ਸਮਾਂ ਮੁੱਕ ਗਿਆ" },
-  endWins: { en: "{side} wins", pa: "{side} ਦੀ ਜਿੱਤ" },
-  themeToLight: { en: "Switch to the light look", pa: "ਹਲਕੀ ਦਿੱਖ ਲਗਾਓ" }, themeToDark: { en: "Switch to the dark look", pa: "ਗੂੜ੍ਹੀ ਦਿੱਖ ਲਗਾਓ" },
+  endWins: { en: "{side} wins", pa: "{side} ਜਿੱਤ ਗਿਆ" },
+  // the colour before ਨੇ / ਦਾ takes the oblique form: ਚਿੱਟੇ ਨੇ, ਕਾਲੇ ਦਾ (translator check 2026-10-17)
+  colourWhiteObl: { en: "White", pa: "ਚਿੱਟੇ" }, colourBlackObl: { en: "Black", pa: "ਕਾਲੇ" },
+  themeToLight: { en: "Switch to the light look", pa: "ਹਲਕੀ ਦਿੱਖ ਵਰਤੋ" }, themeToDark: { en: "Switch to the dark look", pa: "ਗੂੜ੍ਹੀ ਦਿੱਖ ਵਰਤੋ" },
   gsPlayMove: { en: "Play {m}?", pa: "ਚਾਲ {m} ਚੱਲਣੀ ਹੈ?" }, gsConfirm: { en: "Play this move", pa: "ਇਹ ਚਾਲ ਚੱਲੋ" }, gsUndoMove: { en: "Take it back", pa: "ਵਾਪਸ ਲਓ" },
 } satisfies Record<string, Text>;
 

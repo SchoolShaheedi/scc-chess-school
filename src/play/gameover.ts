@@ -25,12 +25,13 @@ export function kindOf(how: string, drawn: boolean): EndKind {
 }
 
 const side = (c: "w" | "b") => t(c === "w" ? "colourWhite" : "colourBlack");
+const sideObl = (c: "w" | "b") => t(c === "w" ? "colourWhiteObl" : "colourBlackObl");
 /** The banner's words: what happened, then the score. */
 export function bannerText(kind: EndKind, loser: "w" | "b" | null): string {
   const score = !loser ? "½–½" : loser === "w" ? "0–1" : "1–0";
   const words = kind === "mate" ? t("endMate") : kind === "stalemate" ? t("endStalemate") : !loser ? t("endDraw")
-    : kind === "resign" ? t("endResign").replace("{side}", side(loser))
-    : kind === "time" ? t("endTime").replace("{side}", side(loser))
+    : kind === "resign" ? t("endResign").replace("{side}", sideObl(loser))
+    : kind === "time" ? t("endTime").replace("{side}", sideObl(loser))
     : t("endWins").replace("{side}", side(loser === "w" ? "b" : "w"));
   return `${words} · ${score}`;
 }

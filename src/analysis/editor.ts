@@ -29,7 +29,7 @@ export function boardEditor(root: HTMLElement, go: Go): () => void {
     <div class="frame"><div class="boardwrap" data-board></div></div>
     <div class="edtray" role="group" aria-label="${t("edTray")}">${tray("w")}</div>
     <div class="edtray" role="group" aria-label="${t("edTray")}">${tray("b")}<button class="edpc er" data-tool="x" aria-label="${t("edErase")}">${icon("close")}</button></div>
-    <div class="seg" role="group" data-turn>${(["w", "b"] as const).map(c => `<button data-v="${c}">${t("toMove").replace("{side}", t(c === "w" ? "colourWhite" : "colourBlack"))}</button>`).join("")}</div>
+    <div class="seg" role="group" data-turn>${(["w", "b"] as const).map(c => `<button data-v="${c}">${t("toMove").replace("{side}", t(c === "w" ? "colourWhiteObl" : "colourBlackObl"))}</button>`).join("")}</div>
     <div class="row3"><button class="btn ghost" data-start>${t("edStart")}</button><button class="btn ghost" data-clear>${t("edClear")}</button></div>
     <p class="edstate" data-state aria-live="polite"></p>
     <div class="edfen"><code data-fen></code><button class="btn ghost small" data-copy>${t("edCopy")}</button></div>
@@ -47,7 +47,7 @@ export function boardEditor(root: HTMLElement, go: Go): () => void {
     const bad = problemOf(pos, turn), fen = fenOf(pos, turn), c = castlingOf(pos);
     $("[data-state]").className = `edstate ${bad ? "bad" : "ok"}`;
     $("[data-state]").innerHTML = bad ? `${icon("no")} ${t(`edP_${bad}` as UIKey)}`
-      : `${icon("ok")} ${t("edOk").replace("{side}", t(turn === "w" ? "colourWhite" : "colourBlack")).replace("{c}", c === "-" ? t("edNone") : c)}`;
+      : `${icon("ok")} ${t("edOk").replace("{side}", t(turn === "w" ? "colourWhiteObl" : "colourBlackObl")).replace("{c}", c === "-" ? t("edNone") : c)}`;
     $("[data-fen]").textContent = fen;
     $<HTMLButtonElement>("[data-analyse]").disabled = $<HTMLButtonElement>("[data-play]").disabled = !!bad;
   }
