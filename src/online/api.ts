@@ -12,7 +12,7 @@ export interface Challenge { id: string; from_player: string; to_player: string;
 export type Variant = "chess" | "magical";
 /** Magical Chess online is switched on only once the database and play-move have their Stage 2 changes (the plan's
  *  step 3). Until then the app offers normal chess only, exactly as now. */
-export const MAGICAL_ONLINE = false;
+export const MAGICAL_ONLINE = true;   // switched on 2026-10-17, after play-move v4 and the magical_chess_online_stage2 migration
 export interface Game {
   id: string; white: string; black: string; tc_min: number; tc_inc: number; moves: string[]; fen: string;
   white_ms: number; black_ms: number; turn_since: string | null; status: "active" | "finished";

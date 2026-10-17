@@ -1,6 +1,5 @@
--- DRAFT — NOT APPLIED. Magical Chess with friends online (Stage 2 of 02_Design/POWER-CHESS-SPEC.md; plan in
--- 02_Design/MAGICAL-ONLINE-PLAN.md). Builds on online.sql + online_adults.sql. Nothing here may be applied to the
--- live project until the user says yes (house rule: confirm before any live Supabase change).
+-- APPLIED 2026-10-17 as migration magical_chess_online_stage2 (after play-move v4 was deployed; security-reviewed). Magical Chess with friends online (Stage 2 of 02_Design/POWER-CHESS-SPEC.md; plan in
+-- 02_Design/MAGICAL-ONLINE-PLAN.md). Builds on online.sql + online_adults.sql. Applied with the user's yes.
 --
 -- What changes:
 --   * a challenge and a game carry a VARIANT: 'chess' (every game so far) or 'magical';
