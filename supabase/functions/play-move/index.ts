@@ -11,7 +11,7 @@
 // (SUPABASE_SERVICE_ROLE_KEY). It exists only on Supabase's servers: it is never in the app or in this repository.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { Chess } from "npm:chess.js@1.4.0";
-import { playMagical, replayMagical } from "./power/online.ts";   // a copy of the app's own rules (tools/sync-magical.mjs)
+import { playMagicalFrom, replayMagical } from "./power/online.ts";   // a copy of the app's own rules (tools/sync-magical.mjs)
 
 // only the app's own addresses may call it from a browser: the live site, this computer's test address, and any
 // others set in ALLOWED_ORIGINS (comma-separated; e.g. a custom domain later)
@@ -35,6 +35,7 @@ Deno.serve(async req => {
   const { game: gameId, player, uci, claim, change } = body;
   if (!gameId || !player || (!uci && claim !== "time")) return reply(400, { error: "bad request" });
   if (uci && !/^[a-h][1-8][a-h][1-8][qrbn]?$/.test(uci)) return reply(400, { error: "bad move" });
+  if (change !== undefined && typeof change !== "boolean") return reply(400, { error: "bad request" });
 
   const db = createClient(url, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
   const { data: me } = await db.from("online_players").select("id").eq("id", player).eq("parent", user.id).maybeSingle();
@@ -47,7 +48,13 @@ Deno.serve(async req => {
   // replay from the start, so repetition and the fifty-move rule are judged on the whole game. A Magical Chess game
   // is replayed with its gems from its seed instead: the position can't be rebuilt from the moves alone.
   const magical = g.variant === "magical";
-  const chess = magical ? new Chess(replayMagical(g.seed, g.moves, g.changes ?? []).fen) : new Chess();
+  let state: ReturnType<typeof replayMagical> | null = null;
+  if (magical) {
+    if (typeof g.seed !== "number") return reply(500, { error: "game state error" });
+    if (g.moves.length > 600) return reply(409, { error: "the game is too long" });   // a runaway guard
+    try { state = replayMagical(g.seed, g.moves, g.changes ?? []); } catch { return reply(500, { error: "game state error" }); }
+  }
+  const chess = state ? new Chess(state.fen) : new Chess();
   if (!magical) for (const m of g.moves as string[]) chess.move({ from: m.slice(0, 2), to: m.slice(2, 4), promotion: m[4] });
   const turn = chess.turn(), now = Date.now();
   const timed = g.tc_min > 0, since = g.turn_since ? Date.parse(g.turn_since) : null;
@@ -63,6 +70,11 @@ Deno.serve(async req => {
   // out of time (FIDE 6.9) loses, unless the opponent could not mate by any legal series of moves: only a king; a lone
   // knight or bishop against a bare king; or nothing but bishops on one square colour (dead). The app has the same rule.
   const flagResult = (flagged: "w" | "b") => {
+    // Magical Chess: while a gem is on the board any piece (not a king) could still become a queen, so only a bare king can't win
+    if (state?.orbs.length) {
+      const others = chess.board().flat().filter(p => p && p.type !== "k" && p.color !== flagged);
+      return others.length ? (flagged === "w" ? "0-1" : "1-0") : "1/2-1/2";
+    }
     const pieces = chess.board().flat().filter(p => p && p.type !== "k") as { type: string; color: string }[];
     const mine = pieces.filter(p => p.color === flagged), theirs = pieces.filter(p => p.color !== flagged);
     const lose = flagged === "w" ? "0-1" : "1-0";
@@ -87,7 +99,8 @@ Deno.serve(async req => {
   const patch: Record<string, unknown> = { draw_offer: null, updated_at: new Date(now).toISOString() };
   if (magical) {
     // checked by the same rules the app plays by: legal, and a change only where a piece (never a king) landed on a gem
-    const r = playMagical(g.seed, g.moves, g.changes ?? [], uci!, !!change);
+    let r;
+    try { r = playMagicalFrom(state!, uci!, change === true); } catch { return reply(500, { error: "game state error" }); }
     if (!r.ok) return reply(422, { error: r.error });
     lan = r.lan; end = new Chess(r.st.fen);
     Object.assign(patch, { fen: r.st.fen, orbs: r.st.orbs, ...(r.changed ? { changes: [...(g.changes ?? []), g.moves.length] } : {}) });
@@ -106,8 +119,9 @@ Deno.serve(async req => {
   if (end.isCheckmate()) return finish(turn === "w" ? "1-0" : "0-1", "mate", patch);
   if (end.isStalemate()) return finish("1/2-1/2", "stalemate", patch);
   if (!magical && end.isThreefoldRepetition()) return finish("1/2-1/2", "repetition", patch);
-  if (end.isInsufficientMaterial()) return finish("1/2-1/2", "material", patch);
-  if (end.isDraw() && !end.isThreefoldRepetition()) return finish("1/2-1/2", "fifty", patch);
+  const gemsLeft = magical && ((patch.orbs as unknown[] | undefined)?.length ?? 0) > 0;   // a gem could still make mating material
+  if (end.isInsufficientMaterial() && !gemsLeft) return finish("1/2-1/2", "material", patch);
+  if (end.isDraw() && !end.isThreefoldRepetition() && !(end.isInsufficientMaterial() && gemsLeft)) return finish("1/2-1/2", "fifty", patch);
 
   const { data, error } = await db.from("games").update(patch).eq("id", g.id).eq("status", "active").eq("updated_at", g.updated_at).select("id");
   return error || !data?.length ? reply(409, { error: "the game changed, try again" }) : reply(200, { ok: true });

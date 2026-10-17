@@ -19,7 +19,11 @@ export type MagicalMove = { ok: true; st: PowerState; lan: string; changed: bool
 /** One more move, checked: legal from the current position, and a change only where the piece (never a king) landed
  *  on a gem. The result's `st.fen` is the position the other player now moves in. */
 export function playMagical(seed: number, moves: string[], changes: number[], uci: string, change: boolean): MagicalMove {
-  const st = replayMagical(seed, moves, changes), g = new Chess(st.fen);
+  return playMagicalFrom(replayMagical(seed, moves, changes), uci, change);
+}
+/** The same, from a state already replayed (the server replays once per request). */
+export function playMagicalFrom(st: PowerState, uci: string, change: boolean): MagicalMove {
+  const g = new Chess(st.fen);
   let m;
   try { m = g.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }); } catch { return { ok: false, error: "illegal move" }; }
   const gem = gemFor(st, m);

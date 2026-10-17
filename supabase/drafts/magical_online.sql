@@ -16,7 +16,14 @@ alter table public.games add column if not exists seed int;                     
 alter table public.games add column if not exists orbs jsonb not null default '[]';        -- magical only: [{ sq, piece }]
 alter table public.games add column if not exists changes int[] not null default '{}';    -- magical only: plies where a piece changed
 -- a magical game is never rated (DECISIONS #98: unrated, practice only)
-alter table public.games add constraint magical_unrated check (variant = 'chess' or not rated);
+-- and has a seed (answer_challenge always draws one; the schema makes sure nothing else forgets). Written so the file
+-- can be run twice without failing.
+do $$ begin
+  alter table public.games add constraint magical_unrated check (variant = 'chess' or not rated);
+exception when duplicate_object then null; end $$;
+do $$ begin
+  alter table public.games add constraint magical_has_seed check (variant = 'chess' or seed is not null);
+exception when duplicate_object then null; end $$;
 
 -- challenge(): the same as now, plus the variant. The old 4-argument version is dropped, not kept beside it: two
 -- versions would make the live app's 4-argument call ambiguous. The default ('chess') keeps that call working.
