@@ -1192,3 +1192,28 @@ body { padding-top: var(--sat); padding-bottom: var(--sab); }
 /* behind the status bar: a solid strip, so text scrolling up never runs under the clock (seen on Android 2026-10-17) */
 body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: var(--sat); background: var(--bg); z-index: 60; pointer-events: none; }
 html:has(.gamescreen) body::before { background: #141414; }
+
+/* wide screens on the website (DECISIONS #126, option B; src/wide.ts splits each screen into two columns).
+   Off a wide screen the columns are invisible to the layout, so phones keep the one column. */
+.wcol { display: contents; }
+@media (min-width: 900px) {
+  html.wide #app { max-width: none; }
+  html.wide #app:has(.tabbar) { padding-left: 92px; }   /* room for the side menu */
+  html.wide .screen { max-width: 980px; width: 100%; margin: 0 auto; }
+  html.wide .screen[data-wide] { max-width: none; padding: 20px 32px; }
+  /* the welcome, sign-in and first-time setup stay a narrow column in the middle: one choice at a time */
+  html.wide .wscreen, html.wide .screen:has(> .signin), html.wide .screen:has(> .choicegrid), html.wide .ftscreen { max-width: 560px; }
+  html.wide .wcol { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  /* a board screen: the board as big as the window allows, the rest in a panel beside it */
+  html.wide .screen[data-wide="board"] { flex-direction: row; align-items: flex-start; justify-content: center; gap: 28px; }
+  html.wide .screen[data-wide="board"] .wleft { flex: none; gap: 8px;
+    width: min(calc(100vh - 180px), calc(100vw - 92px - 64px - 400px)); min-width: 420px; }
+  html.wide .screen[data-wide="board"] .wright { flex: 1; min-width: 340px; max-width: 520px; padding: 16px; border-radius: 16px;
+    background: var(--surface); border: 1px solid var(--line); min-height: calc(100vh - 40px); }
+  html.wide .gamescreen .wright { background: #1A1816; border-color: #2B2824; }
+  /* the home screen: today's lesson and the tiles on the left, the level on the right */
+  html.wide .screen[data-wide="home"] { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); column-gap: 28px; align-items: start; align-content: start; }
+  html.wide .screen[data-wide="home"] .clubhead { grid-column: 1 / -1; }
+  html.wide .screen[data-wide="home"] .wcol { gap: 0; }
+  html.wide .screen[data-wide="home"] .mtiles, html.wide .screen[data-wide="home"] .mtiles.four { grid-template-columns: repeat(4, 1fr); }
+}

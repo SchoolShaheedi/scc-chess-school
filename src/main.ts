@@ -54,6 +54,7 @@ import { NATIVE, OFFLINE_APP, nativeBackButton, nativeBars } from "./native";
 import { boardEditor } from "./analysis/editor";
 import { soloScreen } from "./solo/screen";
 import { gameSettingsHTML, wireGameSettings } from "./play/gamesettings";
+import { wideLayout } from "./wide";
 
 // the Android app (DECISIONS #121) carries every file inside it: no service worker
 if (!NATIVE) registerSW({ immediate: true });
@@ -526,6 +527,7 @@ function offlineBanner() {
 window.addEventListener("online", offlineBanner);
 window.addEventListener("offline", offlineBanner);
 offlineBanner();
+wideLayout(app);   // DECISIONS #126: two columns on a wide screen (website only)
 // re-route when sign-in changes; always on the first answer from Supabase (the screen is blank until then),
 // but never yank someone out of a lesson or test they are in the middle of. Every save also tells the account's
 // listeners (for "saved at" in Settings), so only a real change of signed-in state re-routes: re-routing on each
