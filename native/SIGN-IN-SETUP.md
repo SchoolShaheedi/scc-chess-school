@@ -14,8 +14,11 @@ sign-in screen** (the website requires an account, DECISIONS #123).
   - `com.sikhworldchampionship.chess://login`: the Android app (the emailed link and Google come back here)
   - `http://localhost:8752/**`: testing on this computer
 
-## 2. Authentication → Emails (LATER: sign-in is Google only until this is done, DECISIONS #124)
-When it is done, set `EMAIL_SIGNIN = true` in `src/accountui.ts` and redeploy, and the email box comes back.
+## 2. Authentication → Emails (DONE 2026-10-18, DECISIONS #125)
+Set up with the charity's Google Workspace: sender `socialmedia@shaheedibunga.com`, host `smtp.gmail.com`, port 465,
+username the same address, password a Google **app password** named "ChessSchool" (myaccount.google.com/apppasswords).
+Gmail caps it at about 2,000 emails a day. Rate Limits → emails: 100 an hour. `EMAIL_SIGNIN = true` in `src/accountui.ts`.
+If the app password is ever deleted, sign-in emails stop: make a new one and paste it into Supabase.
 
 Supabase's built-in email sender is for testing: it sends only a few sign-in emails an hour, which a class of
 children would use up in minutes. Set **SMTP Settings** to the charity's own email service (Resend works; the SWC site

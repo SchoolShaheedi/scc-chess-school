@@ -7,8 +7,8 @@ import { account, deleteAccount, signInWithEmail, signInWithGoogle, signOut, syn
 type Step = "start" | "age" | "parent" | "methods" | "sent";
 
 /** The emailed link needs our own email sender (SMTP) in Supabase: without one, Supabase emails only its own team.
- *  Until the sender is set up (native/SIGN-IN-SETUP.md step 2), sign-in is Google only (DECISIONS #124). */
-const EMAIL_SIGNIN = false;
+ *  Off, sign-in is Google only (DECISIONS #124); on since the charity's Gmail sender was set up (#125). */
+const EMAIL_SIGNIN = true;
 
 export function mountAccount(box: HTMLElement, opts: { startAt?: Step } = {}): () => void {
   let step: Step = opts.startAt ?? "start", error = "";
