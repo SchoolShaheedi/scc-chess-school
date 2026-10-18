@@ -40,7 +40,7 @@ is approved and live.
 > It is free, with no adverts. A parent's account keeps each learner's progress on every device, and the lessons,
 > bots and puzzles keep working without an internet connection.
 >
-> • 84 lessons in 10 levels, from how the pieces move to tactics, endgames, openings and strategy
+> • 93 lessons in 10 levels, from how the pieces move to tactics, endgames, openings and strategy
 > • Three looks for three ages: big and friendly for 5–9, the full course for 10–15, clean and compact for adults
 > • A friendly coach explains every idea, and the superheroes of each level (Himmat, Seva, Ekta and more) cheer you on
 > • Six bots to play, from beginner to strong club player, each with their own style, plus Play vs Coach
@@ -61,7 +61,7 @@ is approved and live.
 > SWC ਸ਼ਤਰੰਜ ਪਾਠਸ਼ਾਲਾ ਪਹਿਲੀ ਚਾਲ ਤੋਂ ਟੂਰਨਾਮੈਂਟ ਤੱਕ, ਪੰਜਾਬੀ ਅਤੇ ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ, ਹਰ ਉਮਰ ਲਈ ਸ਼ਤਰੰਜ ਸਿਖਾਉਂਦੀ ਹੈ।
 > ਇਹ ਮੁਫ਼ਤ ਹੈ ਅਤੇ ਇਸ ਵਿੱਚ ਕੋਈ ਇਸ਼ਤਿਹਾਰ ਨਹੀਂ ਹੈ। ਮਾਤਾ-ਪਿਤਾ ਦਾ ਖਾਤਾ ਹਰ ਸਿੱਖਣ ਵਾਲੇ ਦਾ ਸਿੱਖਿਆ ਦਾ ਹਿਸਾਬ ਹਰ ਡਿਵਾਈਸ 'ਤੇ ਸੰਭਾਲਦਾ ਹੈ, ਅਤੇ ਪਾਠ, ਬੋਟ ਅਤੇ ਬੁਝਾਰਤਾਂ ਇੰਟਰਨੈੱਟ ਤੋਂ ਬਿਨਾਂ ਵੀ ਚੱਲਦੇ ਹਨ।
 >
-> • ੧੦ ਪੱਧਰਾਂ ਵਿੱਚ ੮੪ ਪਾਠ: ਮੋਹਰਿਆਂ ਦੀ ਚਾਲ ਤੋਂ ਦਾਅ-ਪੇਚ, ਅੰਤਲੀ ਖੇਡ, ਸ਼ੁਰੂਆਤਾਂ ਅਤੇ ਰਣਨੀਤੀ ਤੱਕ
+> • ੧੦ ਪੱਧਰਾਂ ਵਿੱਚ ੯੩ ਪਾਠ: ਮੋਹਰਿਆਂ ਦੀ ਚਾਲ ਤੋਂ ਦਾਅ-ਪੇਚ, ਅੰਤਲੀ ਖੇਡ, ਸ਼ੁਰੂਆਤਾਂ ਅਤੇ ਰਣਨੀਤੀ ਤੱਕ
 > • ਤਿੰਨ ਉਮਰਾਂ ਲਈ ਤਿੰਨ ਦਿੱਖਾਂ: ੫–੯ ਸਾਲ ਲਈ ਵੱਡੀ ਅਤੇ ਦੋਸਤਾਨਾ, ੧੦–੧੫ ਲਈ ਪੂਰਾ ਕੋਰਸ, ਵੱਡਿਆਂ ਲਈ ਸਾਫ਼ ਅਤੇ ਸੰਖੇਪ
 > • ਦੋਸਤਾਨਾ ਕੋਚ ਹਰ ਗੱਲ ਸਮਝਾਉਂਦੇ ਹਨ, ਅਤੇ ਹਰ ਪੱਧਰ ਦੇ ਸੁਪਰਹੀਰੋ (ਹਿੰਮਤ, ਸੇਵਾ, ਏਕਤਾ ਅਤੇ ਹੋਰ) ਤੁਹਾਡਾ ਹੌਸਲਾ ਵਧਾਉਂਦੇ ਹਨ
 > • ਖੇਡਣ ਲਈ ਛੇ ਬੋਟ, ਨਵੇਂ ਸਿੱਖਣ ਵਾਲੇ ਤੋਂ ਤਕੜੇ ਕਲੱਬ ਖਿਡਾਰੀ ਤੱਕ, ਹਰ ਇੱਕ ਦਾ ਆਪਣਾ ਅੰਦਾਜ਼; ਨਾਲ ਹੀ ਕੋਚ ਨਾਲ ਖੇਡੋ
@@ -110,7 +110,7 @@ is approved and live.
 3. Then **Production → Create release** with the same bundle. Countries: all (or the UK, India, Canada, the US,
    Australia, Kenya and Europe to start).
 4. Release notes:
-   > First release: 84 lessons in Panjabi and English, bots, Magical Chess, puzzles, Game Review and Insights.
+   > First release: 93 lessons in Panjabi and English, bots, Magical Chess, puzzles, Game Review and Insights.
 
 ## Updating later
 Raise `versionCode` (by 1) and `versionName` in `android/app/build.gradle`, run `npm run sync`, then build the signed
