@@ -62,8 +62,8 @@ export const family = {
   },
 
   /** The account's family merged with this device's (sync.ts, on sign-in). */
-  applyRemote(remote: Family | null) {
-    const merged = remote ? mergeFamily(family.snapshot(), remote) : family.snapshot();
+  applyRemote(remote: Family | null, remoteFirst = false) {
+    const merged = !remote ? family.snapshot() : remoteFirst ? mergeFamily(remote, family.snapshot()) : mergeFamily(family.snapshot(), remote);
     fam = merged;
     switching = true;
     try { store.replaceProgress(fillSaved(fam.saved[fam.active] ?? emptySaved())); store.set({ look: family.current().look }); }

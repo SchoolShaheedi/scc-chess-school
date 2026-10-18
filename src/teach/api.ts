@@ -58,6 +58,8 @@ export async function joinClass(code: string): Promise<string | null> {
   joined = null; await pushSummaries(); return null;
 }
 let joined: Joined[] | null = null;
+/** Sign-out: the next account must not see this one's classes (sync.ts forgetDevice). */
+export const forgetClasses = () => { joined = null; };
 export async function myClasses(fresh = false): Promise<Joined[]> {
   const c = db(); if (!c) return [];
   if (joined && !fresh) return joined;

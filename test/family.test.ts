@@ -51,3 +51,18 @@ describe("switching children", () => {
     family.remove(second);
   });
 });
+
+describe("signing in on a device (review 2026-10-18)", () => {
+  it("on a device the account has never used, the account's own children win over the device's untouched first child", () => {
+    family.reset(); store.reset(); store.set({ look: "junior" });
+    const remote = { v: 2 as const, active: "p1", profiles: [{ id: "p1", avatar: "owl", colour: "#7C3AED", look: "young" as const }],
+      saved: { p1: { ...emptySaved(), xp: 90 } } };
+    family.applyRemote(remote, true);
+    expect(family.current().avatar).toBe("owl"); expect(store.get().look).toBe("young"); expect(store.get().xp).toBe(90);
+  });
+  it("an account with no progress yet keeps what was done on the device", () => {
+    family.reset(); store.reset(); store.set({ xp: 12 });
+    family.applyRemote(null, true);
+    expect(store.get().xp).toBe(12);
+  });
+});

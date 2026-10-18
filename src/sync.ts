@@ -6,7 +6,7 @@ import { createClient, type Session, type SupabaseClient } from "@supabase/supab
 import { forgetGames } from "./play/history";
 import { asFamily, type Family } from "./merge";
 import { family } from "./family";
-import { pushSummaries } from "./teach/api";
+import { forgetClasses, pushSummaries } from "./teach/api";
 import { store } from "./store";
 import { APP_RETURN_URL, NATIVE, onReturnToApp, openSignInPage } from "./native";
 
@@ -17,6 +17,10 @@ export const syncConfigured = !!(URL && KEY);
 let db: SupabaseClient | null = null;
 let session: Session | null = null;
 let lastSaved: Date | null = null;
+// true once this account's progress has been read (or found empty). Nothing is saved before that, so a failed or
+// slow read can never overwrite the account with an empty device (review 2026-10-18)
+let synced = false;
+let syncingFor: string | null = null;   // the account onSignedIn is running (or has run) for
 let returnFailed = false;     // the Android app was opened by a sign-in link that did not work (#123)
 let ready = false;              // true once Supabase has said whether a session exists
 let pushTimer: ReturnType<typeof setTimeout> | undefined;
@@ -34,6 +38,8 @@ export const account = {
   lastSaved: () => lastSaved,
   /** True once, after a sign-in link came back to the app with an error (an expired or used link). */
   takeReturnError: () => { const r = returnFailed; returnFailed = false; return r; },
+  /** The same, without clearing it (for the router). */
+  returnPending: () => returnFailed,
   subscribe(f: () => void) { listeners.add(f); return () => listeners.delete(f); },
 };
 
@@ -69,7 +75,12 @@ export async function signInWithEmail(email: string): Promise<string | null> {
 const OWNER = "scc-school-owner";
 const owner = () => { try { return localStorage.getItem(OWNER); } catch { return null; } };
 const setOwner = (id: string | null) => { try { if (id) localStorage.setItem(OWNER, id); else localStorage.removeItem(OWNER); } catch { /* storage blocked */ } };
-const forgetDevice = () => { setOwner(null); forgetGames(); family.reset(); store.reset(); };
+// store.reset() keeps the device's "set up" mark for Settings → Reset; after a sign-out the next person is asked
+// their age again, and never sees the last account's "saved at" time or classes
+const forgetDevice = () => {
+  setOwner(null); forgetGames(); family.reset(); store.reset(); store.set({ onboarded: false });
+  synced = false; syncingFor = null; lastSaved = null; forgetClasses();
+};
 
 export async function signOut() { await db?.auth.signOut(); forgetDevice(); }
 
@@ -82,28 +93,43 @@ export async function deleteAccount(): Promise<string | null> {
   return null;
 }
 
-async function pull(): Promise<Family | null> {
-  const { data, error } = await db!.from("progress").select("data").eq("user_id", session!.user.id).maybeSingle();
-  if (error) { console.warn("progress pull failed", error.message); return null; }
+/** The account's family; null when the account has no progress yet; undefined when it could not be read. */
+async function pull(userId: string): Promise<Family | null | undefined> {
+  const { data, error } = await db!.from("progress").select("data").eq("user_id", userId).maybeSingle();
+  if (error) { console.warn("progress pull failed", error.message); return undefined; }
   return asFamily(data?.data);   // a row from before profiles becomes the first child
 }
 
 async function push() {
-  if (!session) return;
+  if (!session || !synced) return;
   const { error } = await db!.from("progress").upsert({
     user_id: session.user.id, data: family.snapshot(), updated_at: new Date().toISOString(),
   });
   if (error) console.warn("progress save failed", error.message);
-  else { lastSaved = new Date(); notify(); void pushSummaries(); }
+  else { lastSaved = new Date(); notify(); void pushSummaries().catch(() => {}); }
 }
 
 /** On sign-in, the device's progress and the account's are merged, so nothing done offline is lost. */
 async function onSignedIn() {
+  const id = session!.user.id;
   // progress left by a DIFFERENT account must never be merged into this one
   const prev = owner();
-  if (prev && prev !== session!.user.id) { family.reset(); store.reset(); }
-  setOwner(session!.user.id);
-  family.applyRemote(await pull());   // every child on the account, merged with this device's
+  if (prev && prev !== id) { family.reset(); store.reset(); store.set({ onboarded: false }); }
+  setOwner(id);
+  const remote = await pull(id);
+  if (session?.user.id !== id) return;   // signed out (or someone else signed in) while it was being read
+  if (remote === undefined) {            // not read: try again shortly, and save nothing until it is
+    setTimeout(() => { if (session?.user.id === id && !synced) void onSignedIn(); }, 15000);
+    return;
+  }
+  // every child on the account, merged with this device's; on a device this account has never used, the account's
+  // own children (age band, animal, colour) win over the device's untouched first child
+  family.applyRemote(remote, !prev);
+  // a learner who already has progress is not asked their age again on a new device
+  const s = store.get();
+  if (!s.onboarded && remote && (s.xp > 0 || Object.keys(s.lessons).length > 0 || s.placed !== undefined)) store.set({ onboarded: true });
+  synced = true;
+  notify();
   await push();
 }
 
@@ -116,11 +142,12 @@ export function startSync() {
     if (got && "access_token" in got) void db!.auth.setSession(got);
     else if (got) { console.warn("sign-in came back with an error:", got.error); returnFailed = true; notify(); }
   });
-  db.auth.onAuthStateChange((event, s) => {
-    const was = !!session;
+  db.auth.onAuthStateChange((_event, s) => {
     session = s; ready = true;
     notify();
-    if (s && (!was || event === "SIGNED_IN")) void onSignedIn();
+    // once per account: supabase-js also says SIGNED_IN when a tab comes back into view, which is not a new sign-in
+    if (s && syncingFor !== s.user.id) { syncingFor = s.user.id; synced = false; void onSignedIn(); }
+    if (!s) { syncingFor = null; synced = false; }
   });
   // every change to progress is saved a moment later (batched, so a fast lesson is one write)
   const later = () => {

@@ -415,7 +415,7 @@ function settings() {
   app.querySelector<HTMLButtonElement>("[data-home]")!.onclick = () => go("#/me");
   app.querySelector<HTMLButtonElement>("[data-placement]")?.addEventListener("click", () => go("#/placement"));
   // teacher tools only for approved teachers (the database decides: is_teacher())
-  void isTeacher().then(yes => { const g = app.querySelector<HTMLElement>("[data-teacher]"); if (g && yes) g.hidden = false; });
+  void isTeacher().catch(() => false).then(yes => { const g = app.querySelector<HTMLElement>("[data-teacher]"); if (g && yes) g.hidden = false; });
   app.querySelector<HTMLButtonElement>("[data-teach]")!.onclick = () => go("#/teach");
   app.querySelector<HTMLButtonElement>("[data-reset]")!.onclick = () => { if (confirm(t("resetConfirm"))) { store.reset(); go("#/"); } };
 }
@@ -457,7 +457,7 @@ function route() {
   // teacher pages need a signed-in, approved teacher; anyone else lands on Settings
   if (page === "teach") {
     if (!account.signedIn()) return settings();
-    void isTeacher().then(yes => { if (!yes) go("#/settings"); else if (arg) void classView(app, arg, go); else void teacherHome(app, go); });
+    void isTeacher().catch(() => false).then(yes => { if (!yes) go("#/settings"); else if (arg) void classView(app, arg, go); else void teacherHome(app, go); });
     return;
   }
   if (page === "join") return account.signedIn() ? joinScreen(app, go) : familyScreen(app, go);
@@ -527,6 +527,20 @@ window.addEventListener("online", offlineBanner);
 window.addEventListener("offline", offlineBanner);
 offlineBanner();
 // re-route when sign-in changes; always on the first answer from Supabase (the screen is blank until then),
-// but never yank someone out of a lesson or test they are in the middle of
-account.subscribe(() => { if (app.querySelector("[data-waiting]") || !/^#\/(lesson|test)\//.test(location.hash)) route(); });
+// but never yank someone out of a lesson or test they are in the middle of. Every save also tells the account's
+// listeners (for "saved at" in Settings), so only a real change of signed-in state re-routes: re-routing on each
+// save sent a new learner back to the age question 1.5 s after they chose (2026-10-18).
+let signedState = "";
+const signedKey = () => `${account.ready()}|${account.signedIn()}`;
+const onboardingShown = () => !!app.querySelector("[data-look], .ftscreen, [data-start]");
+account.subscribe(() => {
+  const key = signedKey();
+  if (account.returnPending() && !app.querySelector("[data-account]")) { go("#/signin/have"); return; }   // a sign-in link that failed: say so where a new one is asked for
+  // the account turned out to have progress already (a new device): skip the age question
+  if (key === signedState && store.get().onboarded && onboardingShown()) { route(); return; }
+  if (key === signedState && !app.querySelector("[data-waiting]")) return;
+  signedState = key;
+  if (app.querySelector("[data-waiting]") || !/^#\/(lesson|test)\//.test(location.hash)) route();
+});
+signedState = signedKey();
 route();
