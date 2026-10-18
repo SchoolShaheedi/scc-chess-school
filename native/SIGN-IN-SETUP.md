@@ -14,7 +14,9 @@ sign-in screen** (the website requires an account, DECISIONS #123).
   - `com.sikhworldchampionship.chess://login`: the Android app (the emailed link and Google come back here)
   - `http://localhost:8752/**`: testing on this computer
 
-## 2. Authentication → Emails (strongly advised before real families)
+## 2. Authentication → Emails (LATER: sign-in is Google only until this is done, DECISIONS #124)
+When it is done, set `EMAIL_SIGNIN = true` in `src/accountui.ts` and redeploy, and the email box comes back.
+
 Supabase's built-in email sender is for testing: it sends only a few sign-in emails an hour, which a class of
 children would use up in minutes. Set **SMTP Settings** to the charity's own email service (Resend works; the SWC site
 already uses it), with a sender such as `chess@shaheedibunga.com`.

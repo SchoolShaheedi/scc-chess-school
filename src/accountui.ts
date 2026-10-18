@@ -6,6 +6,10 @@ import { account, deleteAccount, signInWithEmail, signInWithGoogle, signOut, syn
 
 type Step = "start" | "age" | "parent" | "methods" | "sent";
 
+/** The emailed link needs our own email sender (SMTP) in Supabase: without one, Supabase emails only its own team.
+ *  Until the sender is set up (native/SIGN-IN-SETUP.md step 2), sign-in is Google only (DECISIONS #124). */
+const EMAIL_SIGNIN = false;
+
 export function mountAccount(box: HTMLElement, opts: { startAt?: Step } = {}): () => void {
   let step: Step = opts.startAt ?? "start", error = "";
 
@@ -35,16 +39,21 @@ export function mountAccount(box: HTMLElement, opts: { startAt?: Step } = {}): (
         <button class="btn wide" data-go="methods">${t("adultConfirm")}</button>`,
       parent: `<p>${t("askParent")}</p><button class="btn wide" data-go="methods">${t("imParent")}</button>`,
       // the email link is the main way in: it shares only the email. Google is offered second, with what it shares said plainly
-      methods: `<form class="emailform" data-email><label class="note" for="em">${t("emailLabel")}</label>
+      methods: EMAIL_SIGNIN ? `<form class="emailform" data-email><label class="note" for="em">${t("emailLabel")}</label>
           <input id="em" type="email" inputmode="email" autocomplete="email" required placeholder="name@example.com">
           <button class="btn wide" type="submit">${icon("mail")} ${t("sendLink")}</button></form>
         ${error ? `<p class="note err">${escape(error)}</p>` : ""}
         <div class="ordiv"><span>${t("or")}</span></div>
         <button class="btn ghost wide google" data-google>${GOOGLE_G} ${t("google")}</button>
-        <p class="note">${t("googleNote")}</p>`,
+        <p class="note">${t("googleNote")}</p>`
+        : `${error ? `<p class="note err">${escape(error)}</p>` : ""}
+        <button class="btn wide google" data-google>${GOOGLE_G} ${t("google")}</button>
+        <p class="note">${t("googleNoteOnly")}</p>`,
       sent: `<p>${icon("mail")} ${t("linkSent")}</p>`,
     }[step];
-    box.innerHTML = `<h2>${t("saveTitle")}</h2>${body}<p class="note">${t("privacy")}</p>`;
+    // with Google only, its own note already says what is kept; the general note speaks of the email link
+    const note = EMAIL_SIGNIN || step !== "methods" ? `<p class="note">${t("privacy")}</p>` : "";
+    box.innerHTML = `<h2>${t("saveTitle")}</h2>${body}${note}`;
     box.querySelectorAll<HTMLButtonElement>("[data-go]").forEach(b => b.onclick = () => { step = b.dataset.go as Step; error = ""; render(); });
     box.querySelector<HTMLButtonElement>("[data-google]")?.addEventListener("click", () => void signInWithGoogle());
     box.querySelector<HTMLFormElement>("[data-email]")?.addEventListener("submit", async e => {
