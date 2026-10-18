@@ -12,7 +12,7 @@ import { checkSquare, refusal } from "../lesson/exercises";
 import { captured, flagOutcome, movesFor, positionAt, premoveTargets, premovesOn, promotion } from "../play/gamekit";
 import { type Clock, flagged, fmt, newClock, press, remaining } from "../play/clock";
 import { saveGame } from "../play/history";
-import { NATIVE } from "../native";
+import { OFFLINE_APP } from "../native";
 import { shareButton, wireShare } from "../play/share";
 import { announceEnd, END_PAUSE, kindOf } from "../play/gameover";
 import { gameMenuButton, wireGameMenu } from "../play/gamesettings";
@@ -61,7 +61,7 @@ export function botList(root: HTMLElement, go: (h: string) => void) {
       ${beaten(b) ? `<i class="tick">${icon("check")}</i>` : ""}<span>${tx(b.name)}</span><small>~${num(b.rating)}</small></button>`).join("")}</div>
     <h2 class="sec">${t("otherWays")}</h2>
     <div class="ways">
-      ${NATIVE ? "" : chip("data-online", "users", t("onlineTitle"))}
+      ${OFFLINE_APP ? "" : chip("data-online", "users", t("onlineTitle"))}
       ${chip("data-friend", "swords", t("friendTitle"))}
       ${young ? "" : chip("data-tourney", "trophy", t("tnTitle"))}
       ${chip("data-analysis", "search", t("anaTitle"))}

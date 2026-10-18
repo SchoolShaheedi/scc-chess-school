@@ -8,6 +8,7 @@ import { asFamily, type Family } from "./merge";
 import { family } from "./family";
 import { pushSummaries } from "./teach/api";
 import { store } from "./store";
+import { APP_RETURN_URL, NATIVE, onReturnToApp, openSignInPage } from "./native";
 
 const URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
@@ -16,6 +17,7 @@ export const syncConfigured = !!(URL && KEY);
 let db: SupabaseClient | null = null;
 let session: Session | null = null;
 let lastSaved: Date | null = null;
+let returnFailed = false;     // the Android app was opened by a sign-in link that did not work (#123)
 let ready = false;              // true once Supabase has said whether a session exists
 let pushTimer: ReturnType<typeof setTimeout> | undefined;
 const listeners = new Set<() => void>();
@@ -30,13 +32,30 @@ export const account = {
   signedIn: () => !!session,
   ready: () => ready,
   lastSaved: () => lastSaved,
+  /** True once, after a sign-in link came back to the app with an error (an expired or used link). */
+  takeReturnError: () => { const r = returnFailed; returnFailed = false; return r; },
   subscribe(f: () => void) { listeners.add(f); return () => listeners.delete(f); },
 };
 
-const redirect = () => location.origin + location.pathname;
+// the Android app returns through its own address (#123); the website to itself
+const redirect = () => (NATIVE ? APP_RETURN_URL : location.origin + location.pathname);
 
 export async function signInWithGoogle() {
-  await db!.auth.signInWithOAuth({ provider: "google", options: { redirectTo: redirect() } });
+  if (!NATIVE) { await db!.auth.signInWithOAuth({ provider: "google", options: { redirectTo: redirect() } }); return; }
+  // in the app: Google's page opens in a browser tab, never in the app's own web view (Google refuses that)
+  const { data } = await db!.auth.signInWithOAuth({ provider: "google", options: { redirectTo: redirect(), skipBrowserRedirect: true } });
+  if (data?.url) await openSignInPage(data.url);
+}
+
+/** The app was opened through its return address: the tokens are after the "#" (Supabase's implicit flow), or an
+ *  error is. A link that carries neither is ignored. Exported for test/native-signin.test.ts. */
+export function tokensFrom(url: string): { access_token: string; refresh_token: string } | { error: string } | null {
+  const hash = url.split("#")[1] ?? url.split("?")[1] ?? "";
+  const q = new URLSearchParams(hash);
+  const access_token = q.get("access_token"), refresh_token = q.get("refresh_token");
+  if (access_token && refresh_token) return { access_token, refresh_token };
+  const error = q.get("error_description") ?? q.get("error");
+  return error ? { error } : null;
 }
 
 /** Sends a one-tap sign-in link. No password to remember, and nothing for a child to forget. */
@@ -90,7 +109,13 @@ async function onSignedIn() {
 
 export function startSync() {
   if (!syncConfigured) return;
-  db = createClient(URL!, KEY!, { auth: { persistSession: true, detectSessionInUrl: true } });
+  db = createClient(URL!, KEY!, { auth: { persistSession: true, detectSessionInUrl: !NATIVE } });
+  // the Android app is opened through its return address with the sign-in tokens; Supabase then signs in as usual
+  if (NATIVE) onReturnToApp(url => {
+    const got = tokensFrom(url);
+    if (got && "access_token" in got) void db!.auth.setSession(got);
+    else if (got) { console.warn("sign-in came back with an error:", got.error); returnFailed = true; notify(); }
+  });
   db.auth.onAuthStateChange((event, s) => {
     const was = !!session;
     session = s; ready = true;

@@ -10,6 +10,8 @@ export function mountAccount(box: HTMLElement, opts: { startAt?: Step } = {}): (
   let step: Step = opts.startAt ?? "start", error = "";
 
   const render = () => {
+    // a sign-in link that came back to the app without working (#123): say so where a new one is asked for
+    if (account.takeReturnError()) { step = "methods"; error = t("linkFailed"); }
     if (!syncConfigured) { box.innerHTML = `<h2>${t("account")}</h2><p class="note">${t("notSetUp")}</p>`; return; }
     if (account.signedIn()) {
       const saved = account.lastSaved();

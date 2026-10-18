@@ -1,6 +1,7 @@
 # SWC Chess School · the Play Store, everything to paste
 
-Drafted 2026-10-17 for version 1.0.0 (DECISIONS #121). The Panjabi was checked by the translator the same day (three
+Drafted 2026-10-17 for version 1.0.0 (DECISIONS #121); updated 2026-10-18 for the FULL version with sign-in and online
+play (#123). The Panjabi was checked by the translator the same day (three
 missing claims restored: no sign-in or tracking, the puzzle modes, what Game Review and Insights do). The privacy page
 is approved and live.
 
@@ -36,7 +37,8 @@ is approved and live.
 
 **English (UK)**
 > SWC Chess School teaches chess from the very first move to tournament play, in Panjabi and English, for every age.
-> It is free, with no adverts and no account, and it works with no internet connection.
+> It is free, with no adverts. A parent's account keeps each learner's progress on every device, and the lessons,
+> bots and puzzles keep working without an internet connection.
 >
 > • 84 lessons in 10 levels, from how the pieces move to tactics, endgames, openings and strategy
 > • Three looks for three ages: big and friendly for 5–9, the full course for 10–15, clean and compact for adults
@@ -48,14 +50,16 @@ is approved and live.
 > • Insights: your openings, the part of the game you lose most points in, and how thinking time helps you
 > • An analysis board with a position editor, an openings trainer and a two-player mode on one phone
 > • Dark and light looks, piece sets and boards to earn, and share your best games as a picture
+> • Play friends and classmates online: only four friendly messages, and no chat
 >
-> Everything stays on your phone: no sign-in, no tracking, nothing sent anywhere. The code is open source (GPLv3).
+> No adverts, no tracking, and nothing sold or shared. Children appear to other players only as an animal and a
+> colour, and there is no chat. The code is open source (GPLv3).
 >
 > Made by Shaheedi Bunga, a UK Sikh charity, as part of Sikh World Championships.
 
 **ਪੰਜਾਬੀ**
 > SWC ਸ਼ਤਰੰਜ ਪਾਠਸ਼ਾਲਾ ਪਹਿਲੀ ਚਾਲ ਤੋਂ ਟੂਰਨਾਮੈਂਟ ਤੱਕ, ਪੰਜਾਬੀ ਅਤੇ ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ, ਹਰ ਉਮਰ ਲਈ ਸ਼ਤਰੰਜ ਸਿਖਾਉਂਦੀ ਹੈ।
-> ਇਹ ਮੁਫ਼ਤ ਹੈ, ਇਸ ਵਿੱਚ ਕੋਈ ਇਸ਼ਤਿਹਾਰ ਨਹੀਂ ਹੈ, ਕੋਈ ਖਾਤਾ ਨਹੀਂ ਬਣਾਉਣਾ ਪੈਂਦਾ, ਅਤੇ ਇਹ ਇੰਟਰਨੈੱਟ ਤੋਂ ਬਿਨਾਂ ਵੀ ਚੱਲਦੀ ਹੈ।
+> ਇਹ ਮੁਫ਼ਤ ਹੈ ਅਤੇ ਇਸ ਵਿੱਚ ਕੋਈ ਇਸ਼ਤਿਹਾਰ ਨਹੀਂ ਹੈ। ਮਾਤਾ-ਪਿਤਾ ਦਾ ਖਾਤਾ ਹਰ ਸਿੱਖਣ ਵਾਲੇ ਦਾ ਸਿੱਖਿਆ ਦਾ ਹਿਸਾਬ ਹਰ ਡਿਵਾਈਸ 'ਤੇ ਸੰਭਾਲਦਾ ਹੈ, ਅਤੇ ਪਾਠ, ਬੋਟ ਅਤੇ ਬੁਝਾਰਤਾਂ ਇੰਟਰਨੈੱਟ ਤੋਂ ਬਿਨਾਂ ਵੀ ਚੱਲਦੇ ਹਨ।
 >
 > • ੧੦ ਪੱਧਰਾਂ ਵਿੱਚ ੮੪ ਪਾਠ: ਮੋਹਰਿਆਂ ਦੀ ਚਾਲ ਤੋਂ ਦਾਅ-ਪੇਚ, ਅੰਤਲੀ ਖੇਡ, ਸ਼ੁਰੂਆਤਾਂ ਅਤੇ ਰਣਨੀਤੀ ਤੱਕ
 > • ਤਿੰਨ ਉਮਰਾਂ ਲਈ ਤਿੰਨ ਦਿੱਖਾਂ: ੫–੯ ਸਾਲ ਲਈ ਵੱਡੀ ਅਤੇ ਦੋਸਤਾਨਾ, ੧੦–੧੫ ਲਈ ਪੂਰਾ ਕੋਰਸ, ਵੱਡਿਆਂ ਲਈ ਸਾਫ਼ ਅਤੇ ਸੰਖੇਪ
@@ -67,8 +71,9 @@ is approved and live.
 > • ਤੁਹਾਡੀ ਖੇਡ ਦੀ ਝਲਕ: ਤੁਹਾਡੀਆਂ ਸ਼ੁਰੂਆਤਾਂ, ਖੇਡ ਦਾ ਉਹ ਹਿੱਸਾ ਜਿੱਥੇ ਤੁਸੀਂ ਸਭ ਤੋਂ ਵੱਧ ਅੰਕ ਗੁਆਉਂਦੇ ਹੋ, ਅਤੇ ਸੋਚਣ ਦਾ ਸਮਾਂ ਕਿਵੇਂ ਮਦਦ ਕਰਦਾ ਹੈ
 > • ਵਿਸ਼ਲੇਸ਼ਣ ਬਿਸਾਤ, ਸ਼ੁਰੂਆਤਾਂ ਦਾ ਅਭਿਆਸ, ਅਤੇ ਇੱਕ ਫ਼ੋਨ ਉੱਤੇ ਦੋ ਖਿਡਾਰੀਆਂ ਲਈ ਖੇਡ
 > • ਗੂੜ੍ਹੇ ਅਤੇ ਹਲਕੇ ਰੰਗ, ਜਿੱਤਣ ਲਈ ਮੋਹਰੇ ਅਤੇ ਬਿਸਾਤਾਂ, ਅਤੇ ਆਪਣੀਆਂ ਵਧੀਆ ਖੇਡਾਂ ਤਸਵੀਰ ਵਜੋਂ ਭੇਜੋ
+> • ਦੋਸਤਾਂ ਅਤੇ ਜਮਾਤੀਆਂ ਨਾਲ ਔਨਲਾਈਨ ਖੇਡੋ: ਸਿਰਫ਼ ਚਾਰ ਦੋਸਤਾਨਾ ਸੁਨੇਹੇ, ਕੋਈ ਗੱਲਬਾਤ ਨਹੀਂ
 >
-> ਸਭ ਕੁਝ ਤੁਹਾਡੇ ਫ਼ੋਨ ਉੱਤੇ ਹੀ ਰਹਿੰਦਾ ਹੈ: ਕੋਈ ਸਾਈਨ ਇਨ ਨਹੀਂ, ਕੋਈ ਟਰੈਕਿੰਗ ਨਹੀਂ, ਕਿਤੇ ਕੁਝ ਭੇਜਿਆ ਨਹੀਂ ਜਾਂਦਾ। ਕੋਡ ਓਪਨ ਸੋਰਸ (GPLv3) ਹੈ।
+> ਕੋਈ ਇਸ਼ਤਿਹਾਰ ਨਹੀਂ, ਕੋਈ ਟਰੈਕਿੰਗ ਨਹੀਂ, ਅਤੇ ਕੁਝ ਵੇਚਿਆ ਜਾਂ ਸਾਂਝਾ ਨਹੀਂ ਕੀਤਾ ਜਾਂਦਾ। ਬੱਚੇ ਹੋਰ ਖਿਡਾਰੀਆਂ ਨੂੰ ਸਿਰਫ਼ ਜਾਨਵਰ ਅਤੇ ਰੰਗ ਵਜੋਂ ਦਿਸਦੇ ਹਨ, ਅਤੇ ਕੋਈ ਗੱਲਬਾਤ ਨਹੀਂ ਹੈ। ਕੋਡ ਓਪਨ ਸੋਰਸ (GPLv3) ਹੈ।
 >
 > ਇਹ ਸ਼ਹੀਦੀ ਬੁੰਗਾ, ਯੂ.ਕੇ. ਦੀ ਇੱਕ ਸਿੱਖ ਚੈਰਿਟੀ, ਨੇ Sikh World Championships ਦੇ ਹਿੱਸੇ ਵਜੋਂ ਬਣਾਈ ਹੈ।
 
@@ -82,19 +87,21 @@ is approved and live.
 |---|---|
 | Privacy policy | the URL above |
 | Ads | **No, my app does not contain ads** |
-| App access | **All functionality is available without special access** |
-| Content rating | Fill the questionnaire: category *Reference, News, or Educational*; no violence, no user-to-user communication, no sharing of location, no purchases. Expected rating: **PEGI 3 / Everyone**. |
+| App access | **All or some functionality is restricted**: the app needs a parent's sign-in. Google's reviewers can't open an emailed link, so give them a **Google test account** (make a new Google account for this; never a personal one): *Instructions:* "Tap Get started, confirm you are a parent or 13+, then Continue with Google and sign in with the account below." |
+| Content rating | Fill the questionnaire: category *Reference, News, or Educational*; no violence, no sharing of location, no purchases. **Users can interact: yes** (online games with friends and classmates, and four fixed friendly messages), **chat: no**. Expected rating: **PEGI 3 / Everyone**, with the note *Users Interact*. |
 | Target audience | **5 and under? No.** Tick **6–8, 9–12, 13–15, 16–17, 18 and over**. Google then applies the **Families policy**. |
 | Appeal to children | Yes (it is a children's school) |
-| Data safety | **Does the app collect or share any user data? No.** (Nothing leaves the phone; there is no internet permission.) Data encrypted in transit: not applicable. Data deletion: not applicable (nothing collected). |
+| Data safety | **Collects data: Yes. Shares data: No.** Encrypted in transit: **Yes**. Users can ask for deletion: **Yes** (Settings → Account → Delete my account, or by email). Declare: **Personal info → Email address** (required; App functionality, Account management); **Personal info → Name** (optional, only when signing in with Google; Account management; we don't use or show it); **Personal info → Other info**: the Google profile picture link (optional, same); **App activity → Other actions**: lessons, puzzle results, ratings and online games (required; App functionality); **App info → none; Device IDs → none; Location → none; Financial → none**. User IDs: the account's internal ID (required; Account management). |
 | Government app | No |
 | Financial features | None |
 | Health | None |
 | News app | No |
 
 **Families policy notes for the reviewer** (paste into *App content → Target audience → Notes*, if asked):
-> The app is a chess school for all ages from a UK charity. Version 1 has no sign-in, no network access (no INTERNET
-> permission), no ads, no analytics, no third-party SDKs and no data collection. Everything is stored on the device.
+> The app is a chess school for all ages from a UK charity. A parent (or an adult for themselves) signs in; children never
+> create accounts. Children are shown to other players only as an animal and a colour; they can play only friends their
+> parent accepted or classmates in a teacher's class; there is no chat (four fixed messages only); adults and children
+> are never paired. No ads, no analytics, no tracking; data is kept only to run the school (privacy page linked).
 
 ## Release
 1. **Testing → Internal testing → Create release**, upload `app-release.aab`, release name `1.0.0 (1)`.

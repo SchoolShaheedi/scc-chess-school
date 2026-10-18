@@ -50,7 +50,7 @@ import { classView, homeworkCard, joinScreen, teacherHome } from "./teach/screen
 import { mountAccount } from "./accountui";
 import { account, startSync, syncConfigured } from "./sync";
 import { insightsScreen } from "./insights/screen";
-import { NATIVE, nativeBackButton, nativeBars } from "./native";
+import { NATIVE, OFFLINE_APP, nativeBackButton, nativeBars } from "./native";
 import { boardEditor } from "./analysis/editor";
 import { soloScreen } from "./solo/screen";
 import { gameSettingsHTML, wireGameSettings } from "./play/gamesettings";
@@ -124,14 +124,14 @@ function welcome() {
     <h1 class="wtitle">${t("appName")}${s.lang === "en" ? `<span lang="pa">ਸ਼ਤਰੰਜ ਪਾਠਸ਼ਾਲਾ</span>` : `<span lang="en">Chess School</span>`}</h1><p class="wtag">${t("tagline")}</p>
     <ul class="wreasons chips">${reasons}</ul>
     <div class="wcta"><button class="btn wide gold" data-go="new">${t("getStarted")}</button>
-      ${NATIVE ? "" : `<button class="linkbtn" data-go="have">${t("haveAccount")}</button>`}</div>
+      ${OFFLINE_APP ? "" : `<button class="linkbtn" data-go="have">${t("haveAccount")}</button>`}</div>
   </div></div>`;
   app.querySelectorAll<HTMLButtonElement>(".wlang [data-l]").forEach(b => b.onclick = () => {
     store.set({ lang: b.dataset.l as "en" | "pa" }); applyTheme(); welcome();
   });
   app.querySelectorAll<HTMLButtonElement>("[data-go]").forEach(b => b.onclick = () => {
     // the Android app has no sign-in in version 1 (DECISIONS #121): straight into onboarding, saved on the phone
-    if (NATIVE) { localOnly = true; return onboarding(1); }
+    if (OFFLINE_APP) { localOnly = true; return onboarding(1); }
     go(b.dataset.go === "have" ? "#/signin/have" : "#/signin");
   });
 }
@@ -410,7 +410,7 @@ function settings() {
     store.set({ [g.dataset.seg!]: v } as Partial<ReturnType<typeof store.get>>); applyTheme(); teardown?.(); settings();
   }));
   wireGameSettings(app.querySelector("[data-gsgroup]")!, () => {});   // DECISIONS #115
-  if (NATIVE) app.querySelector<HTMLElement>("[data-account]")!.hidden = true;   // no accounts in the Android app yet
+  if (OFFLINE_APP) app.querySelector<HTMLElement>("[data-account]")!.hidden = true;   // no accounts in the offline build
   else teardown = mountAccount(app.querySelector("[data-account]")!);
   app.querySelector<HTMLButtonElement>("[data-home]")!.onclick = () => go("#/me");
   app.querySelector<HTMLButtonElement>("[data-placement]")?.addEventListener("click", () => go("#/placement"));
@@ -433,7 +433,7 @@ function route() {
   if (gated) return page === "signin" ? signInScreen(arg === "have") : welcome();
   if (!store.get().onboarded) return onboarding(1);
   // the Android app has nothing online in version 1 (DECISIONS #121): those screens are never opened there
-  if (NATIVE && ["online", "teach", "class", "join", "signin"].includes(page)) { go("#/"); return; }
+  if (OFFLINE_APP && ["online", "teach", "class", "join", "signin"].includes(page)) { go("#/"); return; }
   if (page === "test" && arg) {
     const lv = LEVELS[parseInt(arg) - 1];
     if (lv?.test && testState(lv.n) !== "locked") { teardown = playTest(app, lv, go); return; }

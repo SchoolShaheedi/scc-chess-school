@@ -809,6 +809,7 @@ export const UI = {
   colourWhiteObl: { en: "White", pa: "ਚਿੱਟੇ" }, colourBlackObl: { en: "Black", pa: "ਕਾਲੇ" },
   themeToLight: { en: "Switch to the light look", pa: "ਹਲਕੀ ਦਿੱਖ ਵਰਤੋ" }, themeToDark: { en: "Switch to the dark look", pa: "ਗੂੜ੍ਹੀ ਦਿੱਖ ਵਰਤੋ" },
   chessPlain: { en: "Chess", pa: "ਸ਼ਤਰੰਜ" },   // beside "Magical Chess" when challenging a friend (Stage 2)
+  linkFailed: { en: "That sign-in link didn't work: it may have expired or been used already. Ask for a new one.", pa: "ਉਹ ਸਾਈਨ-ਇਨ ਲਿੰਕ ਨਹੀਂ ਚੱਲਿਆ: ਸ਼ਾਇਦ ਉਸ ਦਾ ਸਮਾਂ ਮੁੱਕ ਗਿਆ ਹੈ ਜਾਂ ਉਹ ਪਹਿਲਾਂ ਵਰਤਿਆ ਜਾ ਚੁੱਕਾ ਹੈ। ਨਵਾਂ ਲਿੰਕ ਮੰਗਵਾਓ।" },
   gsPlayMove: { en: "Play {m}?", pa: "ਚਾਲ {m} ਚੱਲਣੀ ਹੈ?" }, gsConfirm: { en: "Play this move", pa: "ਇਹ ਚਾਲ ਚੱਲੋ" }, gsUndoMove: { en: "Take it back", pa: "ਵਾਪਸ ਲਓ" },
 } satisfies Record<string, Text>;
 
