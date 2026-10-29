@@ -2,7 +2,7 @@
 // games with Stockfish. The full ladder is slow, so it runs only with LADDER=1 (npm run ladder).
 import { Chess } from "chess.js";
 import { describe, expect, it } from "vitest";
-import { BOTS, type Bot, bookMove, botMove, chooseMove } from "../src/bots/bots";
+import { BOTS, type Bot, bookMove, botById, botMove, chooseMove } from "../src/bots/bots";
 import { asNumber } from "../src/engine/uci";
 import { nodeEngine } from "./engine";
 
@@ -49,14 +49,14 @@ async function game(white: Bot, black: Bot, seed: number, maxPlies = 160): Promi
 
 describe("bot strength", () => {
   it("Baaz beats Nanhi Chidi with either colour", async () => {
-    const [chidi, baaz] = [BOTS[0], BOTS[5]];
+    const [chidi, baaz] = [botById("nanhi-chidi")!, botById("baaz")!];
     expect(await game(baaz, chidi, 11, 120)).toBe(1);
     expect(await game(chidi, baaz, 12, 120)).toBe(0);
   }, 600000);
 
   it.runIf(process.env.LADDER)("each bot outscores the one below it (ladder)", async () => {
     const GAMES = 6, report: string[] = [];
-    for (let i = 0; i + 1 < BOTS.length; i++) {
+    for (let i = +(process.env.LADDER_FROM ?? 0); i + 1 < BOTS.length; i++) {
       const [lo, hi] = [BOTS[i], BOTS[i + 1]];
       let score = 0;
       for (let k = 0; k < GAMES; k++) score += k % 2 ? 1 - await game(lo, hi, 100 + k) : await game(hi, lo, 100 + k);

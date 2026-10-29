@@ -1,47 +1,125 @@
 {
- "source": "Lichess puzzle database, CC0 - https://database.lichess.org/#puzzles",
- "built": "2026-10-05",
+ "source": "Lichess puzzle database, CC0 - https://database.lichess.org/#puzzles (rated bank, public/puzzles/bank)",
+ "built": "2026-10-29",
  "pack": {
   "id": "knight-endgame",
   "themes": [
    "knightEndgame"
   ],
-  "min": 1300,
+  "min": 1600,
   "max": 1800,
-  "count": 15,
-  "atLeast": 8,
+  "widenedBy": 100,
+  "count": 40,
+  "atLeast": 30,
   "maxPly": 6
  },
  "puzzles": [
   {
-   "id": "07jQ3",
-   "fen": "5k2/1n3ppp/1NN5/p7/8/2P1n2P/PPK3P1/8 w - - 1 30",
+   "id": "0Leuo",
+   "fen": "1N6/6k1/p4ppp/2p5/3p4/P1P3nP/1P4P1/6K1 w - - 0 42",
    "moves": [
-    "c2b3",
-    "b7c5",
-    "b3a3",
-    "e3c2"
+    "b8a6",
+    "d4d3",
+    "g1f2",
+    "d3d2"
    ],
-   "rating": 1301,
+   "rating": 1501,
    "themes": [
+    "advancedPawn",
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0HgMq",
+   "fen": "8/7p/8/6PP/8/4n1k1/8/6K1 b - - 0 62",
+   "moves": [
+    "g3g4",
+    "g5g6",
+    "h7g6",
+    "h5h6",
+    "e3d5",
+    "h6h7"
+   ],
+   "rating": 1515,
+   "themes": [
+    "advancedPawn",
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "long"
+   ]
+  },
+  {
+   "id": "04dbk",
+   "fen": "8/2Nn2pk/3P3p/8/pp6/8/P5PP/5K2 w - - 0 39",
+   "moves": [
+    "f1e2",
+    "b4b3",
+    "a2b3",
+    "a4a3",
+    "c7e6",
+    "a3a2"
+   ],
+   "rating": 1518,
+   "themes": [
+    "advancedPawn",
+    "advantage",
+    "endgame",
+    "knightEndgame",
+    "long",
+    "master"
+   ]
+  },
+  {
+   "id": "0FArl",
+   "fen": "8/8/6n1/6PN/3kp2P/1P4K1/8/8 w - - 0 62",
+   "moves": [
+    "h5f4",
+    "g6f4",
+    "g3f4",
+    "e4e3"
+   ],
+   "rating": 1527,
+   "themes": [
+    "crushing",
     "endgame",
     "knightEndgame",
     "master",
+    "short"
+   ]
+  },
+  {
+   "id": "02DwR",
+   "fen": "k7/P7/1K6/1N6/8/4p1p1/3n4/8 b - - 1 59",
+   "moves": [
+    "d2c4",
+    "b6a6",
+    "e3e2",
+    "b5c7"
+   ],
+   "rating": 1542,
+   "themes": [
+    "defensiveMove",
+    "endgame",
+    "knightEndgame",
     "mate",
     "mateIn2",
     "short"
    ]
   },
   {
-   "id": "07Gtm",
-   "fen": "8/6p1/4k3/1n4KP/4P3/3P1P2/8/8 b - - 0 50",
+   "id": "0O84r",
+   "fen": "8/8/7p/3N1K2/p5P1/1k6/8/8 w - - 0 54",
    "moves": [
-    "b5d4",
-    "g5g6",
-    "d4f3",
-    "g6g7"
+    "f5g6",
+    "a4a3",
+    "g4g5",
+    "h6g5"
    ],
-   "rating": 1310,
+   "rating": 1545,
    "themes": [
     "crushing",
     "endgame",
@@ -50,15 +128,362 @@
    ]
   },
   {
-   "id": "04pqI",
-   "fen": "8/2p3pp/N1p3p1/3k4/8/nP5P/2P2PP1/3K4 b - - 0 33",
+   "id": "03pLv",
+   "fen": "8/5n2/p3p3/1p6/1Pk3Np/2P5/P2K1P2/8 b - - 1 44",
    "moves": [
-    "a3b5",
-    "c2c4",
-    "d5d6",
-    "c4b5"
+    "h4h3",
+    "g4e3"
    ],
-   "rating": 1321,
+   "rating": 1566,
+   "themes": [
+    "endgame",
+    "knightEndgame",
+    "master",
+    "mate",
+    "mateIn1",
+    "oneMove"
+   ]
+  },
+  {
+   "id": "0F4TI",
+   "fen": "8/8/8/6p1/6Pp/4k3/6KN/8 w - - 3 70",
+   "moves": [
+    "g2h3",
+    "e3f2",
+    "h2f1",
+    "f2f1"
+   ],
+   "rating": 1578,
+   "themes": [
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "02ICM",
+   "fen": "4k3/8/8/4N3/1pPP4/pK5P/3n2P1/8 w - - 2 51",
+   "moves": [
+    "b3c2",
+    "b4b3",
+    "c2d2",
+    "a3a2",
+    "d2c3",
+    "a2a1q"
+   ],
+   "rating": 1587,
+   "themes": [
+    "advancedPawn",
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "long",
+    "promotion",
+    "sacrifice"
+   ]
+  },
+  {
+   "id": "0LoWO",
+   "fen": "8/p2K4/6k1/1p4N1/7p/1P6/8/8 w - - 0 58",
+   "moves": [
+    "g5h3",
+    "a7a5",
+    "d7d6",
+    "a5a4",
+    "b3a4",
+    "b5a4"
+   ],
+   "rating": 1593,
+   "themes": [
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "long",
+    "quietMove"
+   ]
+  },
+  {
+   "id": "0ThTZ",
+   "fen": "8/8/4p1p1/4Pp1p/5P1P/3k1KP1/3n4/5N2 w - - 26 57",
+   "moves": [
+    "f3f2",
+    "d2f1",
+    "f2f1",
+    "d3e3",
+    "f1e1",
+    "e3f3"
+   ],
+   "rating": 1598,
+   "themes": [
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "long"
+   ]
+  },
+  {
+   "id": "0OifM",
+   "fen": "8/Pkn5/6p1/2K1p1Pp/7P/2P2P2/8/8 b - - 0 44",
+   "moves": [
+    "b7a7",
+    "c5d6",
+    "c7e8",
+    "d6e5"
+   ],
+   "rating": 1602,
+   "themes": [
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "09Nq4",
+   "fen": "1N6/5k2/p1p4p/Pp1pP2P/1P1P2p1/2K3n1/8/8 w - - 0 50",
+   "moves": [
+    "b8a6",
+    "g3e4",
+    "c3d3",
+    "g4g3"
+   ],
+   "rating": 1623,
+   "themes": [
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "master",
+    "short"
+   ]
+  },
+  {
+   "id": "0EAjw",
+   "fen": "8/8/1n6/PP6/1K1k4/8/8/8 b - - 0 51",
+   "moves": [
+    "b6c8",
+    "b5b6",
+    "d4d5",
+    "b6b7"
+   ],
+   "rating": 1630,
+   "themes": [
+    "advancedPawn",
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0GRcM",
+   "fen": "8/8/4p3/1k1pP1N1/p1pP1nP1/2P5/2K5/8 b - - 0 45",
+   "moves": [
+    "f4d3",
+    "g5e6",
+    "a4a3",
+    "c2b1"
+   ],
+   "rating": 1654,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "knightEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "07Zg3",
+   "fen": "8/ppp5/7N/1P6/4K3/P1P3pk/8/8 w - - 0 37",
+   "moves": [
+    "e4f3",
+    "g3g2",
+    "f3f2",
+    "h3h2",
+    "h6g4",
+    "h2h1"
+   ],
+   "rating": 1657,
+   "themes": [
+    "advancedPawn",
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "long"
+   ]
+  },
+  {
+   "id": "0aAFO",
+   "fen": "8/5pp1/2kNp3/2P1P2p/3K1P2/4n1P1/8/8 b - - 3 48",
+   "moves": [
+    "e3f5",
+    "d6f5",
+    "e6f5",
+    "d4c4"
+   ],
+   "rating": 1667,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "knightEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0GaKN",
+   "fen": "6k1/3n1p2/p2N2pp/4P3/P1P2P1P/1n4P1/8/3K4 b - - 0 30",
+   "moves": [
+    "f7f6",
+    "e5e6",
+    "g8f8",
+    "e6d7"
+   ],
+   "rating": 1669,
+   "themes": [
+    "advancedPawn",
+    "advantage",
+    "endgame",
+    "knightEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0M79L",
+   "fen": "8/3n4/1p1k3p/1P2ppp1/2P5/1N2KP1P/6P1/8 w - - 1 40",
+   "moves": [
+    "e3d3",
+    "d7c5",
+    "b3c5",
+    "d6c5"
+   ],
+   "rating": 1683,
+   "themes": [
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "04KMO",
+   "fen": "7k/5p1p/2p1p1p1/p1K1P3/P1N4P/8/6n1/8 b - - 2 46",
+   "moves": [
+    "g2h4",
+    "c4a5",
+    "h4f3",
+    "a5c6"
+   ],
+   "rating": 1686,
+   "themes": [
+    "advantage",
+    "endgame",
+    "knightEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "04Mrj",
+   "fen": "8/p5p1/5pp1/3n1k2/PpNP1P1P/5K2/5P2/8 b - - 3 42",
+   "moves": [
+    "d5f4",
+    "c4e3",
+    "f5e6",
+    "f3f4",
+    "g6g5",
+    "h4g5"
+   ],
+   "rating": 1697,
+   "themes": [
+    "crushing",
+    "deflection",
+    "endgame",
+    "knightEndgame",
+    "long"
+   ]
+  },
+  {
+   "id": "0XSBw",
+   "fen": "8/1p2k2p/2p1P1p1/3pK3/3N4/2P3P1/PP3n1P/8 w - - 4 33",
+   "moves": [
+    "b2b4",
+    "f2d3"
+   ],
+   "rating": 1701,
+   "themes": [
+    "endgame",
+    "knightEndgame",
+    "master",
+    "mate",
+    "mateIn1",
+    "oneMove"
+   ]
+  },
+  {
+   "id": "0hwdV",
+   "fen": "8/8/2n2p2/p1Nk2p1/3p2P1/PP1K3P/8/8 w - - 3 44",
+   "moves": [
+    "c5d7",
+    "c6e5",
+    "d7e5",
+    "f6e5"
+   ],
+   "rating": 1709,
+   "themes": [
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0gULu",
+   "fen": "8/8/8/6k1/3np3/4NpP1/3K1P2/8 w - - 1 49",
+   "moves": [
+    "e3c2",
+    "d4c2",
+    "d2c2",
+    "e4e3"
+   ],
+   "rating": 1718,
+   "themes": [
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0drxt",
+   "fen": "8/5p1p/6p1/1p1np3/1P1k4/1P5P/2P2PP1/3N1K2 w - - 3 31",
+   "moves": [
+    "f1e2",
+    "d5c3",
+    "e2d2",
+    "c3d1",
+    "d2d1",
+    "d4c3"
+   ],
+   "rating": 1719,
+   "themes": [
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "long"
+   ]
+  },
+  {
+   "id": "0POtX",
+   "fen": "8/7p/6p1/4npk1/8/6P1/5PKP/4N3 b - - 2 40",
+   "moves": [
+    "h7h5",
+    "f2f4",
+    "g5f6",
+    "f4e5"
+   ],
+   "rating": 1730,
    "themes": [
     "crushing",
     "endgame",
@@ -68,39 +493,146 @@
    ]
   },
   {
-   "id": "07COk",
-   "fen": "8/1p3p1p/2k3p1/3N1p2/3P4/5P2/7P/7K w - - 1 39",
+   "id": "08QjJ",
+   "fen": "8/8/1Pk2n2/P1p2N2/2K1pp2/8/5P2/8 b - - 0 51",
    "moves": [
-    "d5f6",
-    "b7b5",
-    "h1g2",
-    "b5b4"
+    "f6d5",
+    "b6b7",
+    "c6b7",
+    "c4d5"
    ],
-   "rating": 1338,
+   "rating": 1737,
+   "themes": [
+    "advancedPawn",
+    "crushing",
+    "deflection",
+    "endgame",
+    "knightEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "00hA5",
+   "fen": "6n1/2p3k1/1p1p2P1/p2P1K1P/P1P5/1P6/8/8 b - - 2 53",
+   "moves": [
+    "g8h6",
+    "f5e6",
+    "h6g8",
+    "e6d7"
+   ],
+   "rating": 1766,
    "themes": [
     "crushing",
     "defensiveMove",
     "endgame",
     "knightEndgame",
-    "quietMove",
+    "master",
     "short"
    ]
   },
   {
-   "id": "07ZAn",
-   "fen": "8/8/p5P1/P2k4/2np1K2/3N4/8/8 w - - 0 61",
+   "id": "0cVwN",
+   "fen": "4N3/8/1p2k1p1/2pp3p/P1P1nK1P/1P4P1/8/8 b - - 0 49",
    "moves": [
-    "d3e5",
-    "c4e5",
-    "g6g7",
-    "e5g6",
-    "f4f3",
-    "g6e7"
+    "e4d2",
+    "e8c7",
+    "e6d6",
+    "c7d5"
    ],
-   "rating": 1344,
+   "rating": 1773,
    "themes": [
     "crushing",
-    "defensiveMove",
+    "endgame",
+    "knightEndgame",
+    "master",
+    "short"
+   ]
+  },
+  {
+   "id": "0TZPl",
+   "fen": "8/4p3/2ppp3/1kn2pP1/8/8/1K6/1N6 b - - 0 49",
+   "moves": [
+    "c5e4",
+    "b1c3",
+    "e4c3",
+    "b2c3"
+   ],
+   "rating": 1776,
+   "themes": [
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0q6VO",
+   "fen": "8/8/4p1p1/4P2p/2pK1P1P/1k1n4/1P6/3N4 w - - 2 44",
+   "moves": [
+    "d1e3",
+    "d3b2",
+    "f4f5",
+    "g6f5"
+   ],
+   "rating": 1804,
+   "themes": [
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "master",
+    "short"
+   ]
+  },
+  {
+   "id": "0Xoq8",
+   "fen": "2n5/8/2P5/2K2pp1/1N6/pk3PP1/7P/8 w - - 0 52",
+   "moves": [
+    "h2h4",
+    "f5f4",
+    "g3g4",
+    "g5h4"
+   ],
+   "rating": 1809,
+   "themes": [
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "master",
+    "short"
+   ]
+  },
+  {
+   "id": "07qqp",
+   "fen": "8/4k3/p7/2KP3p/1P3n1P/8/5p2/5N2 w - - 0 44",
+   "moves": [
+    "f1e3",
+    "f4g2",
+    "e3f1",
+    "g2h4"
+   ],
+   "rating": 1823,
+   "themes": [
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0L5uX",
+   "fen": "8/1p4p1/p7/1PP1k2p/5p2/3K1P1N/1P6/5n2 b - - 0 44",
+   "moves": [
+    "f1h2",
+    "c5c6",
+    "e5d6",
+    "c6b7",
+    "d6c7",
+    "b5a6"
+   ],
+   "rating": 1849,
+   "themes": [
+    "advancedPawn",
+    "crushing",
     "endgame",
     "knightEndgame",
     "long",
@@ -108,35 +640,36 @@
    ]
   },
   {
-   "id": "01idE",
-   "fen": "8/1n6/1P3N2/3p3k/pP3p2/P4Kp1/8/8 b - - 1 60",
+   "id": "01EQu",
+   "fen": "8/2n5/8/Pkp1K3/2N5/8/8/8 w - - 7 57",
    "moves": [
-    "h5h4",
-    "f6d5",
-    "g3g2",
-    "f3g2"
+    "e5d6",
+    "b5c4",
+    "d6c7",
+    "c4b5",
+    "a5a6",
+    "b5a6"
    ],
-   "rating": 1351,
+   "rating": 1861,
    "themes": [
     "crushing",
     "endgame",
     "knightEndgame",
-    "master",
-    "short"
+    "long"
    ]
   },
   {
-   "id": "0Ckmf",
-   "fen": "8/p7/5N2/1P5p/1P1p2p1/1k6/6KP/8 w - - 0 51",
+   "id": "0plb0",
+   "fen": "8/8/p7/8/1P1p1p2/2k5/1NP2K2/8 w - - 3 57",
    "moves": [
-    "f6h5",
+    "b2a4",
+    "c3c2",
+    "a4c5",
     "d4d3",
-    "b5b6",
-    "a7b6",
-    "h5f6",
+    "f2f3",
     "d3d2"
    ],
-   "rating": 1365,
+   "rating": 1864,
    "themes": [
     "advancedPawn",
     "crushing",
@@ -146,94 +679,36 @@
    ]
   },
   {
-   "id": "061eK",
-   "fen": "6k1/1p6/6P1/1p1KN3/1Pn5/8/8/8 b - - 0 67",
+   "id": "0UCAd",
+   "fen": "8/8/2n5/2P2pN1/p1K5/5P2/7P/3k4 w - - 0 42",
    "moves": [
-    "g8g7",
-    "e5c4",
-    "b5c4",
-    "d5c4"
+    "h2h4",
+    "d1c2",
+    "c4b5",
+    "a4a3",
+    "b5c6",
+    "a3a2"
    ],
-   "rating": 1370,
-   "themes": [
-    "crushing",
-    "endgame",
-    "knightEndgame",
-    "master",
-    "short"
-   ]
-  },
-  {
-   "id": "0DwwN",
-   "fen": "8/8/3N3p/p5p1/3p1kP1/P1p2P2/3K4/8 w - - 0 44",
-   "moves": [
-    "d2d3",
-    "f4f3",
-    "d6f5",
-    "f3g4",
-    "f5d4",
-    "h6h5"
-   ],
-   "rating": 1385,
-   "themes": [
-    "crushing",
-    "defensiveMove",
-    "endgame",
-    "knightEndgame",
-    "long"
-   ]
-  },
-  {
-   "id": "0Jc0f",
-   "fen": "8/1p6/3p2kp/PPn1p3/4P1P1/3P1K1P/8/8 b - - 2 39",
-   "moves": [
-    "c5d3",
-    "a5a6",
-    "b7a6",
-    "b5a6",
-    "d3f4",
-    "a6a7"
-   ],
-   "rating": 1394,
+   "rating": 1872,
    "themes": [
     "advancedPawn",
-    "crushing",
-    "endgame",
-    "knightEndgame",
-    "long"
-   ]
-  },
-  {
-   "id": "0GABO",
-   "fen": "3b4/8/2N2kp1/1pp2p2/2P5/6PP/7K/8 w - - 0 42",
-   "moves": [
-    "c6d8",
-    "b5b4",
-    "d8b7",
-    "b4b3",
-    "b7c5",
-    "b3b2"
-   ],
-   "rating": 1396,
-   "themes": [
-    "advancedPawn",
-    "crushing",
+    "advantage",
     "endgame",
     "knightEndgame",
     "long",
-    "quietMove"
+    "sacrifice"
    ]
   },
   {
-   "id": "0KmNk",
-   "fen": "8/pp6/3p1k2/3P2p1/1P2p3/P5Pp/4K2N/8 w - - 1 45",
+   "id": "0naXf",
+   "fen": "8/1p5p/4k1pN/p4p2/8/1P3P2/PPK5/8 w - - 3 36",
    "moves": [
-    "e2e3",
-    "f6e5",
-    "h2g4",
-    "e5d5"
+    "c2d3",
+    "e6f6",
+    "d3c4",
+    "f6g7"
    ],
-   "rating": 1398,
+   "rating": 1874,
    "themes": [
     "advantage",
     "endgame",
@@ -242,62 +717,38 @@
    ]
   },
   {
-   "id": "0L7w3",
-   "fen": "8/8/5k1p/4p1p1/7P/5PN1/3n2PK/8 w - - 0 43",
+   "id": "0akwP",
+   "fen": "8/8/8/n1pk1p2/P1p1pP1p/N3P2P/1P6/4K3 w - - 7 52",
    "moves": [
-    "g3e4",
-    "d2e4",
-    "f3e4",
-    "g5h4"
+    "a3c2",
+    "c4c3",
+    "b2c3",
+    "d5c4",
+    "e1d2",
+    "a5b3"
    ],
-   "rating": 1408,
+   "rating": 1886,
    "themes": [
-    "crushing",
+    "advantage",
     "endgame",
     "knightEndgame",
-    "short"
+    "long"
    ]
   },
   {
-   "id": "08gaI",
-   "fen": "8/8/n6p/1p1kPppP/1p1P4/1P2K1PN/8/8 b - - 4 46",
+   "id": "0DybW",
+   "fen": "8/8/ppn4p/2p2p2/2K1k3/1PP4P/PN3PP1/8 w - - 0 36",
    "moves": [
-    "a6c7",
-    "h3g5",
-    "h6g5",
-    "h5h6"
+    "b2a4",
+    "c6e5"
    ],
-   "rating": 1411,
+   "rating": 1896,
    "themes": [
-    "crushing",
     "endgame",
     "knightEndgame",
-    "master",
-    "sacrifice",
-    "short"
-   ]
-  },
-  {
-   "id": "0GOZi",
-   "fen": "8/1Pk5/4n1K1/4P2P/2P2p2/8/8/8 w - - 2 49",
-   "moves": [
-    "g6f5",
-    "f4f3",
-    "f5e6",
-    "f3f2",
-    "h5h6",
-    "f2f1q"
-   ],
-   "rating": 1435,
-   "themes": [
-    "advancedPawn",
-    "crushing",
-    "endgame",
-    "knightEndgame",
-    "long",
-    "master",
-    "promotion",
-    "sacrifice"
+    "mate",
+    "mateIn1",
+    "oneMove"
    ]
   }
  ]

@@ -57,11 +57,12 @@ export function band(min: number): Promise<BankPuzzle[]> {
 const LOW = 400, HIGH = 2500, STEP = 100;
 const bandOf = (r: number) => Math.min(HIGH, Math.max(LOW, Math.floor(r / STEP) * STEP));
 
-/** A puzzle near a rating, never one in `used`; with a theme, from that theme only (widening the search band by band). */
-export async function nearRating(r: number, used: Set<string>, theme?: string, rand: () => number = Math.random): Promise<BankPuzzle | null> {
+/** A puzzle near a rating, never one in `used`; with a theme, from that theme only; with `keep`, only those it accepts (the Race
+ *  asks for short ones). The search widens band by band. */
+export async function nearRating(r: number, used: Set<string>, theme?: string, rand: () => number = Math.random, keep?: (p: BankPuzzle) => boolean): Promise<BankPuzzle | null> {
   for (let spread = 0; spread <= 6; spread++) {
     const mins = [...new Set([bandOf(r - spread * STEP), bandOf(r + spread * STEP)])];
-    const pool = (await Promise.all(mins.map(band))).flat().filter(p => !used.has(p.id) && (!theme || p.themes.includes(theme)));
+    const pool = (await Promise.all(mins.map(band))).flat().filter(p => !used.has(p.id) && (!theme || p.themes.includes(theme)) && (!keep || keep(p)));
     // prefer the ones nearest the rating: pick among the closest 30
     if (pool.length) { const near = pool.sort((a, b) => Math.abs(a.rating - r) - Math.abs(b.rating - r)).slice(0, 30); return near[Math.floor(rand() * near.length)]; }
   }

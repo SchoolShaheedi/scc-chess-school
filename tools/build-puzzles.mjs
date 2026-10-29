@@ -45,34 +45,7 @@ const PACKS = [
   // Level 6 openings
   { id: "opening-easy", themes: ["opening"], not: ["mate"], min: 600, max: 1100, count: 30, atLeast: 15, maxPly: 4 },
   { id: "opening-mate", themes: ["opening", "mateIn1"], min: 400, max: 1000, count: 15, atLeast: 8, maxPly: 2 },
-  // Level 7 tactics II (band 1200-1400 -> Lichess 900-1400)
-  { id: "mate2", themes: ["mateIn2"], min: 900, max: 1400, count: 30, atLeast: 15, maxPly: 4 },
-  { id: "mate3", themes: ["mateIn3"], min: 900, max: 1500, count: 20, atLeast: 10, maxPly: 6 },
-  { id: "mate-patterns", themes: ["mate"], min: 900, max: 1400, count: 40, atLeast: 20, maxPly: 6, anyOf: ["arabianMate", "anastasiaMate", "bodenMate", "hookMate", "dovetailMate"] },
-  { id: "attraction", themes: ["attraction"], min: 900, max: 1400, count: 20, atLeast: 10, maxPly: 6 },
-  { id: "deflection", themes: ["deflection"], min: 900, max: 1400, count: 20, atLeast: 10, maxPly: 6 },
-  { id: "intermezzo", themes: ["intermezzo"], min: 900, max: 1500, count: 20, atLeast: 10, maxPly: 6 },
-  { id: "interference", themes: ["interference"], min: 900, max: 1600, count: 15, atLeast: 8, maxPly: 6 },
-  { id: "clearance", themes: ["clearance"], min: 900, max: 1500, count: 15, atLeast: 8, maxPly: 6 },
-  { id: "xray", themes: ["xRayAttack"], min: 900, max: 1500, count: 15, atLeast: 8, maxPly: 6 },
-  { id: "sacrifice", themes: ["sacrifice"], min: 900, max: 1400, count: 25, atLeast: 12, maxPly: 6 },
-  { id: "quiet", themes: ["quietMove"], min: 900, max: 1500, count: 20, atLeast: 10, maxPly: 6 },
-  // Level 8 strategy (band 1400-1600 -> Lichess 1100-1600)
-  { id: "kingside-attack", themes: ["kingsideAttack"], min: 1100, max: 1600, count: 20, atLeast: 10, maxPly: 6 },
-  { id: "exposed-king", themes: ["exposedKing"], min: 1100, max: 1600, count: 15, atLeast: 8, maxPly: 6 },
-  { id: "advantage", themes: ["advantage", "middlegame"], min: 1100, max: 1600, count: 25, atLeast: 12, maxPly: 4 },
-  // Level 9 endgames II (band 1600-1800 -> Lichess 1300-1800)
-  { id: "rook-endgame", themes: ["rookEndgame"], min: 1300, max: 1800, count: 30, atLeast: 15, maxPly: 6 },
-  { id: "zugzwang", themes: ["zugzwang"], min: 1300, max: 1900, count: 20, atLeast: 10, maxPly: 6 },
-  { id: "bishop-endgame", themes: ["bishopEndgame"], min: 1300, max: 1800, count: 15, atLeast: 8, maxPly: 6 },
-  { id: "knight-endgame", themes: ["knightEndgame"], min: 1300, max: 1800, count: 15, atLeast: 8, maxPly: 6 },
-  { id: "queen-endgame-hard", themes: ["queenEndgame"], min: 1300, max: 1800, count: 15, atLeast: 8, maxPly: 6 },
-  { id: "converting", themes: ["endgame", "crushing"], min: 1300, max: 1800, count: 25, atLeast: 12, maxPly: 6 },
-  // Level 10 calculation (band 1800+ -> Lichess 1600-2200)
-  { id: "long", themes: ["long"], not: ["mate"], min: 1600, max: 2100, count: 25, atLeast: 12, maxPly: 8 },
-  { id: "very-long", themes: ["veryLong"], min: 1600, max: 2200, count: 15, atLeast: 8, maxPly: 10 },
-  { id: "defend-hard", themes: ["defensiveMove"], not: ["mate"], min: 1700, max: 2200, count: 20, atLeast: 10, maxPly: 6 },
-  { id: "mate-hard", themes: ["mate"], min: 1600, max: 2100, count: 20, atLeast: 10, maxPly: 8 },
+  // Levels 7-10 are built from the rated bank by tools/build-bank-packs.mjs (real bands, 30-60 puzzles a pack)
   // castling: only 4 one-move puzzles exist in 6.1M (2026-10-02), so lesson 2.4 uses hand-built positions
 ];
 const MIN_PLAYS = 100, MIN_POPULARITY = 80, MAX_ROWS = 7_000_000;

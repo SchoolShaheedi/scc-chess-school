@@ -11,10 +11,12 @@ import { runExercise } from "../lesson/exercises";
 import { sound } from "../sound";
 import { store, today } from "../store";
 import { tabbar } from "../tabbar";
-import { dailyPuzzle, rushNext, rushPool } from "./pick";
+import { dailyPuzzle, raceShort, raceStart, raceTarget, rushNext, rushPool } from "./pick";
 import { asExercise, puzzleById } from "./index";
 import { type BankPuzzle, bankById, bankExercise, nearRating, THEMES, themeName } from "./bank";
-import type { Text } from "../lesson/types";
+import type { PuzzleExercise, Text } from "../lesson/types";
+import { bankDue, bankIds } from "./due";
+export { bankDue };
 
 type Go = (h: string) => void;
 const RUSH_SECONDS = 180, RUSH_MISSES = 3;
@@ -84,15 +86,12 @@ function puzzleScreen(root: HTMLElement, title: string, right: string) {
   };
 }
 
-/** Missed puzzles due again today (the mistake bank, chess review 2026-10-04). */
-// a lesson puzzle is found in the packs; a big-bank puzzle (DECISIONS #85) by the rating it was saved with
-const bankIds = () => Object.entries(store.get().missed).filter(([, c]) => c.due <= today()).sort((a, b) => a[1].due.localeCompare(b[1].due)).map(([id]) => id).filter(id => puzzleById(id) || store.get().missed[id].r);
-export const bankDue = () => bankIds().length;
-
 /** Fix your mistakes: up to 10 banked puzzles. Wrong moves can be tried again (and the answer is shown after
  *  two); a clean solve moves the puzzle up a box, and three clean solves in a row take it out of the bank. */
-export function playBank(root: HTMLElement, go: Go): () => void {
-  const ids = bankIds().slice(0, 10);
+export function playBank(root: HTMLElement, go: Go, phase?: string): () => void {
+  const ph = (["opening", "middlegame", "endgame"] as const).find(x => x === phase);
+  // from Insights: your own drills for that phase first, then the rest of the bank
+  const ids = (ph ? [...bankIds(ph), ...bankIds().filter(i => !store.get().missed[i].mine || store.get().missed[i].mine!.ph !== ph)] : bankIds()).slice(0, 10);
   let i = 0, clean = 0, alive = true, cleanup: (() => void) | null = null, ui: ReturnType<typeof puzzleScreen> | null = null;
   const teardown = () => { cleanup?.(); cleanup = null; ui?.board.destroy(); ui = null; };
   async function next() {
@@ -104,14 +103,16 @@ export function playBank(root: HTMLElement, go: Go): () => void {
       root.querySelector<HTMLButtonElement>("[data-hub]")!.onclick = () => go("#/puzzles");
       return;
     }
-    const id = ids[i], r = store.get().missed[id]?.r;
-    let p: { id: string; fen: string; moves: string[]; rating: number; themes?: string[] } | undefined = puzzleById(id);
+    const id = ids[i], card = store.get().missed[id], r = card?.r, mine = card?.mine;
+    let p: { id: string; fen: string; moves: string[]; rating: number; themes?: string[] } | undefined = mine ? { id, fen: mine.fen, moves: mine.moves, rating: 0 } : puzzleById(id);
     if (!p && r) { try { p = await bankById(id, r); } catch { /* offline */ } }
     if (!alive) return;
     if (!p) { i++; return void next(); }   // offline and its band never opened: skip it for now
     ui = puzzleScreen(root, `${t("bankTitle")} · ${num(i + 1)}/${num(ids.length)}`, "");
     root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/puzzles");
-    cleanup = runExercise(asExercise(p), {
+    const ex = asExercise(p);
+    if (mine) ex.prompt = { en: `In your game you played ${mine.san}. Find the better move.`, pa: `ਆਪਣੀ ਖੇਡ ਵਿੱਚ ਤੁਸੀਂ ${mine.san} ਚੱਲੀ ਸੀ। ਬਿਹਤਰ ਚਾਲ ਲੱਭੋ।` };
+    cleanup = runExercise(ex, {
       board: ui.board, extra: ui.extra, status: ui.status,
       say: (text, tone = "info") => { ui!.say(text, tone); if (tone === "no") sound.wrong(); },
       done: mistakes => {
@@ -150,53 +151,79 @@ export function playDaily(root: HTMLElement, level: number, go: Go): () => void 
   return () => { cleanup?.(); ui.board.destroy(); };
 }
 
+type RaceEx = PuzzleExercise & { id: string; rating: number; themes?: string[]; bank?: boolean };
+/** The Race: 3 minutes, 3 misses. Everyone but the Young look races on the rated bank, starting near their puzzle rating
+ *  and climbing (src/puzzles/pick.ts raceStart); the Young look keeps the gentle lesson-pack climb from 400. Offline with
+ *  the bank never opened, the Race falls back to the lesson packs rather than not starting. */
 export function playRush(root: HTMLElement, go: Go): () => void {
-  const pool = rushPool(), used = new Set<string>();
+  const pool = rushPool(), used = new Set<string>(), rated = !young(), start = raceStart(puzzleRating().r);
   let step = 0, score = 0, misses = 0, left = RUSH_SECONDS, over = false, timer = 0;
   let cleanup: (() => void) | null = null, ui: ReturnType<typeof puzzleScreen> | null = null;
-  const teardown = () => { clearInterval(timer); cleanup?.(); cleanup = null; ui?.board.destroy(); ui = null; };
   // leaving mid-answer: the pending "next puzzle" and "finish" timers must find the Race over (DECISIONS #128)
-  const leave = () => { over = true; teardown(); };
+  const teardown = () => { over = true; clearInterval(timer); cleanup?.(); cleanup = null; ui?.board.destroy(); ui = null; };
+  const leave = teardown;
   const clock = () => `${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}`;
   const head = () => `<span class="pill rushhead"><span data-clock>${num(clock())}</span>
     <span class="strikes">${Array.from({ length: RUSH_MISSES }, (_, i) => icon("close", i < misses ? "hit" : "")).join("")}</span>
     <b data-score>${num(score)}</b></span>`;
 
+  /** The next puzzle: from the rated bank near the climbing target, or (Young look, or no bank offline) from the lesson packs. */
+  async function pick(): Promise<RaceEx> {
+    if (rated) {
+      try {
+        const p = await nearRating(raceTarget(start, step), used, undefined, Math.random, raceShort);
+        if (p) { used.add(p.id); return { ...bankExercise(p), id: p.id, rating: p.rating, themes: p.themes, bank: true }; }
+      } catch { /* offline and this band never opened: the lesson packs */ }
+    }
+    return rushNext(pool, step, used);
+  }
+  let queued: Promise<RaceEx> | null = null;
+
   function intro() {
     root.innerHTML = `<div class="screen">${bar(t("rushTitle"))}
-      <div class="hero"><div class="trophy light">${icon("timer")}</div><h1>${t("rushTitle")}</h1><p>${t("rushIntro")}</p>
+      <div class="hero"><div class="trophy light">${icon("timer")}</div><h1>${t("rushTitle")}</h1><p>${t(rated ? "raceIntro" : "rushIntro")}</p>
+        ${rated ? `<p class="muted">${t("raceStartsAt").replace("{r}", num(start))}</p>` : ""}
         <p><b>${t("rushBest")}: ${num(store.get().rushBest)}</b></p></div>
       <div class="actions"><button class="btn wide" data-go>${t("start")}</button></div></div>`;
     root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/puzzles");
-    root.querySelector<HTMLButtonElement>("[data-go]")!.onclick = () => {
+    root.querySelector<HTMLButtonElement>("[data-go]")!.onclick = async () => {
+      // the first puzzle (and its rating band) is fetched BEFORE the clock starts, so a slow connection costs no time
+      const first = pick(); queued = first;
+      (root.querySelector("[data-go]") as HTMLButtonElement).disabled = true; await first;
+      if (over) return;
       timer = window.setInterval(() => {
         left--; const c = root.querySelector("[data-clock]"); if (c) c.textContent = num(clock());
         if (left <= 10) c?.classList.add("low");
         if (left <= 0) finish();
       }, 1000);
-      next();
+      void next();
     };
   }
 
-  function next() {
+  async function next() {
     if (over) return;
     cleanup?.(); ui?.board.destroy();
     ui = puzzleScreen(root, t("rushTitle"), head());
     root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => { leave(); go("#/puzzles"); };
-    const ex = rushNext(pool, step, used);
+    const ex = await (queued ?? pick()); queued = null;
+    if (over || !ui) return;
+    const here = ui;
     let decided = false;
     const decide = (ok: boolean) => {
       if (decided || over) return; decided = true;
-      store.recordPuzzle(ex.id, undefined, ok, puzzleById(ex.id)?.themes);   // Race answers are against the clock: unrated
+      // Race answers are against the clock: unrated. A missed bank puzzle still joins the mistake bank, with its rating
+      store.recordPuzzle(ex.id, undefined, ok, ex.themes ?? puzzleById(ex.id)?.themes, ex.bank ? ex.rating : undefined);
       if (ok) { score++; step++; sound.correct(); } else { misses++; sound.wrong(); }
-      ui!.say(t(ok ? "correct" : "rushMiss"), ok ? "ok" : "no");
+      here.say(t(ok ? "correct" : "rushMiss"), ok ? "ok" : "no");
       if (misses >= RUSH_MISSES) return void setTimeout(finish, 700);
-      setTimeout(next, ok ? 450 : 900);
+      // the next puzzle is fetched while this one's answer is on screen
+      if (!over) queued = pick();
+      setTimeout(() => void next(), ok ? 450 : 900);
     };
     cleanup = runExercise(ex, {
-      board: ui.board, extra: ui.extra, status: ui.status,   // "You play Black": the board flips between puzzles
+      board: here.board, extra: here.extra, status: here.status,   // "You play Black": the board flips between puzzles
       // a legal but wrong move is a miss; an illegal slip only gets the reason
-      say: (text, tone = "info") => { if (tone === "no" && text === t("puzzleWrong")) return decide(false); if (!decided) ui!.say(text, tone); },
+      say: (text, tone = "info") => { if (tone === "no" && text === t("puzzleWrong")) return decide(false); if (!decided) here.say(text, tone); },
       done: mistakes => decide(mistakes === 0),
     });
   }

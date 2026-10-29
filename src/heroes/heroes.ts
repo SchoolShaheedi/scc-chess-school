@@ -51,7 +51,7 @@ export function bossRating(level: number): number {
 /** The hero as a bot: the play of the bot nearest that strength, under the hero's name and art. */
 export function bossBot(level: number): Bot {
   const target = bossRating(level), h = heroOf(level);
-  const like = [...BOTS].sort((a, b) => Math.abs(a.rating - target) - Math.abs(b.rating - target))[0];
+  const like = BOTS.filter(b => !b.beyond).sort((a, b) => Math.abs(a.rating - target) - Math.abs(b.rating - target))[0];
   return { ...like, name: h.name, about: h.virtue, rating: target, help: false, art: `art/heroes/${h.id}` };
 }
 

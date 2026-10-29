@@ -1,167 +1,50 @@
 {
- "source": "Lichess puzzle database, CC0 - https://database.lichess.org/#puzzles",
- "built": "2026-10-05",
+ "source": "Lichess puzzle database, CC0 - https://database.lichess.org/#puzzles (rated bank, public/puzzles/bank)",
+ "built": "2026-10-29",
  "pack": {
   "id": "zugzwang",
   "themes": [
    "zugzwang"
   ],
-  "min": 1300,
-  "max": 1900,
-  "count": 20,
-  "atLeast": 10,
+  "min": 1600,
+  "max": 1800,
+  "widenedBy": 100,
+  "count": 40,
+  "atLeast": 30,
   "maxPly": 6
  },
  "puzzles": [
   {
-   "id": "0UNte",
-   "fen": "8/8/8/p1pk3p/7P/PP1K4/8/8 b - - 1 45",
+   "id": "02kQm",
+   "fen": "8/8/8/pp6/4k1p1/P1P3P1/1P3K2/8 w - - 2 53",
    "moves": [
-    "d5d6",
-    "d3c4",
-    "a5a4",
-    "b3a4",
-    "d6c6",
-    "a4a5"
-   ],
-   "rating": 1301,
-   "themes": [
-    "crushing",
-    "defensiveMove",
-    "endgame",
-    "long",
-    "pawnEndgame",
-    "zugzwang"
-   ]
-  },
-  {
-   "id": "0FcdF",
-   "fen": "8/p7/2k1p2p/P1p1P1p1/2K3P1/1P6/7P/8 w - - 0 43",
-   "moves": [
-    "h2h3",
-    "a7a6",
-    "b3b4",
-    "c5b4",
-    "c4b4",
-    "c6d5"
-   ],
-   "rating": 1309,
-   "themes": [
-    "crushing",
-    "endgame",
-    "long",
-    "pawnEndgame",
-    "quietMove",
-    "zugzwang"
-   ]
-  },
-  {
-   "id": "0R23v",
-   "fen": "8/8/5k2/5p1p/5K1P/5P2/8/8 w - - 2 67",
-   "moves": [
-    "f4g3",
-    "f6e5",
-    "g3f2",
-    "e5f4",
     "f2e2",
-    "f4g3"
+    "a5a4",
+    "b2b3",
+    "a4b3"
    ],
-   "rating": 1314,
+   "rating": 1506,
    "themes": [
     "crushing",
-    "endgame",
-    "long",
-    "pawnEndgame",
-    "zugzwang"
-   ]
-  },
-  {
-   "id": "03WcF",
-   "fen": "8/8/8/1k4p1/2q5/2Q5/2K5/8 w - - 20 62",
-   "moves": [
-    "c3c4",
-    "b5c4",
-    "c2d2",
-    "c4d4",
-    "d2e2",
-    "d4e4"
-   ],
-   "rating": 1328,
-   "themes": [
-    "crushing",
-    "defensiveMove",
-    "endgame",
-    "long",
-    "zugzwang"
-   ]
-  },
-  {
-   "id": "09Mof",
-   "fen": "8/7p/1p6/p7/P5Pp/1P5P/k1K5/8 b - - 0 44",
-   "moves": [
-    "h7h6",
-    "c2c3",
-    "a2a3",
-    "c3c4"
-   ],
-   "rating": 1329,
-   "themes": [
-    "crushing",
-    "defensiveMove",
     "endgame",
     "pawnEndgame",
+    "quietMove",
     "short",
     "zugzwang"
    ]
   },
   {
-   "id": "0NP0k",
-   "fen": "8/8/4kp2/6p1/p2KP1P1/P7/8/8 w - - 3 50",
+   "id": "04yy4",
+   "fen": "8/p7/1pp5/8/PPP5/4Kp2/5Pk1/8 w - - 0 41",
    "moves": [
-    "d4e3",
-    "e6e5",
-    "e3f3",
-    "e5d4"
+    "c4c5",
+    "b6c5",
+    "b4c5",
+    "a7a5",
+    "e3e4",
+    "g2f2"
    ],
-   "rating": 1334,
-   "themes": [
-    "crushing",
-    "endgame",
-    "pawnEndgame",
-    "short",
-    "zugzwang"
-   ]
-  },
-  {
-   "id": "0TaM0",
-   "fen": "8/6p1/8/3p1P1p/3P1K1P/1k6/8/8 b - - 1 55",
-   "moves": [
-    "b3c4",
-    "f4e5",
-    "c4c3",
-    "e5d5"
-   ],
-   "rating": 1368,
-   "themes": [
-    "crushing",
-    "endgame",
-    "pawnEndgame",
-    "short",
-    "zugzwang"
-   ]
-  },
-  {
-   "id": "0IyTx",
-   "fen": "8/5p2/p1k5/P1p1P1pp/2K5/7P/6P1/8 b - - 0 39",
-   "moves": [
-    "g5g4",
-    "h3g4",
-    "h5g4",
-    "g2g3",
-    "f7f6",
-    "e5f6"
-   ],
-   "rating": 1369,
+   "rating": 1512,
    "themes": [
     "crushing",
     "endgame",
@@ -172,158 +55,17 @@
    ]
   },
   {
-   "id": "00m6L",
-   "fen": "8/8/k6p/p4p1P/p1p1pP2/K1P1P3/1P6/8 w - - 1 49",
+   "id": "0VMPr",
+   "fen": "8/1kp5/p7/P3K2p/7P/8/8/8 b - - 10 55",
    "moves": [
-    "a3a4",
-    "a6b6",
-    "a4a3",
-    "b6b5",
-    "a3a2",
-    "b5a4"
+    "c7c6",
+    "e5d6",
+    "c6c5",
+    "d6c5"
    ],
-   "rating": 1370,
+   "rating": 1556,
    "themes": [
     "crushing",
-    "defensiveMove",
-    "endgame",
-    "long",
-    "pawnEndgame",
-    "zugzwang"
-   ]
-  },
-  {
-   "id": "04iyl",
-   "fen": "8/8/1pk5/4p1pp/2K1Pp2/2P2P1P/6P1/8 b - - 0 38",
-   "moves": [
-    "h5h4",
-    "c4b4",
-    "b6b5",
-    "c3c4",
-    "b5c4",
-    "b4c4"
-   ],
-   "rating": 1372,
-   "themes": [
-    "crushing",
-    "endgame",
-    "long",
-    "pawnEndgame",
-    "quietMove",
-    "zugzwang"
-   ]
-  },
-  {
-   "id": "0PuYY",
-   "fen": "8/5k2/5n2/4R1p1/7p/5K2/6P1/8 w - - 10 50",
-   "moves": [
-    "f3e3",
-    "f6g4",
-    "e3d4",
-    "g4e5",
-    "d4e5",
-    "f7g6"
-   ],
-   "rating": 1374,
-   "themes": [
-    "crushing",
-    "defensiveMove",
-    "endgame",
-    "fork",
-    "long",
-    "master",
-    "zugzwang"
-   ]
-  },
-  {
-   "id": "0FFRR",
-   "fen": "8/8/2k1p3/pp3p2/3P1Pp1/PP1K2P1/8/8 w - - 1 36",
-   "moves": [
-    "a3a4",
-    "b5a4",
-    "b3a4",
-    "c6d5",
-    "d3e3",
-    "d5c4"
-   ],
-   "rating": 1380,
-   "themes": [
-    "crushing",
-    "endgame",
-    "long",
-    "pawnEndgame",
-    "zugzwang"
-   ]
-  },
-  {
-   "id": "0BvQH",
-   "fen": "8/8/7p/p1pk2p1/P4pP1/1P1K1P1P/8/8 b - - 1 40",
-   "moves": [
-    "d5c6",
-    "d3c4",
-    "c6d6",
-    "c4b5",
-    "d6d5",
-    "b5a5"
-   ],
-   "rating": 1432,
-   "themes": [
-    "crushing",
-    "endgame",
-    "long",
-    "pawnEndgame",
-    "zugzwang"
-   ]
-  },
-  {
-   "id": "0FHA1",
-   "fen": "8/8/4k1p1/6P1/4KP1p/8/8/8 w - - 0 55",
-   "moves": [
-    "e4f3",
-    "e6f5",
-    "f3e3",
-    "f5g4"
-   ],
-   "rating": 1433,
-   "themes": [
-    "crushing",
-    "endgame",
-    "master",
-    "pawnEndgame",
-    "short",
-    "zugzwang"
-   ]
-  },
-  {
-   "id": "09goD",
-   "fen": "8/6p1/3k1p2/2pb3P/2B2PP1/3K4/8/8 b - - 2 58",
-   "moves": [
-    "d5c4",
-    "d3c4",
-    "d6e6",
-    "c4c5"
-   ],
-   "rating": 1434,
-   "themes": [
-    "crushing",
-    "endgame",
-    "short",
-    "zugzwang"
-   ]
-  },
-  {
-   "id": "08Mr3",
-   "fen": "8/6pp/5k2/8/4p1PP/8/5PK1/8 w - - 1 46",
-   "moves": [
-    "g2g3",
-    "f6e5",
-    "f2f4",
-    "e5d4"
-   ],
-   "rating": 1436,
-   "themes": [
-    "crushing",
-    "defensiveMove",
     "endgame",
     "pawnEndgame",
     "short",
@@ -331,56 +73,353 @@
    ]
   },
   {
-   "id": "0TZK4",
-   "fen": "8/8/4k3/5p1p/1p1P1K2/1P4P1/8/8 w - - 0 43",
+   "id": "0LYOc",
+   "fen": "8/6p1/2p1p3/4P2P/2kP4/4K3/8/8 b - - 1 62",
    "moves": [
-    "f4e3",
-    "e6d5",
+    "c4d5",
     "e3d3",
-    "f5f4",
-    "g3f4",
-    "h5h4"
+    "c6c5",
+    "d4c5"
    ],
-   "rating": 1444,
+   "rating": 1577,
    "themes": [
     "crushing",
-    "defensiveMove",
     "endgame",
-    "long",
     "pawnEndgame",
+    "short",
     "zugzwang"
    ]
   },
   {
-   "id": "0MDP0",
-   "fen": "8/4n1k1/2p1p1P1/1p4K1/3PB3/1P6/8/8 b - - 15 60",
+   "id": "0F4TI",
+   "fen": "8/8/8/6p1/6Pp/4k3/6KN/8 w - - 3 70",
    "moves": [
-    "e7d5",
-    "e4d5",
-    "c6d5",
-    "b3b4",
-    "e6e5",
+    "g2h3",
+    "e3f2",
+    "h2f1",
+    "f2f1"
+   ],
+   "rating": 1578,
+   "themes": [
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "03nUA",
+   "fen": "8/8/p6p/2p1k1p1/P3P1P1/4K3/1P6/8 b - - 0 39",
+   "moves": [
+    "c5c4",
+    "a4a5",
+    "e5e6",
+    "e3d4",
+    "h6h5",
+    "g4h5"
+   ],
+   "rating": 1585,
+   "themes": [
+    "crushing",
+    "endgame",
+    "long",
+    "pawnEndgame",
+    "quietMove",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0UZfV",
+   "fen": "4b3/6k1/p3p2p/1p1pP3/3P2PK/8/PP6/1B6 b - - 0 37",
+   "moves": [
+    "e8g6",
+    "b1g6",
+    "g7g6",
+    "b2b4"
+   ],
+   "rating": 1595,
+   "themes": [
+    "bishopEndgame",
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0WFIJ",
+   "fen": "8/7p/3k1pp1/1p6/1P1K1PP1/6P1/8/8 b - - 0 32",
+   "moves": [
+    "f6f5",
+    "g4g5",
+    "d6c6",
     "d4e5"
    ],
-   "rating": 1445,
+   "rating": 1607,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "quietMove",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "08Oqo",
+   "fen": "8/4k3/2R1P3/2Pp4/4r2p/3K2pP/6P1/8 b - - 0 55",
+   "moves": [
+    "e4e6",
+    "c6e6",
+    "e7e6",
+    "d3d4"
+   ],
+   "rating": 1640,
+   "themes": [
+    "crushing",
+    "endgame",
+    "rookEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0XofW",
+   "fen": "8/8/7p/4K1p1/6Pk/5P2/8/8 b - - 0 52",
+   "moves": [
+    "h6h5",
+    "e5f5",
+    "h5g4",
+    "f3g4",
+    "h4h3",
+    "f5g5"
+   ],
+   "rating": 1650,
    "themes": [
     "crushing",
     "endgame",
     "long",
+    "pawnEndgame",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "077KU",
+   "fen": "8/8/4kp2/6p1/4P2p/5K1P/6P1/8 w - - 3 58",
+   "moves": [
+    "f3g4",
+    "e6e5",
+    "g4h5",
+    "e5e4",
+    "h5g6",
+    "e4e5"
+   ],
+   "rating": 1681,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "long",
+    "pawnEndgame",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "05QfW",
+   "fen": "8/p7/1p1k1n2/3p1P2/PP1K1N2/8/8/8 b - - 0 48",
+   "moves": [
+    "a7a5",
+    "b4b5",
+    "f6e4",
+    "f4d5"
+   ],
+   "rating": 1686,
+   "themes": [
+    "crushing",
+    "endgame",
+    "knightEndgame",
+    "master",
+    "quietMove",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0TReG",
+   "fen": "8/8/4p1pp/p2k4/P1pPp3/4P1PP/3K1P2/8 b - - 1 43",
+   "moves": [
+    "e6e5",
+    "d2c3",
+    "e5d4",
+    "e3d4"
+   ],
+   "rating": 1702,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0RLYg",
+   "fen": "8/8/pp2k3/6p1/2P1K1P1/P7/8/8 b - - 0 39",
+   "moves": [
+    "a6a5",
+    "a3a4",
+    "e6d6",
+    "e4f5",
+    "d6c5",
+    "f5g5"
+   ],
+   "rating": 1712,
+   "themes": [
+    "crushing",
+    "endgame",
+    "long",
+    "pawnEndgame",
     "quietMove",
     "zugzwang"
    ]
   },
   {
-   "id": "0S0aJ",
-   "fen": "8/3k4/4P1p1/3K2pp/6P1/7P/8/8 b - - 0 52",
+   "id": "0T7Uo",
+   "fen": "8/8/4k2p/1p6/p4K1P/P7/1P6/8 w - - 1 45",
    "moves": [
-    "d7e7",
-    "d5e5",
-    "h5h4",
-    "e5d5"
+    "h4h5",
+    "e6f6",
+    "f4e3",
+    "f6g5",
+    "e3d4",
+    "g5h5"
    ],
-   "rating": 1445,
+   "rating": 1730,
+   "themes": [
+    "crushing",
+    "endgame",
+    "long",
+    "pawnEndgame",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0dRpJ",
+   "fen": "8/4kp2/p3p1p1/3pP1K1/1p3PP1/1P6/P1P5/8 b - - 3 32",
+   "moves": [
+    "a6a5",
+    "f4f5",
+    "e6f5",
+    "g4f5",
+    "g6f5",
+    "g5f5"
+   ],
+   "rating": 1747,
+   "themes": [
+    "crushing",
+    "endgame",
+    "long",
+    "pawnEndgame",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0eeit",
+   "fen": "8/5pk1/6p1/7p/7P/5KP1/5P2/8 b - - 0 58",
+   "moves": [
+    "g7f6",
+    "f3f4",
+    "g6g5",
+    "h4g5",
+    "f6g6",
+    "f2f3"
+   ],
+   "rating": 1747,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "long",
+    "master",
+    "masterVsMaster",
+    "pawnEndgame",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "08uwv",
+   "fen": "8/8/5pp1/2k5/p6P/P1K5/5P2/8 w - - 6 55",
+   "moves": [
+    "f2f4",
+    "f6f5",
+    "c3d3",
+    "c5d5"
+   ],
+   "rating": 1754,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "pawnEndgame",
+    "quietMove",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0WYAQ",
+   "fen": "8/8/7p/8/3Kp1kP/4P3/8/8 b - - 4 46",
+   "moves": [
+    "g4f3",
+    "h4h5",
+    "f3g4",
+    "d4e4",
+    "g4g5",
+    "e4e5"
+   ],
+   "rating": 1765,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "long",
+    "pawnEndgame",
+    "quietMove",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0L4vs",
+   "fen": "8/4kp2/6p1/4P1P1/5K2/8/8/8 w - - 4 50",
+   "moves": [
+    "f4e4",
+    "e7e6",
+    "e4f4",
+    "e6d5",
+    "e5e6",
+    "f7e6"
+   ],
+   "rating": 1769,
+   "themes": [
+    "crushing",
+    "endgame",
+    "long",
+    "pawnEndgame",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0H0zr",
+   "fen": "8/8/2p1p3/1p2P1k1/pPpP4/P1P2K2/8/8 w - - 2 52",
+   "moves": [
+    "f3e4",
+    "g5g4",
+    "e4e3",
+    "g4g3"
+   ],
+   "rating": 1781,
    "themes": [
     "crushing",
     "defensiveMove",
@@ -391,21 +430,380 @@
    ]
   },
   {
-   "id": "0AGoq",
-   "fen": "8/8/2p1k3/1p1p2pp/p2P1b2/P1P1NP1P/1P2K3/8 w - - 0 38",
+   "id": "0TNOU",
+   "fen": "8/8/8/3k2p1/p3p3/1P2K3/P6P/8 b - - 0 50",
    "moves": [
-    "e2d3",
-    "f4e3",
-    "d3e3",
-    "e6f5",
-    "e3f2",
-    "f5f4"
+    "a4a3",
+    "h2h3",
+    "d5c5",
+    "e3e4"
    ],
-   "rating": 1450,
+   "rating": 1791,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "quietMove",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0NQ0Q",
+   "fen": "8/5k2/4p2p/4K1p1/6P1/5P1P/8/8 w - - 1 46",
+   "moves": [
+    "e5d6",
+    "f7f6",
+    "d6d7",
+    "f6e5",
+    "d7e7",
+    "e5f4"
+   ],
+   "rating": 1800,
    "themes": [
     "crushing",
     "endgame",
     "long",
+    "pawnEndgame",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0pDTj",
+   "fen": "8/8/p6p/1p1k1pp1/PP1P1P2/3K2P1/6P1/8 w - - 0 59",
+   "moves": [
+    "a4a5",
+    "g5g4",
+    "d3c3",
+    "d5e4",
+    "d4d5",
+    "e4d5"
+   ],
+   "rating": 1805,
+   "themes": [
+    "crushing",
+    "endgame",
+    "long",
+    "pawnEndgame",
+    "quietMove",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0RY4o",
+   "fen": "8/8/8/5rp1/R4pk1/6P1/5K2/8 w - - 1 56",
+   "moves": [
+    "g3f4",
+    "f5f4",
+    "a4f4",
+    "g4f4"
+   ],
+   "rating": 1809,
+   "themes": [
+    "crushing",
+    "endgame",
+    "rookEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0bCCy",
+   "fen": "8/5p2/5kpp/8/4KPP1/8/7P/8 b - - 0 39",
+   "moves": [
+    "g6g5",
+    "f4f5",
+    "f6e7",
+    "e4e5",
+    "f7f6",
+    "e5d5"
+   ],
+   "rating": 1812,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "long",
+    "pawnEndgame",
+    "quietMove",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0fel3",
+   "fen": "8/2k2p2/1p2p1p1/1K2P1P1/P4P2/8/8/8 w - - 3 41",
+   "moves": [
+    "b5a6",
+    "c7c6",
+    "a6a7",
+    "b6b5",
+    "a4b5",
+    "c6b5"
+   ],
+   "rating": 1841,
+   "themes": [
+    "crushing",
+    "endgame",
+    "long",
+    "pawnEndgame",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "095AS",
+   "fen": "8/6p1/2p3p1/2Ppk1P1/1P3p1P/2K2P2/8/8 b - - 3 46",
+   "moves": [
+    "d5d4",
+    "c3c4",
+    "e5e6",
+    "c4d4"
+   ],
+   "rating": 1845,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "pawnEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "01Tlc",
+   "fen": "8/1p3k2/p1p3p1/P1P3K1/1P5P/8/8/8 w - - 9 60",
+   "moves": [
+    "g5h6",
+    "f7f6",
+    "h6h7",
+    "g6g5",
+    "h4g5",
+    "f6g5"
+   ],
+   "rating": 1850,
+   "themes": [
+    "crushing",
+    "endgame",
+    "long",
+    "pawnEndgame",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0eoEY",
+   "fen": "8/p7/1p4k1/8/6Pp/1P6/P5K1/8 b - - 5 37",
+   "moves": [
+    "g6g5",
+    "g2h3",
+    "b6b5",
+    "b3b4",
+    "g5f6",
+    "h3h4"
+   ],
+   "rating": 1855,
+   "themes": [
+    "crushing",
+    "endgame",
+    "long",
+    "pawnEndgame",
+    "quietMove",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0deVS",
+   "fen": "8/4k1p1/8/1p4P1/p7/P3K3/1P6/8 w - - 1 53",
+   "moves": [
+    "e3f4",
+    "e7e6",
+    "f4e4",
+    "g7g6",
+    "e4d4",
+    "e6f5"
+   ],
+   "rating": 1856,
+   "themes": [
+    "crushing",
+    "endgame",
+    "long",
+    "pawnEndgame",
+    "quietMove",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0R7cz",
+   "fen": "8/8/k1p5/p5p1/2PP2P1/1K6/8/8 b - - 13 46",
+   "moves": [
+    "a6b6",
+    "b3a4",
+    "b6a6",
+    "c4c5",
+    "a6a7",
+    "a4a5"
+   ],
+   "rating": 1859,
+   "themes": [
+    "crushing",
+    "endgame",
+    "long",
+    "pawnEndgame",
+    "quietMove",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0QciL",
+   "fen": "8/8/8/8/k1p1K3/2P5/8/8 b - - 3 49",
+   "moves": [
+    "a4a3",
+    "e4d5",
+    "a3b3",
+    "d5d4"
+   ],
+   "rating": 1862,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0Sx4u",
+   "fen": "8/8/3k2p1/6Pp/4K3/8/5P2/8 w - - 5 47",
+   "moves": [
+    "f2f4",
+    "d6e6",
+    "e4f3",
+    "e6f5"
+   ],
+   "rating": 1863,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0qWRJ",
+   "fen": "8/5p2/5kp1/7p/4PK1P/8/5P2/8 b - - 2 41",
+   "moves": [
+    "f6e6",
+    "f4g5",
+    "e6e5",
+    "f2f3",
+    "e5d4",
+    "g5f6"
+   ],
+   "rating": 1871,
+   "themes": [
+    "crushing",
+    "endgame",
+    "long",
+    "pawnEndgame",
+    "quietMove",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0ape3",
+   "fen": "8/8/8/p1p1p3/P1P3N1/1P3Pbp/8/5K1k w - - 2 51",
+   "moves": [
+    "g4f2",
+    "g3f2",
+    "f1f2",
+    "h1h2"
+   ],
+   "rating": 1878,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0SMAv",
+   "fen": "8/8/3kp1p1/pB1b1p1p/P2P1P1P/2K3P1/8/8 b - - 1 42",
+   "moves": [
+    "d5c6",
+    "b5c6",
+    "d6c6",
+    "c3c4",
+    "c6d6",
+    "c4b5"
+   ],
+   "rating": 1885,
+   "themes": [
+    "bishopEndgame",
+    "crushing",
+    "endgame",
+    "long",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0c76x",
+   "fen": "8/8/8/3k1p1K/5P2/8/8/8 b - - 0 66",
+   "moves": [
+    "d5d4",
+    "h5g6",
+    "d4e4",
+    "g6g5"
+   ],
+   "rating": 1888,
+   "themes": [
+    "crushing",
+    "endgame",
+    "master",
+    "pawnEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0fuX6",
+   "fen": "8/5p2/4p2k/p1p1P1p1/P1P3K1/5P2/7P/8 w - - 8 43",
+   "moves": [
+    "h2h3",
+    "h6g6",
+    "f3f4",
+    "g5f4",
+    "g4f4",
+    "g6h5"
+   ],
+   "rating": 1897,
+   "themes": [
+    "advantage",
+    "defensiveMove",
+    "endgame",
+    "long",
+    "pawnEndgame",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0e5xI",
+   "fen": "8/7p/p1p1pk2/P1P2p2/5P2/4K1PP/8/8 b - - 1 40",
+   "moves": [
+    "h7h5",
+    "e3d4",
+    "e6e5",
+    "f4e5",
+    "f6e6",
+    "h3h4"
+   ],
+   "rating": 1898,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "long",
+    "pawnEndgame",
     "zugzwang"
    ]
   }

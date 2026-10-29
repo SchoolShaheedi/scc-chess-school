@@ -4,6 +4,7 @@
 import { NATIVE } from "./native";
 import { fromLevel as ratingFromLevel, update as updateRating } from "./me/rating";
 import { addDays, review } from "./openings/srs";
+import type { MineInfo } from "./puzzles/mine";
 
 export type Look = "young" | "junior" | "adult";
 
@@ -69,7 +70,7 @@ export interface State {
   buzz: boolean;
   /** The learner's rating estimate (src/me/rating.ts) and the mistake bank: missed puzzles by Lichess id, on review boxes. */
   rating: { r: number; n: number };
-  missed: Record<string, { box: number; due: string; r?: number }>;
+  missed: Record<string, MissedCard>;
   /** Phase 2 (DECISIONS #85): a separate puzzle rating (the one above is now the playing rating, from games); one
    *  point a day of each for the graphs; per Lichess theme [tried, solved]; per "bot:<id>" and "tc:<clock>" [won, lost, drawn]. */
   prating?: { r: number; n: number };
@@ -79,6 +80,9 @@ export interface State {
   /** Puzzles finished per day, the last two weeks (DECISIONS #89: the class leaderboard's weekly puzzles). */
   puzzlesByDay?: Record<string, number>;
 }
+/** A card in the mistake bank. `r` = a big-bank puzzle, saved with its rating; `mine` = a personal drill made from the
+ *  learner's own game (src/puzzles/mine.ts): the puzzle itself travels with the card, since no bank holds it. */
+export interface MissedCard { box: number; due: string; r?: number; mine?: MineInfo }
 export const GOAL = 3;
 
 const KEY = "scc-school-v1";
@@ -217,8 +221,9 @@ export const store = {
       rating, results, hist: { ...hist(), play: point(hist().play, rating.r) } });
   },
   /** Any real puzzle finished (lesson, test, daily, Rush, the bank): moves the rating, and a miss goes into the
-   *  mistake bank while a clean solve moves a banked puzzle up a box (chess review 2026-10-04). */
-  recordPuzzle(id: string | undefined, puzzleRating: number | undefined, clean: boolean, themes?: string[]) {
+   *  mistake bank while a clean solve moves a banked puzzle up a box (chess review 2026-10-04). `bankRating` saves a
+   *  big-bank puzzle's rating on its card without moving the learner's rating (the Race is unrated). */
+  recordPuzzle(id: string | undefined, puzzleRating: number | undefined, clean: boolean, themes?: string[], bankRating?: number) {
     const patch: Partial<State> = {};
     // puzzles move the PUZZLE rating (DECISIONS #85); games move the playing rating
     if (puzzleRating) {
@@ -237,14 +242,26 @@ export const store = {
     }
     if (id) {
       const missed = { ...state.missed }, card = missed[id];
-      if (!clean) missed[id] = { box: 0, due: addDays(today(), 1), ...(puzzleRating ? { r: puzzleRating } : {}) };
-      else if (card) { const next = review(card, true, today()); if (next.box >= 3) delete missed[id]; else missed[id] = next; }
+      // a card keeps its rating `r` and its personal puzzle `mine` through every review (they used to be dropped, which
+      // hid a big-bank puzzle from the bank after its first clean solve)
+      if (!clean) missed[id] = { ...(card?.r ? { r: card.r } : {}), ...(card?.mine ? { mine: card.mine } : {}), box: 0, due: addDays(today(), 1), ...(puzzleRating || bankRating ? { r: puzzleRating ?? bankRating } : {}) };
+      else if (card) { const next = review(card, true, today()); if (next.box >= 3) delete missed[id]; else missed[id] = { ...card, ...next }; }
       // keep the bank small: the 200 soonest due
       const keys = Object.keys(missed);
       if (keys.length > 200) for (const k of keys.sort((a, b) => missed[b].due.localeCompare(missed[a].due)).slice(0, keys.length - 200)) delete missed[k];
       patch.missed = missed;
     }
     store.set(patch);
+  },
+  /** Personal drills from a reviewed game (src/puzzles/mine.ts): each joins the mistake bank, due today, unless it is
+   *  already there (reviewing a game twice must not reset a drill's schedule). Same 200-card cap as every miss. */
+  addMine(drills: { id: string; mine: MineInfo }[]) {
+    if (!drills.length) return;
+    const missed = { ...state.missed };
+    for (const d of drills) if (!missed[d.id]) missed[d.id] = { box: 0, due: today(), mine: d.mine };
+    const keys = Object.keys(missed);
+    if (keys.length > 200) for (const k of keys.sort((a, b) => missed[b].due.localeCompare(missed[a].due)).slice(0, keys.length - 200)) delete missed[k];
+    store.set({ missed });
   },
   /** After a placement, start the rating from the level found instead of 400 (only if nothing has rated it yet). */
   seedRating(level: number) {

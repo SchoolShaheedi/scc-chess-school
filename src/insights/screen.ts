@@ -12,6 +12,8 @@ import { coachHTML } from "../coach";
 import { LEVELS } from "../content/levels";
 import { games, type SavedGame } from "../play/history";
 import { grade } from "../review/grade";
+import { DepthGovernor, INSIGHTS_BUDGET_MS, INSIGHTS_DEPTH } from "../review/depth";
+import { mineDue } from "../puzzles/due";
 import { store } from "../store";
 import NAMES from "../content/opening-names.json";
 import { type Band, byOpening, byPhase, byTime, myMoves, type MyMove, type Phase, replay, summarise } from "./insights";
@@ -53,10 +55,14 @@ export function insightsScreen(root: HTMLElement, go: (h: string) => void, lesso
       const c = root.querySelector("[data-count]"); if (c) c.textContent = t("insAnalysingN").replace("{a}", num(k + 1)).replace("{b}", num(todo.length));
       const g = todo[k], { fens, sans, ucis } = replay(g), last = new Chess(fens[fens.length - 1]);
       const evals: { score: Score; best: string }[] = [];
+      // depth 12, governed per game so a slow phone finishes each one in about INSIGHTS_BUDGET_MS (review/depth.ts)
+      const gov = new DepthGovernor(fens.length - (last.isGameOver() ? 1 : 0), INSIGHTS_DEPTH, INSIGHTS_BUDGET_MS);
       for (let i = 0; i < fens.length; i++) {
         if (!alive) return;
         if (i === fens.length - 1 && last.isGameOver()) { evals.push({ score: last.isCheckmate() ? { mate: 0 } : { cp: 0 }, best: "" }); continue; }
-        const cands = await engine.candidates(fens[i], { n: 1, depth: 8 });
+        const depth = gov.next(), t0 = performance.now();
+        const cands = await engine.candidates(fens[i], { n: 1, depth });
+        gov.record(depth, performance.now() - t0);
         evals.push(cands.length ? { score: cands[0].score, best: cands[0].move } : { score: { cp: 0 }, best: "" });
       }
       const drops = grade(sans.map((san, i) => ({ san, uci: ucis[i] })), evals, new Chess(fens[0]).turn()).map(m => Math.round(m.drop * 10) / 10);
@@ -83,7 +89,13 @@ export function insightsScreen(root: HTMLElement, go: (h: string) => void, lesso
         + `${s.rushed ? ` ${t(`insRush_${s.rushed.band}` as UIKey).replace("{a}", num(s.rushed.acc))}${s.rushed.band === "fast" ? ` ${t("insSlowDown")}` : ""}` : ""}</p>`;
     }
     const lv = s.weak ? PRACTISE[s.weak.phase] : null, to = lv ? lessonFor(lv) : null;
-    const practise = lv && to ? `<button class="inspractise" data-practise><span class="grow"><small>${t("insPractise")}</small><b>${t("level")} ${num(lv)} · ${tx(LEVELS[lv - 1].title)}</b></span>${icon("chevronRight")}</button>` : "";
+    // your own mistakes first: drills from your reviewed games, for the weak phase when there are any, else any phase;
+    // with none due, the old route to the level that teaches the weak phase
+    const mineHere = s.weak ? mineDue(s.weak.phase) : 0, mineAll = mineDue();
+    const drillPhase = mineHere ? s.weak!.phase : mineAll ? undefined : null;
+    const practise = drillPhase !== null
+      ? `<button class="inspractise" data-practise><span class="grow"><small>${t("insPractise")}</small><b>${t("insMineTitle")} · ${t("insMineN").replace("{n}", num(mineHere || mineAll))}</b></span>${icon("chevronRight")}</button>`
+      : lv && to ? `<button class="inspractise" data-practise><span class="grow"><small>${t("insPractise")}</small><b>${t("level")} ${num(lv)} · ${tx(LEVELS[lv - 1].title)}</b></span>${icon("chevronRight")}</button>` : "";
     const coachName = look === "young" ? { en: "Ghuggi", pa: "ਘੁੱਗੀ" } : words(store.get().coach === "kaur" ? "coachKaur" : "coachSingh");
 
     const wdl = (w: number, d: number, l: number) => { const n = w + d + l || 1;
@@ -108,6 +120,6 @@ export function insightsScreen(root: HTMLElement, go: (h: string) => void, lesso
         : `<p class="note">${t("insTimeNone")}</p>`}</div>
     </div>`;
     root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go(back);
-    root.querySelector<HTMLButtonElement>("[data-practise]")?.addEventListener("click", () => go(to!));
+    root.querySelector<HTMLButtonElement>("[data-practise]")?.addEventListener("click", () => go(drillPhase !== null ? `#/puzzles/bank${drillPhase ? `/${drillPhase}` : ""}` : to!));
   }
 }
