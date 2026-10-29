@@ -46,7 +46,8 @@ describe("the bot game's tabs", () => {
     expect(open.textContent).toBe("");
     const moves = s.querySelector("[data-moves]")!;
     moves.innerHTML = `<i>1.</i><button class="mv">e4</button> <button class="mv">c5</button>`;
-    await tick();
+    // the names file loads asynchronously: under a busy test run one tick is not always enough, so wait up to 2 s
+    for (let i = 0; i < 100 && !open.textContent?.includes("Sicilian"); i++) await new Promise(r => setTimeout(r, 20));
     expect(open.textContent).toContain("Sicilian Defence");
   });
   it("puts the exact original screen back when the window narrows, tabs and all", async () => {

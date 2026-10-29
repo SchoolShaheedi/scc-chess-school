@@ -1,0 +1,460 @@
+{
+ "italian": {
+  "games": 28226,
+  "popular": 43,
+  "white": 50,
+  "draw": 4,
+  "black": 46,
+  "you": 50,
+  "reply": {
+   "san": "Bc5",
+   "share": 34
+  },
+  "road": {
+   "move": "d6",
+   "share": 6.7,
+   "games": 2044
+  }
+ },
+ "london": {
+  "games": 13585,
+  "popular": 20,
+  "white": 51,
+  "draw": 5,
+  "black": 45,
+  "you": 51,
+  "reply": {
+   "san": "Nf6",
+   "share": 27
+  },
+  "road": null
+ },
+ "qg": {
+  "games": 24190,
+  "popular": 36,
+  "white": 52,
+  "draw": 5,
+  "black": 43,
+  "you": 52,
+  "reply": {
+   "san": "e6",
+   "share": 27
+  },
+  "road": {
+   "move": "dxc4",
+   "share": 24.2,
+   "games": 5846
+  }
+ },
+ "fourknights": {
+  "games": 3494,
+  "popular": 46,
+  "white": 49,
+  "draw": 5,
+  "black": 46,
+  "you": 49,
+  "reply": {
+   "san": "Bc4",
+   "share": 35
+  },
+  "road": null
+ },
+ "e5": {
+  "games": 157387,
+  "popular": 42,
+  "white": 51,
+  "draw": 4,
+  "black": 45,
+  "you": 45,
+  "reply": {
+   "san": "Nf3",
+   "share": 62
+  },
+  "road": null
+ },
+ "sicilian": {
+  "games": 65265,
+  "popular": 18,
+  "white": 48,
+  "draw": 4,
+  "black": 47,
+  "you": 47,
+  "reply": {
+   "san": "Nf3",
+   "share": 53
+  },
+  "road": null
+ },
+ "carokann": {
+  "games": 31075,
+  "popular": 8,
+  "white": 48,
+  "draw": 5,
+  "black": 47,
+  "you": 47,
+  "reply": {
+   "san": "d4",
+   "share": 45
+  },
+  "road": null
+ },
+ "qgd": {
+  "games": 6465,
+  "popular": 27,
+  "white": 51,
+  "draw": 5,
+  "black": 43,
+  "you": 43,
+  "reply": {
+   "san": "Nc3",
+   "share": 57
+  },
+  "road": null
+ },
+ "slav": {
+  "games": 4679,
+  "popular": 19,
+  "white": 52,
+  "draw": 4,
+  "black": 43,
+  "you": 43,
+  "reply": {
+   "san": "Nc3",
+   "share": 53
+  },
+  "road": null
+ },
+ "kid": {
+  "games": 3554,
+  "popular": 30,
+  "white": 49,
+  "draw": 5,
+  "black": 47,
+  "you": 47,
+  "reply": {
+   "san": "Nc3",
+   "share": 77
+  },
+  "road": null
+ },
+ "ruy": {
+  "games": 14225,
+  "popular": 22,
+  "white": 51,
+  "draw": 4,
+  "black": 45,
+  "you": 51,
+  "reply": {
+   "san": "d6",
+   "share": 24
+  },
+  "road": {
+   "move": "Nd4",
+   "share": 5.4,
+   "games": 772
+  }
+ },
+ "vienna": {
+  "games": 10170,
+  "popular": 6,
+  "white": 50,
+  "draw": 4,
+  "black": 46,
+  "you": 50,
+  "reply": {
+   "san": "Nc6",
+   "share": 38
+  },
+  "road": null
+ },
+ "scotch": {
+  "games": 12174,
+  "popular": 19,
+  "white": 52,
+  "draw": 4,
+  "black": 43,
+  "you": 52,
+  "reply": {
+   "san": "exd4",
+   "share": 80
+  },
+  "road": null
+ },
+ "french": {
+  "games": 37182,
+  "popular": 10,
+  "white": 48,
+  "draw": 4,
+  "black": 47,
+  "you": 47,
+  "reply": {
+   "san": "d4",
+   "share": 47
+  },
+  "road": null
+ },
+ "scandi": {
+  "games": 35966,
+  "popular": 10,
+  "white": 49,
+  "draw": 4,
+  "black": 46,
+  "you": 46,
+  "reply": {
+   "san": "exd5",
+   "share": 72
+  },
+  "road": null
+ },
+ "nimzo": {
+  "games": 1489,
+  "popular": 48,
+  "white": 47,
+  "draw": 5,
+  "black": 47,
+  "you": 47,
+  "reply": {
+   "san": "Nf3",
+   "share": 17
+  },
+  "road": null
+ },
+ "dutch": {
+  "games": 3010,
+  "popular": 2,
+  "white": 51,
+  "draw": 5,
+  "black": 44,
+  "you": 44,
+  "reply": {
+   "san": "c4",
+   "share": 33
+  },
+  "road": null
+ },
+ "english": {
+  "games": 18672,
+  "popular": 3,
+  "white": 51,
+  "draw": 5,
+  "black": 45,
+  "you": 51,
+  "reply": {
+   "san": "e5",
+   "share": 33
+  },
+  "road": null
+ },
+ "catalan": {
+  "games": 148,
+  "popular": 3,
+  "white": 54,
+  "draw": 7,
+  "black": 39,
+  "you": 54,
+  "reply": {
+   "san": "d5",
+   "share": 59
+  },
+  "road": null
+ },
+ "pirc": {
+  "games": 1780,
+  "popular": 61,
+  "white": 52,
+  "draw": 4,
+  "black": 43,
+  "you": 43,
+  "reply": {
+   "san": "Nf3",
+   "share": 29
+  },
+  "road": null
+ },
+ "alekhine": {
+  "games": 4840,
+  "popular": 1,
+  "white": 48,
+  "draw": 5,
+  "black": 47,
+  "you": 47,
+  "reply": {
+   "san": "e5",
+   "share": 49
+  },
+  "road": null
+ },
+ "grunfeld": {
+  "games": 640,
+  "popular": 22,
+  "white": 46,
+  "draw": 5,
+  "black": 49,
+  "you": 49,
+  "reply": {
+   "san": "cxd5",
+   "share": 38
+  },
+  "road": null
+ },
+ "qid": {
+  "games": 200,
+  "popular": 17,
+  "white": 53,
+  "draw": 6,
+  "black": 42,
+  "you": 42,
+  "reply": {
+   "san": "g3",
+   "share": 45
+  },
+  "road": null
+ },
+ "reti": {
+  "games": 949,
+  "popular": 14,
+  "white": 53,
+  "draw": 5,
+  "black": 41,
+  "you": 53,
+  "reply": {
+   "san": "dxc4",
+   "share": 32
+  },
+  "road": null
+ },
+ "petroff": {
+  "games": 9417,
+  "popular": 10,
+  "white": 50,
+  "draw": 4,
+  "black": 46,
+  "you": 46,
+  "reply": {
+   "san": "Nc3",
+   "share": 35
+  },
+  "road": null
+ },
+ "modern": {
+  "games": 10849,
+  "popular": 3,
+  "white": 49,
+  "draw": 4,
+  "black": 47,
+  "you": 47,
+  "reply": {
+   "san": "d4",
+   "share": 46
+  },
+  "road": null
+ },
+ "evans": {
+  "games": 708,
+  "popular": 7,
+  "white": 51,
+  "draw": 3,
+  "black": 46,
+  "you": 51,
+  "reply": {
+   "san": "Bxb4",
+   "share": 74
+  },
+  "road": null
+ },
+ "twoknights": {
+  "games": 9198,
+  "popular": 30,
+  "white": 51,
+  "draw": 4,
+  "black": 45,
+  "you": 45,
+  "reply": {
+   "san": "d3",
+   "share": 34
+  },
+  "road": null
+ },
+ "benoni": {
+  "games": 974,
+  "popular": 8,
+  "white": 48,
+  "draw": 4,
+  "black": 48,
+  "you": 48,
+  "reply": {
+   "san": "d5",
+   "share": 65
+  },
+  "road": null
+ },
+ "philidor": {
+  "games": 15261,
+  "popular": 16,
+  "white": 51,
+  "draw": 4,
+  "black": 45,
+  "you": 45,
+  "reply": {
+   "san": "Bc4",
+   "share": 44
+  },
+  "road": null
+ },
+ "kia": {
+  "games": 1353,
+  "popular": 20,
+  "white": 52,
+  "draw": 5,
+  "black": 42,
+  "you": 52,
+  "reply": {
+   "san": "Nc6",
+   "share": 24
+  },
+  "road": null
+ },
+ "bogo": {
+  "games": 224,
+  "popular": 19,
+  "white": 49,
+  "draw": 3,
+  "black": 48,
+  "you": 48,
+  "reply": {
+   "san": "Bd2",
+   "share": 61
+  },
+  "road": {
+   "move": "e3",
+   "share": 3.1,
+   "games": 145
+  }
+ },
+ "dragon": {
+  "games": 718,
+  "popular": 25,
+  "white": 45,
+  "draw": 5,
+  "black": 50,
+  "you": 50,
+  "reply": {
+   "san": "Be3",
+   "share": 36
+  },
+  "road": null
+ },
+ "trompowsky": {
+  "games": 1129,
+  "popular": 4,
+  "white": 51,
+  "draw": 4,
+  "black": 44,
+  "you": 51,
+  "reply": {
+   "san": "e6",
+   "share": 29
+  },
+  "road": null
+ }
+}

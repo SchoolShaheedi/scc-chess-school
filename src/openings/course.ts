@@ -8,12 +8,13 @@ import { type Square, placementFromFen } from "../chess/types";
 import { COURSE, courseOpening, GROUPS, STEPS, type CourseLine, type CourseOpening, type Step } from "../content/course";
 import BOXES from "../content/course-boxes.json";
 import { repOption } from "../content/repertoire";
-import { num, t, tx } from "../i18n";
+import { count, num, t, tx, type UIKey } from "../i18n";
 import { icon } from "../icons";
 import { checkSquare, refusal } from "../lesson/exercises";
 import { sound } from "../sound";
 import { store, today } from "../store";
 import { newCard } from "./srs";
+import { FEW_GAMES, statsFor, TAGS } from "./facts";
 
 type Go = (h: string) => void;
 const wait = (ms: number) => new Promise(r => setTimeout(r, ms));
@@ -51,8 +52,9 @@ export function courseHub(root: HTMLElement, go: Go) {
     ${GROUPS.map(({ group, title }) => {
       const list = COURSE.filter(o => o.group === group);
       return list.length ? `<h2 class="sec">${tx(title)}</h2><div class="botlist">${list.map(o => {
-        const n = doneSteps(o.id).length;
-        return `<button class="botcard" data-o="${o.id}"><span class="grow"><b>${tx(o.name)}</b><small>${tx(o.about)}</small>
+        const n = doneSteps(o.id).length, s = statsFor(o.id);
+        return `<button class="botcard" data-o="${o.id}">${s ? `<span class="winchip"><b>${num(s.you)}%</b><small>${t("statYouWin")}</small></span>` : ""}
+          <span class="grow"><b>${tx(o.name)}</b><small>${tx(o.about)}</small>${tagsHTML(o.id, s?.popular)}
           <small class="rating">${n >= STEPS.length ? icon("check") + " " + t("courseDone") : t("courseSteps").replace("{n}", num(n)).replace("{m}", num(STEPS.length))}</small></span>${icon("arrowRight", "go")}</button>`;
       }).join("")}</div>` : "";
     }).join("")}
@@ -62,6 +64,32 @@ export function courseHub(root: HTMLElement, go: Go) {
   wireBack(root, go);
   root.querySelectorAll<HTMLButtonElement>("[data-o]").forEach(b => b.onclick = () => go(`#/openings/o/${b.dataset.o}`));
   root.querySelector<HTMLButtonElement>("[data-review]")!.onclick = () => go("#/openings/review");
+}
+
+// ---------- the opening's facts (DECISIONS #130): your win %, its tags, and a card of numbers on its page ----------
+const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
+function tagsHTML(id: string, popular?: number): string {
+  const tag = TAGS[id];
+  if (!tag) return "";
+  return `<span class="otags"><span>${t(`style${cap(tag[0])}` as UIKey)}</span><span>${t(`level${tag[1]}` as UIKey)}</span>`
+    + (popular !== undefined ? `<span>${t("statChosen").replace("{n}", num(popular))}</span>` : "") + `</span>`;
+}
+function factsHTML(o: CourseOpening): string {
+  const s = statsFor(o.id);
+  if (!s) return "";
+  const seg = (cls: string, v: number, label: string) => `<i class="${cls}" style="flex:${Math.max(v, 3)}" title="${label}">${v >= 12 ? `${num(v)}%` : ""}</i>`;
+  return `<div class="group facts"><h2 class="sec" style="margin-top:0">${t("factsTitle")}</h2>
+    <div class="wdl" role="img" aria-label="${t("factWhite")} ${s.white}%, ${t("factDraw")} ${s.draw}%, ${t("factBlack")} ${s.black}%">
+      ${seg("w", s.white, t("factWhite"))}${seg("d", s.draw, t("factDraw"))}${seg("b", s.black, t("factBlack"))}</div>
+    <div class="wdlkey"><span><i class="w"></i>${t("factWhite")}</span><span><i class="d"></i>${t("factDraw")}</span><span><i class="b"></i>${t("factBlack")}</span></div>
+    <ul>
+      <li>${t(o.side === "w" ? "factYouW" : "factYouB").replace("{n}", `<b>${num(s.you)}</b>`)}</li>
+      <li>${t("factChosen").replace("{n}", `<b>${num(s.popular)}</b>`).replace("{g}", `<b>${count(s.games)}</b>`)}</li>
+      ${s.reply ? `<li>${t("factReply").replace("{m}", `<b>${s.reply.san}</b>`).replace("{n}", num(s.reply.share))}</li>` : ""}
+      ${s.road ? `<li>${t("factRoad").replace("{n}", `<b>${num(s.road.share)}</b>`).replace("{m}", `<b>${s.road.move}</b>`)}</li>` : ""}
+    </ul>${tagsHTML(o.id)}
+    ${s.games < FEW_GAMES ? `<p class="note">${t("factFew")}</p>` : ""}
+    <p class="note">${t("factEven")}</p><p class="note">${t("factSource")}</p></div>`;
 }
 
 // ---------- one opening: its plan and five steps ----------
@@ -75,6 +103,7 @@ export function coursePage(root: HTMLElement, id: string, go: Go) {
   root.innerHTML = `<div class="screen">${bar(tx(o.name))}
     <p class="muted">${tx(o.about)}</p>
     <div class="group"><h2 class="sec" style="margin-top:0">${t("coursePlan")}</h2><p>${tx(o.plan)}</p></div>
+    ${factsHTML(o)}
     <div class="lslist">
       ${step("learn", 1, t("courseLearn"), t("courseLearnSub"))}
       ${step("practise", 2, t("coursePractise"), t("coursePractiseSub"))}
