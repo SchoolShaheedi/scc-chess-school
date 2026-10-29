@@ -11,8 +11,9 @@ import { nodeEngine } from "./engine";
 
 const TOLERANCE = 35, GOOD = 30, DEPTH = 14, WON = 300;
 const LINES = ["main", "win", "game"] as const;
-// the move that names an opening is the learner's choice of opening, not a mistake: 1...d5, 1...Nf6, 1...g6, 2...c5 (Benoni) and 2.c4 (Reti) are a little below the best move
-const NAMING: Record<string, number> = { scandi: 1, alekhine: 1, modern: 1, reti: 2, benoni: 3 };
+// the move that names an opening is the learner's choice of opening, not a mistake: 1...d5, 1...Nf6, 1...g6, 2...c5 (Benoni), 5...g6 (Dragon) and 2.c4 (Reti) are a little below the best move (up to 50cp; an
+// opening whose naming move is worse than that is not taught: King's Gambit and Bird were dropped)
+const NAMING: Record<string, number> = { scandi: 1, alekhine: 1, modern: 1, reti: 2, benoni: 3, dragon: 9 };
 
 describe("openings course", () => {
   for (const o of COURSE) for (const k of LINES) {
