@@ -60,7 +60,7 @@ export const LEVEL8: Lesson[] = [
       { kind: "pick", fen: "4k3/pp4pp/3p4/2pPp3/2P1P3/8/PP4PP/4K3 w - - 0 1", feature: "outpost", color: "w",
         prompt: { en: "A deep outpost: tap it.", pa: "ਡੂੰਘਾ ਪੱਕਾ ਟਿਕਾਣਾ: ਉਸ ਨੂੰ ਛੂਹੋ।" } },
     ],
-    challenge: { kind: "pack", pack: "advantage", count: 3, prompt: real("put your pieces on strong squares.", "ਮੋਹਰੇ ਤਕੜੇ ਖਾਨਿਆਂ 'ਤੇ ਰੱਖੋ।") },
+    challenge: { kind: "pack", pack: "advantage", count: 3, prompt: real("find the best plan.", "ਸਭ ਤੋਂ ਵਧੀਆ ਯੋਜਨਾ ਲੱਭੋ।") },
   },
   {
     id: "8.4", level: 8, status: "checked",
@@ -78,7 +78,7 @@ export const LEVEL8: Lesson[] = [
       { kind: "pick", fen: "4k3/pp2pppp/8/8/8/8/PPP1P1PP/4K3 w - - 0 1", feature: "openFile", color: "w",
         prompt: { en: "Only one file is fully open. Careful: some are only half-open. Tap the open one.", pa: "ਸਿਰਫ਼ ਇੱਕ ਖੜ੍ਹੀ ਕਤਾਰ ਪੂਰੀ ਖੁੱਲ੍ਹੀ ਹੈ। ਧਿਆਨ: ਕੁਝ ਸਿਰਫ਼ ਅੱਧੀਆਂ ਖੁੱਲ੍ਹੀਆਂ ਹਨ। ਪੂਰੀ ਖੁੱਲ੍ਹੀ ਵਾਲੀ ਛੂਹੋ।" } },
     ],
-    challenge: { kind: "pack", pack: "advantage", count: 3, prompt: real("rooks on open files.", "ਖੁੱਲ੍ਹੀਆਂ ਖੜ੍ਹੀਆਂ ਕਤਾਰਾਂ 'ਤੇ ਹਾਥੀ ਰੱਖੋ।") },
+    challenge: { kind: "pack", pack: "advantage", count: 3, prompt: real("find the best plan.", "ਸਭ ਤੋਂ ਵਧੀਆ ਯੋਜਨਾ ਲੱਭੋ।") },
   },
   {
     id: "8.5", level: 8, status: "checked",
@@ -122,7 +122,7 @@ export const LEVEL8: Lesson[] = [
           { text: { en: "The knight", pa: "ਘੋੜਾ" }, why: { en: "A knight is slow to cross from one wing to the other.", pa: "ਘੋੜੇ ਨੂੰ ਇੱਕ ਪਾਸੇ ਤੋਂ ਦੂਜੇ ਪਾਸੇ ਪਹੁੰਚਣ ਵਿੱਚ ਚਿਰ ਲੱਗਦਾ ਹੈ।" } },
         ] },
     ],
-    challenge: { kind: "pack", pack: "advantage", count: 3, prompt: real("minor pieces at work.", "ਘੋੜੇ ਅਤੇ ਊਠ ਨਾਲ ਸਭ ਤੋਂ ਵਧੀਆ ਚਾਲ ਲੱਭੋ।") },
+    challenge: { kind: "pack", pack: "advantage", count: 3, prompt: real("find the best plan.", "ਸਭ ਤੋਂ ਵਧੀਆ ਯੋਜਨਾ ਲੱਭੋ।") },
   },
   {
     id: "8.7", level: 8, status: "checked",
@@ -182,6 +182,6 @@ export const LEVEL8: Lesson[] = [
           { text: { en: "Bring more pieces into the corner", pa: "ਹੋਰ ਮੋਹਰੇ ਖੂੰਜੇ ਵਿੱਚ ਲਿਆਓ" }, why: { en: "That makes the cramp worse.", pa: "ਇਸ ਨਾਲ ਮੋਹਰੇ ਹੋਰ ਤੰਗ ਹੋ ਜਾਂਦੇ ਹਨ।" } },
         ] },
     ],
-    challenge: { kind: "pack", pack: "advantage", count: 3, prompt: real("use the weak squares.", "ਕਮਜ਼ੋਰ ਖਾਨੇ ਵਰਤੋ।") },
+    challenge: { kind: "pack", pack: "advantage", count: 3, prompt: real("find the best plan.", "ਸਭ ਤੋਂ ਵਧੀਆ ਯੋਜਨਾ ਲੱਭੋ।") },
   },
 ];
