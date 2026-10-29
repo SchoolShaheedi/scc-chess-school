@@ -13,7 +13,7 @@ export const LEVEL7: Lesson[] = [
     title: { en: "Mate in two", pa: "ਦੋ ਚਾਲਾਂ ਵਿੱਚ ਮਾਤ" },
     goal: { en: "Find a checkmate that takes two moves.", pa: "ਦੋ ਚਾਲਾਂ ਵਾਲੀ ਸ਼ਹਿ-ਮਾਤ ਲੱਭੋ।" },
     learn: [
-      { text: { en: "Look at forcing moves first, in this order: checks, then captures, then threats. Forcing moves leave your opponent few choices, so you can see to the end.", pa: "ਪਹਿਲਾਂ ਮਜਬੂਰ ਕਰਨ ਵਾਲੀਆਂ ਚਾਲਾਂ ਵੇਖੋ, ਇਸ ਤਰਤੀਬ ਵਿੱਚ: ਸ਼ਹਿ, ਫਿਰ ਮਾਰ, ਫਿਰ ਧਮਕੀ। ਇਹ ਚਾਲਾਂ ਵਿਰੋਧੀ ਕੋਲ ਘੱਟ ਰਾਹ ਛੱਡਦੀਆਂ ਹਨ, ਇਸ ਲਈ ਤੁਸੀਂ ਅੰਤ ਤੱਕ ਵੇਖ ਸਕਦੇ ਹੋ।" },
+      { text: { en: "Look at forcing moves first, in this order: checks, then captures, then threats. Forcing moves leave your opponent few choices, so you can see to the end. In the picture, Re8+ is a check but ...Rxe8 just wins the rook; the capture Bxd5 wins a knight.", pa: "ਪਹਿਲਾਂ ਮਜਬੂਰ ਕਰਨ ਵਾਲੀਆਂ ਚਾਲਾਂ ਵੇਖੋ, ਇਸ ਤਰਤੀਬ ਵਿੱਚ: ਸ਼ਹਿ, ਫਿਰ ਮਾਰ, ਫਿਰ ਧਮਕੀ। ਇਹ ਚਾਲਾਂ ਵਿਰੋਧੀ ਕੋਲ ਘੱਟ ਰਾਹ ਛੱਡਦੀਆਂ ਹਨ, ਇਸ ਲਈ ਤੁਸੀਂ ਅੰਤ ਤੱਕ ਵੇਖ ਸਕਦੇ ਹੋ। ਤਸਵੀਰ ਵਿੱਚ Re8+ ਸ਼ਹਿ ਹੈ, ਪਰ ...Rxe8 ਨਾਲ ਹਾਥੀ ਚਲਾ ਜਾਂਦਾ ਹੈ; ਮਾਰ Bxd5 ਘੋੜਾ ਜਿੱਤਦੀ ਹੈ।" },
         board: { fen: "r5k1/5ppp/8/3n4/8/1B6/5PPP/4R1K1 w - - 0 1", arrows: [["e1","e8"],["b3","d5"]] } },
       { text: { en: "For each check, ask: what are ALL the replies? If every reply allows mate next move, you've found it.", pa: "ਹਰ ਸ਼ਹਿ ਲਈ ਪੁੱਛੋ: ਸਾਰੇ ਜਵਾਬ ਕਿਹੜੇ ਹਨ? ਜੇ ਹਰ ਜਵਾਬ ਤੋਂ ਬਾਅਦ ਅਗਲੀ ਚਾਲ ਮਾਤ ਹੈ, ਤਾਂ ਤੁਸੀਂ ਲੱਭ ਲਈ।" },
         board: { fen: "3r3k/6pp/7N/8/8/1Q6/5PPP/6K1 w - - 0 1", arrows: [["b3","g8"],["d8","g8"],["h6","f7"]] } },
@@ -28,9 +28,9 @@ export const LEVEL7: Lesson[] = [
     goal: { en: "Calculate a forcing line three moves deep.", pa: "ਮਜਬੂਰ ਕਰਨ ਵਾਲੀਆਂ ਚਾਲਾਂ ਦੀ ਲੜੀ ਤਿੰਨ ਚਾਲਾਂ ਡੂੰਘੀ ਗਿਣੋ।" },
     learn: [
       { text: { en: "The same method, one step deeper. Keep the picture in your head: where is every piece after each move?", pa: "ਉਹੀ ਤਰੀਕਾ, ਇੱਕ ਕਦਮ ਹੋਰ ਡੂੰਘਾ। ਤਸਵੀਰ ਦਿਮਾਗ਼ ਵਿੱਚ ਰੱਖੋ: ਹਰ ਚਾਲ ਤੋਂ ਬਾਅਦ ਹਰ ਮੋਹਰਾ ਕਿੱਥੇ ਹੈ?" },
-        board: { fen: "r1bq1rk1/pppn1ppp/2n1p3/3pP3/1b1P4/2NB1N2/PPP2PPP/R1BQK2R w KQ - 7 8", arrows: [["d3","h7"],["g8","h7"],["f3","g5"]] } },
+        board: { fen: "1k1q3r/pp6/2p2p2/8/2P2p2/1P2b3/P1Q1R1PP/3R3K b - - 4 28", flip: true, arrows: [["h8","h2"],["d8","h8"],["h8","h7"]] } },
       { text: { en: "Often the first move is a sacrifice that drags the king out into the open.", pa: "ਅਕਸਰ ਪਹਿਲੀ ਚਾਲ ਜਾਣ-ਬੁੱਝ ਕੇ ਮੋਹਰਾ ਦੇਣ ਵਾਲੀ ਹੁੰਦੀ ਹੈ, ਜੋ ਬਾਦਸ਼ਾਹ ਨੂੰ ਖੁੱਲ੍ਹੇ ਵਿੱਚ ਖਿੱਚ ਲਿਆਉਂਦੀ ਹੈ।" },
-        board: { fen: "r1bq1rk1/pppn1ppp/2n1p3/3pP3/1b1P4/2NB1N2/PPP2PPP/R1BQK2R w KQ - 7 8", arrows: [["d3","h7"]], highlights: ["g8"] } },
+        board: { fen: "1k1q3r/pp6/2p2p2/8/2P2p2/1P2b3/P1Q1R1PP/3R3K b - - 4 28", flip: true, arrows: [["h8","h2"]], highlights: ["h1"] } },
     ],
     try: one("mate3", "Mate in three moves.", "ਤਿੰਨ ਚਾਲਾਂ ਵਿੱਚ ਮਾਤ ਦਿਓ।"),
     practise: [many("mate3", 4, "mate in three.", "ਤਿੰਨ ਚਾਲਾਂ ਵਿੱਚ ਮਾਤ ਦਿਓ।")],
@@ -94,7 +94,7 @@ export const LEVEL7: Lesson[] = [
     goal: { en: "Cut a defender's line, or clear a square for your own piece.", pa: "ਰਾਖੇ ਦੀ ਲਕੀਰ ਕੱਟੋ, ਜਾਂ ਆਪਣੇ ਮੋਹਰੇ ਲਈ ਖਾਨਾ ਖਾਲੀ ਕਰੋ।" },
     learn: [
       { text: { en: "Interference: put a piece between a defender and what it defends. The line is cut.", pa: "ਰੋਕ: ਰਾਖੇ ਅਤੇ ਉਸ ਮੋਹਰੇ ਵਿਚਕਾਰ, ਜਿਸ ਦੀ ਉਹ ਰਾਖੀ ਕਰਦਾ ਹੈ, ਇੱਕ ਮੋਹਰਾ ਰੱਖੋ। ਲਕੀਰ ਕੱਟੀ ਜਾਂਦੀ ਹੈ।" },
-        board: { pieces: {a5:"bR",e5:"bN",e1:"wR",b3:"wN",b4:"wP"}, arrows: [["a5","e5"],["b3","c5"],["e1","e5"]], highlights: ["c5"] } },
+        board: { fen: "1b2k2r/8/8/2P1nN2/8/8/5P1P/4R1K1 w - - 0 1", arrows: [["b8","e5"],["f5","d6"],["e1","e5"]], highlights: ["d6"] } },
       { text: { en: "Clearance: move your own piece out of the way, often with a threat, so another piece can use its square or line.", pa: "ਰਾਹ ਖੋਲ੍ਹਣਾ: ਆਪਣੇ ਮੋਹਰੇ ਨੂੰ ਰਾਹੋਂ ਹਟਾਓ, ਅਕਸਰ ਧਮਕੀ ਨਾਲ, ਤਾਂ ਜੋ ਕੋਈ ਹੋਰ ਮੋਹਰਾ ਹਟਾਏ ਹੋਏ ਮੋਹਰੇ ਦਾ ਖਾਨਾ ਜਾਂ ਲਕੀਰ ਵਰਤ ਸਕੇ।" },
         board: { pieces: {c2:"wQ",e4:"wN",h7:"bP",g8:"bK"}, arrows: [["e4","f6"],["c2","h7"]] } },
     ],
@@ -108,7 +108,7 @@ export const LEVEL7: Lesson[] = [
     goal: { en: "Attack or defend through another piece.", pa: "ਕਿਸੇ ਹੋਰ ਮੋਹਰੇ ਦੇ ਆਰ-ਪਾਰ ਹਮਲਾ ਜਾਂ ਰਾਖੀ ਕਰੋ।" },
     learn: [
       { text: { en: "A rook, bishop or queen still works through a piece in its way: once that piece moves or is captured, the line comes alive.", pa: "ਹਾਥੀ, ਊਠ ਜਾਂ ਰਾਣੀ ਰਾਹ ਵਿੱਚ ਆਏ ਮੋਹਰੇ ਦੇ ਆਰ-ਪਾਰ ਵੀ ਕੰਮ ਕਰਦੇ ਹਨ: ਜਦੋਂ ਉਹ ਮੋਹਰਾ ਹਿੱਲ ਜਾਵੇ ਜਾਂ ਮਾਰਿਆ ਜਾਵੇ, ਲਕੀਰ ਜਾਗ ਪੈਂਦੀ ਹੈ।" },
-        board: { fen: "4k3/8/8/8/4n3/8/8/4R1K1 b - - 0 1", arrows: [["e1","e8"]], highlights: ["e4"] } },
+        board: { fen: "3r2k1/8/8/3q4/8/8/3R4/3R2K1 w - - 0 1", arrows: [["d1","d5"]], highlights: ["d2"] } },
     ],
     try: one("xray", "Use the x-ray.", "ਆਰ-ਪਾਰ ਹਮਲਾ ਵਰਤੋ।"),
     practise: [many("xray", 4, "x-ray.", "ਆਰ-ਪਾਰ ਹਮਲਾ ਵਰਤੋ।")],

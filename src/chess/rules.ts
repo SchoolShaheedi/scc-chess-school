@@ -40,11 +40,12 @@ function play(fen: string, uci: string): { after: Chess; move: Move } | null {
 
 /** Which way a legal move gets out of check: king walks, the checker is taken, or the line is blocked. */
 export function escapeKind(fen: string, m: Move): "move" | "capture" | "block" {
-  if (m.piece === "k") return "move";
   const g = new Chess(fen);
   const king = g.findPiece({ type: "k", color: g.turn() })[0];
   const checkers = g.attackers(king, g.turn() === "w" ? "b" : "w");
-  return checkers.includes(m.to as CjSquare) ? "capture" : "block";
+  // taking the checker is "capture" even when the KING does the taking (it is also a king move, but the child took the piece)
+  if (checkers.includes(m.to as CjSquare)) return "capture";
+  return m.piece === "k" ? "move" : "block";
 }
 
 /** Judges one LEGAL move against the goal. */
@@ -61,7 +62,8 @@ export function judge(fen: string, uci: string, goal: Goal): Verdict {
     case "escape": return { ok: true };
     case "escape-move": case "escape-block": case "escape-capture": {
       const k = escapeKind(fen, move);
-      if (`escape-${k}` === goal) return { ok: true };
+      // a king that takes the checker has done BOTH a king move and a capture: either exercise accepts it
+      if (`escape-${k}` === goal || (goal === "escape-move" && move.piece === "k")) return { ok: true };
       // a legal escape, just not the one this exercise is practising: not a mistake, try the other way
       return { ok: false, tryAnother: true, why: goal === "escape-move" ? "wantMove" : goal === "escape-block" ? "wantBlock" : "wantCapture" };
     }

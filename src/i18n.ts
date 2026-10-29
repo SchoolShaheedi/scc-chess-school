@@ -758,7 +758,7 @@ export const UI = {
   checkmate: { en: "Checkmate!", pa: "ਸ਼ਹਿ-ਮਾਤ!" },
   whyNoCapture: { en: "That doesn't capture anything. Look for a piece nobody is guarding.", pa: "ਇਹ ਕੁਝ ਨਹੀਂ ਮਾਰਦੀ। ਉਹ ਮੋਹਰਾ ਲੱਭੋ ਜਿਸ ਦੀ ਕੋਈ ਰਾਖੀ ਨਹੀਂ ਕਰਦਾ।" },
   whyDefended: { en: "That piece was guarded: you would be taken back. Find the one that is free.", pa: "ਉਸ ਮੋਹਰੇ ਦੀ ਰਾਖੀ ਸੀ: ਤੁਹਾਨੂੰ ਬਦਲੇ ਵਿੱਚ ਮਾਰ ਲਿਆ ਜਾਵੇਗਾ। ਮੁਫ਼ਤ ਵਾਲਾ ਲੱਭੋ।" },
-  whyNotFork: { en: "From there your piece attacks only one target. A fork hits two at once.", pa: "ਉੱਥੋਂ ਤੁਹਾਡਾ ਮੋਹਰਾ ਸਿਰਫ਼ ਇੱਕ ਨਿਸ਼ਾਨੇ 'ਤੇ ਹਮਲਾ ਕਰਦਾ ਹੈ। ਦੋਹਰਾ ਵਾਰ ਇੱਕੋ ਵਾਰ ਦੋ 'ਤੇ ਹੁੰਦਾ ਹੈ।" },
+  whyNotFork: { en: "From there your piece attacks only one target. A double attack hits two at once.", pa: "ਉੱਥੋਂ ਤੁਹਾਡਾ ਮੋਹਰਾ ਸਿਰਫ਼ ਇੱਕ ਨਿਸ਼ਾਨੇ 'ਤੇ ਹਮਲਾ ਕਰਦਾ ਹੈ। ਦੋ ਪਾਸੀ ਹਮਲਾ ਇੱਕੋ ਵਾਰ ਦੋ 'ਤੇ ਹੁੰਦਾ ਹੈ।" },
   whyNotPin: { en: "No pin there. Line your piece up so a smaller enemy piece shields a bigger one behind it.", pa: "ਉੱਥੇ ਬੰਨ੍ਹ ਨਹੀਂ। ਆਪਣੇ ਮੋਹਰੇ ਨੂੰ ਅਜਿਹੀ ਸਿੱਧੀ ਲਕੀਰ ਵਿੱਚ ਰੱਖੋ ਕਿ ਦੁਸ਼ਮਣ ਦਾ ਛੋਟਾ ਮੋਹਰਾ ਪਿੱਛੇ ਵਾਲੇ ਵੱਡੇ ਨੂੰ ਢਕੇ।" },
   whyNotSkewer: { en: "No skewer there. Attack the big piece first, with a smaller one behind it.", pa: "ਉੱਥੇ ਪਿਛਲਾ ਵਾਰ ਨਹੀਂ। ਪਹਿਲਾਂ ਵੱਡੇ ਮੋਹਰੇ 'ਤੇ ਹਮਲਾ ਕਰੋ, ਜਿਸ ਦੇ ਪਿੱਛੇ ਛੋਟਾ ਹੋਵੇ।" },
   whyNotDiscover: { en: "Nothing new is uncovered. Move the piece that stands in front of your attacker.", pa: "ਕੁਝ ਨਵਾਂ ਨਹੀਂ ਖੁੱਲ੍ਹਿਆ। ਉਹ ਮੋਹਰਾ ਹਿਲਾਓ ਜੋ ਤੁਹਾਡੇ ਹਮਲਾਵਰ ਦੇ ਅੱਗੇ ਖੜ੍ਹਾ ਹੈ।" },

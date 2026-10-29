@@ -88,7 +88,7 @@ export const LEVEL10: Lesson[] = [
     title: { en: "Candidate moves", pa: "ਚੋਣਵੀਆਂ ਚਾਲਾਂ" },
     goal: { en: "List your options before you calculate any of them.", pa: "ਕਿਸੇ ਇੱਕ ਦੀ ਗਿਣਤੀ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਸਾਰੀਆਂ ਚੋਣਵੀਆਂ ਚਾਲਾਂ ਦੀ ਸੂਚੀ ਬਣਾਓ।" },
     learn: [
-      { text: { en: "Before calculating, list two or three candidate moves. Start with checks, captures and threats: the forcing moves.", pa: "ਗਿਣਤੀ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਦੋ-ਤਿੰਨ ਚੋਣਵੀਆਂ ਚਾਲਾਂ ਦੀ ਸੂਚੀ ਬਣਾਓ। ਸ਼ਹਿ, ਮਾਰਨ ਵਾਲੀਆਂ ਚਾਲਾਂ ਅਤੇ ਧਮਕੀਆਂ ਤੋਂ ਸ਼ੁਰੂ ਕਰੋ: ਮਜਬੂਰ ਕਰਨ ਵਾਲੀਆਂ ਚਾਲਾਂ।" },
+      { text: { en: "Before calculating, list two or three candidate moves. Start with checks, captures and threats: the forcing moves. In the picture: Re8+ loses the rook to ...Rxe8; h3 gives the king an escape square but wins nothing; Bxd5 wins a knight.", pa: "ਗਿਣਤੀ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਦੋ-ਤਿੰਨ ਚੋਣਵੀਆਂ ਚਾਲਾਂ ਦੀ ਸੂਚੀ ਬਣਾਓ। ਸ਼ਹਿ, ਮਾਰਨ ਵਾਲੀਆਂ ਚਾਲਾਂ ਅਤੇ ਧਮਕੀਆਂ ਤੋਂ ਸ਼ੁਰੂ ਕਰੋ: ਮਜਬੂਰ ਕਰਨ ਵਾਲੀਆਂ ਚਾਲਾਂ। ਤਸਵੀਰ ਵਿੱਚ: Re8+ ਨਾਲ ...Rxe8 ਹਾਥੀ ਲੈ ਜਾਂਦਾ ਹੈ; h3 ਬਾਦਸ਼ਾਹ ਨੂੰ ਬਚਣ ਦਾ ਖਾਨਾ ਦਿੰਦੀ ਹੈ ਪਰ ਕੁਝ ਜਿੱਤਦੀ ਨਹੀਂ; Bxd5 ਘੋੜਾ ਜਿੱਤਦੀ ਹੈ।" },
         board: { fen: "r5k1/5ppp/8/3n4/8/1B6/5PPP/4R1K1 w - - 0 1", arrows: [["e1","e8"],["b3","d5"],["h2","h3"]] } },
       { text: { en: "Then look at each one in turn. Don't fall in love with the first move you see: the best move is often the second or third.", pa: "ਫਿਰ ਇੱਕ-ਇੱਕ ਕਰਕੇ ਹਰ ਚਾਲ ਵੇਖੋ। ਪਹਿਲੀ ਦਿਸੀ ਚਾਲ ਨੂੰ ਹੀ ਸਭ ਤੋਂ ਵਧੀਆ ਨਾ ਸਮਝੋ: ਸਭ ਤੋਂ ਵਧੀਆ ਚਾਲ ਅਕਸਰ ਦੂਜੀ ਜਾਂ ਤੀਜੀ ਹੁੰਦੀ ਹੈ।" },
         board: { fen: "4r1k1/5pp1/7p/8/8/2q5/1P3PPP/4R1K1 w - - 0 1", arrows: [["b2","c3"],["e1","e8"]] } },
@@ -104,8 +104,8 @@ export const LEVEL10: Lesson[] = [
     learn: [
       { text: { en: "Picture the board after each move in your head. At the end of the line, stop and ask: what is the best reply for them here?", pa: "ਹਰ ਚਾਲ ਤੋਂ ਬਾਅਦ ਬਿਸਾਤ ਨੂੰ ਮਨ ਵਿੱਚ ਵੇਖੋ। ਲਾਈਨ ਦੇ ਅੰਤ 'ਤੇ ਰੁਕੋ ਅਤੇ ਪੁੱਛੋ: ਇੱਥੇ ਵਿਰੋਧੀ ਦਾ ਸਭ ਤੋਂ ਵਧੀਆ ਜਵਾਬ ਕੀ ਹੈ?" },
         board: { fen: "3r3k/6pp/7N/8/8/1Q6/5PPP/6K1 w - - 0 1", arrows: [["b3","g8"],["d8","g8"],["h6","f7"]] } },
-      { text: { en: "Blunder check: before you touch a piece, look once more for their checks and captures.", pa: "ਗ਼ਲਤੀ ਦੀ ਜਾਂਚ: ਮੋਹਰੇ ਨੂੰ ਛੂਹਣ ਤੋਂ ਪਹਿਲਾਂ, ਵਿਰੋਧੀ ਦੀਆਂ ਸ਼ਹਿ ਅਤੇ ਮਾਰਨ ਵਾਲੀਆਂ ਚਾਲਾਂ ਇੱਕ ਵਾਰੀ ਹੋਰ ਵੇਖੋ।" },
-        board: { fen: "r5k1/5ppp/8/8/8/8/5PPP/3Q2K1 w - - 0 1", arrows: [["a8","a1"]], highlights: ["a1"] } },
+      { text: { en: "Blunder check: before you touch a piece, look once more for their checks and captures. The d5 pawn looks free, but Qxd5 would be a blunder: the queen is the only guard of the back row, and ...Ra1+ leads to mate.", pa: "ਗ਼ਲਤੀ ਦੀ ਜਾਂਚ: ਮੋਹਰੇ ਨੂੰ ਛੂਹਣ ਤੋਂ ਪਹਿਲਾਂ, ਵਿਰੋਧੀ ਦੀਆਂ ਸ਼ਹਿ ਅਤੇ ਮਾਰਨ ਵਾਲੀਆਂ ਚਾਲਾਂ ਇੱਕ ਵਾਰੀ ਹੋਰ ਵੇਖੋ। d5 ਵਾਲਾ ਪਿਆਦਾ ਮੁਫ਼ਤ ਲੱਗਦਾ ਹੈ, ਪਰ Qxd5 ਵੱਡੀ ਗ਼ਲਤੀ ਹੋਵੇਗੀ: ਰਾਣੀ ਹੀ ਪਿਛਲੀ ਕਤਾਰ ਦੀ ਇੱਕੋ-ਇੱਕ ਰਾਖੀ ਹੈ, ਅਤੇ ...Ra1+ ਨਾਲ ਮਾਤ ਹੋ ਜਾਂਦੀ ਹੈ।" },
+        board: { fen: "r5k1/5ppp/8/3p4/8/8/5PPP/3Q2K1 w - - 0 1", arrows: [["d1","d5"],["a8","a1"]], highlights: ["a1"] } },
     ],
     try: { kind: "pack", pack: "very-long", count: 1, prompt: { en: "A long combination. See it all before you start.", pa: "ਚਾਲਾਂ ਦੀ ਲੰਮੀ ਲੜੀ। ਸ਼ੁਰੂ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਸਾਰੀ ਵੇਖੋ।" } },
     practise: [ { kind: "pack", pack: "very-long", count: 3, prompt: real("deep combinations.", "ਚਾਲਾਂ ਦੀਆਂ ਡੂੰਘੀਆਂ ਲੜੀਆਂ ਲੱਭੋ।") } ],
@@ -117,7 +117,7 @@ export const LEVEL10: Lesson[] = [
     goal: { en: "When you're worse, make every move hard for your opponent.", pa: "ਜਦੋਂ ਤੁਹਾਡੀ ਹਾਲਤ ਮਾੜੀ ਹੋਵੇ, ਵਿਰੋਧੀ ਲਈ ਹਰ ਚਾਲ ਔਖੀ ਬਣਾਓ।" },
     learn: [
       { text: { en: "Don't give up. Find their threat first, then the move that stops it. Look for counter-chances: a check, a passed pawn, a draw by repetition.", pa: "ਹਾਰ ਨਾ ਮੰਨੋ। ਪਹਿਲਾਂ ਵਿਰੋਧੀ ਦੀ ਧਮਕੀ ਲੱਭੋ, ਫਿਰ ਉਸ ਨੂੰ ਰੋਕਣ ਵਾਲੀ ਚਾਲ। ਜਵਾਬੀ ਮੌਕੇ ਲੱਭੋ: ਸ਼ਹਿ, ਆਜ਼ਾਦ ਪਿਆਦਾ, ਦੁਹਰਾਅ ਨਾਲ ਬਰਾਬਰੀ।" },
-        board: { fen: "7k/6p1/8/8/8/8/2r5/1K1Q4 w - - 0 1", arrows: [["d1","h5"]] } },
+        board: { fen: "7k/6p1/8/8/8/8/1rr5/K2Q4 w - - 0 1", arrows: [["d1","h5"]] } },
     ],
     try: { kind: "pack", pack: "defend-hard", count: 1, prompt: { en: "Find the only defence.", pa: "ਬਚਾਅ ਦੀ ਇੱਕੋ ਚਾਲ ਲੱਭੋ।" } },
     practise: [ { kind: "pack", pack: "defend-hard", count: 3, prompt: real("hard defence.", "ਔਖੇ ਬਚਾਅ ਲੱਭੋ।") } ],
