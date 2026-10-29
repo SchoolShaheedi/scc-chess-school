@@ -15,6 +15,7 @@ import { copyText, pgnOf } from "../play/pgn";
 import { whiteWin } from "../review/grade";
 import { explorerHTML } from "./explorer";
 import { editFrom } from "./editor";
+import { tell } from "../ui/dialog";
 
 type Go = (h: string) => void;
 const START = new Chess().fen();
@@ -137,7 +138,7 @@ export function analysisBoard(root: HTMLElement, go: Go): () => void {
       if (/^[rnbqkpRNBQKP1-8]+(\/[rnbqkpRNBQKP1-8]+){7}\s/.test(text)) { new Chess(text); start = text; line = []; at = 0; }
       else { const g = new Chess(); g.loadPgn(text); start = g.getHeaders().FEN ?? START; line = g.history({ verbose: true }).map(m => m.from + m.to + (m.promotion ?? "")); at = line.length; }
       refresh();
-    } catch { alert(t("anaLoadBad")); }
+    } catch { void tell(t("anaLoadBad")); }
   };
   // play on from here against a bot: the learner takes the side to move
   root.querySelector<HTMLButtonElement>("[data-playfrom]")!.onclick = () => {

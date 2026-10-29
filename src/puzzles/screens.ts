@@ -155,6 +155,8 @@ export function playRush(root: HTMLElement, go: Go): () => void {
   let step = 0, score = 0, misses = 0, left = RUSH_SECONDS, over = false, timer = 0;
   let cleanup: (() => void) | null = null, ui: ReturnType<typeof puzzleScreen> | null = null;
   const teardown = () => { clearInterval(timer); cleanup?.(); cleanup = null; ui?.board.destroy(); ui = null; };
+  // leaving mid-answer: the pending "next puzzle" and "finish" timers must find the Race over (DECISIONS #128)
+  const leave = () => { over = true; teardown(); };
   const clock = () => `${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}`;
   const head = () => `<span class="pill rushhead"><span data-clock>${num(clock())}</span>
     <span class="strikes">${Array.from({ length: RUSH_MISSES }, (_, i) => icon("close", i < misses ? "hit" : "")).join("")}</span>
@@ -180,7 +182,7 @@ export function playRush(root: HTMLElement, go: Go): () => void {
     if (over) return;
     cleanup?.(); ui?.board.destroy();
     ui = puzzleScreen(root, t("rushTitle"), head());
-    root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => { teardown(); go("#/puzzles"); };
+    root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => { leave(); go("#/puzzles"); };
     const ex = rushNext(pool, step, used);
     let decided = false;
     const decide = (ok: boolean) => {
@@ -217,7 +219,7 @@ export function playRush(root: HTMLElement, go: Go): () => void {
   }
 
   intro();
-  return teardown;
+  return leave;
 }
 
 // ---------- Puzzle Survival (DECISIONS #115, option B) ----------
@@ -283,7 +285,7 @@ export function playSurvival(root: HTMLElement, go: Go): () => void {
   }
 
   function finish() {
-    if (over) return; over = true;
+    if (over || !alive) return; over = true;
     const best = store.get().survivalBest ?? 0, record = score > best;
     store.recordSurvival(score);
     teardown();

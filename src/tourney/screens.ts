@@ -4,6 +4,7 @@
 import { num, t } from "../i18n";
 import { icon } from "../icons";
 import { currentRound, type Game, type Player, playingRound, type Result, roundDone, roundRobin, standings, suggestRounds, suggestSystem, swissRound, type Tournament } from "./engine";
+import { ask, tell } from "../ui/dialog";
 
 type Go = (h: string) => void;
 const KEY = "scc-tourneys";
@@ -31,7 +32,7 @@ function clean(x: unknown): Tournament | null {
 }
 
 const all = (): Tournament[] => { try { return JSON.parse(localStorage.getItem(KEY) ?? "[]") as Tournament[]; } catch { return []; } };
-const saveAll = (list: Tournament[]) => { try { localStorage.setItem(KEY, JSON.stringify(list)); } catch { alert(t("tnStorageFull")); } };
+const saveAll = (list: Tournament[]) => { try { localStorage.setItem(KEY, JSON.stringify(list)); } catch { void tell(t("tnStorageFull")); } };
 const save = (tn: Tournament) => saveAll([tn, ...all().filter(x => x.id !== tn.id)]);
 const find = (id: string) => all().find(x => x.id === id);
 const nameOf = (tn: Tournament, id: string | null) => (id ? esc(tn.players.find(p => p.id === id)?.name ?? "?") : t("tnBye"));
@@ -61,7 +62,7 @@ export function tourneyHome(root: HTMLElement, go: Go) {
       const tn = clean(JSON.parse(await f.text()));
       if (!tn) throw new Error("not an event");
       save(tn); go(`#/tourney/${tn.id}`);
-    } catch { alert(t("tnImportBad")); }
+    } catch { void tell(t("tnImportBad")); }
   };
 }
 
@@ -141,7 +142,7 @@ export function tourneyView(root: HTMLElement, id: string, go: Go) {
     });
     root.querySelector<HTMLButtonElement>("[data-next]")?.addEventListener("click", () => {
       const x = find(id)!, next = swissRound(x);
-      if (!next) { alert(t("tnNoPairing")); return; }
+      if (!next) { void tell(t("tnNoPairing")); return; }
       x.games.push(...next); save(x); shown = currentRound(x); draw();
     });
     root.querySelectorAll<HTMLButtonElement>("[data-withdraw]").forEach(b => b.onclick = () => {
@@ -158,7 +159,7 @@ export function tourneyView(root: HTMLElement, id: string, go: Go) {
       a.download = `${x.name.replace(/[^\w-]+/g, "_") || "tournament"}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
     });
     root.querySelector<HTMLButtonElement>("[data-delete]")?.addEventListener("click", () => {
-      if (confirm(t("tnDeleteConfirm"))) { saveAll(all().filter(x => x.id !== id)); go("#/tourney"); }
+      void ask(t("tnDeleteConfirm"), { danger: true }).then(ok => { if (ok) { saveAll(all().filter(x => x.id !== id)); go("#/tourney"); } });
     });
     // printing: the sheet is drawn into a print-only block, then the browser's print dialog opens
     const print = (html: string) => { root.querySelector<HTMLElement>("[data-sheet]")!.innerHTML = html; window.print(); };

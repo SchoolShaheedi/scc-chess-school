@@ -9,6 +9,7 @@ import { classBoard, createClass, deleteClass, joinClass, leaveClass, myClasses,
 import { mondayOf } from "./summary";
 import { today } from "../store";
 import { parentGate } from "../online/screens";
+import { ask } from "../ui/dialog";
 
 type Go = (h: string) => void;
 const bar = (title: string) => `<div class="lessonbar"><button class="iconbtn" data-back aria-label="${t("back")}">${icon("chevronLeft")}</button><h1 class="grow">${title}</h1></div>`;
@@ -67,9 +68,9 @@ export async function classView(root: HTMLElement, classId: string, go: Go) {
   root.querySelectorAll<HTMLInputElement>("[data-label]").forEach(i => i.onchange = () => setLabel(i.dataset.label!, i.value));
   root.querySelectorAll<HTMLButtonElement>("[data-rm]").forEach(b => b.onclick = async () => {
     const p = list.find(x => pupilKey(classId, x) === b.dataset.rm)!;
-    if (confirm(t("teachRemoveConfirm"))) { await removePupil(classId, p); void classView(root, classId, go); }
+    if (await ask(t("teachRemoveConfirm"), { danger: true })) { await removePupil(classId, p); void classView(root, classId, go); }
   });
-  root.querySelector<HTMLButtonElement>("[data-del]")!.onclick = async () => { if (confirm(t("teachDeleteConfirm"))) { await deleteClass(classId); go("#/teach"); } };
+  root.querySelector<HTMLButtonElement>("[data-del]")!.onclick = async () => { if (await ask(t("teachDeleteConfirm"), { danger: true })) { await deleteClass(classId); go("#/teach"); } };
 }
 
 // ---------- parent: join a class, with consent ----------
@@ -129,7 +130,7 @@ export async function classesBlock(box: HTMLElement, go: Go) {
   });
   box.querySelector<HTMLButtonElement>("[data-join]")!.onclick = () => go("#/join");
   box.querySelectorAll<HTMLButtonElement>("[data-leave]").forEach(b => b.onclick = async () => {
-    if (confirm(t("joinLeaveConfirm"))) { await leaveClass(b.dataset.leave!, family.current().id); void classesBlock(box, go); }
+    if (await ask(t("joinLeaveConfirm"), { danger: true })) { await leaveClass(b.dataset.leave!, family.current().id); void classesBlock(box, go); }
   });
 }
 

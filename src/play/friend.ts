@@ -19,6 +19,7 @@ import { setLastGame } from "../review/screen";
 import { sound } from "../sound";
 import { type Clock, flagged, fmt, newClock, press, remaining, undoTurn } from "./clock";
 import { copyText, pgnOf } from "./pgn";
+import { ask } from "../ui/dialog";
 
 type Go = (h: string) => void;
 const CONTROLS: [string, number, number][] = [["none", 0, 0], ["5", 5, 0], ["10", 10, 0], ["15+10", 15, 10]];
@@ -145,11 +146,11 @@ function friendGame(root: HTMLElement, go: Go, startClock: Clock | null, turnBoa
     if (over || !g.history().length) return;
     g.undo(); times.length = g.history().length; turnAt = Date.now(); if (clock) clock = undoTurn(clock, Date.now()); show();
   };
-  root.querySelector<HTMLButtonElement>("[data-draw]")!.onclick = () => { if (!over && confirm(t("drawConfirm"))) end("1/2-1/2", t("byAgreement")); };
+  root.querySelector<HTMLButtonElement>("[data-draw]")!.onclick = () => { if (!over) void ask(t("drawConfirm")).then(ok => { if (ok && !over) end("1/2-1/2", t("byAgreement")); }); };
   root.querySelector<HTMLButtonElement>("[data-resign]")!.onclick = () => {
-    if (!over && confirm(t("resignSide").replace("{side}", side(g.turn())))) end(g.turn() === "w" ? "0-1" : "1-0", t("byResign"));
+    if (!over) void ask(t("resignSide").replace("{side}", side(g.turn())), { yes: t("resign"), danger: true }).then(ok => { if (ok && !over) end(g.turn() === "w" ? "0-1" : "1-0", t("byResign")); });
   };
-  root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => { if (over || !g.history().length || confirm(t("leaveGame"))) go("#/play"); };
+  root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => { if (over || !g.history().length) go("#/play"); else void ask(t("leaveGame"), { yes: t("leave"), no: t("keepPlaying"), danger: true }).then(ok => { if (ok) go("#/play"); }); };
   if (clock) timer = window.setInterval(() => {
     if (over || !clock) return;
     const f = flagged(clock, Date.now());

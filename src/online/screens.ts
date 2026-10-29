@@ -22,6 +22,7 @@ import { magicalLine } from "../power/online";
 import { gemFor } from "../power/rules";
 import { askChange, burstAt, gemDecor } from "../power/ui";
 import { sound } from "../sound";
+import { ask, tell } from "../ui/dialog";
 import {
   activeGames, addFriend, adultLadder, answerChallenge, blockPlayer, enableOnlineAdult, findGame, gamePlayers, stopSeeking, cancelChallenge, challenges, claimTime, disableOnline, enableOnline, type Game, gameAction,
   answerFriend, friendRequests, getGame, type Me, myPlayer, newFriendCode, opponents, type Opponent, REACTIONS, removeFriend, sendChallenge, sendMove, signedIn, watchChallenges, watchGame,
@@ -63,15 +64,15 @@ export async function onlineBlock(box: HTMLElement) {
       <div data-gate></div>`;
     box.querySelector<HTMLButtonElement>("[data-adult]")?.addEventListener("click", () =>
       parentGate(box.querySelector("[data-gate]")!, () => declare(box.querySelector("[data-gate]")!, async () => {
-        const e = await enableOnlineAdult(); if (e) alert(e); void onlineBlock(box);
+        const e = await enableOnlineAdult(); if (e) await tell(e); void onlineBlock(box);
       }, () => draw()), () => draw()));
     box.querySelector<HTMLButtonElement>("[data-on]")?.addEventListener("click", () =>
-      parentGate(box.querySelector("[data-gate]")!, async () => { const e = await enableOnline(); if (e) alert(e); void onlineBlock(box); }, () => draw()));
+      parentGate(box.querySelector("[data-gate]")!, async () => { const e = await enableOnline(); if (e) await tell(e); void onlineBlock(box); }, () => draw()));
     box.querySelector<HTMLButtonElement>("[data-off]")?.addEventListener("click", async () => {
-      if (me && confirm(t("onlineOffConfirm"))) { await disableOnline(me.id); void onlineBlock(box); }
+      if (me && await ask(t("onlineOffConfirm"), { danger: true })) { await disableOnline(me.id); void onlineBlock(box); }
     });
     box.querySelector<HTMLButtonElement>("[data-newcode]")?.addEventListener("click", async () => {
-      if (me && confirm(t("onlineNewCodeConfirm"))) { await newFriendCode(me.id); void onlineBlock(box); }
+      if (me && await ask(t("onlineNewCodeConfirm"))) { await newFriendCode(me.id); void onlineBlock(box); }
     });
   };
   draw();
@@ -201,7 +202,7 @@ export function onlineLobby(root: HTMLElement, go: Go): () => void {
       root.querySelectorAll<HTMLButtonElement>("[data-cancel]").forEach(b => b.onclick = async () => { await cancelChallenge(me.id, b.dataset.cancel!); void render(); });
       root.querySelectorAll<HTMLButtonElement>("[data-befriend]").forEach(b => b.onclick = async () => { await answerFriend(me.id, b.dataset.befriend!, true); void render(); });
       root.querySelectorAll<HTMLButtonElement>("[data-refuse]").forEach(b => b.onclick = async () => { await answerFriend(me.id, b.dataset.refuse!, false); void render(); });
-      root.querySelectorAll<HTMLButtonElement>("[data-unfriend]").forEach(b => b.onclick = async () => { if (confirm(t("onlineUnfriendConfirm"))) { await removeFriend(me.id, b.dataset.unfriend!); void render(); } });
+      root.querySelectorAll<HTMLButtonElement>("[data-unfriend]").forEach(b => b.onclick = async () => { if (await ask(t("onlineUnfriendConfirm"), { danger: true })) { await removeFriend(me.id, b.dataset.unfriend!); void render(); } });
       root.querySelector<HTMLFormElement>("[data-add]")!.onsubmit = async e => {
         e.preventDefault();
         const r = await addFriend(me.id, root.querySelector<HTMLInputElement>("#fc")!.value);
@@ -324,7 +325,7 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
         return { pos: placementFromFen(c.fen()), lastMove: last ? [last.slice(0, 2), last.slice(2, 4)] : undefined, flip: mine === "b", result: r, how, opp: { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" }, moves: Math.ceil(g.moves.length / 2) }; });
       card.querySelector<HTMLButtonElement>("[data-x]")!.onclick = () => { card.hidden = true; acts.hidden = false; };
       root.querySelectorAll<HTMLButtonElement>("[data-block]").forEach(b => b.onclick = async () => {
-        if (!oppId || !confirm(t("adultBlockConfirm"))) return;
+        if (!oppId || !(await ask(t("adultBlockConfirm"), { danger: true }))) return;
         const e = await blockPlayer(me!.id, oppId);
         root.querySelectorAll<HTMLButtonElement>("[data-block]").forEach(x => { x.disabled = true; x.textContent = e ?? t("adultBlocked"); });
       });
@@ -390,8 +391,8 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
     root.querySelector<HTMLButtonElement>("[data-prev]")!.onclick = () => { view = Math.max(0, (view ?? g.moves.length) - 1); show(); };
     root.querySelector<HTMLButtonElement>("[data-next]")!.onclick = () => { const n = (view ?? g.moves.length) + 1; view = n >= g.moves.length ? null : n; show(); };
     root.querySelectorAll<HTMLButtonElement>("[data-react]").forEach(b => b.onclick = () => { void gameAction(me.id, g.id, "react", b.dataset.react); b.classList.add("sent"); setTimeout(() => b.classList.remove("sent"), 800); });
-    root.querySelector<HTMLButtonElement>("[data-draw]")!.onclick = () => { if (g.status === "active" && confirm(t("drawConfirm"))) void gameAction(me.id, g.id, "offer_draw"); };
-    root.querySelector<HTMLButtonElement>("[data-resign]")!.onclick = () => { if (g.status === "active" && confirm(t("resignConfirm"))) void gameAction(me.id, g.id, "resign"); };
+    root.querySelector<HTMLButtonElement>("[data-draw]")!.onclick = () => { if (g.status === "active") void ask(t("drawConfirm")).then(ok => { if (ok && g.status === "active") void gameAction(me.id, g.id, "offer_draw"); }); };
+    root.querySelector<HTMLButtonElement>("[data-resign]")!.onclick = () => { if (g.status === "active") void ask(t("resignConfirm"), { yes: t("resign"), no: t("keepPlaying"), danger: true }).then(ok => { if (ok && g.status === "active") void gameAction(me.id, g.id, "resign"); }); };
     root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/online");
     unwatch = watchGame(g.id, apply);
     // the clock ticks here; when the OTHER side's time runs out, ask the server to end the game (it checks the time itself)

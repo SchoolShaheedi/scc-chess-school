@@ -4,6 +4,7 @@
 // The screens themselves are not rewritten: each is split into two columns after it is drawn, and put back exactly
 // as it was when the window becomes narrow (the split changes the order, so it is never left in place on a phone).
 import { NATIVE } from "./native";
+import { addTabs, removeTabs } from "./widetabs";
 
 /** Split one drawn screen into its two columns (exported for test/wide.test.ts). */
 export function splitScreen(s: HTMLElement): "board" | "home" | null {
@@ -32,6 +33,7 @@ export function splitScreen(s: HTMLElement): "board" | "home" | null {
   left.forEach(k => lc.appendChild(k));
   kids.filter(k => !left.includes(k) && !keep.includes(k)).forEach(k => rc.appendChild(k));
   s.appendChild(rc);
+  if (kind === "board") addTabs(s);   // DECISIONS #128: the bot game's panel gets its Moves / Coach / Opening tabs
   return kind;
 }
 
@@ -40,6 +42,7 @@ const originals = new WeakMap<HTMLElement, HTMLElement[]>();
 export function unsplitScreen(s: HTMLElement) {
   const kids = originals.get(s);
   if (!kids) return;
+  removeTabs(s);   // everything in the tabs goes back into the panel first
   const cols = [...s.querySelectorAll(":scope > .wcol")];
   // the original order, without anything the screen has since removed; anything it has added since goes back
   // right after the element it followed in its column

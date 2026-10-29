@@ -24,6 +24,7 @@ let syncingFor: string | null = null;   // the account onSignedIn is running (or
 let returnFailed = false;     // the Android app was opened by a sign-in link that did not work (#123)
 let ready = false;              // true once Supabase has said whether a session exists
 let pushTimer: ReturnType<typeof setTimeout> | undefined;
+let merging = false;            // true while another device's progress is merged in: that is not a new change to save
 const listeners = new Set<() => void>();
 const notify = () => listeners.forEach(f => f());
 
@@ -82,7 +83,10 @@ const forgetDevice = () => {
   synced = false; syncingFor = null; lastSaved = null; forgetClasses();
 };
 
-export async function signOut() { await db?.auth.signOut(); forgetDevice(); }
+/** Saves now anything still waiting (a change in the last 1.5 s), so signing out never drops it (DECISIONS #128). */
+async function flush() { clearTimeout(pushTimer); if (session && synced) await push(); }
+
+export async function signOut() { await flush(); await db?.auth.signOut(); forgetDevice(); }
 
 /** Right to erasure: removes the progress row and the account itself (supabase/schema.sql). */
 export async function deleteAccount(): Promise<string | null> {
@@ -102,8 +106,15 @@ async function pull(userId: string): Promise<Family | null | undefined> {
 
 async function push() {
   if (!session || !synced) return;
+  const id = session.user.id;
+  // read the row again first and merge it in: a tablet left open all day must not overwrite the lessons the child did
+  // on a phone since (DECISIONS #128); if it cannot be read, try again shortly rather than save over it
+  const remote = await pull(id);
+  if (session?.user.id !== id || !synced) return;
+  if (remote === undefined) { clearTimeout(pushTimer); pushTimer = setTimeout(() => void push(), 15000); return; }
+  if (remote) { merging = true; try { family.applyRemote(remote); } finally { merging = false; } }
   const { error } = await db!.from("progress").upsert({
-    user_id: session.user.id, data: family.snapshot(), updated_at: new Date().toISOString(),
+    user_id: id, data: family.snapshot(), updated_at: new Date().toISOString(),
   });
   if (error) console.warn("progress save failed", error.message);
   else { lastSaved = new Date(); notify(); void pushSummaries().catch(() => {}); }
@@ -114,7 +125,8 @@ async function onSignedIn() {
   const id = session!.user.id;
   // progress left by a DIFFERENT account must never be merged into this one
   const prev = owner();
-  if (prev && prev !== id) { family.reset(); store.reset(); store.set({ onboarded: false }); }
+  // ...nor may its saved games, Insights or classes stay on a shared tablet (DECISIONS #128)
+  if (prev && prev !== id) { forgetGames(); family.reset(); store.reset(); store.set({ onboarded: false }); lastSaved = null; forgetClasses(); }
   setOwner(id);
   const remote = await pull(id);
   if (session?.user.id !== id) return;   // signed out (or someone else signed in) while it was being read
@@ -151,7 +163,7 @@ export function startSync() {
   });
   // every change to progress is saved a moment later (batched, so a fast lesson is one write)
   const later = () => {
-    if (!session) return;
+    if (!session || merging) return;
     clearTimeout(pushTimer);
     pushTimer = setTimeout(() => void push(), 1500);
   };

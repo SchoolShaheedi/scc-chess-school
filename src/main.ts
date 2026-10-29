@@ -57,6 +57,8 @@ import { gameSettingsHTML, wireGameSettings } from "./play/gamesettings";
 import { wideLayout } from "./wide";
 import { courseHub, coursePage, runCourse } from "./openings/course";
 import type { Step } from "./content/course";
+import { ask } from "./ui/dialog";
+import { simranScreen, startMusic } from "./music";
 
 // the Android app (DECISIONS #121) carries every file inside it: no service worker
 if (!NATIVE) registerSW({ immediate: true });
@@ -70,6 +72,7 @@ document.addEventListener("error", e => {
   else if (img.hasAttribute("data-hide-on-error")) img.remove();
 }, true);
 startSync();
+startMusic();   // soft background music, when switched on (DECISIONS #129)
 
 const app = document.getElementById("app")!;
 let teardown: (() => void) | null = null;
@@ -393,6 +396,8 @@ function settings() {
         ${avatarHTML(family.current(), k ? `fr-${k}` : "")}<small>${k ? lockLabel("frame", k, tx(rewardFor("frame", k)!.name)) : t("frameNone")}</small>${k ? lockPip("frame", k) : ""}</button>`).join("")}</div></div>` : ""}
     <div class="group"><h2>${icon("sun")} ${t("themeLabel")}</h2>${seg("themeMode", s.themeMode ?? "dark", [["dark", t("themeDark")], ["light", t("themeLight")]])}</div>
     <div class="group"><h2>${icon("music")} ${t("soundLabel")}</h2>${seg("sound", String(s.sound), [["true", t("soundOn")], ["false", t("soundOff")]])}</div>
+    <div class="group"><h2>${icon("music")} ${t("musicLabel")}</h2>${seg("music", String(!!s.music), [["true", t("soundOn")], ["false", t("soundOff")]])}<p class="note">${t("musicNote")}</p>
+      <button class="btn ghost wide" data-simran>${icon("play")} ${t("simranOpen")}</button></div>
     <div class="group"><h2>${icon("sound")} ${t("voiceLabel")}</h2>${seg("voice", String(voiceOn()), [["true", t("soundOn")], ["false", t("soundOff")]])}<p class="note">${t("voiceNote")}</p></div>
     <div class="group"><h2>${icon("vibrate")} ${t("buzzLabel")}</h2>${seg("buzz", String(s.buzz), [["true", t("soundOn")], ["false", t("soundOff")]])}</div>
     <div class="group"><h2>${icon("crown")} ${t("autoQueenLabel")}</h2>${seg("autoQueen", String(!!s.autoQueen), [["true", t("soundOn")], ["false", t("soundOff")]])}<p class="note">${t("autoQueenNote")}</p></div>
@@ -417,14 +422,20 @@ function settings() {
   else teardown = mountAccount(app.querySelector("[data-account]")!);
   app.querySelector<HTMLButtonElement>("[data-home]")!.onclick = () => go("#/me");
   app.querySelector<HTMLButtonElement>("[data-placement]")?.addEventListener("click", () => go("#/placement"));
+  app.querySelector<HTMLButtonElement>("[data-simran]")!.onclick = () => go("#/simran");
   // teacher tools only for approved teachers (the database decides: is_teacher())
   void isTeacher().catch(() => false).then(yes => { const g = app.querySelector<HTMLElement>("[data-teacher]"); if (g && yes) g.hidden = false; });
   app.querySelector<HTMLButtonElement>("[data-teach]")!.onclick = () => go("#/teach");
-  app.querySelector<HTMLButtonElement>("[data-reset]")!.onclick = () => { if (confirm(t("resetConfirm"))) { store.reset(); go("#/"); } };
+  app.querySelector<HTMLButtonElement>("[data-reset]")!.onclick = () => { void ask(t("resetConfirm"), { danger: true }).then(ok => { if (ok) { store.reset(); go("#/"); } }); };
 }
 
+let routedPath = "";
 function route() {
   teardown?.(); teardown = null;
+  // a new screen opens at its top (the UX review found Play opening 323 px down, its header out of sight); a redraw
+  // of the same screen (settings, sign-in changes) keeps its place (DECISIONS #128)
+  const path = location.hash.split("?")[0];
+  if (path !== routedPath) { routedPath = path; window.scrollTo(0, 0); }
   collect();   // rewards earned since the last screen stay earned (DECISIONS #94)
   applyTheme();
   const [, page, arg, sub] = location.hash.split("?")[0].split("/");
@@ -455,6 +466,7 @@ function route() {
     }
   }
   if (page === "settings") return settings();
+  if (page === "simran") { teardown = simranScreen(app, go); return; }
   if (page === "me") return mePage(app, go);
   if (page === "family") return familyScreen(app, go);
   // teacher pages need a signed-in, approved teacher; anyone else lands on Settings

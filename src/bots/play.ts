@@ -6,6 +6,7 @@ import { Board } from "../chess/board";
 import { placementFromFen, type Square } from "../chess/types";
 import { confetti } from "../celebrate";
 import { getEngine } from "../engine/browser";
+import type { Uci } from "../engine/uci";
 import { movesN, num, t, tx } from "../i18n";
 import { icon } from "../icons";
 import { checkSquare, refusal } from "../lesson/exercises";
@@ -28,6 +29,7 @@ import { type Bot, BOTS, botMove, nextOpponent } from "./bots";
 import { goodMove, hanging } from "./gamecoach";
 import { commentary, type Threat } from "./commentary";
 import { coachHTML, type Mood } from "../coach";
+import { ask } from "../ui/dialog";
 
 const art = (b: Bot, mood: "neutral" | "win" | "lose") => `<img class="botart" src="${b.art ?? `art/bots/${b.id}`}-${mood}.webp" alt="">`;
 const fill = (s: string, b: Bot) => s.replace("{bot}", tx(b.name));
@@ -159,6 +161,8 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     </div></div>`;
   const board = new Board(root.querySelector("[data-board]")!, { flip: me === "b", game: true });
   root.querySelector(".screen")?.classList.add("gamescreen");   // DECISIONS #110 (look C): games are black and gold
+  root.querySelector<HTMLElement>(".screen")!.dataset.botgame = "1";   // DECISIONS #128: the wide panel's tabs are for this game only
+  if (startFen) root.querySelector<HTMLElement>(".screen")!.dataset.setpos = "1";   // its moves do not start from the usual position
   root.querySelector(".lessonbar")!.insertAdjacentHTML("beforeend", gameMenuButton());   // DECISIONS #115
   wireGameMenu(root, board, coachMode);
   const extra = root.querySelector<HTMLElement>("[data-extra]")!;
@@ -365,12 +369,15 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
   root.querySelector<HTMLButtonElement>("[data-hint]")?.addEventListener("click", async () => {
     if (busy || over) return;
     view = null; busy = true; helped = true; say(t("engineThinking"));
-    const a = await (await engine).analyse(g.fen(), { depth: 10 }); if (!alive) return;
-    busy = false; show(false, [[a.best.slice(0, 2) as Square, a.best.slice(2, 4) as Square]]); turnText();
+    // the hint must never lock the game: a failed or stopped engine just gives no arrow (DECISIONS #128)
+    let a: Awaited<ReturnType<Uci["analyse"]>> | null = null;
+    try { a = await (await engine).analyse(g.fen(), { depth: 10 }); } catch { /* no hint this time */ } finally { busy = false; }
+    if (!alive || over) return;
+    show(false, a && a.best.length >= 4 ? [[a.best.slice(0, 2) as Square, a.best.slice(2, 4) as Square]] : undefined); turnText();
   });
-  root.querySelector<HTMLButtonElement>("[data-resign]")!.onclick = () => { if (!over && confirm(t("resignConfirm"))) checkEnd(true); };
+  root.querySelector<HTMLButtonElement>("[data-resign]")!.onclick = () => { if (!over) void ask(t("resignConfirm"), { yes: t("resign"), no: t("keepPlaying"), danger: true }).then(ok => { if (ok && !over && alive) checkEnd(true); }); };
   root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => {
-    if (over || !g.history().length || confirm(t("leaveGame"))) go(back);
+    if (over || !g.history().length) go(back); else void ask(t("leaveGame"), { yes: t("leave"), no: t("keepPlaying"), danger: true }).then(ok => { if (ok) go(back); });
   };
   if (clock) timer = window.setInterval(() => {
     if (over || !clock || !alive) return;

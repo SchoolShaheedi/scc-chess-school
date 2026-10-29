@@ -9,6 +9,7 @@ import { disableOnlineFor } from "../online/api";
 import { onlineBlock } from "../online/screens";
 import { type Look, store } from "../store";
 import { animalHeroArt, heroArt } from "../heroes/heroes";
+import { ask } from "../ui/dialog";
 
 export const avatarHTML = (p: Pick<Profile, "avatar" | "colour">, cls = "") =>
   `<span class="kidav ${cls}" style="--kc:${p.colour}">${icon(p.avatar as Avatar)}</span>`;
@@ -42,7 +43,7 @@ export function familyScreen(root: HTMLElement, go: (h: string) => void) {
   root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/me");
   root.querySelectorAll<HTMLButtonElement>("[data-kid]").forEach(b => b.onclick = () => { family.switchTo(b.dataset.kid!); go("#/"); });
   root.querySelectorAll<HTMLButtonElement>("[data-del]").forEach(b => b.onclick = async () => {
-    if (!confirm(t("famRemoveConfirm"))) return;
+    if (!(await ask(t("famRemoveConfirm"), { danger: true }))) return;
     // their online play goes with them: friendships, challenges, and unfinished games resigned (DECISIONS #86)
     if (account.signedIn()) await disableOnlineFor(b.dataset.del!);
     family.remove(b.dataset.del!); familyScreen(root, go);

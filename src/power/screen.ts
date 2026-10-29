@@ -19,6 +19,7 @@ import { type Bot, BOTS, botById, nextOpponent } from "../bots/bots";
 import { botPowerAction } from "./bot";
 import { afterMove, gemFor, newPower, type Orb, type OrbPiece, type PowerState } from "./rules";
 import { askChange as ask, burstAt as burst, gemDecor, gemPiece, pieceWord } from "./ui";
+import { ask as askCard } from "../ui/dialog";
 
 // in Magical Chess the bots appear as their superhero versions (DECISIONS #109); a boss brings its own hero's art
 const art = (b: Bot, mood: "neutral" | "win" | "lose") => `<img class="botart" src="${b.art ?? `art/herobots/${b.id}`}-${mood}.webp" alt="">`;
@@ -217,8 +218,8 @@ function powerGame(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) =
   });
   root.querySelector<HTMLButtonElement>("[data-prev]")!.onclick = () => look((view ?? snaps.length - 1) - 1);
   root.querySelector<HTMLButtonElement>("[data-next]")!.onclick = () => look((view ?? snaps.length - 1) + 1);
-  root.querySelector<HTMLButtonElement>("[data-resign]")!.onclick = () => { if (!over && confirm(t("resignConfirm"))) checkEnd(true); };
-  root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => { if (over || !moves.length || confirm(t("leaveGame"))) go(boss?.back ?? "#/play"); };
+  root.querySelector<HTMLButtonElement>("[data-resign]")!.onclick = () => { if (!over) void askCard(t("resignConfirm"), { yes: t("resign"), no: t("keepPlaying"), danger: true }).then(ok => { if (ok && !over) checkEnd(true); }); };
+  root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => { if (over || !moves.length) go(boss?.back ?? "#/play"); else void askCard(t("leaveGame"), { yes: t("leave"), no: t("keepPlaying"), danger: true }).then(ok => { if (ok) go(boss?.back ?? "#/play"); }); };
 
   show();
   if (me === "b") void reply(); else turnText();

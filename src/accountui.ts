@@ -3,6 +3,7 @@
 import { icon } from "./icons";
 import { t } from "./i18n";
 import { account, deleteAccount, signInWithEmail, signInWithGoogle, signOut, syncConfigured } from "./sync";
+import { ask, tell } from "./ui/dialog";
 
 type Step = "start" | "age" | "parent" | "methods" | "sent";
 
@@ -27,8 +28,8 @@ export function mountAccount(box: HTMLElement, opts: { startAt?: Step } = {}): (
         <button class="danger" data-del>${t("deleteAccount")}</button>`;
       box.querySelector<HTMLButtonElement>("[data-out]")!.onclick = () => void signOut();
       box.querySelector<HTMLButtonElement>("[data-del]")!.onclick = async () => {
-        if (!confirm(t("deleteConfirm"))) return;
-        const e = await deleteAccount(); if (e) alert(e);
+        if (!(await ask(t("deleteConfirm"), { danger: true }))) return;
+        const e = await deleteAccount(); if (e) await tell(e);
       };
       return;
     }

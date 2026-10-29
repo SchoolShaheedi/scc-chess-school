@@ -45,6 +45,18 @@ export function reviewGame(root: HTMLElement, go: (h: string) => void): () => vo
   for (const u of game.uci) { const m = g.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); moves.push({ san: m.san, uci: u }); fens.push(g.fen()); }
   const finalScore = g.isCheckmate() ? { mate: 0 } : g.isGameOver() ? { cp: 0 } : null;
 
+  // a game of a few moves (often a quick resignation) has nothing to grade: no rating, no accuracy, no empty chart,
+  // and never "100%, well played" after resigning at move 2 (DECISIONS #128)
+  const myMoves = moves.filter((_, i) => new Chess(fens[i]).turn() === game.me).length;
+  if (myMoves < 6) {
+    root.innerHTML = `<div class="screen">${bar}<div class="hero"><div class="trophy light">${icon("timer")}</div>
+      <h1>${t("reviewShortTitle")}</h1><p>${t("reviewShortBody")}</p></div>
+      <div class="actions"><button class="btn wide" data-again>${t("playAgain")}</button></div></div>`;
+    root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go(game.back);
+    root.querySelector<HTMLButtonElement>("[data-again]")!.onclick = () => go(game.back);
+    return teardown;
+  }
+
   root.innerHTML = `<div class="screen">${bar}<div class="hero"><div class="trophy light">${icon("target")}</div>
     <h1>${t("reviewing")}</h1><div class="testbar wide"><i data-prog style="width:0%"></i></div><p data-count></p></div></div>`;
   root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go(game.back);
