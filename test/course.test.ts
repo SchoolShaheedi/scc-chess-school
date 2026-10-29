@@ -11,8 +11,8 @@ import { nodeEngine } from "./engine";
 
 const TOLERANCE = 35, GOOD = 30, DEPTH = 14, WON = 300;
 const LINES = ["main", "win", "game"] as const;
-// the move that names an opening is the learner's choice of opening, not a mistake: 1...d5 and 1...Nf6 are a little below 1...e5
-const NAMING: Record<string, number> = { scandi: 1, alekhine: 1 };
+// the move that names an opening is the learner's choice of opening, not a mistake: 1...d5, 1...Nf6, 1...g6, 2...c5 (Benoni) and 2.c4 (Reti) are a little below the best move
+const NAMING: Record<string, number> = { scandi: 1, alekhine: 1, modern: 1, reti: 2, benoni: 3 };
 
 describe("openings course", () => {
   for (const o of COURSE) for (const k of LINES) {
@@ -44,6 +44,13 @@ describe("openings course", () => {
       if (!pa) continue;
       expect(pa, "garbled UTF-8 (read as Latin-1)").not.toMatch(/à[\u00a8\u00a9]/);
       expect(pa, "nukta letters are written base + ਼").not.toMatch(/[\u0a33\u0a36\u0a59-\u0a5b\u0a5e]/);
+    }
+  });
+  it("coaching lines (\"Take...\", \"Swap...\") sit on the learner's own moves, not the opponent's", () => {
+    const IMP = /^(Take|Swap|Win|Hit|Push|Develop|Castle|Guard|Kick|Pin|Chase|Strike|Step|Make|Bring|Block|Leave|Give|Open|Close|Jump|Stop|Keep|Get|Move|Offer|Break|Fight|Answer)\b/;
+    for (const o of COURSE) for (const k of LINES) for (const [p, t] of Object.entries(o[k].notes)) {
+      const mover = +p % 2 === 0 ? "w" : "b";
+      if (mover !== o.side) expect(t.en, `${o.id} ${k} ply ${p} (${o[k].moves[+p]}) is the opponent's move`).not.toMatch(IMP);
     }
   });
   it("the main lines start the full games", () => {
