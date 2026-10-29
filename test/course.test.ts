@@ -9,8 +9,10 @@ import BOXES from "../src/content/course-boxes.json";
 import { asNumber } from "../src/engine/uci";
 import { nodeEngine } from "./engine";
 
-const TOLERANCE = 35, GOOD = 30, DEPTH = 14;
+const TOLERANCE = 35, GOOD = 30, DEPTH = 14, WON = 300;
 const LINES = ["main", "win", "game"] as const;
+// the move that names an opening is the learner's choice of opening, not a mistake: 1...d5 and 1...Nf6 are a little below 1...e5
+const NAMING: Record<string, number> = { scandi: 1, alekhine: 1 };
 
 describe("openings course", () => {
   for (const o of COURSE) for (const k of LINES) {
@@ -28,6 +30,22 @@ describe("openings course", () => {
       expect((BOXES as Record<string, Record<string, unknown>>)[o.id]?.[k], "run COURSE_BUILD=1 npx vitest run test/course.test.ts").toBeTruthy();
     });
   }
+  it("every Punjabi line is real Gurmukhi: not garbled bytes, no precomposed nukta letters", () => {
+    const texts: string[] = [];
+    const walk = (v: unknown): void => {
+      if (v && typeof v === "object") {
+        const t = v as { pa?: unknown };
+        if (typeof t.pa === "string") texts.push(t.pa);
+        Object.values(v).forEach(walk);
+      }
+    };
+    walk(COURSE);
+    for (const pa of texts) {
+      if (!pa) continue;
+      expect(pa, "garbled UTF-8 (read as Latin-1)").not.toMatch(/à[\u00a8\u00a9]/);
+      expect(pa, "nukta letters are written base + ਼").not.toMatch(/[\u0a33\u0a36\u0a59-\u0a5b\u0a5e]/);
+    }
+  });
   it("the main lines start the full games", () => {
     for (const o of COURSE) expect(o.game.moves.slice(0, o.main.moves.length)).toEqual(o.main.moves);
   });
@@ -36,7 +54,10 @@ describe("openings course", () => {
 describe.runIf(process.env.COURSE_BUILD === "1")("openings course: Stockfish", () => {
   it("every taught move is near the best; rebuild the also-good squares", async () => {
     const e = await nodeEngine(), out: Record<string, Record<string, Record<number, string[]>>> = {}, bad: string[] = [];
+    // COURSE_ONLY=id,id re-checks just those openings and keeps the others' squares as they are
+    const only = process.env.COURSE_ONLY?.split(",");
     for (const o of COURSE) {
+      if (only && !only.includes(o.id)) { out[o.id] = (BOXES as typeof out)[o.id]; continue; }
       out[o.id] = {};
       for (const k of LINES) {
         const g = new Chess(), boxes: Record<number, string[]> = {};
@@ -47,7 +68,9 @@ describe.runIf(process.env.COURSE_BUILD === "1")("openings course: Stockfish", (
           const uci = m.from + m.to + (m.promotion ?? ""), hit = c.find(x => x.move === uci);
           // a move outside the top five is scored on its own: the position after it, from the other side
           const mine_ = hit ? asNumber(hit.score) : g.isCheckmate() ? best : -asNumber((await e.analyse(g.fen(), { depth: DEPTH })).score);
-          if (!g.isCheckmate() && best - mine_ > TOLERANCE) bad.push(`${o.id} ${k} ${ply} ${san}: ${best - mine_}`);
+          // in a won position a move is fine if it keeps a decisive advantage (3 pawns or more): a slower win is still a win
+          const decisive = best >= WON && mine_ >= WON;
+          if (!g.isCheckmate() && best - mine_ > TOLERANCE && !decisive && NAMING[o.id] !== ply) bad.push(`${o.id} ${k} ${ply} ${san}: loses ${best - mine_} (best ${best}, played ${mine_})`);
           const also = c.filter(x => x.move !== uci && best - asNumber(x.score) <= GOOD && x.move.slice(2, 4) !== m.to).slice(0, 2).map(x => x.move.slice(2, 4));
           if (also.length) boxes[ply] = [...new Set(also)];
         }
