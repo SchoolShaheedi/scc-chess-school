@@ -32,6 +32,15 @@ export function rushPool(): P[] {
   return [...seen.values()].sort((a, b) => a.rating - b.rating);
 }
 
+/** Puzzle Race on the rated bank (everyone but the Young look): it starts a little below the learner's puzzle rating, so the
+ *  first puzzles are quick wins, and climbs RACE_STEP points a solve, to the bank's top. A strong player meets real speed
+ *  tactics; a new one starts where they are, not at 400. */
+export const RACE_BACK = 150, RACE_STEP = 40, RACE_TOP = 2500;
+export const raceStart = (puzzleRating: number) => Math.min(RACE_TOP, Math.max(RUSH_START, Math.round((puzzleRating - RACE_BACK) / 10) * 10));
+export const raceTarget = (start: number, solved: number) => Math.min(RACE_TOP, start + solved * RACE_STEP);
+/** A Race puzzle has at most two moves of the learner's: it is a speed test, not a calculation test. */
+export const raceShort = (p: { moves: string[] }) => p.moves.length <= 4;
+
 // the pool runs from ~250 to ~1800 (2026-10-04), so a 60-point step reaches the top after ~24 puzzles
 export const RUSH_START = 400, RUSH_STEP = 60;
 

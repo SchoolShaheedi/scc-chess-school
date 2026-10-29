@@ -18,10 +18,15 @@ import { coachReport, gameRating, keyMoments, type Label2, reasonText, refine, t
 import type { Score } from "../engine/uci";
 import { openInAnalysis } from "../analysis/screen";
 import { runExercise } from "../lesson/exercises";
+import { gameId, minePuzzles } from "../puzzles/mine";
+import { DepthGovernor, REVIEW_BUDGET_MS, REVIEW_DEPTH } from "./depth";
+import { refutation } from "./refute";
 
 export interface PlayedGame { uci: string[]; me: "w" | "b"; botName: Text; back: string; startFen?: string;
   /** The opponent's rating, when it is a bot: it steadies the Game Rating estimate. */
   oppRating?: number;
+  /** A stable id for the game (puzzles/mine.ts gameId); worked out from the moves when absent. */
+  id?: string;
   /** Who "me" is called: "You" against a bot; "White" in a game between two friends. */
   meName?: Text }
 let last: PlayedGame | null = null;
@@ -51,12 +56,16 @@ export function reviewGame(root: HTMLElement, go: (h: string) => void): () => vo
 
   (async () => {
     // the two best moves of every position: the second one tells a "Great" (only) move from an ordinary best one
+    // depth 14, but governed: a slow phone steps the depth down so the whole review stays inside ~REVIEW_BUDGET_MS (depth.ts)
     const engine = await getEngine(), evals: { score: Score; best: string; second?: Score }[] = [];
+    const gov = new DepthGovernor(fens.length - (finalScore ? 1 : 0), REVIEW_DEPTH, REVIEW_BUDGET_MS);
     for (let i = 0; i < fens.length; i++) {
       if (!alive) return;
       if (i === fens.length - 1 && finalScore) evals.push({ score: finalScore, best: "" });
       else {
-        const c = await engine.candidates(fens[i], { n: 2, depth: 10 });
+        const depth = gov.next(), t0 = performance.now();
+        const c = await engine.candidates(fens[i], { n: 2, depth });
+        gov.record(depth, performance.now() - t0);
         evals.push(c.length ? { score: c[0].score, best: c[0].move, second: c[1]?.score } : { score: { cp: 0 }, best: "" });
       }
       const p = root.querySelector<HTMLElement>("[data-prog]"); if (p) p.style.width = `${((i + 1) / fens.length) * 100}%`;
@@ -79,9 +88,13 @@ export function reviewGame(root: HTMLElement, go: (h: string) => void): () => vo
     const moments = keyMoments(r, me);
     const coachName = young ? { en: "Ghuggi", pa: "ਘੁੱਗੀ" } : words(store.get().coach === "kaur" ? "coachKaur" : "coachSingh");
     const report = coachReport(r, me, words, pieceWord).map(x => `<p>${tx(x)}</p>`).join("");
+    // your own worst slips become spaced drills in the mistake bank (not for a game between two friends: who is "you"?)
+    const drills = game!.meName ? [] : minePuzzles(r, fens, me, game!.id ?? gameId(game!.uci, game!.startFen));
+    store.addMine(drills);
     root.innerHTML = `<div class="screen">${bar}
       <div class="revreport">${look !== "adult" ? `<div class="av">${coachHTML(look, "happy")}</div>` : ""}
         <div class="grow">${look !== "adult" ? `<span class="who">${tx(coachName)}</span>` : ""}${report}</div></div>
+      ${drills.length ? `<p class="note revdrills">${icon("again")} ${t("reviewSavedDrills").replace("{n}", num(drills.length))}</p>` : ""}
       <div class="revstats ${young ? "two" : ""}">
         ${young ? `<div><b>${num(great)}</b><small>${t("greatMoves")}</small></div>` : `<div><b>${num(accMe)}%</b><small>${game!.meName ? tx(game!.meName) : t("you")}</small></div>`}
         <div class="gr" title="${t("gameRatingNote")}"><b>~${num(rating)}</b><small>${t("gameRatingLabel")}</small></div>
@@ -121,10 +134,12 @@ export function reviewGame(root: HTMLElement, go: (h: string) => void): () => vo
     root.innerHTML = `<div class="screen">${bar}
       <div class="frame"><div class="boardwrap" data-board></div></div>
       <div class="revnote" data-note aria-live="polite"></div>
+      <p class="coachline revwhy" data-whyline aria-live="polite" hidden></p>
       <div class="revmoves" data-moves>${r.map((m, i) => `${i % 2 ? "" : `<i>${num(i / 2 + 1)}.</i>`}<button class="mv ${m.label}" data-i="${i}">${m.san}</button>`).join("")}</div>
       <div class="actions">
         <button class="btn ghost" data-prev aria-label="${t("back")}">${icon("chevronLeft")}</button>
         <button class="btn ghost" data-better hidden>${t("showBetter")}</button>
+        <button class="btn ghost" data-why hidden>${t("showWhy")}</button>
         <button class="btn" data-next aria-label="${t("next")}">${icon("arrowRight")}</button></div>
       <div class="anatools">
         <button class="btn gold" data-retry hidden>${icon("again")} ${t("retryMoment")}</button>
@@ -136,7 +151,40 @@ export function reviewGame(root: HTMLElement, go: (h: string) => void): () => vo
     retryBtn.onclick = () => retry(r, at);
     root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go(game!.back);
     const better = root.querySelector<HTMLButtonElement>("[data-better]")!;
+    // "Show why": the engine's best line against the move played, animated 2-4 plies, then back to the position
+    const whyBtn = root.querySelector<HTMLButtonElement>("[data-why]")!, whyLine = root.querySelector<HTMLElement>("[data-whyline]")!;
+    const pvs = new Map<number, string[]>();   // the engine's line after each move, found once
+    let whyRun = 0;
+    const sleep = (ms: number) => new Promise<void>(res => setTimeout(res, ms));
+    const stopWhy = () => { whyRun++; whyBtn.disabled = false; whyLine.hidden = true; };
+    whyBtn.onclick = async () => {
+      const run = ++whyRun, i = at, m = r[i], mark = (x: string): [Square, Square] => [x.slice(0, 2) as Square, x.slice(2, 4) as Square];
+      const live = () => run === whyRun && alive && !!board;
+      whyBtn.disabled = true; whyLine.hidden = false; whyLine.textContent = t("whyThinking");
+      let pv = pvs.get(i);
+      if (!pv) {
+        try { pv = (await (await getEngine()).analyse(fens[i + 1], { depth: 12 })).pv; pvs.set(i, pv); }
+        catch { if (live()) { whyLine.textContent = t("whyFail"); whyBtn.disabled = false; } return; }
+      }
+      if (!live()) return;
+      const line = refutation(fens[i + 1], pv);
+      if (!line.steps.length) { whyLine.textContent = t("whyNone"); whyBtn.disabled = false; return; }
+      const text = t("whyLine").replace("{san}", m.san).replace("{line}", line.text);
+      whyLine.textContent = text;
+      showingBetter = false; better.textContent = t("showBetter");
+      board!.set(placementFromFen(fens[i]), {}); await sleep(600); if (!live()) return;
+      board!.set(placementFromFen(fens[i + 1]), { lastMove: mark(m.uci) }, mark(m.uci));
+      for (const st of line.steps) {
+        await sleep(950); if (!live()) return;
+        board!.set(placementFromFen(st.fen), { lastMove: mark(st.uci) }, mark(st.uci));
+      }
+      await sleep(1400); if (!live()) return;
+      show(i);                                  // back to the game's position; the explanation stays up
+      whyLine.hidden = false; whyLine.textContent = text;
+      whyBtn.disabled = false;
+    };
     const show = (i: number, showBetter = false) => {
+      if (i !== at) stopWhy();
       at = Math.max(0, Math.min(r.length - 1, i));
       const m = r[at], weak = m.drop >= 10 && m.best;
       if (showBetter && weak) {
@@ -150,6 +198,7 @@ export function reviewGame(root: HTMLElement, go: (h: string) => void): () => vo
       root.querySelector("[data-note]")!.innerHTML = `<b class="tag ${m.label}">${lbl(m.label)}</b> ${num(Math.floor(at / 2) + 1)}${m.by === "w" ? "." : "…"} ${m.san} · ${whose}
         <p>${weak ? t("reviewChance").replace("{a}", num(Math.round(m.before))).replace("{b}", num(Math.round(m.after))).replace("{best}", bestSan) : t(m.label === "good" || m.label === "book" ? "reviewGood" : "reviewBest")}</p>
         ${why ? `<p class="coachline">${tx(why)}</p>` : ""}`;
+      whyBtn.hidden = !weak;
       better.hidden = !weak; better.textContent = showBetter ? t("showPlayed") : t("showBetter");
       retryBtn.hidden = !(weak && m.by === game!.me);
       root.querySelectorAll(".revmoves .mv").forEach(b => b.classList.toggle("on", +(b as HTMLElement).dataset.i! === at));
@@ -158,7 +207,7 @@ export function reviewGame(root: HTMLElement, go: (h: string) => void): () => vo
     let showingBetter = false;
     root.querySelector<HTMLButtonElement>("[data-prev]")!.onclick = () => { showingBetter = false; show(at - 1); };
     root.querySelector<HTMLButtonElement>("[data-next]")!.onclick = () => { showingBetter = false; show(at + 1); };
-    better.onclick = () => { showingBetter = !showingBetter; show(at, showingBetter); };
+    better.onclick = () => { stopWhy(); showingBetter = !showingBetter; show(at, showingBetter); };
     root.querySelectorAll<HTMLButtonElement>(".revmoves .mv").forEach(b => b.onclick = () => { showingBetter = false; show(+b.dataset.i!); });
     show(at);
   }

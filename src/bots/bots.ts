@@ -1,4 +1,4 @@
-// The six bots (DECISIONS #69). Stockfish finds each position's top moves; a bot then CHOOSES among them
+// The six bots (DECISIONS #69), and two beyond the course (2026-10-29). Stockfish finds each position's top moves; a bot then CHOOSES among them
 // the way a player of its strength would: a weaker bot looks less deep, often picks a worse candidate,
 // and sometimes plays a careless move. The ratings are targets, checked only RELATIVELY by the ladder
 // test (each bot beats the one below it); they are not measured Elo.
@@ -7,7 +7,7 @@ import { Chess } from "chess.js";
 import book from "../content/book.json";
 import { asNumber, type Candidate, type Uci } from "../engine/uci";
 
-export type BotId = "nanhi-chidi" | "kesri" | "ghorsavaar" | "teer" | "sher" | "baaz";
+export type BotId = "nanhi-chidi" | "kesri" | "ghorsavaar" | "teer" | "sher" | "baaz" | "bhediya" | "bagh";
 
 export interface Bot {
   id: BotId; name: Text; rating: number; about: Text;
@@ -19,12 +19,14 @@ export interface Bot {
   style?: "attack" | "knight";
   /** Its picture, without the "-<mood>.webp" ending; unset = art/bots/<id>. A level's boss uses its hero's (DECISIONS #109). */
   art?: string;
+  /** Beyond the course (2026-10-29): stronger than any level boss. Never a boss's play, and no collectible hero of its own. */
+  beyond?: true;
 }
 
 // DECISIONS #96: the bots are cartoon animals, renamed 2026-10-15. The ids are the OLD names and stay, so saved wins,
 // trophies and the Level 1 test keep working: nanhi-chidi = Titli, kesri = Chakor, ghorsavaar = Cheeta, teer = Baaz,
 // sher = Bhaalu, baaz = Sher. Art files are keyed by id (public/art/bots/<id>-<mood>.webp).
-export const BOTS: Bot[] = [
+const ALL_BOTS: Bot[] = [
   { id: "nanhi-chidi", name: { en: "Titli", pa: "ਤਿਤਲੀ" }, rating: 250, help: true,
     about: { en: "Just learning. Often leaves pieces where you can take them.", pa: "ਹੁਣੇ ਸਿੱਖ ਰਹੀ ਹੈ। ਅਕਸਰ ਮੋਹਰੇ ਅਜਿਹੀ ਥਾਂ ਛੱਡਦੀ ਹੈ ਜਿੱਥੋਂ ਤੁਸੀਂ ਮਾਰ ਸਕੋ।" },
     depth: 1, spread: 8, temp: 450, careless: 0.45 },
@@ -43,7 +45,18 @@ export const BOTS: Bot[] = [
   { id: "baaz", name: { en: "Sher", pa: "ਸ਼ੇਰ" }, rating: 2100, help: false,
     about: { en: "The final challenge. Rarely makes a mistake.", pa: "ਆਖ਼ਰੀ ਚੁਣੌਤੀ। ਬਹੁਤ ਘੱਟ ਗ਼ਲਤੀ ਕਰਦਾ ਹੈ।" },
     depth: 12, spread: 2, temp: 12, careless: 0 },
+  // Beyond the course: for players who have outgrown Sher. Same knobs, no new ones. Their pictures are COPIES of Bhaalu's and
+  // Sher's (no new art was made); the ratings are targets like all the others, and the top one is the engine at close to full
+  // strength, so "about 2300" is a label, not a measurement.
+  { id: "bhediya", name: { en: "Bhediya", pa: "ਭੇੜੀਆ" }, rating: 1900, help: false, beyond: true,
+    about: { en: "A patient hunter. Pounces on the smallest slip.", pa: "ਸਬਰ ਵਾਲਾ ਸ਼ਿਕਾਰੀ। ਛੋਟੀ ਤੋਂ ਛੋਟੀ ਗ਼ਲਤੀ ਉੱਤੇ ਝਪਟ ਪੈਂਦਾ ਹੈ।" },
+    depth: 10, spread: 2, temp: 22, careless: 0.004 },
+  { id: "bagh", name: { en: "Bagh", pa: "ਬਾਘ" }, rating: 2300, help: false, beyond: true,
+    about: { en: "Full strength. It calculates deep and never plays a careless move.", pa: "ਪੂਰੀ ਤਾਕਤ। ਡੂੰਘੀ ਗਿਣਤੀ ਕਰਦਾ ਹੈ ਅਤੇ ਕਦੇ ਲਾਪਰਵਾਹ ਚਾਲ ਨਹੀਂ ਚੱਲਦਾ।" },
+    depth: 14, spread: 2, temp: 4, careless: 0 },
 ];
+/** Weakest first (the pickers and the ladder test read them in this order). */
+export const BOTS: Bot[] = [...ALL_BOTS].sort((a, b) => a.rating - b.rating);
 export const botById = (id: string) => BOTS.find(b => b.id === id);
 
 /** Pick a move: a careless random legal move, or a weighted draw from the engine's candidates

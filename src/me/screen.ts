@@ -134,7 +134,7 @@ function heroShelf(s: ReturnType<typeof store.get>): string {
       <span>${got ? label : "?"}</span><small>${sub}</small></button>`;
   return `<h2 class="sec">${t("heroesTitle")}</h2><p class="note">${t("heroesNote")}</p>
     <div class="hshelf">${HEROES.map(h => tile(h.id, heroArt(h.id), tx(h.name), hasHero(h.id, s) || unlockAll(), `${t("level")} ${num(h.level)}`)).join("")}</div>
-    <div class="hshelf animals">${BOTS.map(b => tile(`bot:${b.id}`, animalHeroArt(b.id), tx(b.name), animalHeroEarned(b.id, s), `~${num(b.rating)}`)).join("")}</div>`;
+    <div class="hshelf animals">${BOTS.filter(b => !b.beyond).map(b => tile(`bot:${b.id}`, animalHeroArt(b.id), tx(b.name), animalHeroEarned(b.id, s), `~${num(b.rating)}`)).join("")}</div>`;
 }
 
 function rewardShelf(s: ReturnType<typeof store.get>): string {

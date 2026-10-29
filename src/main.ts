@@ -488,7 +488,7 @@ function route() {
     if (arg === "rush") { teardown = playRush(app, go); return; }
     if (arg === "survival") { teardown = playSurvival(app, go); return; }   // DECISIONS #115
     if (arg === "solo") { teardown = soloScreen(app, go); return; }
-    if (arg === "bank") { teardown = playBank(app, go); return; }
+    if (arg === "bank") { teardown = playBank(app, go, sub); return; }   // /bank/<phase>: Insights' drills of your own mistakes
     if (arg === "rated") { teardown = playRated(app, go); return; }
     if (arg === "themes") return themesScreen(app, go);
     if (arg === "theme" && sub) { teardown = playRated(app, go, sub); return; }

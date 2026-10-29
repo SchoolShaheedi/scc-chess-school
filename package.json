@@ -11,6 +11,7 @@
     "check": "tsc --noEmit && vitest run",
     "test": "vitest run",
     "puzzles": "node tools/build-puzzles.mjs",
+    "puzzles:bank": "node tools/build-bank-packs.mjs",
     "preview": "vite preview",
     "engine": "cp node_modules/stockfish/bin/stockfish-19-lite-single.* public/engine/ && cp node_modules/stockfish/Copying.txt public/engine/COPYING-stockfish.txt",
     "ladder": "LADDER=1 vitest run test/bots.test.ts",

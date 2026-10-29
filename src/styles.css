@@ -915,7 +915,7 @@ textarea.textin { resize: vertical; }
 .oppcard h2 { margin: 2px 0 4px; font: 800 24px var(--display); }
 .oppcard h2 small { font-size: 15px; color: #8A6A1A; font-weight: 700; }
 .oppcard p { margin: 0 0 12px; color: var(--muted); }
-.botfaces { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 2px; padding: 4px 0 6px; }
+.botfaces { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px 2px; padding: 4px 0 6px; }
 .botface { position: relative; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 2px;
   background: none; border: 0; padding: 4px 0; color: var(--ink); }
 .botface .botart { width: min(52px, 100%); aspect-ratio: 1; height: auto; border-radius: 50%; object-fit: cover; border: 2px solid transparent; }
@@ -1230,3 +1230,12 @@ html:has(.gamescreen) body::before { background: #141414; }
 .boxkey i { width: 14px; height: 14px; border-radius: 3px; flex: none; font-style: normal; line-height: 14px; text-align: center; }
 .boxkey i.best { border: 3px solid #2FB36B; } .boxkey i.good { border: 2px dashed #2FB36B; } .boxkey i.watch { border: 3px solid #E2463A; }
 .boxkey i.aim { color: var(--gold); }
+
+/* Game Review: "Show why" (2026-10-29) and the saved-drills note */
+.revmoves ~ .actions { flex-wrap: wrap; }
+.revnote ~ .revmoves ~ .actions [data-prev], .revnote ~ .revmoves ~ .actions [data-next] { order: 1; flex: 1 1 40%; }
+.revnote ~ .revmoves ~ .actions [data-better], .revnote ~ .revmoves ~ .actions [data-why] { order: 2; flex: 1 1 45%; }
+.revwhy { margin: 0; padding: 8px 14px; color: var(--muted); font-size: 14px; font-weight: 600; }
+.revwhy[hidden] { display: none; }
+.revdrills { display: flex; align-items: center; gap: 8px; }
+.revdrills svg { width: 18px; height: 18px; flex: none; }
