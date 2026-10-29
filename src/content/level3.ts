@@ -173,9 +173,9 @@ export const LEVEL3: Lesson[] = [
     practise: [
       { kind: "play", fen: "6k1/5ppp/3b4/8/7q/8/5PPP/5R1K w - - 0 1", goal: "stop-mate",
         prompt: { en: "Queen and bishop aim at h2. Stop the mate.", pa: "ਰਾਣੀ ਅਤੇ ਊਠ h2 ਵੱਲ ਨਿਸ਼ਾਨਾ ਲਾਈ ਬੈਠੇ ਹਨ। ਮਾਤ ਰੋਕੋ।" } },
-      { kind: "pack", pack: "defend-easy", count: 3, prompt: { en: "Real games: find the move that saves you.", pa: "ਅਸਲੀ ਖੇਡਾਂ: ਉਹ ਚਾਲ ਲੱਭੋ ਜੋ ਤੁਹਾਨੂੰ ਬਚਾਵੇ।" } },
+      { kind: "pack", pack: "defend-first", count: 3, prompt: { en: "Real games: find the move that saves you.", pa: "ਅਸਲੀ ਖੇਡਾਂ: ਉਹ ਚਾਲ ਲੱਭੋ ਜੋ ਤੁਹਾਨੂੰ ਬਚਾਵੇ।" } },
     ],
-    challenge: { kind: "pack", pack: "defend-easy", count: 3,
+    challenge: { kind: "pack", pack: "defend-first", count: 3,
       prompt: { en: "Three real games. Defend first.", pa: "ਤਿੰਨ ਅਸਲੀ ਖੇਡਾਂ। ਪਹਿਲਾਂ ਬਚਾਅ ਕਰੋ।" } },
   },
 ];

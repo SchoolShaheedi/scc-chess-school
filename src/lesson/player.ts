@@ -15,11 +15,12 @@ import { devHost, store } from "../store";
 import { account, syncConfigured } from "../sync";
 import { sound } from "../sound";
 import { runExercise } from "./exercises";
-import type { Exercise, Lesson } from "./types";
+import { finalStars, forLook } from "./help";
+import type { Diagram, Exercise, Lesson, Text } from "./types";
 
-type Phase = { k: "learn"; i: number } | { k: "try" } | { k: "practise"; i: number } | { k: "challenge" } | { k: "done"; stars: 1 | 2 | 3; gained: number };
+type Phase = { k: "learn"; i: number } | { k: "try" } | { k: "practise"; i: number } | { k: "challenge" } | { k: "done"; stars: 1 | 2 | 3; gained: number; skipped: boolean };
 
-export function starsFor(mistakes: number): 1 | 2 | 3 { return mistakes === 0 ? 3 : mistakes <= 2 ? 2 : 1; }
+export function starsFor(mistakes: number): 1 | 2 | 3 { return finalStars(mistakes, false); }
 
 /** The position after the arrow's move, if that move is legal from `fen` (either side to move); else null. */
 function playable(fen: string, [from, to]: [string, string]): string | null {
@@ -59,8 +60,17 @@ export function playLesson(root: HTMLElement, lesson: Lesson, go: (hash: string)
   const practise: Exercise[] = lesson.practise.flatMap(ex => expand([ex]));
   const challenge: Exercise[] = expand([lesson.challenge]);
   const tryEx: Exercise = expand([lesson.try])[0];   // a Try may itself be a single puzzle from a pack
+  // the Young look reads the short version of a slide where the lesson wrote one (or the slide split into one idea each);
+  // its voice clip is "<id>-y" / "<id>-y1".. so a recording of the long text is never read over the short one
+  const slides: { text: Text; board?: Diagram; vid: string }[] = lesson.learn.flatMap((s, i) => {
+    const base = learnId(lesson.id, i);
+    if (store.get().look === "young" && s.youngSplit?.length) return s.youngSplit.map((x, k) => ({ text: x.text, board: x.board ?? s.board, vid: `${base}-y${k + 1}` }));
+    if (store.get().look === "young" && s.young) return [{ text: s.young, board: s.board, vid: `${base}-y` }];
+    return [{ text: s.text, board: s.board, vid: base }];
+  });
   let phase: Phase = { k: "learn", i: 0 };
   let scored = 0, board: Board | null = null, cleanup: (() => void) | null = null, ci = 0;
+  let skippedAny = false;   // "Skip for now" was used: the lesson finishes with 1 star and is marked for review
 
   const stepIndex = () => ({ learn: 0, try: 1, practise: 2, challenge: 3, done: 4 })[phase.k];
   const STEPS = ["stepLearn", "stepTry", "stepPractise", "stepChallenge"] as const;
@@ -81,18 +91,18 @@ export function playLesson(root: HTMLElement, lesson: Lesson, go: (hash: string)
     teardown();
     const look = store.get().look;
     if (phase.k === "learn") {
-      const at = phase.i, s = lesson.learn[at], last = at === lesson.learn.length - 1;
+      const at = phase.i, s = slides[at], last = at === slides.length - 1;
       root.innerHTML = `<div class="screen">${head()}
         <p class="slidetext">${tx(s.text)}<button class="speak" data-speak aria-label="${t("listen")}">${icon("sound")}</button></p>
         <div class="frame"><div class="boardwrap" data-board></div></div>
-        <div class="progressdots">${lesson.learn.map((_, i) => `<i class="${i < at ? "done" : i === at ? "on" : ""}"></i>`).join("")}</div>
+        <div class="progressdots">${slides.map((_, i) => `<i class="${i < at ? "done" : i === at ? "on" : ""}"></i>`).join("")}</div>
         <div class="actions">
           ${phase.i > 0 ? `<button class="btn ghost" data-prev>${t("back")}</button>` : ""}
           <button class="btn ghost" data-replay hidden>${icon("again")} ${t("watchAgain")}</button>
           <button class="btn" data-next>${last ? `${t("stepTry")} ${icon("arrowRight")}` : t("next")}</button>
         </div></div>`;
       // the coach voice: the button replays, and with the voice on the slide is read aloud as it opens
-      const vid = learnId(lesson.id, at), sp = root.querySelector<HTMLButtonElement>("[data-speak]")!;
+      const vid = s.vid, sp =root.querySelector<HTMLButtonElement>("[data-speak]")!;
       sp.hidden = true;
       if (voiceOn()) void speak(vid).then(ok => { sp.hidden = !ok; });
       sp.onclick = () => void speak(vid);
@@ -114,7 +124,7 @@ export function playLesson(root: HTMLElement, lesson: Lesson, go: (hash: string)
       root.querySelector<HTMLButtonElement>("[data-prev]")?.addEventListener("click", () => { phase = { k: "learn", i: at - 1 }; render(); });
       root.querySelector<HTMLButtonElement>("[data-next]")!.onclick = () => { phase = last ? { k: "try" } : { k: "learn", i: at + 1 }; render(); };
     } else if (phase.k === "done") {
-      const { stars, gained } = phase, next = nextLessonId(lesson.id);
+      const { stars, gained, skipped } = phase, next = nextLessonId(lesson.id);
       sound.complete();
       const st = store.get();
       // DECISIONS #94: every third lesson finished, a quick game (a short capture race) before going on
@@ -126,6 +136,7 @@ export function playLesson(root: HTMLElement, lesson: Lesson, go: (hash: string)
         <p>${num(lesson.id)} · ${tx(lesson.title)}</p>
         <p class="gain">+<span data-count>${num(0)}</span> ${t("xp")}</p>
         <div class="bigstars" aria-label="${stars} / 3">${[1, 2, 3].map(n => icon("star", n <= stars ? "on" : "")).join("")}</div>
+        ${skipped ? `<p class="skipnote">${t("skippedNote")}</p>` : ""}
         <div class="donestats"><div><small>${t("xp")}</small><b>${num(st.xp)}</b></div><div><small>${t("statStreak")}</small><b>${icon("flame")} ${num(st.streak.days)}</b></div></div>
         ${look !== "adult" ? `<div class="av doneav">${coachHTML(look, "cheer")}</div>` : ""}
       </div>
@@ -142,7 +153,7 @@ export function playLesson(root: HTMLElement, lesson: Lesson, go: (hash: string)
       root.querySelector<HTMLButtonElement>("[data-home]")!.onclick = () => go("#/");
       root.querySelector<HTMLButtonElement>("[data-mini]")?.addEventListener("click", () => go(`#/play/${mini!.id}/race`));
     } else {
-      const ex = phase.k === "try" ? tryEx : phase.k === "practise" ? practise[phase.i] : challenge[ci];
+      const ex = forLook(phase.k === "try" ? tryEx : phase.k === "practise" ? practise[phase.i] : challenge[ci], look);
       const list = phase.k === "practise" ? practise : phase.k === "challenge" ? challenge : null;
       const at = phase.k === "practise" ? phase.i : ci;
       root.innerHTML = `<div class="screen">${head()}
@@ -153,6 +164,8 @@ export function playLesson(root: HTMLElement, lesson: Lesson, go: (hash: string)
         ${list && list.length > 1 ? `<div class="progressdots">${list.map((_, i) => `<i class="${i < at ? "done" : i === at ? "on" : ""}"></i>`).join("")}</div>` : ""}
         <div class="actions">
           ${ex.hint ? `<button class="btn ghost" data-hint>${icon("hint")} ${t("hint")}</button>` : ""}
+          <button class="btn ghost" data-watch hidden>${icon("play")} ${t("watchMe")}</button>
+          <button class="btn ghost" data-skip hidden>${icon("arrowRight")} ${t("skipFor")}</button>
           <button class="btn" data-continue disabled>${t("continue")}</button>
         </div></div>`;
       const bubble = root.querySelector<HTMLElement>("[data-say]")!, av = root.querySelector<HTMLElement>("[data-av]")!;
@@ -167,26 +180,38 @@ export function playLesson(root: HTMLElement, lesson: Lesson, go: (hash: string)
         if (look !== "adult") av.innerHTML = coachHTML(look, mood);
       };
       root.querySelector<HTMLButtonElement>("[data-hint]")?.addEventListener("click", () => { say(tx(ex.hint!)); if (look !== "adult") av.innerHTML = coachHTML(look, "think"); });
-      if (voiceOn()) void speak(phase.k === "try" ? promptId(lesson.id, "try") : phase.k === "practise" ? promptId(lesson.id, "practise", practiseSrc[phase.i]) : promptId(lesson.id, "challenge"));
+      // a young prompt has its own clip ("<id>-y"): a recording of the long prompt is never read over the short one
+      const pid = phase.k === "try" ? promptId(lesson.id, "try") : phase.k === "practise" ? promptId(lesson.id, "practise", practiseSrc[phase.i]) : promptId(lesson.id, "challenge");
+      if (voiceOn()) void speak(look === "young" && ex.young ? `${pid}-y` : pid);
+      const watchBtn = root.querySelector<HTMLButtonElement>("[data-watch]")!, skipBtn = root.querySelector<HTMLButtonElement>("[data-skip]")!;
       cleanup = runExercise(ex, {
         board, extra: root.querySelector("[data-extra]")!, say,
         status: html => { root.querySelector("[data-status]")!.innerHTML = html; },
         done: mistakes => {
           if (phase.k === "practise" || phase.k === "challenge") scored += mistakes;
           if (ex.kind === "puzzle") { const id = idOf(ex); store.recordPuzzle(id, id ? puzzleById(id)?.rating : undefined, mistakes === 0, id ? puzzleById(id)?.themes : undefined); }
+          skipBtn.hidden = true; watchBtn.hidden = true;
           btn.disabled = false; btn.focus();
         },
+        // "No dead ends": after 3 failures "Skip for now" appears; after 2 failed mates or games "Watch me do it"
+        offerSkip: () => { if (btn.disabled) skipBtn.hidden = false; },
+        offerWatch: run => {
+          watchBtn.hidden = false;
+          watchBtn.onclick = async () => { watchBtn.disabled = true; try { await run(); } finally { watchBtn.disabled = false; } };
+        },
       });
-      btn.onclick = () => {
+      const advance = () => {
         if (phase.k === "try") phase = practise.length ? { k: "practise", i: 0 } : { k: "challenge" };
         else if (phase.k === "practise") phase = phase.i + 1 < practise.length ? { k: "practise", i: phase.i + 1 } : { k: "challenge" };
         else if (phase.k === "challenge" && ci + 1 < challenge.length) ci++;
         else {
-          const stars = starsFor(scored);
-          phase = { k: "done", stars, gained: store.completeLesson(lesson.id, stars) };
+          const stars = finalStars(scored, skippedAny);
+          phase = { k: "done", stars, gained: store.completeLesson(lesson.id, stars, skippedAny), skipped: skippedAny };
         }
         render();
       };
+      btn.onclick = advance;
+      skipBtn.onclick = () => { skippedAny = true; advance(); };
     }
     root.querySelector<HTMLButtonElement>("[data-close]")?.addEventListener("click", () => go("#/"));
     window.scrollTo({ top: 0 });

@@ -1,0 +1,230 @@
+{
+ "built": "2026-10-29",
+ "note": "hand-made: a black quiet move, then the only free capture; nominal rating 300",
+ "puzzles": [
+  {
+   "id": "hm-hang-1",
+   "fen": "7B/8/5n1K/8/8/7P/8/3k4 b - - 0 1",
+   "moves": [
+    "d1c1",
+    "h8f6"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-2",
+   "fen": "8/8/2p1N3/6r1/8/k7/4K3/8 b - - 0 1",
+   "moves": [
+    "a3a2",
+    "e6g5"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-3",
+   "fen": "3k4/8/2p5/8/3n1P2/8/1B6/4K3 b - - 0 1",
+   "moves": [
+    "d8c7",
+    "b2d4"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-4",
+   "fen": "4k3/8/4p3/4n3/3BP3/7K/8/8 b - - 0 1",
+   "moves": [
+    "e8f7",
+    "d4e5"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-5",
+   "fen": "7K/4Q3/4n3/8/4pk2/8/1P6/8 b - - 0 1",
+   "moves": [
+    "f4g3",
+    "e7e6"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-6",
+   "fen": "3k4/8/7B/7K/5r2/8/2P5/8 b - - 0 1",
+   "moves": [
+    "d8e8",
+    "h6f4"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-7",
+   "fen": "8/8/p5k1/8/6r1/7Q/8/4K3 b - - 0 1",
+   "moves": [
+    "g6f6",
+    "h3g4"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-8",
+   "fen": "8/8/8/P1p1N3/2b1K3/8/8/7k b - - 0 1",
+   "moves": [
+    "h1g2",
+    "e5c4"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-9",
+   "fen": "2k5/8/3p4/8/3P4/6q1/8/5N1K b - - 0 1",
+   "moves": [
+    "d6d5",
+    "f1g3"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-10",
+   "fen": "8/4k3/7K/8/3b4/3R4/8/8 b - - 0 1",
+   "moves": [
+    "e7e8",
+    "d3d4"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-11",
+   "fen": "k7/8/2n3p1/3Q2P1/8/8/8/5K2 b - - 0 1",
+   "moves": [
+    "a8b8",
+    "d5c6"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-12",
+   "fen": "7B/3k4/5n2/8/8/8/3P3K/8 b - - 0 1",
+   "moves": [
+    "d7c7",
+    "h8f6"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-13",
+   "fen": "8/1k6/8/8/Q5r1/1K6/8/8 b - - 0 1",
+   "moves": [
+    "b7b6",
+    "a4g4"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-14",
+   "fen": "8/6RK/4kp2/8/8/6q1/8/8 b - - 0 1",
+   "moves": [
+    "e6d6",
+    "g7g3"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-15",
+   "fen": "8/1N6/3r4/8/2p4K/8/k7/8 b - - 0 1",
+   "moves": [
+    "a2a1",
+    "b7d6"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-16",
+   "fen": "7k/1K6/2N5/8/3q2p1/8/8/8 b - - 0 1",
+   "moves": [
+    "h8g8",
+    "c6d4"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  }
+ ]
+}

@@ -10,10 +10,20 @@ it.runIf(process.env.VOICE)("voice script", () => {
   const rows: { id: string; where: string; en: string; pa: string }[] = [];
   for (const k of UI_LINES) rows.push({ id: uiId(k), where: "everywhere", en: UI[k].en, pa: UI[k].pa });
   for (const lv of LEVELS) for (const l of lv.lessons) {
-    l.learn.forEach((s, i) => rows.push({ id: learnId(l.id, i), where: `${l.id} learn ${i + 1}`, ...s.text }));
+    l.learn.forEach((s, i) => {
+      rows.push({ id: learnId(l.id, i), where: `${l.id} learn ${i + 1}`, ...s.text });
+      // the Young look reads the short version (or a split into one idea per slide): its own clip, "<id>-y" / "<id>-y1".. (2026-10-29)
+      if (s.young) rows.push({ id: `${learnId(l.id, i)}-y`, where: `${l.id} learn ${i + 1} (young)`, ...s.young });
+      s.youngSplit?.forEach((x, k) => rows.push({ id: `${learnId(l.id, i)}-y${k + 1}`, where: `${l.id} learn ${i + 1} (young, part ${k + 1})`, ...x.text }));
+    });
     rows.push({ id: promptId(l.id, "try"), where: `${l.id} try`, ...l.try.prompt });
-    l.practise.forEach((p, i) => rows.push({ id: promptId(l.id, "practise", i), where: `${l.id} practise ${i + 1}`, ...p.prompt }));
+    if (l.try.young) rows.push({ id: `${promptId(l.id, "try")}-y`, where: `${l.id} try (young)`, ...l.try.young });
+    l.practise.forEach((p, i) => {
+      rows.push({ id: promptId(l.id, "practise", i), where: `${l.id} practise ${i + 1}`, ...p.prompt });
+      if (p.young) rows.push({ id: `${promptId(l.id, "practise", i)}-y`, where: `${l.id} practise ${i + 1} (young)`, ...p.young });
+    });
     rows.push({ id: promptId(l.id, "challenge"), where: `${l.id} challenge`, ...l.challenge.prompt });
+    if (l.challenge.young) rows.push({ id: `${promptId(l.id, "challenge")}-y`, where: `${l.id} challenge (young)`, ...l.challenge.young });
   }
   const dir = new URL("../../../04_Assets/", import.meta.url);
   const md = [

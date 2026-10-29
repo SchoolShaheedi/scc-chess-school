@@ -36,6 +36,8 @@ export function merge(a: Saved, b: Saved): Saved {
     lessons[id] = !mine ? r : {
       stars: (Math.max(mine.stars, r.stars) as 1 | 2 | 3),
       completedAt: mine.completedAt > r.completedAt ? mine.completedAt : r.completedAt,
+      // still marked for review unless the later finish was a clean one
+      ...((mine.completedAt >= r.completedAt ? mine.review : r.review) ? { review: true } : {}),
     };
   }
   // the streak that was touched most recently is the true one

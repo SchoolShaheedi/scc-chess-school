@@ -1,0 +1,378 @@
+{
+ "source": "Lichess puzzle database, CC0 - https://database.lichess.org/#puzzles (picked from the local bank, lowest ratings first)",
+ "built": "2026-10-29",
+ "pack": {
+  "id": "defend-first",
+  "themes": [
+   "defensiveMove"
+  ],
+  "note": "lowest-rated defensiveMove puzzles in the bank, at most two learner moves"
+ },
+ "puzzles": [
+  {
+   "id": "5uXd3",
+   "fen": "8/p7/1p6/kP4R1/6PK/1r6/8/8 b - - 0 67",
+   "moves": [
+    "b3b5",
+    "g5b5",
+    "a5b5",
+    "g4g5"
+   ],
+   "rating": 562,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "rookEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "3F3Bj",
+   "fen": "8/5p2/7p/1K6/3Pk3/2P5/8/8 b - - 0 52",
+   "moves": [
+    "e4d5",
+    "c3c4",
+    "d5d4",
+    "c4c5"
+   ],
+   "rating": 686,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0CaOX",
+   "fen": "8/8/3pp1p1/8/1k4KP/1p3P2/1Qr5/8 w - - 8 55",
+   "moves": [
+    "b2d4",
+    "c2c4",
+    "d4c4",
+    "b4c4"
+   ],
+   "rating": 707,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "pin",
+    "queenRookEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0GkwE",
+   "fen": "8/3R4/3r3p/3kp1pP/6P1/5K2/8/8 w - - 16 45",
+   "moves": [
+    "d7d6",
+    "d5d6",
+    "f3e4",
+    "d6e6"
+   ],
+   "rating": 719,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0bFMn",
+   "fen": "8/8/2kp4/1p2p3/1P3P2/4K3/2P5/8 w - - 0 38",
+   "moves": [
+    "f4e5",
+    "d6e5",
+    "e3e4",
+    "c6d6"
+   ],
+   "rating": 726,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "1LBAk",
+   "fen": "6k1/6pp/8/3p2q1/8/P2Q4/8/1K6 b - - 0 35",
+   "moves": [
+    "g5g6",
+    "d3g6",
+    "h7g6",
+    "a3a4"
+   ],
+   "rating": 728,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "queenEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "1UkQA",
+   "fen": "8/8/7n/3Pk1KP/8/8/8/8 b - - 2 67",
+   "moves": [
+    "h6f7",
+    "g5g6",
+    "f7d6",
+    "h5h6"
+   ],
+   "rating": 737,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "knightEndgame",
+    "master",
+    "short"
+   ]
+  },
+  {
+   "id": "111Yn",
+   "fen": "8/2K5/5p2/4k3/1P2P3/3B4/3n4/8 b - - 2 55",
+   "moves": [
+    "d2e4",
+    "d3e4",
+    "e5e4",
+    "b4b5"
+   ],
+   "rating": 740,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "master",
+    "short"
+   ]
+  },
+  {
+   "id": "1TUSJ",
+   "fen": "8/8/pkp5/1p6/5q1p/P6R/1P4P1/4B1K1 b - - 5 47",
+   "moves": [
+    "f4d4",
+    "e1f2",
+    "c6c5",
+    "f2d4"
+   ],
+   "rating": 751,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "pin",
+    "short"
+   ]
+  },
+  {
+   "id": "1sY0W",
+   "fen": "2b2r2/p5kp/1q3pp1/8/1r1p4/1P2QP2/P3BKPP/R6R w - - 0 21",
+   "moves": [
+    "e3e7",
+    "f8f7",
+    "e7f7",
+    "g7f7"
+   ],
+   "rating": 761,
+   "themes": [
+    "advantage",
+    "defensiveMove",
+    "master",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "1RfMA",
+   "fen": "8/p1Nnk2p/1p1N1p2/6p1/PP1P2P1/7P/b5P1/6K1 w - - 3 38",
+   "moves": [
+    "d6c8",
+    "e7d8",
+    "c8a7",
+    "d8c7"
+   ],
+   "rating": 773,
+   "themes": [
+    "advantage",
+    "defensiveMove",
+    "endgame",
+    "master",
+    "short"
+   ]
+  },
+  {
+   "id": "0lLSj",
+   "fen": "8/6P1/1r2PK2/3k4/8/8/8/8 b - - 0 61",
+   "moves": [
+    "b6e6",
+    "f6f7",
+    "e6e5",
+    "g7g8q"
+   ],
+   "rating": 798,
+   "themes": [
+    "advancedPawn",
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "promotion",
+    "rookEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0i2Ho",
+   "fen": "8/8/8/3bk3/5p1p/2N4P/5K2/8 w - - 0 53",
+   "moves": [
+    "c3d5",
+    "e5d5",
+    "f2f3",
+    "d5e5"
+   ],
+   "rating": 836,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "master",
+    "masterVsMaster",
+    "short"
+   ]
+  },
+  {
+   "id": "0ZjNU",
+   "fen": "r2r4/5B2/p4Q1p/8/1p6/p6P/6P1/2k4K w - - 15 50",
+   "moves": [
+    "f6f1",
+    "d8d1",
+    "f1d1",
+    "c1d1"
+   ],
+   "rating": 839,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "pin",
+    "short"
+   ]
+  },
+  {
+   "id": "0LGVv",
+   "fen": "2k5/ppp5/2p3P1/5r1p/1P3p2/8/P4R2/6K1 b - - 0 33",
+   "moves": [
+    "f5g5",
+    "f2g2",
+    "g5g6",
+    "g2g6"
+   ],
+   "rating": 841,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "rookEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0WwQ3",
+   "fen": "3r3r/p1p1k1q1/2Qp1p2/3Bp3/P3P2p/3P1b2/5PPB/R4RK1 w - - 3 23",
+   "moves": [
+    "c6c7",
+    "d8d7",
+    "c7d7",
+    "e7d7"
+   ],
+   "rating": 854,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "middlegame",
+    "pin",
+    "short"
+   ]
+  },
+  {
+   "id": "0mJjo",
+   "fen": "8/1p6/2k4p/6pP/p1K3P1/P2P4/8/8 b - - 2 43",
+   "moves": [
+    "b7b5",
+    "c4b4",
+    "c6d5",
+    "b4b5"
+   ],
+   "rating": 855,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0hL8c",
+   "fen": "8/8/8/8/1Kpk4/8/2P5/8 w - - 4 45",
+   "moves": [
+    "c2c3",
+    "d4d3",
+    "b4c5",
+    "d3c3"
+   ],
+   "rating": 857,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "pawnEndgame",
+    "short",
+    "zugzwang"
+   ]
+  },
+  {
+   "id": "0U0cT",
+   "fen": "8/8/1p2r3/1P5p/R3p1k1/2P1K1p1/1P4P1/8 w - - 2 46",
+   "moves": [
+    "a4e4",
+    "e6e4",
+    "e3e4",
+    "h5h4"
+   ],
+   "rating": 871,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "rookEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0eW3H",
+   "fen": "4k3/8/pp5P/2p5/2P5/1P1Q4/4K3/q7 b - - 3 60",
+   "moves": [
+    "a1e5",
+    "d3e3",
+    "e5e3",
+    "e2e3"
+   ],
+   "rating": 876,
+   "themes": [
+    "crushing",
+    "defensiveMove",
+    "endgame",
+    "queenEndgame",
+    "short"
+   ]
+  }
+ ]
+}

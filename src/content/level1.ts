@@ -311,10 +311,10 @@ export const LEVEL1: Lesson[] = [
           why: { en: "Right. You would lose your rook for a knight.", pa: "ਠੀਕ। ਘੋੜੇ ਬਦਲੇ ਤੁਹਾਡਾ ਹਾਥੀ ਚਲਾ ਜਾਂਦਾ।" } },
       ] },
     practise: [
-      { kind: "pack", pack: "hanging-easy", count: 5,
+      { kind: "pack", pack: "hanging-first", count: 5,
         prompt: { en: "A piece is hanging. Find it and take it.", pa: "ਇੱਕ ਮੋਹਰਾ ਬੇ-ਬਚਾਅ ਹੈ। ਉਸ ਨੂੰ ਲੱਭੋ ਅਤੇ ਮਾਰੋ।" } },
     ],
-    challenge: { kind: "pack", pack: "hanging-easy", count: 3,
+    challenge: { kind: "pack", pack: "hanging-first", count: 3,
       prompt: { en: "Three real games. Find the free piece in each.", pa: "ਤਿੰਨ ਅਸਲੀ ਖੇਡਾਂ। ਹਰ ਇੱਕ ਵਿੱਚ ਮੁਫ਼ਤ ਮੋਹਰਾ ਲੱਭੋ।" } },
   },
 

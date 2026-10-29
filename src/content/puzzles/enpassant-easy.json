@@ -1,0 +1,153 @@
+{
+ "source": "Hand-made for the Chess School, CC0; every position proved with Stockfish (test/easy-packs.test.ts)",
+ "built": "2026-10-29",
+ "pack": {
+  "id": "enpassant-easy",
+  "themes": [
+   "enPassant"
+  ],
+  "note": "hand-made: the pawn pushes two squares, the en passant capture forks two pieces; nominal rating 400"
+ },
+ "puzzles": [
+  {
+   "id": "hm-ep-1",
+   "fen": "7k/npn5/8/P7/8/8/8/K7 b - - 0 1",
+   "moves": [
+    "b7b5",
+    "a5b6"
+   ],
+   "rating": 400,
+   "themes": [
+    "enPassant",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-ep-2",
+   "fen": "7k/npr5/8/2P5/8/8/8/K7 b - - 0 1",
+   "moves": [
+    "b7b5",
+    "c5b6"
+   ],
+   "rating": 400,
+   "themes": [
+    "enPassant",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-ep-3",
+   "fen": "7k/1npr4/8/1P6/8/8/8/K7 b - - 0 1",
+   "moves": [
+    "c7c5",
+    "b5c6"
+   ],
+   "rating": 400,
+   "themes": [
+    "enPassant",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-ep-4",
+   "fen": "7k/1npr4/8/3P4/8/8/8/K7 b - - 0 1",
+   "moves": [
+    "c7c5",
+    "d5c6"
+   ],
+   "rating": 400,
+   "themes": [
+    "enPassant",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-ep-5",
+   "fen": "7k/2npr3/8/2P5/8/8/8/K7 b - - 0 1",
+   "moves": [
+    "d7d5",
+    "c5d6"
+   ],
+   "rating": 400,
+   "themes": [
+    "enPassant",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-ep-6",
+   "fen": "7k/2npr3/8/4P3/8/8/8/K7 b - - 0 1",
+   "moves": [
+    "d7d5",
+    "e5d6"
+   ],
+   "rating": 400,
+   "themes": [
+    "enPassant",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-ep-7",
+   "fen": "k7/3npr2/8/3P4/8/8/8/7K b - - 0 1",
+   "moves": [
+    "e7e5",
+    "d5e6"
+   ],
+   "rating": 400,
+   "themes": [
+    "enPassant",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-ep-8",
+   "fen": "7k/8/8/8/5p2/8/3NPR2/K7 w - - 0 1",
+   "moves": [
+    "e2e4",
+    "f4e3"
+   ],
+   "rating": 400,
+   "themes": [
+    "enPassant",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-ep-9",
+   "fen": "7k/8/8/8/4p3/8/4NPR1/K7 w - - 0 1",
+   "moves": [
+    "f2f4",
+    "e4f3"
+   ],
+   "rating": 400,
+   "themes": [
+    "enPassant",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-ep-10",
+   "fen": "7k/8/8/8/6p1/8/4NPR1/K7 w - - 0 1",
+   "moves": [
+    "f2f4",
+    "g4f3"
+   ],
+   "rating": 400,
+   "themes": [
+    "enPassant",
+    "oneMove",
+    "handMade"
+   ]
+  }
+ ]
+}
