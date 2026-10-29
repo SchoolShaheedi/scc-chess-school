@@ -22,9 +22,19 @@ export interface Diagram {
   coords?: boolean;
 }
 
-export interface Slide { text: Text; board?: Diagram }
+export interface Slide {
+  text: Text; board?: Diagram;
+  /** The Young look shows this instead of `text`: one idea, about twelve words (2026-10-29, "no dead ends"). */
+  young?: Text;
+  /** The Young look shows these slides in place of this one (a long slide split into one idea per slide). */
+  youngSplit?: { text: Text; board?: Diagram }[];
+}
 
-interface Base { prompt: Text; hint?: Text }
+interface Base {
+  prompt: Text; hint?: Text;
+  /** The Young look shows this prompt instead of `prompt`. */
+  young?: Text;
+}
 
 /** Tap the named squares in order. */
 export interface CoordExercise extends Base { kind: "coord"; targets: Square[]; coords?: boolean }
@@ -43,11 +53,20 @@ export interface ChooseExercise extends Base {
   kind: "choose"; board?: Diagram; options: { text: Text; correct?: boolean; why?: Text }[];
 }
 /** A real position: the learner plays the solution (Lichess convention, see tools/build-puzzles.mjs). */
-export interface PuzzleExercise extends Base { kind: "puzzle"; fen: string; moves: string[]; source?: string }
+export interface PuzzleExercise extends Base {
+  kind: "puzzle"; fen: string; moves: string[]; source?: string;
+  /** The pack it was drawn from (set by expand()): it names the theme, for "why that was wrong" and the level test's missed list. */
+  pack?: string;
+}
 /** A real position, learner to move, with a goal the move must meet (see src/chess/rules.ts). */
 export interface PlayExercise extends Base { kind: "play"; fen: string; goal: Goal }
 /** Mate the lone king: the learner plays, the app defends with rules.ts defend(), within maxMoves. */
-export interface MateVsExercise extends Base { kind: "mateVs"; fen: string; maxMoves: number }
+export interface MateVsExercise extends Base {
+  kind: "mateVs"; fen: string; maxMoves: number;
+  /** A part-drill that starts mid-way (Level 3, 2026-10-29): its small limit is proved by Stockfish in test/easy-packs.test.ts,
+   *  not set from the longest forced mate for the material like the full drills. */
+  partial?: boolean;
+}
 /** Play it out against Stockfish (DECISIONS #57). promote = queen a pawn safely; wipe = leave the opponent
  *  only a king; hold = survive maxMoves without losing. The app stops the drill if the win (or draw) slips. */
 export interface EngineVsExercise extends Base {

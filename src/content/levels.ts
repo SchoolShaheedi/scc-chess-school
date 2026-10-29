@@ -11,6 +11,7 @@ import { LEVEL7 } from "./level7";
 import { LEVEL8 } from "./level8";
 import { LEVEL9 } from "./level9";
 import { LEVEL10 } from "./level10";
+import { applyBeginnerHelp } from "./beginner-help";
 import p_long from "./puzzles/long.json";
 import p_very_long from "./puzzles/very-long.json";
 import p_defend_hard from "./puzzles/defend-hard.json";
@@ -55,14 +56,18 @@ import enpassant from "./puzzles/enpassant.json";
 import mate1Easy from "./puzzles/mate1-easy.json";
 import promotionEasy from "./puzzles/promotion-easy.json";
 import hangingEasy from "./puzzles/hanging-easy.json";
+// 2026-10-29 "no dead ends": the easiest packs the bank (and a few hand-made positions) can give, built by tools/build-easy-packs.mjs
+import hangingFirst from "./puzzles/hanging-first.json";
+import defendFirst from "./puzzles/defend-first.json";
+import enpassantEasy from "./puzzles/enpassant-easy.json";
 
 export const LEVELS: Level[] = [
-  { n: 1, band: "0–200", title: { en: "Pieces & moves", pa: "ਮੋਹਰੇ ਤੇ ਚਾਲਾਂ" }, lessons: LEVEL1, plannedLessons: 12, botTest: "nanhi-chidi", race: 5 },
-  { n: 2, band: "200–400", title: { en: "Special moves, check & mate", pa: "ਖ਼ਾਸ ਚਾਲਾਂ, ਸ਼ਹਿ ਤੇ ਮਾਤ" }, lessons: LEVEL2, plannedLessons: 10,
-    test: { pass: 9, packs: [{ pack: "mate1-easy", count: 6 }, { pack: "promotion-easy", count: 3 }, { pack: "enpassant", count: 1 }, { pack: "hanging-easy", count: 2 }] } },
-  { n: 3, band: "400–600", title: { en: "First checkmates", pa: "ਪਹਿਲੀਆਂ ਮਾਤਾਂ" }, lessons: LEVEL3, plannedLessons: 8,
-    test: { pass: 11, packs: [{ pack: "mate1-mid", count: 6 }, { pack: "backrank", count: 3 }, { pack: "smothered", count: 2 }, { pack: "defend-easy", count: 2 }, { pack: "mate1-easy", count: 2 }] } },
-  { n: 4, band: "600–800", title: { en: "Tactics I", pa: "ਦਾਅ-ਪੇਚ ੧" }, lessons: LEVEL4, plannedLessons: 11,
+  { n: 1, band: "0–200", title: { en: "Pieces & moves", pa: "ਮੋਹਰੇ ਤੇ ਚਾਲਾਂ" }, lessons: applyBeginnerHelp(LEVEL1), plannedLessons: 12, botTest: "nanhi-chidi", race: 5 },
+  { n: 2, band: "200–400", title: { en: "Special moves, check & mate", pa: "ਖ਼ਾਸ ਚਾਲਾਂ, ਸ਼ਹਿ ਤੇ ਮਾਤ" }, lessons: applyBeginnerHelp(LEVEL2), plannedLessons: 10,
+    test: { pass: 9, packs: [{ pack: "mate1-easy", count: 6 }, { pack: "promotion-easy", count: 3 }, { pack: "enpassant-easy", count: 1 }, { pack: "hanging-first", count: 2 }] } },
+  { n: 3, band: "400–600", title: { en: "First checkmates", pa: "ਪਹਿਲੀਆਂ ਮਾਤਾਂ" }, lessons: applyBeginnerHelp(LEVEL3), plannedLessons: 8,
+    test: { pass: 11, packs: [{ pack: "mate1-mid", count: 6 }, { pack: "backrank", count: 3 }, { pack: "smothered", count: 2 }, { pack: "defend-first", count: 2 }, { pack: "mate1-easy", count: 2 }] } },
+  { n: 4, band: "600–800", title: { en: "Tactics I", pa: "ਦਾਅ-ਪੇਚ ੧" }, lessons: applyBeginnerHelp(LEVEL4), plannedLessons: 11,
     test: { pass: 15, packs: [{ pack: "fork-easy", count: 4 }, { pack: "pin-easy", count: 3 }, { pack: "skewer-easy", count: 3 }, { pack: "discovered-easy", count: 3 },
       { pack: "doublecheck-easy", count: 2 }, { pack: "defender-easy", count: 2 }, { pack: "trapped-easy", count: 2 }, { pack: "hanging-easy", count: 1 }] } },
   { n: 5, band: "800–1000", title: { en: "Endgames I", pa: "ਅੰਤਲੀ ਖੇਡ ੧" }, lessons: LEVEL5, plannedLessons: 8,
@@ -83,6 +88,7 @@ export const LEVELS: Level[] = [
 interface Pack { source: string; puzzles: { id: string; fen: string; moves: string[]; rating: number }[] }
 export const PACKS: Record<string, Pack> = {
   "hanging-easy": hangingEasy as Pack, "mate1-easy": mate1Easy as Pack,
+  "hanging-first": hangingFirst as Pack, "defend-first": defendFirst as Pack, "enpassant-easy": enpassantEasy as Pack,
   "promotion-easy": promotionEasy as Pack, enpassant: enpassant as Pack,
   backrank: backrank as Pack, smothered: smothered as Pack, "mate1-mid": mate1Mid as Pack, "defend-easy": defendEasy as Pack,
   "fork-easy": forkEasy as Pack, "pin-easy": pinEasy as Pack, "skewer-easy": skewerEasy as Pack, "discovered-easy": discoveredEasy as Pack,
@@ -102,8 +108,9 @@ export function expand(list: Exercise[], rand: () => number = Math.random): Exer
     if (ex.kind !== "pack") return [ex];
     const pool = [...PACKS[ex.pack].puzzles].sort(() => rand() - 0.5).slice(0, ex.count);
     return pool.map((p): PuzzleExercise => ({
-      kind: "puzzle", fen: p.fen, moves: p.moves, prompt: ex.prompt, hint: ex.hint,
-      source: `lichess.org/training/${p.id}`,
+      kind: "puzzle", fen: p.fen, moves: p.moves, prompt: ex.prompt, hint: ex.hint, young: ex.young, pack: ex.pack,
+      // hand-made positions (ids "hm-...") are not on Lichess: no link, but the id still finds the puzzle's theme and rating
+      source: p.id.startsWith("hm-") ? `scc/hand-made/${p.id}` : `lichess.org/training/${p.id}`,
     }));
   });
 }

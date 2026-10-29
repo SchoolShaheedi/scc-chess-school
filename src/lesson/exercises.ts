@@ -11,8 +11,9 @@ import { getEngine } from "../engine/browser";
 import { asNumber } from "../engine/uci";
 import { type PieceCode, type Placement, type Square, placementFromFen } from "../chess/types";
 import { num, t, tx, type UIKey } from "../i18n";
+import { canSkip, canWatch, firstSafeMove, firstStarsMove, goalMove, rungFor, topicKey, topicOf, watchLine, watchPick } from "./help";
 import type {
-  ChooseExercise, CoordExercise, EngineBestExercise, EngineVsExercise, Exercise, LineExercise, PickExercise, MateVsExercise, PlaceExercise, PlayExercise, PuzzleExercise, SafeExercise, StarsExercise, BotGameExercise,
+  ChooseExercise, CoordExercise, EngineBestExercise, EngineVsExercise, Exercise, LineExercise, PickExercise, MateVsExercise, PlaceExercise, PlayExercise, PuzzleExercise, SafeExercise, StarsExercise, BotGameExercise, Text,
 } from "./types";
 
 export interface Ctx {
@@ -21,9 +22,28 @@ export interface Ctx {
   say(text: string, tone?: "ok" | "no" | "info"): void;
   status(html: string): void;                   // small counter line: "Stars left 2"
   done(mistakes: number): void;
+  /** "Skip for now" (2026-10-29): called once an exercise has been failed 3 times. The player shows the button; where it is
+   *  missing (the Puzzles tab, the placement test) nothing is offered. */
+  offerSkip?(): void;
+  /** "Watch me do it": called after 2 failed attempts at a mate or a mini-game; `run` plays the winning side for the learner. */
+  offerWatch?(run: () => Promise<void>): void;
 }
 type Cleanup = () => void;
-const wait = (ms: number) => new Promise(r => setTimeout(r, ms));
+const wait = (ms: number) => new Promise<void>(r => setTimeout(r, ms));
+
+/** The hint if the exercise has one, else the glow's own words. */
+const hintOr = (ex: { hint?: Text }, key: UIKey) => ex.hint ? tx(ex.hint) : t(key);
+
+/** The opponent's best reply, for "why that was wrong". Null when no engine is ready within a moment: then it is simply skipped. */
+async function bestReply(fen: string): Promise<string | null> {
+  try {
+    const a = await Promise.race([getEngine().analyse(fen, { depth: 8 }), wait(1500).then(() => null)]);
+    return a?.best ?? null;
+  } catch { return null; }
+}
+
+/** The engine plays the learner's side for "Watch me do it". */
+const engineBestMove = (depth: number) => async (fen: string) => (await getEngine().analyse(fen, { depth })).best;
 
 /** Why a drill piece cannot go to `to`: blocked on its line, or not its shape of move at all. */
 function whyRefused(board: Placement, from: Square, to: Square): string {
@@ -36,19 +56,27 @@ function whyRefused(board: Placement, from: Square, to: Square): string {
 }
 
 function runCoord(ex: CoordExercise, c: Ctx): Cleanup {
-  let i = 0, mistakes = 0;
+  let i = 0, mistakes = 0, wrong = 0;
   const ask = () => { c.say(`${t("tapSquare")} <b class="sqname">${ex.targets[i]}</b>`); c.status(`${num(i + 1)} / ${num(ex.targets.length)}`); };
   c.board.set({});
   c.board.interact({
     onTap: s => {
       if (s === ex.targets[i]) {
-        c.board.mark({ flash: { sq: s, ok: true } });
+        wrong = 0;
+        c.board.mark({ flash: { sq: s, ok: true }, highlights: [], stars: [] });
         if (++i === ex.targets.length) { c.say(t("wellDone"), "ok"); c.done(mistakes); return; }
         ask();
       } else {
-        mistakes++;
+        mistakes++; wrong++;
         c.board.mark({ flash: { sq: s, ok: false } });
         c.say(`<b class="sqname">${s}</b> ✗ · ${t("tapSquare")} <b class="sqname">${ex.targets[i]}</b>`, "no");
+        // the help ladder: 2 misses light up the column (and give the hint), 3 put a star on the square
+        const target = ex.targets[i], rung = rungFor(wrong);
+        if (rung === "hint") {
+          c.board.mark({ highlights: [1, 2, 3, 4, 5, 6, 7, 8].map(r => target[0] + r) });
+          c.say(`${ex.hint ? tx(ex.hint) + " " : ""}${t("helpCoordFile").replaceAll("{f}", target[0])}`);
+        } else if (rung === "arrow") { c.board.mark({ stars: [target], highlights: [] }); c.say(t("helpCoordHere")); }
+        if (canSkip(wrong)) c.offerSkip?.();
       }
     },
   });
@@ -61,13 +89,24 @@ function runStars(ex: StarsExercise, c: Ctx): Cleanup {
   const counter = () => c.status(`${t("starsLeft")} <b>${num(stars.length)}</b>`
     + (ex.maxMoves ? ` · ${t("movesLeft")} <b>${num(ex.maxMoves - moves)}</b>` : ""));
   const reset = () => { pos = { ...ex.pieces }; stars = [...ex.stars]; moves = 0; c.board.set(pos, { stars }); counter(); };
+  // the help ladder: 2 misses glow the piece to move (or give the hint), 3 draw the arrow and offer "Skip for now"
+  const help = () => {
+    const rung = rungFor(mistakes);
+    if (rung === "none") return;
+    const cap = ex.maxMoves ? ex.maxMoves - moves : 8;
+    let m = firstStarsMove(pos, stars, ex.only, Math.min(cap, 8));
+    if (!m) { reset(); m = firstStarsMove(pos, stars, ex.only, Math.min(ex.maxMoves ?? 8, 8)); }   // this attempt can no longer finish: start again
+    if (rung === "hint") { c.board.mark({ stars, highlights: m ? [m[0]] : [] }); c.say(hintOr(ex, "helpLookPiece")); }
+    else { c.board.mark({ stars, highlights: m ? [m[0]] : [], arrows: m ? [m] : [] }); c.say(t("helpArrow")); }
+    if (canSkip(mistakes)) c.offerSkip?.();
+  };
   c.board.interact({
     canPick: s => pos[s]?.[0] !== "w" ? t("whyNotYours") : ex.only && pos[s]![1] !== ex.only ? t("whyWall") : true,
     targets: s => drillMoves(pos, s),
     onTap: s => c.say(pos[s]?.[0] === "b" ? t("whyNotYours") : pos[s] ? t("whyWall") : t("whyPickFirst"), pos[s] ? "no" : "info"),
     onMove: async (from, to) => {
       if (!drillMoves(pos, from).includes(to)) {
-        mistakes++; c.board.shake(to); c.say(whyRefused(pos, from, to), "no"); return;
+        mistakes++; c.board.shake(to); c.say(whyRefused(pos, from, to), "no"); help(); return;
       }
       pos = move(pos, from, to); moves++;
       stars = stars.filter(s => s !== to);
@@ -76,7 +115,7 @@ function runStars(ex: StarsExercise, c: Ctx): Cleanup {
       if (!stars.length) { c.say(t("wellDone"), "ok"); c.done(mistakes); return; }
       if (ex.maxMoves && moves >= ex.maxMoves) {
         mistakes++; c.say(t("tooManyMoves"), "no");
-        await wait(1100); if (alive) { reset(); c.say(tx(ex.prompt)); }
+        await wait(1100); if (alive) { reset(); c.say(tx(ex.prompt)); help(); }
       }
     },
   });
@@ -89,12 +128,24 @@ function runSafe(ex: SafeExercise, c: Ctx): Cleanup {
   const king = () => Object.keys(pos).find(s => pos[s] === "wK")!;
   const counter = () => c.status(ex.maxMoves ? `${t("movesLeft")} <b>${num(ex.maxMoves - moves)}</b>` : "");
   const reset = () => { pos = { ...ex.pieces }; moves = 0; c.board.set(pos, { goal: ex.goal, stars: [ex.goal] }); counter(); };
+  // the help ladder: 2 misses glow the king (or give the hint), 3 draw the safe next step and offer "Skip for now"
+  const help = () => {
+    const rung = rungFor(mistakes);
+    if (rung === "none") return;
+    const cap = ex.maxMoves ? ex.maxMoves - moves : 12;
+    let m = firstSafeMove(pos, ex.goal, cap);
+    if (!m) { reset(); m = firstSafeMove(pos, ex.goal, ex.maxMoves ?? 12); }
+    const marks = { goal: ex.goal, stars: [ex.goal], highlights: m ? [m[0]] : [] };
+    if (rung === "hint") { c.board.mark(marks); c.say(hintOr(ex, "helpLookPiece")); }
+    else { c.board.mark({ ...marks, arrows: m ? [m] : [], crosses: [] }); c.say(t("helpArrow")); }
+    if (canSkip(mistakes)) c.offerSkip?.();
+  };
   c.board.interact({
     canPick: s => pos[s] === "wK" ? true : t("whyNotYours"),
     targets: s => drillMoves(pos, s),
     onTap: () => c.say(t("whyPickFirst"), "info"),
     onMove: async (from, to) => {
-      if (!drillMoves(pos, from).includes(to)) { mistakes++; c.board.shake(to); c.say(t("whyK"), "no"); return; }
+      if (!drillMoves(pos, from).includes(to)) { mistakes++; c.board.shake(to); c.say(t("whyK"), "no"); help(); return; }
       const next = move(pos, from, to);
       if (attackedBy(next, "b").has(to)) {
         mistakes++; c.board.shake(to);
@@ -102,6 +153,7 @@ function runSafe(ex: SafeExercise, c: Ctx): Cleanup {
         const attackers = Object.keys(next).filter(s => next[s]?.[0] === "b" && attacks(next, s, next[s]!).includes(to));
         c.board.mark({ crosses: [to], highlights: attackers, arrows: attackers.map(a => [a, to] as [Square, Square]) });
         c.say(t("whyUnsafe"), "no");
+        if (rungFor(mistakes) !== "none") { await wait(1200); if (alive) help(); }   // let the reason be seen before the answer
         return;
       }
       pos = next; moves++;
@@ -110,7 +162,7 @@ function runSafe(ex: SafeExercise, c: Ctx): Cleanup {
       if (king() === ex.goal) { c.say(t("wellDone"), "ok"); c.done(mistakes); return; }
       if (ex.maxMoves && moves >= ex.maxMoves) {
         mistakes++; c.say(t("tooManyMoves"), "no");
-        await wait(1100); if (alive) { reset(); c.say(tx(ex.prompt)); }
+        await wait(1100); if (alive) { reset(); c.say(tx(ex.prompt)); help(); }
       }
     },
   });
@@ -119,7 +171,7 @@ function runSafe(ex: SafeExercise, c: Ctx): Cleanup {
 }
 
 function runPlace(ex: PlaceExercise, c: Ctx): Cleanup {
-  let pos: Placement = { ...(ex.start ?? {}) }, i = 0, mistakes = 0;
+  let pos: Placement = { ...(ex.start ?? {}) }, i = 0, mistakes = 0, wrong = 0;
   const ask = () => {
     const st = ex.steps[i];
     c.say(`<span class="tray">${pieceHTML(st.piece)}</span> ${t("whereGoes")}`);
@@ -130,13 +182,18 @@ function runPlace(ex: PlaceExercise, c: Ctx): Cleanup {
     onTap: s => {
       const st = ex.steps[i];
       if (st.squares.includes(s) && !pos[s]) {
-        pos = { ...pos, [s]: st.piece };
+        pos = { ...pos, [s]: st.piece }; wrong = 0;
         c.board.set(pos, { flash: { sq: s, ok: true } });
         if (++i === ex.steps.length) { c.say(t("wellDone"), "ok"); c.done(mistakes); return; }
         ask();
       } else {
-        mistakes++; c.board.shake(s); c.board.mark({ flash: { sq: s, ok: false } });
+        mistakes++; wrong++; c.board.shake(s); c.board.mark({ flash: { sq: s, ok: false } });
         c.say(ex.hint ? tx(ex.hint) : t("notQuite"), "no");
+        // the help ladder: 2 misses glow the squares this piece may go to, 3 put a star on one and offer "Skip for now"
+        const free = st.squares.filter(q => !pos[q]), rung = rungFor(wrong);
+        if (rung === "hint") { c.board.mark({ highlights: free }); if (!ex.hint) c.say(t("helpSquares")); }
+        else if (rung === "arrow") { c.board.mark({ highlights: free, stars: free.slice(0, 1) }); c.say(t("helpPickStar")); }
+        if (canSkip(wrong)) c.offerSkip?.();
       }
     },
   });
@@ -163,6 +220,13 @@ function runChoose(ex: ChooseExercise, c: Ctx): Cleanup {
     } else {
       mistakes++; btn.classList.add("no"); btn.disabled = true;
       c.say(o.why ? tx(o.why) : t("notQuite"), "no");
+      // the help ladder: 2 misses give the hint and make the right answer glow; 3 offer "Skip for now"
+      if (rungFor(mistakes) !== "none") {
+        const right = c.extra.querySelector<HTMLButtonElement>(`.choice[data-i="${ex.options.findIndex(x => x.correct)}"]`);
+        right?.classList.add("glow");
+        c.say(`${o.why ? tx(o.why) + " " : ""}${hintOr(ex, "helpAnswer")}`, "no");
+      }
+      if (canSkip(mistakes)) c.offerSkip?.();
     }
   });
   return () => { c.extra.innerHTML = ""; };
@@ -191,8 +255,19 @@ function runPlay(ex: PlayExercise, c: Ctx): Cleanup {
   const game = new Chess(ex.fen);
   const me = game.turn();
   let mistakes = 0, done = false, busy = false, alive = true;
+  // the help ladder: 2 misses glow the piece to move (or give the hint), 3 draw the arrow and offer "Skip for now"
+  let helpFrom: Square[] = [], helpArrow: [Square, Square][] = [];
   const show = (last?: [Square, Square], anim = false) =>
-    c.board.set(placementFromFen(game.fen()), { lastMove: last, check: checkSquare(game) }, anim ? last : undefined);
+    c.board.set(placementFromFen(game.fen()), { lastMove: last, check: checkSquare(game), highlights: helpFrom, arrows: helpArrow }, anim ? last : undefined);
+  const help = () => {
+    const rung = rungFor(mistakes);
+    if (rung === "none") return;
+    const m = goalMove(game.fen(), ex.goal);
+    helpFrom = m ? [m[0]] : []; helpArrow = rung === "arrow" && m ? [m] : [];
+    show();
+    c.say(rung === "arrow" ? t("helpArrow") : hintOr(ex, "helpLookPiece"));
+    if (canSkip(mistakes)) c.offerSkip?.();
+  };
   c.board.setFlip(me === "b");
   show();
   c.status(t(me === "w" ? "whiteToMove" : "blackToMove"));
@@ -203,25 +278,27 @@ function runPlay(ex: PlayExercise, c: Ctx): Cleanup {
     onMove: async (from, to) => {
       if (done || busy) return;
       const legal = game.moves({ square: from as CjSquare, verbose: true }).filter(m => m.to === to);
-      if (!legal.length) { mistakes++; c.board.shake(to); c.say(refusal(game.fen(), from, to), "no"); return; }
+      if (!legal.length) { mistakes++; c.board.shake(to); c.say(refusal(game.fen(), from, to), "no"); help(); return; }
       const promo = legal[0].promotion ? await pickPromotion(c, me) : "";
       const uci = from + to + promo;
       const v = judge(game.fen(), uci, ex.goal);
       if (v.ok) {
         game.move({ from, to, promotion: promo || undefined });
-        done = true; show([from, to], true);
+        done = true; helpFrom = []; helpArrow = []; show([from, to], true);
         c.say(t("correct"), "ok"); c.done(mistakes); return;
       }
       if (!v.tryAnother) mistakes++;
       // show the consequence of a wrong-but-legal move for a moment, then put it back
       const before = game.fen();
       busy = true;
+      helpFrom = []; helpArrow = [];
       game.move({ from, to, promotion: promo || undefined });
       show([from, to], true);
       c.say(t(v.why!), v.tryAnother ? "info" : "no");
       await wait(1300);
       if (!alive) return;
       game.load(before); busy = false; show();
+      help();
     },
   });
   return () => { alive = false; c.board.setFlip(false); };
@@ -234,9 +311,27 @@ function runMateVs(ex: MateVsExercise, c: Ctx): Cleanup {
     c.board.set(placementFromFen(game.fen()), { lastMove: last, check: checkSquare(game) }, anim ? last : undefined);
   const counter = () => c.status(`${t("movesLeft")} <b>${num(ex.maxMoves - moves)}</b>`);
   const reset = () => { game = new Chess(ex.fen); moves = 0; busy = false; show(); counter(); };
+  // "Watch me do it": the engine mates for the learner (against the same stubborn defender), then it is their turn again
+  const watch = async () => {
+    reset(); busy = true; c.say(t("watching"));
+    const out = await watchLine({
+      fen: ex.fen, side: me, best: engineBestMove(18), reply: async f => defend(f),
+      show: (g, last) => c.board.set(placementFromFen(g.fen()), { lastMove: last, check: checkSquare(g) }, last),
+      pause: wait, alive: () => alive, stop: g => g.isCheckmate(), maxPlies: 90,
+    });
+    if (!alive || out === "gone") return;
+    c.say(out === "stopped" ? t("checkmate") : t("watchHalf"), out === "stopped" ? "ok" : "info");
+    await wait(1800); if (!alive) return;
+    reset(); c.say(t("watchTry"));
+  };
+  const offerHelp = () => {
+    if (canWatch(mistakes)) c.offerWatch?.(watch);
+    if (canSkip(mistakes)) c.offerSkip?.();
+  };
   const fail = async (key: UIKey) => {
     mistakes++; busy = true; c.say(t(key), "no");
-    await wait(1600); if (!alive) return; reset(); c.say(tx(ex.prompt));
+    await wait(1600); if (!alive) return; reset(); c.say(canWatch(mistakes) && ex.hint ? tx(ex.hint) : tx(ex.prompt));
+    offerHelp();
   };
   c.board.setFlip(me === "b");
   c.board.interact({
@@ -273,9 +368,26 @@ function runEngineVs(ex: EngineVsExercise, c: Ctx): Cleanup {
     c.board.set(placementFromFen(game.fen()), { lastMove: last, check: checkSquare(game) }, anim ? last : undefined);
   const counter = () => c.status(`${t("movesLeft")} <b>${num(ex.maxMoves - moves)}</b>`);
   const reset = () => { game = new Chess(ex.fen); moves = 0; busy = false; show(); counter(); };
+  // "Watch me do it": the engine plays the learner's side, and replies as it would, then it is their turn again
+  const watch = async () => {
+    reset(); busy = true; c.say(t("watching"));
+    const out = await watchLine({
+      fen: ex.fen, side: me, best: engineBestMove(depth), reply: async f => (await getEngine().analyse(f, { depth })).best,
+      show: (g, last) => c.board.set(placementFromFen(g.fen()), { lastMove: last, check: checkSquare(g) }, last),
+      pause: wait, alive: () => alive,
+      stop: (g, m) => g.isCheckmate() || (m.color === me && ex.goal !== "hold" && engineGoalMet(g, me, ex.goal, m)) || (ex.goal === "wipe" && engineGoalMet(g, me, "wipe")),
+      maxPlies: Math.max(12, ex.maxMoves * 2),
+    });
+    if (!alive || out === "gone") return;
+    c.say(out === "stopped" ? t("miniWin") : t("watchHalf"), out === "stopped" ? "ok" : "info");
+    await wait(1800); if (!alive) return;
+    reset(); c.say(t("watchTry"));
+  };
   const fail = async (key: UIKey) => {
     mistakes++; busy = true; c.say(t(key), "no");
-    await wait(1800); if (!alive) return; reset(); c.say(tx(ex.prompt));
+    await wait(1800); if (!alive) return; reset(); c.say(canWatch(mistakes) && ex.hint ? tx(ex.hint) : tx(ex.prompt));
+    if (canWatch(mistakes)) c.offerWatch?.(watch);
+    if (canSkip(mistakes)) c.offerSkip?.();
   };
   const win = (key: UIKey) => { done = true; c.status(""); c.say(t(key), "ok"); c.done(mistakes); };
   c.board.setFlip(me === "b");
@@ -325,8 +437,24 @@ function runBotGame(ex: BotGameExercise, c: Ctx): Cleanup {
     if (r === "win") { done = true; c.status(""); c.say(t("miniWin"), "ok"); c.done(tries); return true; }
     tries++; busy = true; c.say(t(r === "lose" ? "miniLose" : "miniDraw"), "no");
     await wait(1800); if (!alive) return true;
-    game = new Chess(ex.fen); busy = false; show(); c.say(tx(ex.prompt));
+    game = new Chess(ex.fen); busy = false; show(); c.say(canWatch(tries) && ex.hint ? tx(ex.hint) : tx(ex.prompt));
+    if (canWatch(tries)) c.offerWatch?.(watch);
+    if (canSkip(tries)) c.offerSkip?.();
     return true;
+  };
+  // "Watch me do it": the engine plays the learner's side against the same bot, then it is their turn again
+  const watch = async () => {
+    game = new Chess(ex.fen); busy = true; show(); c.status(""); c.say(t("watching"));
+    const out = await watchLine({
+      fen: ex.fen, side: me,
+      best: async f => watchPick(f, (await getEngine().candidates(f, { n: 6, depth: 8 })).map(x => ({ move: x.move, score: asNumber(x.score) })), ex.goal),
+      reply: async f => { const legalAll = new Chess(f).moves({ verbose: true }).map(m => m.from + m.to + (m.promotion ?? "")); return botMove(getEngine(), f, legalAll, bot); },
+      show: (g, last) => c.board.set(placementFromFen(g.fen()), { lastMove: last, check: checkSquare(g) }, last),
+      pause: wait, alive: () => alive, stop: (g, m) => miniGameResult(g, me, ex.goal, m) !== null, maxPlies: 80,
+    });
+    if (!alive || out === "gone") return;
+    await wait(1200); if (!alive) return;
+    game = new Chess(ex.fen); busy = false; show(); c.say(t("watchTry"));
   };
   c.board.setFlip(me === "b");
   c.board.interact({
@@ -356,8 +484,8 @@ function runBotGame(ex: BotGameExercise, c: Ctx): Cleanup {
 function runLine(ex: LineExercise, c: Ctx): Cleanup {
   const game = new Chess();
   let i = 0, mistakes = 0, wrongHere = 0, busy = true, alive = true;
-  const show = (last?: [Square, Square], anim = false, arrows?: [Square, Square][]) =>
-    c.board.set(placementFromFen(game.fen()), { lastMove: last, check: checkSquare(game), arrows }, anim ? last : undefined);
+  const show = (last?: [Square, Square], anim = false, arrows?: [Square, Square][], highlights?: Square[]) =>
+    c.board.set(placementFromFen(game.fen()), { lastMove: last, check: checkSquare(game), arrows, highlights }, anim ? last : undefined);
   const counter = () => c.status(`${ex.opening ? `<b>${ex.opening}</b> · ` : ""}${num(Math.min(i, ex.moves.length))} / ${num(ex.moves.length)}`);
   const replyIfTheirTurn = async () => {
     while (i < ex.moves.length && game.turn() !== ex.side) {
@@ -385,8 +513,12 @@ function runLine(ex: LineExercise, c: Ctx): Cleanup {
         return replyIfTheirTurn();
       }
       mistakes++; wrongHere++; c.board.shake(to);
-      if (wrongHere >= 2) { show(undefined, false, [[want.from, want.to]]); c.say(t("showLine"), "no"); }
+      // the help ladder: 2 misses glow the piece to move (or give the hint), 3 draw the arrow and offer "Skip for now"
+      const rung = rungFor(wrongHere);
+      if (rung === "arrow") { show(undefined, false, [[want.from, want.to]], [want.from]); c.say(t("showLine"), "no"); }
+      else if (rung === "hint") { show(undefined, false, undefined, [want.from]); c.say(hintOr(ex, "helpLookPiece")); }
       else c.say(t("wrongLine"), "no");
+      if (canSkip(wrongHere)) c.offerSkip?.();
     },
   });
   replyIfTheirTurn();
@@ -422,10 +554,12 @@ function runEngineBest(ex: EngineBestExercise, c: Ctx): Cleanup {
       }
       mistakes++;
       await wait(900); if (!alive) return;
-      const showArrow = mistakes >= 2 && bestMove;
-      c.board.set(placementFromFen(ex.fen), { arrows: showArrow ? [[bestMove.slice(0, 2), bestMove.slice(2, 4)]] : undefined });
-      c.say(t(showArrow ? "showBest" : "weakerMove"), "no");
+      // the help ladder: 2 misses glow the piece to move (or give the hint), 3 draw the arrow and offer "Skip for now"
+      const rung = bestMove ? rungFor(mistakes) : "none", bFrom = bestMove.slice(0, 2), bTo = bestMove.slice(2, 4);
+      c.board.set(placementFromFen(ex.fen), { arrows: rung === "arrow" ? [[bFrom, bTo]] : undefined, highlights: rung !== "none" ? [bFrom] : undefined });
+      c.say(rung === "arrow" ? t("showBest") : rung === "hint" ? hintOr(ex, "helpLookPiece") : t("weakerMove"), rung === "hint" ? "info" : "no");
       c.status(t(me === "w" ? "whiteToMove" : "blackToMove")); busy = false;
+      if (canSkip(mistakes)) c.offerSkip?.();
     },
   });
   return () => { alive = false; c.board.setFlip(false); };
@@ -447,7 +581,14 @@ function runPick(ex: PickExercise, c: Ctx): Cleanup {
       if (want.has(k)) {
         found.add(k); c.board.mark({ highlights: marks(), flash: { sq: s, ok: true } }); counter();
         if (found.size === want.size) { c.say(t("wellDone"), "ok"); c.done(mistakes); }
-      } else { mistakes++; c.board.mark({ flash: { sq: s, ok: false } }); c.say(t(`pickWrong_${ex.feature}` as UIKey), "no"); }
+      } else {
+        mistakes++; c.board.mark({ flash: { sq: s, ok: false } }); c.say(t(`pickWrong_${ex.feature}` as UIKey), "no");
+        // the help ladder: 2 misses give the hint, 3 put a star on an answer square and offer "Skip for now"
+        const rung = rungFor(mistakes), left = squares.filter(q => !found.has(key(q)));
+        if (rung === "hint" && ex.hint) c.say(tx(ex.hint));
+        else if (rung === "arrow" && left.length) { c.board.mark({ stars: left.slice(0, 1) }); c.say(t("helpPickStar")); }
+        if (canSkip(mistakes)) c.offerSkip?.();
+      }
     },
   });
   return () => {};
@@ -492,6 +633,28 @@ function runPuzzle(ex: PuzzleExercise, c: Ctx): Cleanup {
         c.say(t("correct"), "ok");
         await reply();
         c.say(tx(ex.prompt));
+      } else if (ex.pack) {
+        // a lesson or test puzzle (2026-10-29, "no dead ends"): say WHY the move was wrong. The opponent's best reply is
+        // played for a moment, then one plain sentence for the pack's theme; then the help ladder: 2 misses glow the
+        // piece to move (or give the hint), 3 draw the arrow and offer "Skip for now".
+        mistakes++; wrongHere++; c.board.shake(to);
+        busy = true;
+        c.say(t("puzzleWrong"), "no");
+        const before = game.fen();
+        game.move({ from, to, promotion: uci[4] });
+        show([from, to], true);
+        await wait(600); if (!alive) return;
+        const rep = game.isGameOver() ? null : await bestReply(game.fen()); if (!alive) return;
+        if (rep) { play(rep); show([rep.slice(0, 2), rep.slice(2, 4)], true); }
+        c.say(t(topicKey(topicOf(ex.pack), "why")), "no");
+        await wait(2200); if (!alive) return;
+        game.load(before); busy = false;
+        const rung = rungFor(wrongHere), want: [Square, Square] = [expected.slice(0, 2), expected.slice(2, 4)];
+        c.board.set(placementFromFen(game.fen()), {
+          check: checkSquare(game), highlights: rung !== "none" ? [want[0]] : undefined, arrows: rung === "arrow" ? [want] : undefined });
+        if (rung === "arrow") c.say(t("puzzleShow"), "no");
+        else if (rung === "hint") c.say(hintOr(ex, "helpLookPiece"));
+        if (canSkip(wrongHere)) c.offerSkip?.();
       } else {
         // two wrong tries on one move: show the answer, so nobody is ever stuck (the puzzle still counts as missed)
         mistakes++; wrongHere++; c.board.shake(to);

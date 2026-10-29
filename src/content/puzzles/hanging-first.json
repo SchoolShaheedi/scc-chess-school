@@ -1,0 +1,436 @@
+{
+ "source": "Lichess puzzle database, CC0 - https://database.lichess.org/#puzzles (picked from the local bank, lowest ratings first)",
+ "built": "2026-10-29",
+ "pack": {
+  "id": "hanging-first",
+  "themes": [
+   "hangingPiece"
+  ],
+  "note": "one learner move; the only free capture on the board; no check. ids hm-* are hand-made (nominal 300), the rest are Lichess puzzles shortened to their first learner move"
+ },
+ "puzzles": [
+  {
+   "id": "hm-hang-1",
+   "fen": "7B/8/5n1K/8/8/7P/8/3k4 b - - 0 1",
+   "moves": [
+    "d1c1",
+    "h8f6"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-2",
+   "fen": "8/8/2p1N3/6r1/8/k7/4K3/8 b - - 0 1",
+   "moves": [
+    "a3a2",
+    "e6g5"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-3",
+   "fen": "3k4/8/2p5/8/3n1P2/8/1B6/4K3 b - - 0 1",
+   "moves": [
+    "d8c7",
+    "b2d4"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-4",
+   "fen": "4k3/8/4p3/4n3/3BP3/7K/8/8 b - - 0 1",
+   "moves": [
+    "e8f7",
+    "d4e5"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-5",
+   "fen": "7K/4Q3/4n3/8/4pk2/8/1P6/8 b - - 0 1",
+   "moves": [
+    "f4g3",
+    "e7e6"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-6",
+   "fen": "3k4/8/7B/7K/5r2/8/2P5/8 b - - 0 1",
+   "moves": [
+    "d8e8",
+    "h6f4"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-7",
+   "fen": "8/8/p5k1/8/6r1/7Q/8/4K3 b - - 0 1",
+   "moves": [
+    "g6f6",
+    "h3g4"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-8",
+   "fen": "8/8/8/P1p1N3/2b1K3/8/8/7k b - - 0 1",
+   "moves": [
+    "h1g2",
+    "e5c4"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-9",
+   "fen": "2k5/8/3p4/8/3P4/6q1/8/5N1K b - - 0 1",
+   "moves": [
+    "d6d5",
+    "f1g3"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-10",
+   "fen": "8/4k3/7K/8/3b4/3R4/8/8 b - - 0 1",
+   "moves": [
+    "e7e8",
+    "d3d4"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-11",
+   "fen": "k7/8/2n3p1/3Q2P1/8/8/8/5K2 b - - 0 1",
+   "moves": [
+    "a8b8",
+    "d5c6"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-12",
+   "fen": "7B/3k4/5n2/8/8/8/3P3K/8 b - - 0 1",
+   "moves": [
+    "d7c7",
+    "h8f6"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-13",
+   "fen": "8/1k6/8/8/Q5r1/1K6/8/8 b - - 0 1",
+   "moves": [
+    "b7b6",
+    "a4g4"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-14",
+   "fen": "8/6RK/4kp2/8/8/6q1/8/8 b - - 0 1",
+   "moves": [
+    "e6d6",
+    "g7g3"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-15",
+   "fen": "8/1N6/3r4/8/2p4K/8/k7/8 b - - 0 1",
+   "moves": [
+    "a2a1",
+    "b7d6"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "hm-hang-16",
+   "fen": "7k/1K6/2N5/8/3q2p1/8/8/8 b - - 0 1",
+   "moves": [
+    "h8g8",
+    "c6d4"
+   ],
+   "rating": 300,
+   "themes": [
+    "hangingPiece",
+    "oneMove",
+    "handMade"
+   ]
+  },
+  {
+   "id": "40mS4",
+   "fen": "1k2r3/1p6/4p3/p3P2p/P7/5q2/1P1p2Q1/6RK b - - 3 45",
+   "moves": [
+    "e8g8",
+    "g2f3"
+   ],
+   "rating": 501,
+   "themes": [
+    "crushing",
+    "endgame",
+    "hangingPiece",
+    "master",
+    "short"
+   ]
+  },
+  {
+   "id": "3PGZ7",
+   "fen": "8/8/8/K7/P5Pp/7k/8/8 w - - 0 60",
+   "moves": [
+    "a5b6",
+    "h3g4"
+   ],
+   "rating": 536,
+   "themes": [
+    "advancedPawn",
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "promotion",
+    "veryLong"
+   ]
+  },
+  {
+   "id": "3zLId",
+   "fen": "6k1/1q3pbp/4p1p1/p7/4R1P1/1B5P/P7/1K2R3 b - - 3 40",
+   "moves": [
+    "f7f5",
+    "e4e6"
+   ],
+   "rating": 568,
+   "themes": [
+    "crushing",
+    "endgame",
+    "long"
+   ]
+  },
+  {
+   "id": "0Hvnd",
+   "fen": "8/8/8/1p6/1P3k2/2P4K/8/8 w - - 1 66",
+   "moves": [
+    "c3c4",
+    "b5c4"
+   ],
+   "rating": 569,
+   "themes": [
+    "advancedPawn",
+    "crushing",
+    "endgame",
+    "long",
+    "pawnEndgame"
+   ]
+  },
+  {
+   "id": "1YO5m",
+   "fen": "8/8/8/5p2/6p1/6Pp/4k2P/7K b - - 23 74",
+   "moves": [
+    "f5f4",
+    "g3f4"
+   ],
+   "rating": 615,
+   "themes": [
+    "crushing",
+    "endgame",
+    "master",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0FN2O",
+   "fen": "4R3/5p2/8/3k4/3Pr3/8/4K3/8 w - - 29 69",
+   "moves": [
+    "e8e4",
+    "d5e4"
+   ],
+   "rating": 628,
+   "themes": [
+    "crushing",
+    "endgame",
+    "short"
+   ]
+  },
+  {
+   "id": "0khlX",
+   "fen": "8/3q2kp/2Q3p1/1P3p2/3p4/6P1/5P1P/6K1 b - - 2 37",
+   "moves": [
+    "d7c6",
+    "b5c6"
+   ],
+   "rating": 640,
+   "themes": [
+    "advancedPawn",
+    "crushing",
+    "endgame",
+    "master",
+    "short"
+   ]
+  },
+  {
+   "id": "2c3f3",
+   "fen": "8/8/3k2p1/p5Kp/7P/P7/8/8 b - - 1 53",
+   "moves": [
+    "d6c5",
+    "g5g6"
+   ],
+   "rating": 647,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "1lmGR",
+   "fen": "r3kb1r/pp2pppp/2n5/2P1n3/1PP3b1/5N2/P2NB1PP/R1BK3R b kq - 5 12",
+   "moves": [
+    "c6b4",
+    "f3e5"
+   ],
+   "rating": 661,
+   "themes": [
+    "advantage",
+    "hangingPiece",
+    "opening",
+    "short"
+   ]
+  },
+  {
+   "id": "1mgS4",
+   "fen": "8/8/1pK2k2/p6p/P6P/8/8/8 b - - 2 39",
+   "moves": [
+    "f6f5",
+    "c6b6"
+   ],
+   "rating": 675,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  },
+  {
+   "id": "2xEkR",
+   "fen": "r4r1k/p3Nbbp/q1p2pp1/1p2p3/nQ2PP2/6P1/1nN2B1P/R2R1BK1 w - - 0 24",
+   "moves": [
+    "b4b2",
+    "a4b2"
+   ],
+   "rating": 685,
+   "themes": [
+    "advantage",
+    "master",
+    "middlegame",
+    "short"
+   ]
+  },
+  {
+   "id": "2Ytem",
+   "fen": "r2r4/pp1nk1b1/2pR3p/4pp2/8/2P1B1P1/PPB2P1P/3R2K1 w - - 5 22",
+   "moves": [
+    "e3c5",
+    "d7c5"
+   ],
+   "rating": 688,
+   "themes": [
+    "advantage",
+    "hangingPiece",
+    "long",
+    "middlegame"
+   ]
+  },
+  {
+   "id": "1Dgrp",
+   "fen": "8/1k6/8/pK5p/P6P/8/8/8 b - - 8 45",
+   "moves": [
+    "b7a7",
+    "b5a5"
+   ],
+   "rating": 699,
+   "themes": [
+    "crushing",
+    "endgame",
+    "pawnEndgame",
+    "short"
+   ]
+  }
+ ]
+}

@@ -213,7 +213,7 @@ export const LEVEL2: Lesson[] = [
           { text: { en: "Yes", pa: "ਹਾਂ" }, why: { en: "Only on the very next move. That chance has passed.", pa: "ਸਿਰਫ਼ ਅਗਲੀ ਚਾਲ 'ਤੇ। ਉਹ ਮੌਕਾ ਲੰਘ ਗਿਆ।" } },
           { text: { en: "No", pa: "ਨਹੀਂ" }, correct: true, why: { en: "Right: en passant is only allowed straight away.", pa: "ਠੀਕ: ਲੰਘਦਿਆਂ ਮਾਰਨਾ ਸਿਰਫ਼ ਤੁਰੰਤ ਹੀ ਹੁੰਦਾ ਹੈ।" } },
         ] },
-      { kind: "pack", pack: "enpassant", count: 2, prompt: { en: "Real games: the move is en passant.", pa: "ਅਸਲੀ ਖੇਡਾਂ: ਚਾਲ ਲੰਘਦਿਆਂ ਮਾਰਨਾ ਹੈ।" } },
+      { kind: "pack", pack: "enpassant-easy", count: 2, prompt: { en: "Real games: the move is en passant.", pa: "ਅਸਲੀ ਖੇਡਾਂ: ਚਾਲ ਲੰਘਦਿਆਂ ਮਾਰਨਾ ਹੈ।" } },
     ],
     challenge: { kind: "play", fen: "r3k3/pp3ppp/8/2pP4/8/8/PP3PPP/4K3 w - c6 0 2", goal: "enpassant",
       prompt: { en: "Black just played c7 to c5. Use the chance before it's gone.", pa: "ਕਾਲੇ ਨੇ ਹੁਣੇ c7 ਤੋਂ c5 ਚੱਲਿਆ ਹੈ। ਮੌਕਾ ਜਾਣ ਤੋਂ ਪਹਿਲਾਂ ਵਰਤੋ।" } },
@@ -306,7 +306,7 @@ export const LEVEL2: Lesson[] = [
           { text: { en: "A bishop and a knight", pa: "ਇੱਕ ਊਠ ਅਤੇ ਇੱਕ ਘੋੜਾ" }, correct: true, why: { en: "Yes: 6 against 5.", pa: "ਹਾਂ: ੬ ਬਨਾਮ ੫।" } },
         ] },
     ],
-    challenge: { kind: "pack", pack: "hanging-easy", count: 3,
+    challenge: { kind: "pack", pack: "hanging-first", count: 3,
       prompt: { en: "Real games: win material. Find the free piece.", pa: "ਅਸਲੀ ਖੇਡਾਂ: ਮੋਹਰੇ ਜਿੱਤੋ। ਮੁਫ਼ਤ ਮੋਹਰਾ ਲੱਭੋ।" } },
   },
 

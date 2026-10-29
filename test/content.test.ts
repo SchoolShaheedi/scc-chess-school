@@ -160,7 +160,8 @@ describe("lessons", () => {
           // the known longest forced mates (from any position): KRRK 7, KQK 10, KRK 16
           const longest: Record<string, number> = { "bk,wk,wr,wr": 7, "bk,wk,wq": 10, "bk,wk,wr": 16 };
           expect(longest[pieces], `${l.id}: material ${pieces} has no known mate length`).toBeDefined();
-          expect(ex.maxMoves, `${l.id}: limit below the longest forced mate`).toBeGreaterThanOrEqual(longest[pieces]);
+          // a part-drill (`partial`) starts mid-way: its small limit is proved by test/easy-packs.test.ts instead
+          if (!ex.partial) expect(ex.maxMoves, `${l.id}: limit below the longest forced mate`).toBeGreaterThanOrEqual(longest[pieces]);
         }
         if (ex.kind === "line") {
           const g = new Chess();

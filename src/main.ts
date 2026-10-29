@@ -314,6 +314,7 @@ function home() {
       const r = st === "done" ? ring(100, "var(--kesri)", icon("check")) : st === "current" ? ring(35, "var(--gold)", icon("play")) : ring(0, "var(--line)", icon("lock"));
       return `<button class="li ${st}" data-go="${l.id}" ${st === "locked" ? `aria-disabled="true" title="${t("locked")}"` : ""}>${r}
         <span class="grow"><b>${num(l.id)} · ${tx(l.title)}</b><small>${tx(l.goal)}</small></span>
+        ${res?.review ? `<span class="again" title="${t("skippedNote")}">${icon("again")} ${t("practiseAgain")}</span>` : ""}
         ${res ? `<span class="stars" aria-label="${res.stars} / 3">${[1, 2, 3].map(i => icon("star", i <= res.stars ? "on" : "")).join("")}</span>` : ""}</button>`;
     }).join("")}${shown.test ? (() => {
       const st = testState(shown.n), res = s.tests[shown.n];

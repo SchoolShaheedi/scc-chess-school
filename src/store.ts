@@ -7,7 +7,8 @@ import { addDays, review } from "./openings/srs";
 
 export type Look = "young" | "junior" | "adult";
 
-export interface LessonResult { stars: 1 | 2 | 3; completedAt: string }
+/** `review`: the lesson was finished with "Skip for now" on at least one exercise, so the list offers "practise again". */
+export interface LessonResult { stars: 1 | 2 | 3; completedAt: string; review?: boolean }
 
 export interface State {
   onboarded: boolean;
@@ -178,14 +179,17 @@ export const store = {
   subscribe(f: () => void) { listeners.add(f); return () => listeners.delete(f); },
 
   /** Records a finished lesson. Stars never go down on a replay; XP is given every time. */
-  completeLesson(id: string, stars: 1 | 2 | 3) {
+  completeLesson(id: string, stars: 1 | 2 | 3, skipped = false) {
     const prev = state.lessons[id];
     const best = (prev && prev.stars > stars ? prev.stars : stars) as 1 | 2 | 3;
     const gained = 10 + stars * 5;
+    // a skip marks the lesson for review (the next lesson opens all the same: no hard lock); a replay with a skip
+    // never takes a mark off, and a clean replay clears it
+    const review = skipped ? (prev ? !!prev.review : true) : false;
     store.set({
       ...practised(),
       xp: state.xp + gained,
-      lessons: { ...state.lessons, [id]: { stars: best, completedAt: new Date().toISOString() } },
+      lessons: { ...state.lessons, [id]: { stars: best, completedAt: new Date().toISOString(), ...(review ? { review } : {}) } },
     });
     return gained;
   },
