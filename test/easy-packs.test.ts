@@ -85,9 +85,8 @@ describe.runIf(GATE)("easy packs and part-drills: Stockfish", () => {
     const e = await nodeEngine();
     for (const l of allLessons().filter(x => x.level === 3)) for (const ex of [l.try, ...l.practise, l.challenge]) {
       if (ex.kind !== "mateVs") continue;
-      // KNOWN CONTENT BUG, not fixed here (another pass owns the level positions): 3.3's challenge "8/8/8/3k4/8/8/8/K6Q w" has the
-      // black king already in check with White to move, which is not a legal position and Stockfish refuses it. Watch is skipped there.
-      if (new Chess(ex.fen.replace(" w ", " b ")).inCheck()) { process.stderr.write(`skipped (opponent already in check): ${l.id} ${ex.fen}\n`); continue; }
+      // a drill may never start with the side NOT to move already in check (an illegal position; 3.3's challenge was one, fixed)
+      expect(new Chess(ex.fen.replace(" w ", " b ")).inCheck(), `${l.id} ${ex.fen}: the other king is already in check`).toBe(false);
       let plies = 0;
       const out = await watchLine({
         fen: ex.fen, side: "w", best: async f => (await e.analyse(f, { depth: 18 })).best, reply: async f => defend(f),   // depth 18 as in the app
