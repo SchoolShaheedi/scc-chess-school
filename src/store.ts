@@ -54,7 +54,7 @@ export interface State {
   /** Best Puzzle Race score. */
   rushBest: number;
   /** Openings trainer (DECISIONS #74): the chosen option per slot, and one review card per line ("optionId:index"). */
-  rep: { white?: string; e4?: string; d4?: string; cards: Record<string, { box: number; due: string }> };
+  rep: { white?: string; e4?: string; d4?: string; cards: Record<string, { box: number; due: string }>; course?: Record<string, string[]> };
   /** Days with any practice (YYYY-MM-DD, newest last, ~120 kept) for the streak calendar; today's count for the daily goal (DECISIONS #76). */
   active: string[];
   goal: { date: string; n: number };

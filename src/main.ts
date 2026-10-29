@@ -55,6 +55,8 @@ import { boardEditor } from "./analysis/editor";
 import { soloScreen } from "./solo/screen";
 import { gameSettingsHTML, wireGameSettings } from "./play/gamesettings";
 import { wideLayout } from "./wide";
+import { courseHub, coursePage, runCourse } from "./openings/course";
+import type { Step } from "./content/course";
 
 // the Android app (DECISIONS #121) carries every file inside it: no service worker
 if (!NATIVE) registerSW({ immediate: true });
@@ -251,7 +253,7 @@ function miniTiles(s: ReturnType<typeof store.get>): string {
     ${tile("#/puzzles/daily", "t1", dailyDone ? "check" : "target", t("dailyTitle"), dailyDone ? t("dailyDone") : t("dailyReward"))}
     ${tile(`#/play/${nextBot.id}`, "t4", "swords", t("playBot").replace("{bot}", tx(nextBot.name)), t("playNextSub"))}
     <div class="mtile goal"><span class="goalring" style="--deg:${Math.round((n / GOAL) * 360)}deg"><span>${num(n)}/${num(GOAL)}</span></span><b>${n >= GOAL ? t("goalDone") : t("goalTitle")}</b></div>
-    ${openingsOpen() ? tile("#/openings", "t2", "book", t("openTitle"), dueCount() ? t("openDueHome").replace("{n}", num(dueCount())) : t("openNoneDueShort")) : ""}
+    ${openingsOpen() ? tile("#/openings", "t2", "book", t("courseTitle"), dueCount() ? t("openDueHome").replace("{n}", num(dueCount())) : t("openNoneDueShort")) : ""}
   </div>`;
 }
 
@@ -465,7 +467,13 @@ function route() {
   if (page === "openings") {
     if (arg === "choose" && (sub === "white" || sub === "e4" || sub === "d4") && openingsOpen()) return chooseOpening(app, sub, go);
     if (arg === "train") { teardown = trainOpenings(app, go); return; }
-    return openingsHub(app, go);
+    if (arg === "review") return openingsHub(app, go);
+    // the openings course (DECISIONS #127): /o/<id> is an opening, /o/<id>/<step> plays a step
+    if (!openingsOpen()) return openingsHub(app, go);
+    const step = location.hash.split("?")[0].split("/")[4];
+    if (arg === "o" && sub && step) { teardown = runCourse(app, sub, step as Step, go); return; }
+    if (arg === "o" && sub) return coursePage(app, sub, go);
+    return courseHub(app, go);
   }
   if (page === "review") { teardown = reviewGame(app, go); return; }
   // Insights (DECISIONS #113): practise goes to the level's next open lesson, or nowhere if the level is still locked

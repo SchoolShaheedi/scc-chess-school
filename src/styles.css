@@ -1217,3 +1217,16 @@ html:has(.gamescreen) body::before { background: #141414; }
   html.wide .screen[data-wide="home"] .wcol { gap: 0; }
   html.wide .screen[data-wide="home"] .mtiles, html.wide .screen[data-wide="home"] .mtiles.four { grid-template-columns: repeat(4, 1fr); }
 }
+
+/* the openings course boxes (DECISIONS #127, option A "traffic light"): green = where to go, dashed green = also good,
+   red = your piece in danger; the piece to move glows */
+.sq .box { position: absolute; inset: 6%; border-radius: 12%; pointer-events: none; z-index: 3; }
+.sq .box.best { border: clamp(3px, .8vw, 5px) solid var(--box-best, #2FB36B); box-shadow: 0 0 10px var(--box-best, #2FB36B); }
+.sq .box.good { inset: 10%; border: clamp(2px, .55vw, 3px) dashed var(--box-best, #2FB36B); opacity: .9; }
+.sq .box.watch { border: clamp(3px, .8vw, 5px) solid var(--box-watch, #E2463A); }
+.sq.glow .pc { filter: drop-shadow(0 0 6px #2FB36B) drop-shadow(0 0 3px #2FB36B); }
+.boxkey { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.boxkey li { display: flex; gap: 6px; align-items: center; }
+.boxkey i { width: 14px; height: 14px; border-radius: 3px; flex: none; font-style: normal; line-height: 14px; text-align: center; }
+.boxkey i.best { border: 3px solid #2FB36B; } .boxkey i.good { border: 2px dashed #2FB36B; } .boxkey i.watch { border: 3px solid #E2463A; }
+.boxkey i.aim { color: var(--gold); }

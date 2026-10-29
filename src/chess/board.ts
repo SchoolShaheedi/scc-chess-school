@@ -18,6 +18,8 @@ export interface Marks {
   threats?: [Square, Square][];
   /** Extra HTML drawn inside a square, under the piece (Power Chess orbs and badges, DECISIONS #99). */
   decor?: Partial<Record<Square, string>>;
+  /** The openings course boxes (DECISIONS #127): where to go, also good, yours in danger; the piece to move glows. */
+  best?: Square[]; good?: Square[]; watch?: Square[]; glow?: Square[];
 }
 
 export interface Interaction {
@@ -141,9 +143,11 @@ export class Board {
         has(m.highlights, s) && "hl", has(m.lastMove, s) && "last", s === this.selected && "sel",
         dots.has(s) && (p ? "cap" : "dot"), has(m.crosses, s) && "cross", m.goal === s && "goal",
         m.flash?.sq === s && (m.flash.ok ? "ok" : "no"), m.check === s && "incheck", p && this.io.canPick?.(s) === true && "pickable",
-        has(m.premove, s) && "pre", this.drawn.circles.includes(s) && "circled", has(this.pending ?? undefined, s) && "pending"]
+        has(m.premove, s) && "pre", has(m.glow, s) && "glow", this.drawn.circles.includes(s) && "circled", has(this.pending ?? undefined, s) && "pending"]
         .filter(Boolean).join(" ");
       const star = has(m.stars, s) ? `<span class="star" aria-hidden="true">★</span>` : "";
+      const box = has(m.best, s) ? "best" : has(m.watch, s) ? "watch" : has(m.good, s) ? "good" : "";
+      const boxEl = box ? `<span class="box ${box}" aria-hidden="true"></span>` : "";
       // a marked EMPTY square also shows its name, so a learner sees both where it is and what it is called (#83)
       const name = !p && has(m.highlights, s) ? `<b class="sqname" aria-hidden="true">${s}</b>` : "";
       const co = coordsMode !== "off"
@@ -151,7 +155,7 @@ export class Board {
         : "";
       const label = `${s}${p ? ", " + pieceName(p) : ""}${s === this.selected ? ", " + t("srPicked") : ""}${dots.has(s) ? ", " + t("srCanGo") : ""}`;
       const badge = this.end && p?.[1] === "K" ? this.end[p[0] as "w" | "b"] : undefined;
-      return `<div class="${cls}" data-sq="${s}" role="button" tabindex="${s === this.cursor ? 0 : -1}" aria-label="${label}">${star}${name}${m.decor?.[s] ?? ""}${p ? pieceHTML(p) : ""}${co}${badge ? badgeHTML(badge) : ""}</div>`;
+      return `<div class="${cls}" data-sq="${s}" role="button" tabindex="${s === this.cursor ? 0 : -1}" aria-label="${label}${box ? ", " + t(`box_${box}` as "box_best") : ""}">${boxEl}${star}${name}${m.decor?.[s] ?? ""}${p ? pieceHTML(p) : ""}${co}${badge ? badgeHTML(badge) : ""}</div>`;
     }).join("");
     this.drawArrows();
     if (this.selected !== this.told) { this.told = this.selected; this.io.onSelect?.(this.selected); }

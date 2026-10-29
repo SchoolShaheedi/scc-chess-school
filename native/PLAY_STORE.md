@@ -27,8 +27,8 @@ is approved and live.
 
 ## Short description (80 characters max)
 
-**English (UK)** (78):
-> Learn chess step by step in Panjabi and English, from first moves to tournaments.
+**English (UK)** (80, no full stop: with one it is 81, over the limit):
+> Learn chess step by step in Panjabi and English, from first moves to tournaments
 
 **ਪੰਜਾਬੀ**:
 > ਪਹਿਲੀ ਚਾਲ ਤੋਂ ਟੂਰਨਾਮੈਂਟ ਤੱਕ, ਪੰਜਾਬੀ ਅਤੇ ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਕਦਮ-ਕਦਮ ਸ਼ਤਰੰਜ ਸਿੱਖੋ।

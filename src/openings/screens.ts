@@ -47,7 +47,7 @@ export function openingsHub(root: HTMLElement, go: Go) {
       ${lines.length ? `<button class="btn wide" data-train>${due ? t("openTrain").replace("{n}", num(Math.min(due, SESSION))) : t("openPractise")}</button>
         ${due ? "" : `<p class="note" style="text-align:center">${t("openNoneDue")}</p>`}` : `<p class="note" style="text-align:center">${t("openStart")}</p>`}
     </div></div>`;
-  root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/");
+  root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/openings");
   root.querySelectorAll<HTMLButtonElement>("[data-slot]").forEach(b => b.onclick = () => go(`#/openings/choose/${b.dataset.slot}`));
   root.querySelector<HTMLButtonElement>("[data-train]")?.addEventListener("click", () => go("#/openings/train"));
 }
@@ -58,12 +58,12 @@ export function chooseOpening(root: HTMLElement, slot: Slot, go: Go) {
     <div class="botlist">${REPERTOIRE.filter(o => o.slot === slot).map(o => `<button class="botcard ${o.id === cur ? "on" : ""}" data-o="${o.id}">
       <span class="grow"><b>${tx(o.name)}</b><small>${tx(o.about)}</small><small class="rating">${num(o.lines.length)} ${t("openLines")}</small></span>
       ${icon(o.id === cur ? "check" : "arrowRight", "go")}</button>`).join("")}</div></div>`;
-  root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/openings");
+  root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/openings/review");
   root.querySelectorAll<HTMLButtonElement>("[data-o]").forEach(b => b.onclick = () => {
     const o = repOption(b.dataset.o!)!, r = store.get().rep, cards = { ...r.cards };
     o.lines.forEach((_, i) => { cards[`${o.id}:${i}`] ??= newCard(today()); });   // a returning choice keeps its progress
     store.set({ rep: { ...r, [slot]: o.id, cards } });
-    go("#/openings");
+    go("#/openings/review");
   });
 }
 
@@ -85,7 +85,7 @@ export function trainOpenings(root: HTMLElement, go: Go): () => void {
       <div class="frame"><div class="boardwrap" data-board></div></div>
       <div class="status" data-status></div><div class="extra" data-extra></div>
       <div class="actions"><button class="btn" data-continue disabled>${t("continue")}</button></div></div>`;
-    root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/openings");
+    root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/openings/review");
     const bubble = root.querySelector<HTMLElement>("[data-say]")!, btn = root.querySelector<HTMLButtonElement>("[data-continue]")!;
     const say = (text: string, tone: "ok" | "no" | "info" = "info") => {
       bubble.innerHTML = (tone === "info" ? "" : icon(tone, "tone")) + text; bubble.className = `bubble ${tone === "info" ? "" : tone}`;
@@ -114,10 +114,10 @@ export function trainOpenings(root: HTMLElement, go: Go): () => void {
       <h1>${num(clean)} / ${num(queue.length)}</h1><p>${t("openClean")}</p>
       <p class="note">${dueCount() ? t("openStillDue").replace("{n}", num(dueCount())) : t("openNoneDue")}</p></div>
       <div class="actions"><button class="btn wide" data-hub>${t("openTitle")}</button></div></div>`;
-    root.querySelector<HTMLButtonElement>("[data-hub]")!.onclick = () => go("#/openings");
+    root.querySelector<HTMLButtonElement>("[data-hub]")!.onclick = () => go("#/openings/review");
   }
 
-  if (!openingsOpen() || !queue.length) { go("#/openings"); return teardown; }
+  if (!openingsOpen() || !queue.length) { go("#/openings/review"); return teardown; }
   next();
   return teardown;
 }

@@ -52,7 +52,10 @@ export function merge(a: Saved, b: Saved): Saved {
   const ra = a.rep ?? { cards: {} }, rb = b.rep ?? { cards: {} };
   const cards = { ...ra.cards };
   for (const [k, c] of Object.entries(rb.cards)) cards[k] = cards[k] ? mergeCard(cards[k], c) : c;
-  const rep = { white: ra.white ?? rb.white, e4: ra.e4 ?? rb.e4, d4: ra.d4 ?? rb.d4, cards };
+  // the openings course (#127): a step done on either device stays done
+  const course: Record<string, string[]> = { ...(rb.course ?? {}) };
+  for (const [id, steps] of Object.entries(ra.course ?? {})) course[id] = [...new Set([...(course[id] ?? []), ...steps])];
+  const rep = { white: ra.white ?? rb.white, e4: ra.e4 ?? rb.e4, d4: ra.d4 ?? rb.d4, cards, course };
   return { xp: Math.max(a.xp, b.xp), streak, lessons, tests, placed: Math.max(a.placed ?? 0, b.placed ?? 0), daily, rushBest: Math.max(a.rushBest ?? 0, b.rushBest ?? 0), rep,
     active: [...new Set([...(a.active ?? []), ...(b.active ?? [])])].sort().slice(-120),
     // DECISIONS #94: a reward earned on either device stays earned; the larger freeze bank
