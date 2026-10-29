@@ -335,7 +335,7 @@ export const LEVEL1: Lesson[] = [
       prompt: { en: "Check! Move your king off the attacked row.", pa: "ਸ਼ਹਿ! ਆਪਣੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਹਮਲੇ ਵਾਲੀ ਕਤਾਰ ਤੋਂ ਹਟਾਓ।" },
       hint: { en: "Step up, away from the rook's row.", pa: "ਉੱਪਰ ਵੱਲ ਕਦਮ ਚੁੱਕੋ, ਹਾਥੀ ਦੀ ਕਤਾਰ ਤੋਂ ਦੂਰ।" } },
     practise: [
-      { kind: "play", fen: "k7/8/8/8/8/8/4q3/3BK3 w - - 0 1", goal: "escape-capture",
+      { kind: "play", fen: "k7/8/8/8/8/3p4/4q3/3BK3 w - - 0 1", goal: "escape-capture",
         prompt: { en: "The queen gives check. Capture her with your bishop!", pa: "ਰਾਣੀ ਸ਼ਹਿ ਦਿੰਦੀ ਹੈ। ਆਪਣੇ ਊਠ ਨਾਲ ਉਸ ਨੂੰ ਮਾਰੋ!" } },
       { kind: "play", fen: "k3r3/8/8/8/8/5N2/8/4K3 w - - 0 1", goal: "escape-block",
         prompt: { en: "Block the rook's attack with your knight.", pa: "ਆਪਣੇ ਘੋੜੇ ਨਾਲ ਹਾਥੀ ਦਾ ਹਮਲਾ ਰੋਕੋ।" } },

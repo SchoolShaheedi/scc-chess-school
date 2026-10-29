@@ -506,7 +506,7 @@ export const COURSE: CourseOpening[] = [
       moves: [...CAROKANN_MAIN, ..."c4 b5 Ne4 Nxe4 Rhe1 Nxf2 Qb3 bxc4 Qb7 Nd3+ Kb1 Rb8 Qxc6 O-O Bxh6 Rxb2+ Ka1 Rxa2+ Kxa2 Qa5+ Kb1 Qb4+ Kc2 Qb2#".split(" ")],
       notes: {
         23: { en: "The main line is done. Now watch the plan work.", pa: "ਮੁੱਖ ਲਾਈਨ ਪੂਰੀ ਹੋ ਗਈ। ਹੁਣ ਵੇਖੋ ਕਿ ਯੋਜਨਾ ਕਿਵੇਂ ਕੰਮ ਕਰਦੀ ਹੈ।" },
-        25: { en: "White castled on your side of the board: start a pawn storm towards the king.", pa: "ਚਿੱਟੇ ਨੇ ਬਿਸਾਤ ਦੇ ਤੁਹਾਡੇ ਪਾਸੇ ਕਿਲ੍ਹੇਬੰਦੀ ਕੀਤੀ ਹੈ: ਬਾਦਸ਼ਾਹ ਵੱਲ ਪਿਆਦਿਆਂ ਦਾ ਹੱਲਾ ਸ਼ੁਰੂ ਕਰੋ।" },
+        25: { en: "White castled queenside, the long way: start a pawn storm on that side, towards the king.", pa: "ਚਿੱਟੇ ਨੇ ਰਾਣੀ ਵਾਲੇ ਪਾਸੇ ਲੰਮੀ ਕਿਲ੍ਹੇਬੰਦੀ ਕੀਤੀ ਹੈ: ਉਸੇ ਪਾਸੇ ਬਾਦਸ਼ਾਹ ਵੱਲ ਪਿਆਦਿਆਂ ਦਾ ਹੱਲਾ ਸ਼ੁਰੂ ਕਰੋ।" },
         27: { en: "Swap knights.", pa: "ਘੋੜਿਆਂ ਦੀ ਅਦਲਾ-ਬਦਲੀ ਕਰੋ।" },
         29: { en: "Win a pawn and fork the rooks.", pa: "ਇੱਕ ਪਿਆਦਾ ਜਿੱਤ ਲਓ ਅਤੇ ਦੋਵਾਂ ਹਾਥੀਆਂ ਉੱਤੇ ਦੋਹਰਾ ਹਮਲਾ ਕਰੋ।" },
         31: { en: "Open the b-file.", pa: "b ਲਾਈਨ ਖੋਲ੍ਹੋ।" },
@@ -768,7 +768,7 @@ export const COURSE: CourseOpening[] = [
       moves: "e4 e5 Nf3 Nc6 Bb5 Nd4 Nxd4 Nf6 Nf3 c6 Be2 a5 d4 a4 dxe5 a3 exf6 Qa5+ b4 Bxb4+ Bd2 d5 fxg7 Rg8 c3 Qb6 cxb4 c5 Nc3 d4 Nd5 Qd8 Bg5 Qxg5 Nxg5 c4 Nf6+ Kd8 Qxd4+ Kc7 Qe5+ Kb6 Qc5+ Ka6 Qa5#".split(" "),
       notes: {
         5: { en: "Black jumps the knight to d4 instead of guarding e5.", pa: "ਕਾਲਾ e5 ਦੀ ਰਾਖੀ ਕਰਨ ਦੀ ਥਾਂ ਘੋੜੇ ਨੂੰ d4 ਉੱਤੇ ਛਾਲ ਮਰਵਾ ਦਿੰਦਾ ਹੈ।" },
-        6: { en: "Take it: you are a knight up.", pa: "ਇਸ ਨੂੰ ਮਾਰ ਲਓ: ਤੁਸੀਂ ਇੱਕ ਘੋੜਾ ਅੱਗੇ ਹੋ।" },
+        6: { en: "Take it: if Black does not take back, you are a knight up.", pa: "ਇਸ ਨੂੰ ਮਾਰ ਲਓ: ਜੇ ਕਾਲਾ ਬਦਲੇ ਵਿੱਚ ਨਾ ਮਾਰੇ, ਤਾਂ ਤੁਸੀਂ ਇੱਕ ਘੋੜਾ ਅੱਗੇ ਹੋ।" },
         7: { en: "Black forgets to take back.", pa: "ਕਾਲਾ ਬਦਲੇ ਵਿੱਚ ਮਾਰਨਾ ਭੁੱਲ ਜਾਂਦਾ ਹੈ।" },
         12: { en: "Take the centre.", pa: "ਕੇਂਦਰ ਉੱਤੇ ਕਬਜ਼ਾ ਕਰੋ।" },
         14: { en: "Attack the knight on f6.", pa: "f6 ਵਾਲੇ ਘੋੜੇ ਉੱਤੇ ਹਮਲਾ ਕਰੋ।" },

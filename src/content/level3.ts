@@ -18,7 +18,7 @@ export const LEVEL3: Lesson[] = [
       { text: { en: "Here it is NOT mate: the black rook on a8 can capture.", pa: "ਇੱਥੇ ਮਾਤ ਨਹੀਂ ਹੈ: a8 ਵਾਲਾ ਕਾਲਾ ਹਾਥੀ ਮਾਰ ਸਕਦਾ ਹੈ।" },
         board: { play: true, fen: "r2R2k1/5ppp/8/8/8/8/8/6K1 b - - 0 1", arrows: [["a8", "d8"]] } },
       { text: { en: "The cure for your own king: move one pawn up (like h3) to give it an escape square.", pa: "ਆਪਣੇ ਬਾਦਸ਼ਾਹ ਲਈ ਹੱਲ: ਇੱਕ ਪਿਆਦਾ ਅੱਗੇ ਕਰੋ (ਜਿਵੇਂ h3) ਤਾਂ ਜੋ ਉਸ ਕੋਲ ਬਚਣ ਦਾ ਖਾਨਾ ਹੋਵੇ।" },
-        board: { fen: "6k1/8/8/8/8/7P/5PP1/6K1 w - - 0 1", highlights: ["h2"], arrows: [["h2", "h3"]] } },
+        board: { fen: "6k1/8/8/8/8/8/5PPP/6K1 w - - 0 1", highlights: ["h2"], arrows: [["h2", "h3"]] } },
     ],
     try: { kind: "play", fen: "6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1", goal: "mate", prompt: mate1,
       hint: { en: "Your rook can reach the back row.", pa: "ਤੁਹਾਡਾ ਹਾਥੀ ਪਿਛਲੀ ਕਤਾਰ ਤੱਕ ਪਹੁੰਚ ਸਕਦਾ ਹੈ।" } },
@@ -91,7 +91,7 @@ export const LEVEL3: Lesson[] = [
         board: { fen: "8/8/3k4/8/8/4R3/8/4K3 b - - 0 1", arrows: [["e3", "e8"]] } },
       { text: { en: "Walk your king towards the other king. When the two kings face each other with one square between, check on the edge row.", pa: "ਆਪਣੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਦੂਜੇ ਬਾਦਸ਼ਾਹ ਵੱਲ ਲੈ ਜਾਓ। ਜਦੋਂ ਦੋਵੇਂ ਬਾਦਸ਼ਾਹ ਇੱਕ ਖਾਨਾ ਛੱਡ ਕੇ ਆਹਮੋ-ਸਾਹਮਣੇ ਹੋਣ, ਤਾਂ ਕੰਢੇ ਵਾਲੀ ਕਤਾਰ 'ਤੇ ਸ਼ਹਿ ਦਿਓ।" },
         board: { play: true, fen: "4k3/8/4K3/8/8/8/8/7R w - - 0 1", arrows: [["h1", "h8"]] } },
-      { text: { en: "If the kings don't face each other yet, make a quiet rook move along its line: a waiting move. The other king must then step into place.", pa: "ਜੇ ਬਾਦਸ਼ਾਹ ਅਜੇ ਆਹਮੋ-ਸਾਹਮਣੇ ਨਹੀਂ, ਤਾਂ ਹਾਥੀ ਦੀ ਆਪਣੀ ਲਕੀਰ 'ਤੇ ਇੱਕ ਚੁੱਪ ਚਾਲ ਚੱਲੋ: ਉਡੀਕ ਦੀ ਚਾਲ। ਫਿਰ ਦੂਜੇ ਬਾਦਸ਼ਾਹ ਨੂੰ ਆਪ ਹੀ ਸਹੀ ਥਾਂ 'ਤੇ ਆਉਣਾ ਪਵੇਗਾ।" },
+      { text: { en: "If the kings don't face each other yet, make a quiet rook move along its line: a waiting move. The other king may then step into place; if it does not, keep pushing it back.", pa: "ਜੇ ਬਾਦਸ਼ਾਹ ਅਜੇ ਆਹਮੋ-ਸਾਹਮਣੇ ਨਹੀਂ, ਤਾਂ ਹਾਥੀ ਦੀ ਆਪਣੀ ਲਕੀਰ 'ਤੇ ਇੱਕ ਚੁੱਪ ਚਾਲ ਚੱਲੋ: ਉਡੀਕ ਦੀ ਚਾਲ। ਫਿਰ ਦੂਜਾ ਬਾਦਸ਼ਾਹ ਸਹੀ ਥਾਂ 'ਤੇ ਆ ਸਕਦਾ ਹੈ; ਜੇ ਨਾ ਆਵੇ, ਤਾਂ ਉਸ ਨੂੰ ਪਿੱਛੇ ਧੱਕਦੇ ਰਹੋ।" },
         board: { fen: "4k3/R7/3K4/8/8/8/8/8 w - - 0 1", arrows: [["a7","b7"]] } },
     ],
     try: { kind: "play", fen: "3k4/8/3K4/8/8/8/8/R7 w - - 0 1", goal: "mate", prompt: mate1 },   // the slide's mate mirrored, so it is found, not copied (lesson check 2026-10-14)

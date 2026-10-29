@@ -197,7 +197,7 @@ export const LEVEL2: Lesson[] = [
         board: { pieces: { e5: "wP", d7: "bP" }, arrows: [["d7", "d5"]] } },
       { text: { en: "Then, on the very next move only, your pawn may capture it as if it had moved just one square. This is en passant: capturing \"in passing\".",
                 pa: "ਫਿਰ, ਸਿਰਫ਼ ਅਗਲੀ ਚਾਲ 'ਤੇ, ਤੁਹਾਡਾ ਪਿਆਦਾ ਉਸ ਨੂੰ ਇਸ ਤਰ੍ਹਾਂ ਮਾਰ ਸਕਦਾ ਹੈ ਜਿਵੇਂ ਉਹ ਇੱਕ ਹੀ ਖਾਨਾ ਚੱਲਿਆ ਹੋਵੇ। ਇਸ ਨੂੰ ਲੰਘਦਿਆਂ ਮਾਰਨਾ ਕਹਿੰਦੇ ਹਨ।" },
-        board: { pieces: { e5: "wP", d5: "bP" }, arrows: [["e5", "d6"]], crosses: ["d5"] } },
+        board: { pieces: { e5: "wP", d5: "bP" }, arrows: [["e5", "d6"]], highlights: ["d5"] } },
       { text: { en: "If you don't take straight away, the chance is gone for good.", pa: "ਜੇ ਤੁਰੰਤ ਨਾ ਮਾਰੋ, ਤਾਂ ਮੌਕਾ ਹਮੇਸ਼ਾ ਲਈ ਚਲਾ ਜਾਂਦਾ ਹੈ।" },
         board: { pieces: {e5:"wP",d5:"bP"}, crosses: ["d6"] } },
     ],
@@ -360,7 +360,7 @@ export const LEVEL2: Lesson[] = [
       ] },
     practise: [
       { kind: "line", side: "b", moves: ["e4", "e5", "Bc4", "Nc6", "Qh5", "g6", "Qf3", "Nf6"],
-        prompt: { en: "Play Black and stop Scholar's mate: block the queen, then block her path to f7 again.", pa: "ਕਾਲੇ ਨਾਲ ਖੇਡੋ ਅਤੇ ਸਕਾਲਰ ਮਾਤ ਰੋਕੋ: ਰਾਣੀ ਦਾ ਰਾਹ ਰੋਕੋ, ਫਿਰ f7 ਵੱਲ ਉਸ ਦਾ ਰਾਹ ਦੁਬਾਰਾ ਰੋਕੋ।" } },
+        prompt: { en: "Play Black and stop Scholar's mate the classic way: g6 attacks the queen, then Nf6 blocks her path to f7 again.", pa: "ਕਾਲੇ ਨਾਲ ਖੇਡੋ ਅਤੇ ਸਕਾਲਰ ਮਾਤ ਪੁਰਾਣੇ ਤਰੀਕੇ ਨਾਲ ਰੋਕੋ: g6 ਰਾਣੀ ਉੱਤੇ ਹਮਲਾ ਕਰਦਾ ਹੈ, ਫਿਰ Nf6 f7 ਵੱਲ ਉਸ ਦਾ ਰਾਹ ਦੁਬਾਰਾ ਰੋਕਦਾ ਹੈ।" } },
     ],
     challenge: { kind: "pack", pack: "opening-mate", count: 3,
       prompt: { en: "Real games: early mates. Spot them, so you can stop them.", pa: "ਅਸਲੀ ਖੇਡਾਂ: ਛੇਤੀ ਮਾਤਾਂ। ਉਨ੍ਹਾਂ ਨੂੰ ਪਛਾਣੋ, ਤਾਂ ਜੋ ਤੁਸੀਂ ਰੋਕ ਸਕੋ।" } },

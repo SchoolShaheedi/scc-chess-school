@@ -83,7 +83,7 @@ export const LEVEL4: Lesson[] = [
     try: { kind: "play", fen: "4k3/8/8/3n1b2/8/3PP3/8/4K3 w - - 0 1", goal: "fork",
       prompt: { en: "Fork the knight and bishop with a pawn. Your other pawn keeps it safe.", pa: "ਪਿਆਦੇ ਨਾਲ ਘੋੜੇ ਅਤੇ ਊਠ 'ਤੇ ਦੋਹਰਾ ਵਾਰ ਕਰੋ। ਤੁਹਾਡਾ ਦੂਜਾ ਪਿਆਦਾ ਉਸ ਦੀ ਰਾਖੀ ਕਰਦਾ ਹੈ।" } },
     practise: [
-      { kind: "play", fen: "4k3/8/8/8/8/3r4/5b2/4K3 w - - 0 1", goal: "fork",
+      { kind: "play", fen: "4k3/R7/8/8/7b/2n5/2b5/4K3 w - - 0 1", goal: "fork",
         prompt: { en: "You are in check from the bishop. Escape AND fork with your king.", pa: "ਤੁਹਾਨੂੰ ਊਠ ਦੀ ਸ਼ਹਿ ਹੈ। ਬਚੋ ਵੀ, ਅਤੇ ਆਪਣੇ ਬਾਦਸ਼ਾਹ ਨਾਲ ਦੋਹਰਾ ਵਾਰ ਵੀ ਕਰੋ।" } },
       { kind: "pack", pack: "fork-easy", count: 3, prompt: realGames("find the fork.", "ਦੋਹਰਾ ਵਾਰ ਲੱਭੋ।") },
     ],
@@ -178,9 +178,9 @@ export const LEVEL4: Lesson[] = [
     goal: { en: "Take away a guard, then win what it guarded.", pa: "ਰਾਖੇ ਨੂੰ ਹਟਾਓ, ਫਿਰ ਉਹ ਜਿੱਤੋ ਜਿਸ ਦੀ ਉਹ ਰਾਖੀ ਕਰਦਾ ਸੀ।" },
     learn: [
       { text: { en: "If a piece is defended only once, capture its defender, or chase it away. Then the piece is hanging.", pa: "ਜੇ ਕਿਸੇ ਮੋਹਰੇ ਦੀ ਰਾਖੀ ਸਿਰਫ਼ ਇੱਕੋ ਮੋਹਰਾ ਕਰਦਾ ਹੈ, ਤਾਂ ਉਸ ਰਾਖੇ ਨੂੰ ਮਾਰੋ ਜਾਂ ਭਜਾਓ। ਫਿਰ ਉਹ ਮੋਹਰਾ ਬੇ-ਬਚਾਅ ਹੈ।" },
-        board: { fen: "6k1/8/4b3/3n4/8/7B/8/3RK3 w - - 0 1", arrows: [["h3", "e6"], ["e6", "d5"], ["d1", "d5"]] } },
+        board: { fen: "4r1k1/8/4b3/3n4/8/7B/5PP1/3R2K1 w - - 0 1", arrows: [["h3", "e6"], ["e6", "d5"], ["d1", "d5"]] } },
       { text: { en: "Ask: what is this piece's job? Take the guard away, and the job is left undone.", pa: "ਪੁੱਛੋ: ਇਸ ਮੋਹਰੇ ਦਾ ਕੰਮ ਕੀ ਹੈ? ਰਾਖਾ ਹਟਾ ਦਿਓ, ਅਤੇ ਕੰਮ ਅਧੂਰਾ ਰਹਿ ਜਾਂਦਾ ਹੈ।" },
-        board: { fen: "6k1/8/4b3/3n4/8/7B/8/3RK3 w - - 0 1", arrows: [["e6","d5"]], highlights: ["e6"] } },
+        board: { fen: "4r1k1/8/4b3/3n4/8/7B/5PP1/3R2K1 w - - 0 1", arrows: [["e6","d5"]], highlights: ["e6"] } },
     ],
     try: { kind: "pack", pack: "defender-easy", count: 1, prompt: { en: "Remove the defender, then win the piece.", pa: "ਰਾਖਾ ਹਟਾਓ, ਫਿਰ ਮੋਹਰਾ ਜਿੱਤੋ।" } },
     practise: [
@@ -214,7 +214,7 @@ export const LEVEL4: Lesson[] = [
     learn: [
       { text: { en: "Before you capture, count: how many of your pieces attack the square, and how many of theirs defend it?", pa: "ਮਾਰਨ ਤੋਂ ਪਹਿਲਾਂ ਗਿਣੋ: ਤੁਹਾਡੇ ਕਿੰਨੇ ਮੋਹਰੇ ਖਾਨੇ 'ਤੇ ਹਮਲਾ ਕਰਦੇ ਹਨ, ਅਤੇ ਵਿਰੋਧੀ ਦੇ ਕਿੰਨੇ ਉਸ ਦੀ ਰਾਖੀ ਕਰਦੇ ਹਨ?" },
         board: { pieces: { e4: "wP", c3: "wN", d5: "bP", f6: "bN" }, arrows: [["e4", "d5"], ["c3", "d5"], ["f6", "d5"]] } },
-      { text: { en: "More attackers than defenders: you win it. The same number: usually just a trade. Fewer: leave it alone.", pa: "ਰਾਖਿਆਂ ਨਾਲੋਂ ਵੱਧ ਹਮਲਾਵਰ: ਤੁਸੀਂ ਜਿੱਤਦੇ ਹੋ। ਬਰਾਬਰ: ਅਕਸਰ ਸਿਰਫ਼ ਵਟਾਂਦਰਾ। ਘੱਟ: ਰਹਿਣ ਦਿਓ।" },
+      { text: { en: "More attackers than defenders: you win it. The same number: usually just a trade, but count the values too: if you would give a bigger piece for a smaller one, you lose. Fewer: leave it alone. Count, and compare values.", pa: "ਰਾਖਿਆਂ ਨਾਲੋਂ ਵੱਧ ਹਮਲਾਵਰ: ਤੁਸੀਂ ਜਿੱਤਦੇ ਹੋ। ਬਰਾਬਰ: ਅਕਸਰ ਸਿਰਫ਼ ਵਟਾਂਦਰਾ, ਪਰ ਮੁੱਲ ਵੀ ਗਿਣੋ: ਜੇ ਛੋਟੇ ਮੋਹਰੇ ਬਦਲੇ ਵੱਡਾ ਮੋਹਰਾ ਦੇਣਾ ਪਵੇ, ਤਾਂ ਘਾਟਾ ਹੈ। ਘੱਟ: ਰਹਿਣ ਦਿਓ। ਗਿਣੋ, ਅਤੇ ਮੁੱਲ ਦੀ ਤੁਲਨਾ ਕਰੋ।" },
         board: { pieces: {e4:"wP",c3:"wN",b3:"wB",d5:"bP",f6:"bN"}, arrows: [["e4","d5"],["c3","d5"],["b3","d5"],["f6","d5"]] } },
       { text: { en: "Capture with your cheapest piece first, so you never give a big piece for a small one.", pa: "ਪਹਿਲਾਂ ਆਪਣੇ ਸਭ ਤੋਂ ਸਸਤੇ ਮੋਹਰੇ ਨਾਲ ਮਾਰੋ, ਤਾਂ ਜੋ ਛੋਟੇ ਲਈ ਵੱਡਾ ਮੋਹਰਾ ਕਦੇ ਨਾ ਦੇਣਾ ਪਵੇ।" },
         board: { pieces: {e4:"wP",d1:"wQ",d5:"bN",c6:"bP"}, arrows: [["e4","d5"],["c6","d5"]], highlights: ["e4"] } },
