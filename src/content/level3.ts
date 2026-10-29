@@ -78,7 +78,7 @@ export const LEVEL3: Lesson[] = [
       { kind: "mateVs", fen: "4k3/8/8/8/8/8/8/Q3K3 w - - 0 1", maxMoves: 12,
         prompt: { en: "The king starts on the edge. Mate it in 12 moves.", pa: "ਬਾਦਸ਼ਾਹ ਕੰਢੇ ਤੋਂ ਸ਼ੁਰੂ ਹੁੰਦਾ ਹੈ। ੧੨ ਚਾਲਾਂ ਵਿੱਚ ਮਾਤ ਦਿਓ।" } },
     ],
-    challenge: { kind: "mateVs", fen: "8/8/8/3k4/8/8/8/K6Q w - - 0 1", maxMoves: 12,
+    challenge: { kind: "mateVs", fen: "8/8/8/3k4/8/8/7Q/K7 w - - 0 1", maxMoves: 12,
       prompt: { en: "From the middle of the board: checkmate in 12 moves.", pa: "ਬਿਸਾਤ ਦੇ ਵਿਚਕਾਰੋਂ ਸ਼ੁਰੂ ਕਰੋ: ੧੨ ਚਾਲਾਂ ਵਿੱਚ ਸ਼ਹਿ-ਮਾਤ ਕਰੋ।" } },
   },
 
