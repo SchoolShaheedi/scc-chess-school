@@ -1276,3 +1276,6 @@ html:has(.gamescreen) body::before { background: #141414; }
 .simran.on .simranglow { animation: breathe 6s ease-in-out infinite; }
 @keyframes breathe { 50% { transform: scale(1.18); opacity: .75; } }
 @media (prefers-reduced-motion: reduce) { .simran.on .simranglow { animation: none; } }
+.livebox { margin-top: 18px; display: grid; gap: 10px; }
+.liveframe { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #000; }
+.liveframe iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }

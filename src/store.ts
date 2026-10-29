@@ -31,6 +31,8 @@ export interface State {
   sound: boolean;                           // sound effects on/off (DECISIONS #43)
   /** Soft background music (DECISIONS #129); unset = off. */
   music?: boolean;
+  /** Which simran recording plays in the background (#129); unset = Simran 3. */
+  musicTrack?: "simran3" | "camp";
   /** The coach voice (DECISIONS #80); unset = on for the Young look only (see voice.ts). */
   voice?: boolean;
   /** Games (DECISIONS #84): always promote to a queen; premoves (unset = on except for the Young look). */

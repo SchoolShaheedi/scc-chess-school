@@ -397,6 +397,7 @@ function settings() {
     <div class="group"><h2>${icon("sun")} ${t("themeLabel")}</h2>${seg("themeMode", s.themeMode ?? "dark", [["dark", t("themeDark")], ["light", t("themeLight")]])}</div>
     <div class="group"><h2>${icon("music")} ${t("soundLabel")}</h2>${seg("sound", String(s.sound), [["true", t("soundOn")], ["false", t("soundOff")]])}</div>
     <div class="group"><h2>${icon("music")} ${t("musicLabel")}</h2>${seg("music", String(!!s.music), [["true", t("soundOn")], ["false", t("soundOff")]])}<p class="note">${t("musicNote")}</p>
+      ${s.music ? seg("musicTrack", s.musicTrack ?? "simran3", [["simran3", t("musicSimran3")], ["camp", t("musicCamp")]]) : ""}
       <button class="btn ghost wide" data-simran>${icon("play")} ${t("simranOpen")}</button></div>
     <div class="group"><h2>${icon("sound")} ${t("voiceLabel")}</h2>${seg("voice", String(voiceOn()), [["true", t("soundOn")], ["false", t("soundOff")]])}<p class="note">${t("voiceNote")}</p></div>
     <div class="group"><h2>${icon("vibrate")} ${t("buzzLabel")}</h2>${seg("buzz", String(s.buzz), [["true", t("soundOn")], ["false", t("soundOff")]])}</div>
