@@ -1268,17 +1268,16 @@ html:has(.gamescreen) body::before { background: #141414; }
 .boxkey i.best { border: 3px solid #2FB36B; } .boxkey i.good { border: 2px dashed #2FB36B; } .boxkey i.watch { border: 3px solid #E2463A; }
 .boxkey i.aim { color: var(--gold); }
 
-/* the Simran page (DECISIONS #129): calm, one soft glow that breathes while simran plays */
-.simran .hero { gap: 14px; }
-.simran h1[lang="pa"] { font-size: clamp(34px, 9vw, 52px); margin: 0; color: var(--gold); }
-.simranglow { width: 140px; height: 140px; border-radius: 50%; margin: 10px auto 0;
-  background: radial-gradient(circle, rgba(198,162,74,.55) 0%, rgba(198,162,74,.18) 45%, transparent 70%); }
-.simran.on .simranglow { animation: breathe 6s ease-in-out infinite; }
-@keyframes breathe { 50% { transform: scale(1.18); opacity: .75; } }
-@media (prefers-reduced-motion: reduce) { .simran.on .simranglow { animation: none; } }
-.livebox { margin-top: 18px; display: grid; gap: 10px; }
-.liveframe { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #000; }
-.liveframe iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+/* live kirtan's floating Pause / Play button (DECISIONS #129): above the tab bar, out of the board's way */
+.livepill { position: fixed; left: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); z-index: 90; display: grid; place-items: center;
+  width: 44px; height: 44px; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--ink);
+  box-shadow: 0 6px 18px rgba(0,0,0,.35); }
+.livepill svg { width: 20px; height: 20px; color: var(--gold); }
+.livepill.offair svg { color: var(--muted); }
+.livepill[aria-pressed="true"] svg { animation: livepulse 2.4s ease-in-out infinite; }
+@keyframes livepulse { 50% { opacity: .45; } }
+@media (prefers-reduced-motion: reduce) { .livepill[aria-pressed="true"] svg { animation: none; } }
+html.wide .livepill { bottom: 20px; }
 /* "No dead ends" (2026-10-29): the glowing right answer, the practise-again tag, the missed themes after a test */
 .choice.glow { border-color: var(--gold); box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 35%, transparent); }
 .li .again { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: var(--kesri); white-space: nowrap; }

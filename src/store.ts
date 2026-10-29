@@ -31,10 +31,8 @@ export interface State {
   themeMode?: "dark" | "light";
   coach: "singh" | "kaur";                  // the Junior look's coach: "singh" = Hans the swan, "kaur" = Koel the cuckoo (#96); Young has Ghuggi the dove
   sound: boolean;                           // sound effects on/off (DECISIONS #43)
-  /** Soft background music (DECISIONS #129); unset = off. */
+  /** Live kirtan from Sri Harmandar Sahib in the background (DECISIONS #129); unset = off. */
   music?: boolean;
-  /** Which simran recording plays in the background (#129); unset = Simran 3. */
-  musicTrack?: "simran3" | "camp";
   /** The coach voice (DECISIONS #80); unset = on for the Young look only (see voice.ts). */
   voice?: boolean;
   /** Games (DECISIONS #84): always promote to a queen; premoves (unset = on except for the Young look). */
