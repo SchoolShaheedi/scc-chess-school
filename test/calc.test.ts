@@ -20,7 +20,9 @@ describe("calculation drills", () => {
 
   it("every puzzle that fits a level makes a drill whose final move is legal after the hidden moves", () => {
     let made = [0, 0, 0, 0];
-    for (const p of bank) for (let n = 1; n <= CALC_LEVELS; n++) {
+    // the whole bank (~50k puzzles, ~150 s) with CALC_ALL=1; otherwise every 25th puzzle, so the normal suite stays fast
+    const sample = process.env.CALC_ALL === "1" ? bank : bank.filter((_, i) => i % 25 === 0);
+    for (const p of sample) for (let n = 1; n <= CALC_LEVELS; n++) {
       const d = makeDrill(p, n);
       if (!fitsLevel(p, n)) { expect(d, `${p.id} too short for ${n}`).toBeNull(); continue; }
       expect(d, `${p.id} level ${n}`).not.toBeNull();
@@ -35,7 +37,8 @@ describe("calculation drills", () => {
       expect(d!.fen).not.toBe(p.fen);
       made[n]++;
     }
-    expect(made[1]).toBeGreaterThan(10000); expect(made[2]).toBeGreaterThan(1000); expect(made[3]).toBeGreaterThan(100);
+    const k = sample.length / bank.length;   // the thresholds are for the whole bank
+    expect(made[1]).toBeGreaterThan(10000 * k); expect(made[2]).toBeGreaterThan(1000 * k); expect(made[3]).toBeGreaterThan(100 * k);
   }, 600_000);
 
   it("writes the line with move numbers", () => {
