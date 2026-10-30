@@ -6,11 +6,11 @@ import { mergeCard } from "./openings/srs";
 /** What is saved to an account: progress only. Look, language, pieces and coach stay per device. */
 export type Saved = Pick<State, "xp" | "streak" | "lessons"> & { tests?: State["tests"]; placed?: number; daily?: State["daily"]; rushBest?: number; rep?: State["rep"]; active?: string[]; goal?: State["goal"]; stats?: State["stats"]; rating?: State["rating"]; missed?: State["missed"];
   prating?: State["prating"]; hist?: State["hist"]; themeStats?: State["themeStats"]; results?: State["results"]; puzzlesByDay?: State["puzzlesByDay"];
-  unlocked?: string[]; freezes?: number; heroes?: string[]; boss?: Record<string, number>; heroAvatar?: string; soloPath?: number[]; survivalBest?: number; calcBest?: number[]; visionBest?: Record<string, number>; ladder?: State["ladder"] };
+  unlocked?: string[]; freezes?: number; heroes?: string[]; boss?: Record<string, number>; heroAvatar?: string; soloPath?: number[]; survivalBest?: number; calcBest?: number[]; visionBest?: Record<string, number>; ladder?: State["ladder"]; masterBest?: Record<string, number> };
 
 export const savable = (s: Readonly<State>): Saved => ({ xp: s.xp, streak: s.streak, lessons: s.lessons, tests: s.tests, placed: s.placed, daily: s.daily, rushBest: s.rushBest, rep: s.rep, active: s.active, goal: s.goal, stats: s.stats, rating: s.rating, missed: s.missed,
   prating: s.prating, hist: s.hist, themeStats: s.themeStats, results: s.results, puzzlesByDay: s.puzzlesByDay,
-  unlocked: s.unlocked, freezes: s.freezes, heroes: s.heroes, boss: s.boss, heroAvatar: s.heroAvatar, soloPath: s.soloPath, survivalBest: s.survivalBest, calcBest: s.calcBest, visionBest: s.visionBest, ladder: s.ladder });
+  unlocked: s.unlocked, freezes: s.freezes, heroes: s.heroes, boss: s.boss, heroAvatar: s.heroAvatar, soloPath: s.soloPath, survivalBest: s.survivalBest, calcBest: s.calcBest, visionBest: s.visionBest, ladder: s.ladder, masterBest: s.masterBest });
 
 const NO_GOAL = { date: "", n: 0 }, NO_STATS: State["stats"] = { botWins: {}, games: 0, dailies: 0, reviews: 0 };
 function mergeGoal(a: State["goal"] = NO_GOAL, b: State["goal"] = NO_GOAL): State["goal"] {
@@ -73,6 +73,8 @@ export function merge(a: Saved, b: Saved): Saved {
     visionBest: Object.fromEntries([...new Set([...Object.keys(a.visionBest ?? {}), ...Object.keys(b.visionBest ?? {})])].map(k => [k, Math.max(a.visionBest?.[k] ?? 0, b.visionBest?.[k] ?? 0)])),
     // the Endgame ladder: the better stars on each rung, from either device
     ladder: mergeLadder(a.ladder, b.ladder),
+    // master games: the better score for each game and side
+    masterBest: maxScores(a.masterBest, b.masterBest),
     goal: mergeGoal(a.goal, b.goal), stats: mergeStats(a.stats, b.stats),
     // the rating that has seen more results is the better estimate; banked puzzles: the card further along wins
     rating: (a.rating?.n ?? 0) >= (b.rating?.n ?? 0) ? a.rating ?? { r: 400, n: 0 } : b.rating!,
@@ -87,6 +89,11 @@ export function merge(a: Saved, b: Saved): Saved {
 function mergeLadder(a: State["ladder"] = {}, b: State["ladder"] = {}): State["ladder"] {
   const out: NonNullable<State["ladder"]> = { ...a };
   for (const [k, v] of Object.entries(b)) out[k] = Math.max(out[k] ?? 0, v) as 1 | 2 | 3;
+  return Object.keys(out).length ? out : undefined;
+}
+/** Best scores from two devices: the higher one for each key. */
+function maxScores(a: Record<string, number> = {}, b: Record<string, number> = {}): Record<string, number> | undefined {
+  const out = { ...a }; for (const [k, n] of Object.entries(b)) out[k] = Math.max(out[k] ?? 0, n);
   return Object.keys(out).length ? out : undefined;
 }
 /** Puzzles per day from two devices: the higher count for each day (the totals' rule). */

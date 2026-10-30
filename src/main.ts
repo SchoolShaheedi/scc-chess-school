@@ -57,6 +57,7 @@ import { boardEditor } from "./analysis/editor";
 import { soloScreen } from "./solo/screen";
 import { ladderScreen as endgameLadder, playRung, rungOpen } from "./ladder/screen";
 import { rungById } from "./content/ladder";
+import { masterScreen } from "./master/screen";
 import { gameSettingsHTML, wireGameSettings } from "./play/gamesettings";
 import { wideLayout } from "./wide";
 import { courseHub, coursePage, runCourse } from "./openings/course";
@@ -532,6 +533,7 @@ function route() {
   if (page === "online") { teardown = arg === "game" && sub ? onlineGame(app, sub, go) : arg === "ladder" ? ladderScreen(app, go) : onlineLobby(app, go); return; }
   if (page === "class" && arg) return void classBoardScreen(app, arg, go);
   if (page === "tourney") return arg ? tourneyView(app, arg, go) : tourneyHome(app, go);
+  if (page === "master") { teardown = masterScreen(app, go, arg); return; }   // guess the move in famous games
   if (page === "analysis") { teardown = analysisBoard(app, go); return; }
   if (page === "editor") { teardown = boardEditor(app, go); return; }   // DECISIONS #115
   if (page === "play") {
