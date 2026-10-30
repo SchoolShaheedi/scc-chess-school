@@ -7,13 +7,11 @@ import { Board } from "../chess/board";
 import { type Square, placementFromFen } from "../chess/types";
 import { COURSE, courseOpening, GROUPS, STEPS, type CourseLine, type CourseOpening, type Step } from "../content/course";
 import BOXES from "../content/course-boxes.json";
-import { repOption } from "../content/repertoire";
 import { count, num, t, tx, type UIKey } from "../i18n";
 import { icon } from "../icons";
 import { checkSquare, refusal } from "../lesson/exercises";
 import { sound } from "../sound";
-import { store, today } from "../store";
-import { newCard } from "./srs";
+import { store } from "../store";
 import { FEW_GAMES, statsFor, TAGS } from "./facts";
 
 type Go = (h: string) => void;
@@ -109,17 +107,11 @@ export function coursePage(root: HTMLElement, id: string, go: Go) {
       ${step("practise", 2, t("coursePractise"), t("coursePractiseSub"))}
       ${step("win", 3, t("courseWin"), o.win.title ? tx(o.win.title) : "")}
       ${step("game", 4, t("courseGame"), o.game.title ? tx(o.game.title) : "")}
-      ${o.rep ? `<button class="li" data-review><span class="ring"><span>${num(5)}</span></span><span class="grow"><b>${t("courseReview")}</b><small>${t("courseReviewSub")}</small></span>${icon("arrowRight")}</button>` : ""}
+      <button class="li ${done.includes("learn") ? "done" : ""}" data-review><span class="ring"><span>${done.includes("learn") ? icon("check") : num(5)}</span></span><span class="grow"><b>${t("courseReview")}</b><small>${done.includes("learn") ? t("courseReviewIn") : t("courseReviewSub")}</small></span>${icon("arrowRight")}</button>
     </div></div>`;
   wireBack(root, go);
   root.querySelectorAll<HTMLButtonElement>("[data-step]").forEach(b => b.onclick = () => go(`#/openings/o/${id}/${b.dataset.step}`));
-  root.querySelector<HTMLButtonElement>("[data-review]")?.addEventListener("click", () => {
-    // step 5 puts this opening in its slot of the review drill, keeping any progress it already has there
-    const opt = repOption(o.rep!)!, r = store.get().rep, cards = { ...r.cards };
-    opt.lines.forEach((_, i) => { cards[`${opt.id}:${i}`] ??= newCard(today()); });
-    store.set({ rep: { ...r, [opt.slot]: opt.id, cards } });
-    go("#/openings/review");
-  });
+  root.querySelector<HTMLButtonElement>("[data-review]")?.addEventListener("click", () => go("#/openings/review"));
 }
 
 // ---------- playing a step along on the board ----------

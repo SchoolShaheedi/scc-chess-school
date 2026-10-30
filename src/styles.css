@@ -1346,3 +1346,11 @@ html.wide .livepill { bottom: 20px; }
 .mgnew { color: var(--good); font-weight: 700; }
 .mgbegan { font-size: 14px; } .mgbegan summary { cursor: pointer; font-weight: 700; padding: 6px 0; }
 .mgmoves { color: var(--muted); font-size: 13px; word-break: break-word; }
+
+/* openings review, no set-up (DECISIONS #133a): one big number, a due dot per opening */
+.duebig { display: flex; flex-direction: column; align-items: center; margin: 14px 0 10px; }
+.duebig b { font: 800 64px/1 var(--display); color: var(--kesri); }
+.duebig span { color: var(--muted); font-weight: 700; }
+.duerow { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+.duedot { width: 10px; height: 10px; border-radius: 50%; background: #CFC8B8; flex: none; }
+.duedot.on { background: var(--kesri); }
