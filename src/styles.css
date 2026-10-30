@@ -1321,3 +1321,7 @@ html.wide .livepill { bottom: 20px; }
 .facts .wdl .b, .wdlkey .b { background: #2B2824; color: #F2EBDD; }
 .wdlkey { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; font-size: 12px; color: var(--muted); }
 .wdlkey i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; border: 1px solid var(--line); vertical-align: -1px; }
+/* the Calculate drill's hidden line: the heading on its own line, the moves large beneath it */
+.calcline { display: grid; gap: 4px; padding: 10px 12px; border-radius: 12px; background: var(--surface-2); }
+.calcline small { color: var(--muted); font-size: 13px; }
+.calcline .calcmoves { font-size: 20px; letter-spacing: .01em; }
