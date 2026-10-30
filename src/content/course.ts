@@ -111,7 +111,7 @@ export const COURSE: CourseOpening[] = [
     },
     wins: [{
       mistake: 9,
-      title: { en: "Fried Liver Attack: Black's king walks into the open", pa: "ਫ਼ਰਾਈਡ ਲਿਵਰ ਹਮਲਾ: ਕਾਲੇ ਦਾ ਬਾਦਸ਼ਾਹ ਖੁੱਲ੍ਹੇ ਵਿੱਚ ਆ ਜਾਂਦਾ ਹੈ" }, ends: "gain",
+      title: { en: "Fried Liver Attack: Black's king walks into the open", pa: "Fried Liver ਹਮਲਾ: ਕਾਲੇ ਦਾ ਬਾਦਸ਼ਾਹ ਖੁੱਲ੍ਹੇ ਵਿੱਚ ਆ ਜਾਂਦਾ ਹੈ" }, ends: "gain",
       moves: "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Ne7 d4 b5 Bb3 Bb7 Bg5".split(" "),
       notes: {
         4: { en: "The bishop aims at f7 again.", pa: "ਊਠ ਫਿਰ f7 ਵੱਲ ਤਾਣਿਆ ਹੈ।" },
