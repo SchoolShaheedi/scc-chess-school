@@ -6,11 +6,11 @@ import { mergeCard } from "./openings/srs";
 /** What is saved to an account: progress only. Look, language, pieces and coach stay per device. */
 export type Saved = Pick<State, "xp" | "streak" | "lessons"> & { tests?: State["tests"]; placed?: number; daily?: State["daily"]; rushBest?: number; rep?: State["rep"]; active?: string[]; goal?: State["goal"]; stats?: State["stats"]; rating?: State["rating"]; missed?: State["missed"];
   prating?: State["prating"]; hist?: State["hist"]; themeStats?: State["themeStats"]; results?: State["results"]; puzzlesByDay?: State["puzzlesByDay"];
-  unlocked?: string[]; freezes?: number; heroes?: string[]; boss?: Record<string, number>; heroAvatar?: string; soloPath?: number[]; survivalBest?: number };
+  unlocked?: string[]; freezes?: number; heroes?: string[]; boss?: Record<string, number>; heroAvatar?: string; soloPath?: number[]; survivalBest?: number; calcBest?: number[]; visionBest?: Record<string, number> };
 
 export const savable = (s: Readonly<State>): Saved => ({ xp: s.xp, streak: s.streak, lessons: s.lessons, tests: s.tests, placed: s.placed, daily: s.daily, rushBest: s.rushBest, rep: s.rep, active: s.active, goal: s.goal, stats: s.stats, rating: s.rating, missed: s.missed,
   prating: s.prating, hist: s.hist, themeStats: s.themeStats, results: s.results, puzzlesByDay: s.puzzlesByDay,
-  unlocked: s.unlocked, freezes: s.freezes, heroes: s.heroes, boss: s.boss, heroAvatar: s.heroAvatar, soloPath: s.soloPath, survivalBest: s.survivalBest });
+  unlocked: s.unlocked, freezes: s.freezes, heroes: s.heroes, boss: s.boss, heroAvatar: s.heroAvatar, soloPath: s.soloPath, survivalBest: s.survivalBest, calcBest: s.calcBest, visionBest: s.visionBest });
 
 const NO_GOAL = { date: "", n: 0 }, NO_STATS: State["stats"] = { botWins: {}, games: 0, dailies: 0, reviews: 0 };
 function mergeGoal(a: State["goal"] = NO_GOAL, b: State["goal"] = NO_GOAL): State["goal"] {
@@ -68,6 +68,9 @@ export function merge(a: Saved, b: Saved): Saved {
     // DECISIONS #115: the better stars on each Solo Chess path puzzle, and the better Survival score
     soloPath: Array.from({ length: Math.max(a.soloPath?.length ?? 0, b.soloPath?.length ?? 0) }, (_, i) => Math.max(a.soloPath?.[i] ?? 0, b.soloPath?.[i] ?? 0)),
     survivalBest: Math.max(a.survivalBest ?? 0, b.survivalBest ?? 0),
+    // feature 3: the better run at each calculation level, the better round per vision drill
+    calcBest: Array.from({ length: Math.max(a.calcBest?.length ?? 0, b.calcBest?.length ?? 0) }, (_, i) => Math.max(a.calcBest?.[i] ?? 0, b.calcBest?.[i] ?? 0)),
+    visionBest: Object.fromEntries([...new Set([...Object.keys(a.visionBest ?? {}), ...Object.keys(b.visionBest ?? {})])].map(k => [k, Math.max(a.visionBest?.[k] ?? 0, b.visionBest?.[k] ?? 0)])),
     goal: mergeGoal(a.goal, b.goal), stats: mergeStats(a.stats, b.stats),
     // the rating that has seen more results is the better estimate; banked puzzles: the card further along wins
     rating: (a.rating?.n ?? 0) >= (b.rating?.n ?? 0) ? a.rating ?? { r: 400, n: 0 } : b.rating!,

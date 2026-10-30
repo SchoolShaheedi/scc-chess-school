@@ -47,6 +47,9 @@ export interface State {
   /** Solo Chess (DECISIONS #115): stars on each puzzle of the Young path, and Puzzle Survival's best score. */
   soloPath?: number[];
   survivalBest?: number;
+  /** Calculate (feature 3): the best run of clean answers at each calculation level (index 0 = level 1), and the best round per vision drill. */
+  calcBest?: number[];
+  visionBest?: Record<string, number>;
   xp: number;
   streak: { days: number; last: string };   // last = YYYY-MM-DD
   lessons: Record<string, LessonResult>;    // keyed by lesson id
@@ -277,17 +280,27 @@ export const store = {
   recordSurvival(score: number) {
     store.set({ ...(score > 0 ? practised() : {}), xp: state.xp + score * 2, survivalBest: Math.max(state.survivalBest ?? 0, score) });
   },
+  /** A Calculate answer was right at `level` (1-3), making `streak` in a row: the best run is kept, 2 XP an answer. */
+  recordCalc(level: number, streak: number) {
+    const calcBest = Array.from({ length: Math.max(3, state.calcBest?.length ?? 0) }, (_, i) => state.calcBest?.[i] ?? 0);
+    calcBest[level - 1] = Math.max(calcBest[level - 1], streak);
+    store.set({ ...practised(), xp: state.xp + 2, calcBest });
+  },
+  /** A board-vision round ended: the best score per drill is kept, 1 XP a point. */
+  recordVision(kind: string, score: number) {
+    store.set({ ...(score > 0 ? practised() : {}), xp: state.xp + score, visionBest: { ...state.visionBest, [kind]: Math.max(state.visionBest?.[kind] ?? 0, score) } });
+  },
   recordPractice(kind?: "review") {
     store.set({ ...practised(), ...(kind === "review" ? { stats: { ...state.stats, reviews: state.stats.reviews + 1 } } : {}) });
   },
   /** Progress merged in from the signed-in account (sync.ts). */
   replaceProgress(p: Pick<State, "xp" | "streak" | "lessons" | "tests" | "placed" | "daily" | "rushBest" | "rep" | "active" | "goal" | "stats" | "rating" | "missed" | "prating" | "hist" | "themeStats" | "results" | "puzzlesByDay"
-    | "unlocked" | "freezes" | "heroes" | "boss" | "heroAvatar" | "soloPath" | "survivalBest">) {
+    | "unlocked" | "freezes" | "heroes" | "boss" | "heroAvatar" | "soloPath" | "survivalBest" | "calcBest" | "visionBest">) {
     // rewards, freezes and heroes are per child too: without them, switching child kept the last child's (fixed 2026-10-16)
     store.set({ xp: p.xp, streak: p.streak, lessons: p.lessons, tests: p.tests, placed: p.placed, daily: p.daily, rushBest: p.rushBest, rep: p.rep, active: p.active, goal: p.goal, stats: p.stats, rating: p.rating, missed: p.missed,
       prating: p.prating, hist: p.hist, themeStats: p.themeStats, results: p.results, puzzlesByDay: p.puzzlesByDay,
       unlocked: p.unlocked, freezes: p.freezes, heroes: p.heroes, boss: p.boss, heroAvatar: p.heroAvatar,
-      soloPath: p.soloPath, survivalBest: p.survivalBest });
+      soloPath: p.soloPath, survivalBest: p.survivalBest, calcBest: p.calcBest, visionBest: p.visionBest });
   },
   /** A level test result: the best score is kept, and a pass is never lost. */
   recordTest(level: number, score: number, passed: boolean) {

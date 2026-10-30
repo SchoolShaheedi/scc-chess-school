@@ -30,7 +30,7 @@ function thumb(fen: string): string {
   }
   return `<div class="thumb">${out}</div>`;
 }
-const bar = (title: string, right = "") => `<div class="lessonbar"><button class="iconbtn" data-back aria-label="${t("back")}">${icon("chevronLeft")}</button>
+export const bar = (title: string, right = "") => `<div class="lessonbar"><button class="iconbtn" data-back aria-label="${t("back")}">${icon("chevronLeft")}</button>
   <h1 class="grow">${title}</h1>${right}</div>`;
 
 export function puzzleHub(root: HTMLElement, level: number, go: Go) {
@@ -48,6 +48,8 @@ export function puzzleHub(root: HTMLElement, level: number, go: Go) {
       ${s.look === "young" ? "" : `<span class="best"><small>${t("puzzleRating")}</small><b>${num((s.prating ?? s.rating).r)}</b></span>`}</button>
     <button class="rushcard" data-themes><span class="rushicon">${icon("target")}</span>
       <span class="grow"><b>${t("themesTitle")}</b><small>${t("themesAbout").split(/[.।]/)[0]}</small></span>${icon("arrowRight")}</button>
+    <button class="rushcard" data-calc><span class="rushicon">${icon("hint")}</span>
+      <span class="grow"><b>${t("calcTitle")}</b><small>${t("calcAbout")}</small></span>${icon("arrowRight")}</button>
     <button class="rushcard" data-survival><span class="rushicon">${icon("heart")}</span>
       <span class="grow"><b>${t("survTitle")}</b><small>${t("survAbout")}</small></span>
       <span class="best"><small>${t("rushBest")}</small><b>${num(s.survivalBest ?? 0)}</b></span></button>
@@ -61,6 +63,7 @@ export function puzzleHub(root: HTMLElement, level: number, go: Go) {
   root.querySelector<HTMLButtonElement>("[data-daily]")!.onclick = () => go("#/puzzles/daily");
   root.querySelector<HTMLButtonElement>("[data-rush]")!.onclick = () => go("#/puzzles/rush");
   root.querySelector<HTMLButtonElement>("[data-survival]")!.onclick = () => go("#/puzzles/survival");
+  root.querySelector<HTMLButtonElement>("[data-calc]")!.onclick = () => go("#/puzzles/calc");
   root.querySelector<HTMLButtonElement>("[data-solo]")!.onclick = () => go("#/puzzles/solo");
   root.querySelector<HTMLButtonElement>("[data-rated]")!.onclick = () => go("#/puzzles/rated");
   root.querySelector<HTMLButtonElement>("[data-themes]")!.onclick = () => go("#/puzzles/themes");
@@ -68,7 +71,7 @@ export function puzzleHub(root: HTMLElement, level: number, go: Go) {
 }
 
 /** Shared frame for one puzzle on screen. */
-function puzzleScreen(root: HTMLElement, title: string, right: string) {
+export function puzzleScreen(root: HTMLElement, title: string, right: string) {
   root.innerHTML = `<div class="screen">${bar(title, right)}
     <div class="coach"><div class="bubble" data-say aria-live="polite"></div></div>
     <div class="frame"><div class="boardwrap" data-board></div></div>

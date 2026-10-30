@@ -29,6 +29,8 @@ import { bossRound, bossScreen, heroIntro } from "./heroes/screens";
 import { bossOpen, hasHero, heroArt, heroLessons, heroOf } from "./heroes/heroes";
 import { playTest } from "./lesson/testplayer";
 import { playPlacement } from "./lesson/placement";
+import { calcHub, playCalc, playVision } from "./puzzles/calcscreens";
+import type { VisionKind } from "./puzzles/vision";
 import { playBank, playDaily, playRush, playSurvival, puzzleHub, playRated, themesScreen } from "./puzzles/screens";
 import { reviewGame } from "./review/screen";
 import { chooseOpening, dueCount, openingsHub, openingsOpen, trainOpenings } from "./openings/screens";
@@ -500,6 +502,11 @@ function route() {
     if (arg === "solo") { teardown = soloScreen(app, go); return; }
     if (arg === "bank") { teardown = playBank(app, go, sub); return; }   // /bank/<phase>: Insights' drills of your own mistakes
     if (arg === "rated") { teardown = playRated(app, go); return; }
+    if (arg === "calc") {   // feature 3: #/puzzles/calc, /calc/<level>, /calc/v-<drill>
+      if (sub?.startsWith("v-")) { teardown = playVision(app, go, sub.slice(2) as VisionKind); return; }
+      if (sub) { teardown = playCalc(app, go, parseInt(sub)); return; }
+      return calcHub(app, go);
+    }
     if (arg === "themes") return themesScreen(app, go);
     if (arg === "theme" && sub) { teardown = playRated(app, go, sub); return; }
     return puzzleHub(app, learnerLevel(), go);
