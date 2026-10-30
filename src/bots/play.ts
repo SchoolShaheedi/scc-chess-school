@@ -67,6 +67,7 @@ export function botList(root: HTMLElement, go: (h: string) => void) {
       ${chip("data-friend", "swords", t("friendTitle"))}
       ${young ? "" : chip("data-tourney", "trophy", t("tnTitle"))}
       ${chip("data-analysis", "search", t("anaTitle"))}
+      ${chip("data-master", "book", t("mgTitle"))}
     </div></div>${tabbar("play")}`;
   root.querySelector<HTMLButtonElement>("[data-home]")!.onclick = () => go("#/");
   root.querySelectorAll<HTMLButtonElement>("[data-bot]").forEach(b => b.onclick = () => go(`#/play/${b.dataset.bot}`));
@@ -74,6 +75,7 @@ export function botList(root: HTMLElement, go: (h: string) => void) {
   root.querySelector<HTMLButtonElement>("[data-online]")?.addEventListener("click", () => go("#/online"));
   root.querySelector<HTMLButtonElement>("[data-tourney]")?.addEventListener("click", () => go("#/tourney"));
   root.querySelector<HTMLButtonElement>("[data-analysis]")!.onclick = () => go("#/analysis");
+  root.querySelector<HTMLButtonElement>("[data-master]")!.onclick = () => go("#/master");
   root.querySelector<HTMLButtonElement>("[data-power]")!.onclick = () => go("#/power");
   root.querySelector<HTMLButtonElement>("[data-coachplay]")!.onclick = () => go(`#/play/${next.id}/coach`);
 }
