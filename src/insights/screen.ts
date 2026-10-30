@@ -10,12 +10,14 @@ import { num, t, tx, UI, type UIKey } from "../i18n";
 import { icon } from "../icons";
 import { coachHTML } from "../coach";
 import { LEVELS } from "../content/levels";
+import { courseOpening } from "../content/course";
 import { games, type SavedGame } from "../play/history";
 import { grade } from "../review/grade";
 import { DepthGovernor, INSIGHTS_BUDGET_MS, INSIGHTS_DEPTH } from "../review/depth";
 import { mineDue } from "../puzzles/due";
 import { store } from "../store";
 import NAMES from "../content/opening-names.json";
+import { openingsReport } from "./openings-report";
 import { type Band, byOpening, byPhase, byTime, myMoves, type MyMove, type Phase, replay, summarise } from "./insights";
 
 // sign-out on a shared device wipes these with the games (history.ts forgetGames)
@@ -77,6 +79,7 @@ export function insightsScreen(root: HTMLElement, go: (h: string) => void, lesso
     const look = store.get().look, mine: MyMove[] = [];
     const done: SavedGame[] = list.filter(g => graded[g.at]);
     for (const g of done) mine.push(...myMoves(g, graded[g.at]));
+    const yours = openingsReport(list, NAMES as Record<string, string>), cName = (id: string) => tx(courseOpening(id)!.name);
     const openings = byOpening(list, NAMES as Record<string, string>), phases = byPhase(mine), time = byTime(mine);
     const s = summarise(phases, time), ph = (p: Phase) => t(`insPh_${p}` as UIKey);
     const lower = (x: string) => store.get().lang === "en" ? x.toLowerCase() : x;
@@ -113,6 +116,13 @@ export function insightsScreen(root: HTMLElement, go: (h: string) => void, lesso
         ${wdl(o.won, o.drawn, o.lost)}<b class="pct">${num(o.score)}%</b></div>`).join("")
         + `<div class="inslegend"><span><i style="background:${GREEN}"></i>${t("resWon")}</span><span><i style="background:${GREY}"></i>${t("resDraw")}</span><span><i style="background:${RED}"></i>${t("resLost")}</span></div>`
         : `<p class="note">${t("insNoOpenings")}</p>`}</div>
+      <h2 class="sec">${t("insYourOpenings")}</h2>
+      <div class="inscard">${yours.length ? `<p class="note">${t("insYoursNote")}</p>` + yours.map(o => `<div class="insyours ${o.practise ? "worst" : ""}"><div class="insopen"><span class="grow"><b>${o.name}</b><small>${nGames(o.games)} · ${num(o.won)} ${t("resWon")} · ${num(o.drawn)} ${t("resDraw")} · ${num(o.lost)} ${t("resLost")}</small></span>
+        ${wdl(o.won, o.drawn, o.lost)}<b class="pct">${num(o.score)}%</b></div>
+        ${o.practise ? `<span class="insflag">${icon("hint")} ${t("insPractiseThis")}</span>` : ""}
+        ${o.small ? `<small class="note">${t("insSmallSample").replace("{n}", num(o.games))}</small>` : ""}
+        ${o.courseId ? `<button class="inslink" data-learn="${o.courseId}" aria-label="${t("insLearnIt")}: ${cName(o.courseId)}"><span class="grow">${t("insLearnIt")} · ${cName(o.courseId)}</span>${icon("chevronRight")}</button>` : ""}</div>`).join("")
+        : `<p class="note">${t("insYoursNone")}</p>`}</div>
       <h2 class="sec">${t("insPhases")}</h2>
       <div class="inscard">${(["opening", "middlegame", "endgame"] as Phase[]).map(p => barRow(ph(p), phases[p])).join("")}</div>
       <h2 class="sec">${t("insTime")}</h2>
@@ -120,6 +130,7 @@ export function insightsScreen(root: HTMLElement, go: (h: string) => void, lesso
         : `<p class="note">${t("insTimeNone")}</p>`}</div>
     </div>`;
     root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go(back);
+    root.querySelectorAll<HTMLButtonElement>("[data-learn]").forEach(b => b.onclick = () => go(`#/openings/o/${b.dataset.learn}`));
     root.querySelector<HTMLButtonElement>("[data-practise]")?.addEventListener("click", () => go(drillPhase !== null ? `#/puzzles/bank${drillPhase ? `/${drillPhase}` : ""}` : to!));
   }
 }
