@@ -33,7 +33,7 @@ import { calcHub, playCalc, playVision } from "./puzzles/calcscreens";
 import type { VisionKind } from "./puzzles/vision";
 import { playBank, playDaily, playRush, playSurvival, puzzleHub, playRated, themesScreen } from "./puzzles/screens";
 import { reviewGame } from "./review/screen";
-import { chooseOpening, dueCount, openingsHub, openingsOpen, trainOpenings } from "./openings/screens";
+import { dueCount, openingsHub, openingsOpen, trainOpenings } from "./openings/screens";
 import { botById, MINI_RACE, nextOpponent } from "./bots/bots";
 import { botList, playBot } from "./bots/play";
 import { powerSetup } from "./power/screen";
@@ -480,7 +480,6 @@ function route() {
   }
   if (page === "join") return account.signedIn() ? joinScreen(app, go) : familyScreen(app, go);
   if (page === "openings") {
-    if (arg === "choose" && (sub === "white" || sub === "e4" || sub === "d4") && openingsOpen()) return chooseOpening(app, sub, go);
     if (arg === "train") { teardown = trainOpenings(app, go); return; }
     if (arg === "review") return openingsHub(app, go);
     // the openings course (DECISIONS #127): /o/<id> is an opening, /o/<id>/<step> plays a step

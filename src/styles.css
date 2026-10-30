@@ -1127,6 +1127,10 @@ html:not([data-theme="dark"]) .trp.off { color: #6B6B74; }
 .insopen small, .insrow small { display: block; color: var(--muted); font-size: 12px; }
 .inswdl { display: flex; width: 84px; height: 10px; border-radius: 5px; overflow: hidden; flex: none; }
 .insopen .pct { width: 42px; text-align: right; }
+.insyours { display: grid; gap: 6px; padding-bottom: 10px; border-bottom: 1px solid var(--line); } .insyours:last-child { border-bottom: 0; padding-bottom: 0; }
+.insyours.worst { border-left: 3px solid var(--gold); padding-left: 9px; }
+.insflag { color: var(--gold); font-weight: 800; font-size: 13px; display: flex; gap: 6px; align-items: center; }
+.insyours .note { margin: 0; font-size: 12px; }
 .inslegend { display: flex; gap: 12px; font-size: 12px; color: var(--muted); }
 .inslegend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; }
 .insrow { display: grid; grid-template-columns: minmax(84px, auto) 1fr 44px; gap: 6px 10px; align-items: center; font-size: 14px; }
@@ -1346,3 +1350,11 @@ html.wide .livepill { bottom: 20px; }
 .mgnew { color: var(--good); font-weight: 700; }
 .mgbegan { font-size: 14px; } .mgbegan summary { cursor: pointer; font-weight: 700; padding: 6px 0; }
 .mgmoves { color: var(--muted); font-size: 13px; word-break: break-word; }
+
+/* openings review, no set-up (DECISIONS #133a): one big number, a due dot per opening */
+.duebig { display: flex; flex-direction: column; align-items: center; margin: 14px 0 10px; }
+.duebig b { font: 800 64px/1 var(--display); color: var(--kesri); }
+.duebig span { color: var(--muted); font-weight: 700; }
+.duerow { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+.duedot { width: 10px; height: 10px; border-radius: 50%; background: #CFC8B8; flex: none; }
+.duedot.on { background: var(--kesri); }
