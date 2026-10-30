@@ -608,6 +608,16 @@ html:has(.wwal), html:has(.wwal) body { background: #2A1D13; }
 .evalbar i { display: block; height: 100%; width: 50%; background: #F4EAD6; transition: width .3s; }
 .evalrow b { font: 700 15px ui-monospace, Menlo, monospace; min-width: 52px; text-align: right; }
 .anabest { min-height: 22px; font-size: 14px; color: var(--muted); } .anabest b { color: var(--ink); }
+/* three engine lines and side-lines in the move list (2026-10-29): wraps at 375px, no letter-spacing (Gurmukhi) */
+.analines { display: flex; flex-direction: column; gap: 4px; font-size: 14px; } .analines:empty { display: none; }
+.anaLn { display: flex; gap: 8px; align-items: baseline; min-width: 0; }
+.anaLn b { flex: none; min-width: 52px; text-align: right; font: 700 14px ui-monospace, Menlo, monospace; color: var(--ink); }
+.anaLn span { min-width: 0; overflow-wrap: anywhere; color: var(--muted); }
+.movelist.anamoves { white-space: normal; overflow-x: hidden; max-height: 9em; overflow-y: auto; }
+.movelist .br { color: var(--muted); font-weight: 400; margin: 0 2px; }
+.sidebar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; } .sidebar[hidden] { display: none; }
+.sidebar small { flex: 1 1 100%; color: var(--muted); }
+.sidebar .btn { flex: 1 1 auto; min-height: 44px; font-size: 14px; padding: 10px 12px; }
 .anank .btn { flex: 1; padding-left: 6px; padding-right: 6px; }
 .anatools { display: flex; flex-wrap: wrap; gap: 8px; } .anatools .btn { flex: 1 1 auto; white-space: nowrap; font-size: 14px; padding: 10px 12px; }
 .movelist .mv { border: 0; background: none; font: inherit; font-weight: 600; color: var(--ink); border-radius: 6px; padding: 2px 4px; min-height: 32px; }

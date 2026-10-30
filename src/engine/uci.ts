@@ -7,6 +7,8 @@ export interface Transport { send(cmd: string): void; onLine(cb: (line: string) 
 /** Score from the side to move's point of view: centipawns, or mate in N (negative = getting mated). */
 export interface Score { cp?: number; mate?: number }
 export interface Analysis { best: string; score: Score; pv: string[] }
+/** One engine line: its score (side to move's view) and the moves of its principal variation, best first. */
+export interface PvLine { score: Score; pv: string[] }
 /** One candidate move with its score (side to move's view). */
 export interface Candidate { move: string; score: Score }
 
@@ -87,6 +89,30 @@ export class Uci {
         lines.set(k, { move: l.split(" pv ")[1].trim().split(" ")[0], score: mate ? { mate: +mate[1] } : { cp: +(cp?.[1] ?? 0) } });
       }, this.limits?.searchMs);
       return [...lines.keys()].sort((a, b) => a - b).map(k => lines.get(k)!);
+    });
+  }
+
+  /** Stop the search in flight, if any: it ends early with the best answer so far (the queue then moves on). A no-op when idle. */
+  stop() { if (!this.dead && this.listener) this.t.send("stop"); }
+
+  /** The top `n` lines with their full variations (MultiPV), for the analysis board. `depth` and `movetime` (ms) both
+   *  cap the search: whichever comes first ends it. A search the caller no longer wants is cut short with `stop()`,
+   *  and one still waiting in the queue is skipped by `stale`. */
+  lines(fen: string, opts: { n: number; depth: number; movetime?: number; stale?: () => boolean }): Promise<PvLine[]> {
+    return this.run(async () => {
+      if (opts.stale?.()) return [];   // asked for a position the user has already left: don't spend a search on it
+      const found = new Map<number, PvLine>();
+      await this.raw([
+        "setoption name Skill Level value 20", `setoption name MultiPV value ${opts.n}`,
+        "ucinewgame", `position fen ${fen}`, `go depth ${opts.depth}${opts.movetime ? ` movetime ${opts.movetime}` : ""}`,
+      ], l => l.startsWith("bestmove"), l => {
+        if (!l.startsWith("info") || !l.includes(" pv ")) return;
+        const k = +(/ multipv (\d+)/.exec(l)?.[1] ?? 1);
+        const cp = / score cp (-?\d+)/.exec(l), mate = / score mate (-?\d+)/.exec(l);
+        if (!cp && !mate) return;   // lowerbound/upperbound-only noise carries no score we can show
+        found.set(k, { score: mate ? { mate: +mate[1] } : { cp: +cp![1] }, pv: l.split(" pv ")[1].trim().split(" ") });
+      }, this.limits?.searchMs);
+      return [...found.keys()].sort((x, y) => x - y).map(k => found.get(k)!);
     });
   }
 }
