@@ -50,6 +50,8 @@ export interface State {
   /** Calculate (feature 3): the best run of clean answers at each calculation level (index 0 = level 1), and the best round per vision drill. */
   calcBest?: number[];
   visionBest?: Record<string, number>;
+  /** The Endgame ladder (2026-10-30): stars (1-3) on each finished rung, keyed by rung id (src/content/ladder.ts). */
+  ladder?: Record<string, 1 | 2 | 3>;
   xp: number;
   streak: { days: number; last: string };   // last = YYYY-MM-DD
   lessons: Record<string, LessonResult>;    // keyed by lesson id
@@ -276,6 +278,12 @@ export const store = {
     if (pathIndex !== undefined) path[pathIndex] = Math.max(path[pathIndex] ?? 0, stars);
     store.set({ ...practised(), xp: state.xp + 5, ...(pathIndex !== undefined ? { soloPath: Array.from(path, x => x ?? 0) } : {}) });
   },
+  /** An Endgame ladder rung won (or held): its best stars are kept (they never go down), XP every time. */
+  completeRung(id: string, stars: 1 | 2 | 3) {
+    const prev = state.ladder?.[id] ?? 0;
+    store.set({ ...practised(), xp: state.xp + 10 + stars * 5, ladder: { ...(state.ladder ?? {}), [id]: Math.max(prev, stars) as 1 | 2 | 3 } });
+    return 10 + stars * 5;
+  },
   /** A Puzzle Survival run ended: 2 XP a puzzle, as in the Race. */
   recordSurvival(score: number) {
     store.set({ ...(score > 0 ? practised() : {}), xp: state.xp + score * 2, survivalBest: Math.max(state.survivalBest ?? 0, score) });
@@ -295,12 +303,12 @@ export const store = {
   },
   /** Progress merged in from the signed-in account (sync.ts). */
   replaceProgress(p: Pick<State, "xp" | "streak" | "lessons" | "tests" | "placed" | "daily" | "rushBest" | "rep" | "active" | "goal" | "stats" | "rating" | "missed" | "prating" | "hist" | "themeStats" | "results" | "puzzlesByDay"
-    | "unlocked" | "freezes" | "heroes" | "boss" | "heroAvatar" | "soloPath" | "survivalBest" | "calcBest" | "visionBest">) {
+    | "unlocked" | "freezes" | "heroes" | "boss" | "heroAvatar" | "soloPath" | "survivalBest" | "calcBest" | "visionBest" | "ladder">) {
     // rewards, freezes and heroes are per child too: without them, switching child kept the last child's (fixed 2026-10-16)
     store.set({ xp: p.xp, streak: p.streak, lessons: p.lessons, tests: p.tests, placed: p.placed, daily: p.daily, rushBest: p.rushBest, rep: p.rep, active: p.active, goal: p.goal, stats: p.stats, rating: p.rating, missed: p.missed,
       prating: p.prating, hist: p.hist, themeStats: p.themeStats, results: p.results, puzzlesByDay: p.puzzlesByDay,
       unlocked: p.unlocked, freezes: p.freezes, heroes: p.heroes, boss: p.boss, heroAvatar: p.heroAvatar,
-      soloPath: p.soloPath, survivalBest: p.survivalBest, calcBest: p.calcBest, visionBest: p.visionBest });
+      soloPath: p.soloPath, survivalBest: p.survivalBest, calcBest: p.calcBest, visionBest: p.visionBest, ladder: p.ladder });
   },
   /** A level test result: the best score is kept, and a pass is never lost. */
   recordTest(level: number, score: number, passed: boolean) {
