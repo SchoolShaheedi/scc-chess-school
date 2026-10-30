@@ -27,6 +27,8 @@ import { setLastGame } from "../review/screen";
 import { copyText, pgnOf } from "../play/pgn";
 import { type Bot, BOTS, botMove, nextOpponent } from "./bots";
 import { goodMove, hanging } from "./gamecoach";
+import { findTrap } from "./traps";
+import { courseOpening } from "../content/course";
 import { commentary, type Threat } from "./commentary";
 import { coachHTML, type Mood } from "../coach";
 import { ask } from "../ui/dialog";
@@ -220,6 +222,21 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
   const turnText = () => say((g.inCheck() ? `<b class="warn">${t("inCheckNow")}</b>` : `<b>${t("yourMove")}</b>`) + raceText());
   const tick = () => { if (clock) clock = press(clock, Date.now()); };
 
+  /** Trap alert (DECISIONS #133 d): once per kind per game, in the first 20 plies, never giving the move. Only with
+   *  a coach on screen: not the Young look (too much text), not focus mode, not Play vs Coach (it has its own words),
+   *  not a set position, a boss or a race. */
+  const trapSaid = new Set<string>();
+  function trapAlert() {
+    const s = store.get();
+    if (!coached || lookOf === "young" || s.focusMode || coachMode || startFen || bossDone || race || over) return;
+    const studied = (id: string) => (s.rep.course?.[id] ?? []).includes("win");
+    const hit = findTrap(g.fen(), me, g.history().length, studied);
+    if (!hit || trapSaid.has(hit.kind)) return;
+    const o = courseOpening(hit.openingId); if (!o) return;
+    trapSaid.add(hit.kind);
+    coach(t(hit.kind === "walkin" ? "trapWalkin" : "trapBot").replace("{name}", tx(o.name)), hit.kind === "walkin" ? "think" : "cheer", hit.kind === "walkin" ? "no" : "ok");
+  }
+
   async function reply() {
     busy = true; say(fill(t("botThinking"), bot));
     await wait(700);   // DECISIONS #110: your move lands (0.35s) and rests a moment before the bot answers
@@ -235,6 +252,7 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     busy = false; show(true);   // not busy BEFORE drawing, so your pieces are drawn as pick-up-able
     if (checkEnd()) return;
     turnText();
+    trapAlert();
     void explain();
     // the premove plays at once if it is still legal (promoting to a queen, as premoves do); otherwise it is dropped
     if (queued && view === null && movesFor(g, queued[0], queued[1]).length) { await wait(120); if (alive && !over && !busy) await play(queued[0], queued[1], "q"); }
