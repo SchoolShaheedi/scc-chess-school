@@ -4,27 +4,26 @@
 import { describe, expect, it } from "vitest";
 import { Chess } from "chess.js";
 import { writeFileSync } from "node:fs";
-import { COURSE, type CourseLine } from "../src/content/course";
+import { COURSE, lineByKey, lineKeys, type CourseLine } from "../src/content/course";
 import BOXES from "../src/content/course-boxes.json";
 import { asNumber } from "../src/engine/uci";
 import { nodeEngine } from "./engine";
 
 const TOLERANCE = 35, GOOD = 30, DEPTH = 14, WON = 300;
-const LINES = ["main", "win", "game"] as const;
 // the move that names an opening is the learner's choice of opening, not a mistake: 1...d5, 1...Nf6, 1...g6, 2...c5 (Benoni), 5...g6 (Dragon) and 2.c4 (Reti) are a little below the best move (up to 50cp; an
 // opening whose naming move is worse than that is not taught: King's Gambit and Bird were dropped)
 const NAMING: Record<string, number> = { scandi: 1, alekhine: 1, modern: 1, reti: 2, benoni: 3, dragon: 9 };
 
 describe("openings course", () => {
-  for (const o of COURSE) for (const k of LINES) {
-    const line: CourseLine = o[k];
+  for (const o of COURSE) for (const k of lineKeys(o)) {
+    const line: CourseLine = lineByKey(o, k);
     it(`${o.id} ${k}: legal, notes on real plies, ends as it says`, () => {
       const g = new Chess();
       for (const san of line.moves) expect(() => g.move(san), `${o.id} ${k} ${san}`).not.toThrow();
       for (const p of Object.keys(line.notes).map(Number)) expect(p).toBeLessThan(line.moves.length);
       for (const p of Object.keys(line.aim ?? {}).map(Number)) expect(p).toBeLessThan(line.moves.length);
       if (line.ends === "mate") expect(g.isCheckmate(), `${o.id} ${k} ends in mate`).toBe(true);
-      if (k === "game" || k === "win") expect(g.turn(), `${o.id} ${k}: the learner gives the last move`).not.toBe(o.side);
+      if (k !== "main") expect(g.turn(), `${o.id} ${k}: the learner gives the last move`).not.toBe(o.side);
       expect(Object.keys(line.notes).length, "has notes").toBeGreaterThan(0);
     });
     it(`${o.id} ${k}: has its "also good" squares`, () => {
@@ -49,9 +48,9 @@ describe("openings course", () => {
   });
   it("coaching lines (\"Take...\", \"Swap...\") sit on the learner's own moves, not the opponent's", () => {
     const IMP = /^(Take|Swap|Win|Hit|Push|Develop|Castle|Guard|Kick|Pin|Chase|Strike|Step|Make|Bring|Block|Leave|Give|Open|Close|Jump|Stop|Keep|Get|Move|Offer|Break|Fight|Answer)\b/;
-    for (const o of COURSE) for (const k of LINES) for (const [p, t] of Object.entries(o[k].notes)) {
+    for (const o of COURSE) for (const k of lineKeys(o)) for (const [p, t] of Object.entries(lineByKey(o, k).notes)) {
       const mover = +p % 2 === 0 ? "w" : "b";
-      if (mover !== o.side) expect(t.en, `${o.id} ${k} ply ${p} (${o[k].moves[+p]}) is the opponent's move`).not.toMatch(IMP);
+      if (mover !== o.side) expect(t.en, `${o.id} ${k} ply ${p} (${lineByKey(o, k).moves[+p]}) is the opponent's move`).not.toMatch(IMP);
     }
   });
   it("the main lines start the full games", () => {
@@ -67,9 +66,9 @@ describe.runIf(process.env.COURSE_BUILD === "1")("openings course: Stockfish", (
     for (const o of COURSE) {
       if (only && !only.includes(o.id)) { out[o.id] = (BOXES as typeof out)[o.id]; continue; }
       out[o.id] = {};
-      for (const k of LINES) {
+      for (const k of lineKeys(o)) {
         const g = new Chess(), boxes: Record<number, string[]> = {};
-        for (const [ply, san] of o[k].moves.entries()) {
+        for (const [ply, san] of lineByKey(o, k).moves.entries()) {
           const fen = g.fen(), mine = g.turn() === o.side, m = g.move(san);
           if (!mine) continue;
           const c = await e.candidates(fen, { n: 5, depth: DEPTH }), best = asNumber(c[0].score);

@@ -5,7 +5,9 @@
 import { Chess, type Square as CjSquare } from "chess.js";
 import { Board } from "../chess/board";
 import { type Square, placementFromFen } from "../chess/types";
-import { COURSE, courseOpening, GROUPS, STEPS, type CourseLine, type CourseOpening, type Step } from "../content/course";
+import { COURSE, courseOpening, GROUPS, isStepKey, lineByKey, STEPS, type CourseLine, type CourseOpening, type Step } from "../content/course";
+import { BOTS, nextOpponent } from "../bots/bots";
+import { playFrom } from "../bots/play";
 import BOXES from "../content/course-boxes.json";
 import { repOption } from "../content/repertoire";
 import { count, num, t, tx, type UIKey } from "../i18n";
@@ -24,13 +26,25 @@ const bar = (title: string, back = "#/openings") =>
   `<div class="lessonbar"><button class="iconbtn" data-back data-to="${back}" aria-label="${t("back")}">${icon("chevronLeft")}</button><h1 class="grow">${title}</h1></div>`;
 const wireBack = (root: HTMLElement, go: Go) => root.querySelectorAll<HTMLButtonElement>("[data-back]").forEach(b => b.onclick = () => go(b.dataset.to!));
 
-export const doneSteps = (id: string): Step[] => (store.get().rep.course?.[id] ?? []) as Step[];
-function markDone(id: string, step: Step) {
-  const r = store.get().rep, have = doneSteps(id);
-  if (!have.includes(step)) store.set({ rep: { ...r, course: { ...(r.course ?? {}), [id]: [...have, step] } } });
+/** Everything ticked on this opening: the four steps and any extra model win (win2, win3). */
+const doneKeys = (id: string): string[] => store.get().rep.course?.[id] ?? [];
+/** The four steps that are done: the extra model wins have their own ticks and do not count towards the five. */
+export const doneSteps = (id: string): Step[] => doneKeys(id).filter(k => (STEPS as readonly string[]).includes(k)) as Step[];
+function markDone(id: string, key: string) {
+  const r = store.get().rep, have = doneKeys(id);
+  if (!have.includes(key)) store.set({ rep: { ...r, course: { ...(r.course ?? {}), [id]: [...have, key] } } });
 }
-const lineOf = (o: CourseOpening, step: Step): CourseLine => step === "win" ? o.win : step === "game" ? o.game : o.main;
-const boxKey = (step: Step) => (step === "win" ? "win" : step === "game" ? "game" : "main");
+const lineOf = (o: CourseOpening, key: string): CourseLine => key === "learn" || key === "practise" ? o.main : lineByKey(o, key);
+const boxKey = (key: string) => (key === "learn" || key === "practise" ? "main" : key);
+/** Where "Play it from here" starts: the end of the main line, or for a model win the position right after the other side's mistake. */
+function startPly(o: CourseOpening, key: string): number {
+  const line = lineOf(o, key);
+  if (key === "learn" || key === "practise") return line.moves.length;
+  if (line.from !== undefined) return line.from;
+  let dev = 0; while (dev < line.moves.length && line.moves[dev] === o.main.moves[dev]) dev++;   // the first move off the main line
+  const mine = (dev % 2 === 0) === (o.side === "w");
+  return Math.min(dev + (mine ? 2 : 1), line.moves.length - 2);
+}
 
 /** Your pieces the other side attacks that are not safe: undefended, or attacked by something worth less. */
 export function watchSquares(g: Chess, me: "w" | "b"): Square[] {
@@ -108,6 +122,9 @@ export function coursePage(root: HTMLElement, id: string, go: Go) {
       ${step("learn", 1, t("courseLearn"), t("courseLearnSub"))}
       ${step("practise", 2, t("coursePractise"), t("coursePractiseSub"))}
       ${step("win", 3, t("courseWin"), o.win.title ? tx(o.win.title) : "")}
+      ${(o.wins ?? []).map((w, i) => { const k = `win${i + 2}`, d = doneKeys(id).includes(k);
+        return `<button class="li sub ${d ? "done" : ""}" data-step="${k}"><span class="ring"><span>${d ? icon("check") : `${num(3)}.${num(i + 2)}`}</span></span>
+          <span class="grow"><b>${t("courseWinN").replace("{n}", num(i + 2))}</b><small>${w.title ? tx(w.title) : ""}</small></span>${icon("play")}</button>`; }).join("")}
       ${step("game", 4, t("courseGame"), o.game.title ? tx(o.game.title) : "")}
       ${o.rep ? `<button class="li" data-review><span class="ring"><span>${num(5)}</span></span><span class="grow"><b>${t("courseReview")}</b><small>${t("courseReviewSub")}</small></span>${icon("arrowRight")}</button>` : ""}
     </div></div>`;
@@ -123,11 +140,13 @@ export function coursePage(root: HTMLElement, id: string, go: Go) {
 }
 
 // ---------- playing a step along on the board ----------
-export function runCourse(root: HTMLElement, id: string, step: Step, go: Go): () => void {
+export function runCourse(root: HTMLElement, id: string, stepKey: string, go: Go): () => void {
   const o = courseOpening(id);
-  if (!o || !STEPS.includes(step)) { go("#/openings"); return () => {}; }
-  const line = lineOf(o, step), me = o.side, boxesOn = step !== "practise";
-  const also = ((BOXES as Record<string, Record<string, Record<string, string[]>>>)[id]?.[boxKey(step)] ?? {}) as Record<string, Square[]>;
+  if (!o || !isStepKey(o, stepKey)) { go("#/openings"); return () => {}; }
+  const step = (/^win\d+$/.test(stepKey) ? "win" : stepKey) as Step;   // win2, win3 play like the first model win
+  const op: CourseOpening = o;   // narrowed copy for the closures below
+  const line = lineOf(o, stepKey), me = o.side, boxesOn = step !== "practise";
+  const also = ((BOXES as Record<string, Record<string, Record<string, string[]>>>)[id]?.[boxKey(stepKey)] ?? {}) as Record<string, Square[]>;
   const title = step === "learn" ? t("courseLearn") : step === "practise" ? t("coursePractise") : tx(line.title ?? o.name);
   root.innerHTML = `<div class="screen">${bar(tx(o.name), `#/openings/o/${id}`)}
     <p class="status" data-status></p>
@@ -135,7 +154,9 @@ export function runCourse(root: HTMLElement, id: string, step: Step, go: Go): ()
     <div class="frame"><div class="boardwrap" data-board></div></div>
     <ul class="boxkey">${boxesOn || step === "practise" ? `<li><i class="best"></i>${t("keyBest")}</li><li><i class="good"></i>${t("keyGood")}</li>
       <li><i class="watch"></i>${t("keyWatch")}</li><li><i class="aim">★</i>${t("keyAim")}</li>` : ""}</ul>
-    <div class="actions"><button class="btn" data-next hidden>${t("continue")}</button></div></div>`;
+    <div class="actions"><button class="btn" data-next hidden>${t("continue")}</button>
+      <button class="btn ghost" data-playfrom hidden>${icon("swords")} ${t("coursePlayFrom")}</button></div>
+    <div data-pick></div></div>`;
   wireBack(root, go);
   const board = new Board(root.querySelector("[data-board]")!, {});
   const bubble = root.querySelector<HTMLElement>("[data-say]")!, status = root.querySelector<HTMLElement>("[data-status]")!;
@@ -176,12 +197,32 @@ export function runCourse(root: HTMLElement, id: string, step: Step, go: Go): ()
     busy = true; draw();
     const lastNote = line.notes[line.moves.length - 1];
     const clean = mistakes === 0;
-    if (clean || step !== "practise") markDone(id, step);
+    if (clean || step !== "practise") markDone(id, stepKey);
     if (clean) sound.correct();
     say((lastNote ? tx(lastNote) + "<br>" : "") + (step === "practise" && !clean ? t("coursePractiseAgain").replace("{n}", num(mistakes)) : t("courseStepDone")), clean ? "ok" : "info");
-    const after = STEPS[STEPS.indexOf(step) + 1];
+    const extras = (op.wins ?? []).map((_, i) => `win${i + 2}`);
+    const after = step === "win" ? (extras[extras.indexOf(stepKey) + 1] ?? "game") : STEPS[STEPS.indexOf(step) + 1];
+    if (step !== "game") offerPlay();
     next.hidden = false; next.textContent = step === "practise" && !clean ? t("courseTryAgain") : after ? t("courseNextStep") : t("continue");
     next.onclick = () => step === "practise" && !clean ? go(`#/openings/o/${id}/practise?${Date.now()}`) : go(after ? `#/openings/o/${id}/${after}` : `#/openings/o/${id}`);
+  }
+  // "Play it from here" (DECISIONS #133 c): the learner picks any bot, the usual level marked "suggested", and the game starts from this position
+  let sub: (() => void) | undefined;
+  function offerPlay() {
+    const btn = root.querySelector<HTMLButtonElement>("[data-playfrom]")!, pick = root.querySelector<HTMLElement>("[data-pick]")!;
+    btn.hidden = false;
+    btn.onclick = () => {
+      const s = store.get(), suggested = nextOpponent(s.rating.r, s.stats.botWins);
+      pick.innerHTML = `<h2 class="sec">${t("anaPickBot")}</h2><div class="botfaces">${BOTS.map(b => `<button class="botface ${b.id === suggested.id ? "on" : ""}" data-pb="${b.id}"
+        aria-label="${tx(b.name)} ~${num(b.rating)}${b.id === suggested.id ? `, ${t("coursePlaySuggested")}` : ""}"><img class="botart" src="${b.art ?? `art/bots/${b.id}`}-neutral.webp" alt="">
+        <span>${tx(b.name)}</span><small>~${num(b.rating)}</small>${b.id === suggested.id ? `<small class="muted">${t("coursePlaySuggested")}</small>` : ""}</button>`).join("")}</div>`;
+      pick.scrollIntoView?.({ block: "nearest" });
+      pick.querySelectorAll<HTMLButtonElement>("[data-pb]").forEach(pb => pb.onclick = () => {
+        const g = new Chess(); line.moves.slice(0, startPly(op, stepKey)).forEach(m => g.move(m));
+        alive = false; board.setFlip(false); board.destroy();
+        sub = playFrom(root, BOTS.find(x => x.id === pb.dataset.pb)!, g.fen(), go, { me, back: `#/openings/o/${id}` });
+      });
+    };
   }
   board.setFlip(me === "b");
   board.interact({
@@ -208,5 +249,5 @@ export function runCourse(root: HTMLElement, id: string, step: Step, go: Go): ()
   });
   draw(); progress();
   void theirTurn();
-  return () => { alive = false; board.setFlip(false); board.destroy(); };
+  return () => { alive = false; if (sub) { sub(); return; } board.setFlip(false); board.destroy(); };
 }

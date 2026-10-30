@@ -10,12 +10,15 @@ export type Group = "start" | "white" | "e4" | "d4";
 /** A line of moves with a note for some plies (0 = White's first move). A note on the learner's own move is shown
  *  before it is played (the "why"); a note on the other side's move is shown after it lands. `aim` puts the gold
  *  star from that ply on, until the next entry. `ends` says what a model line finishes with. */
-export interface CourseLine { title?: Text; moves: string[]; notes: Record<number, Text>; aim?: Record<number, Square[]>; ends?: "mate" | "gain" }
+export interface CourseLine { title?: Text; moves: string[]; notes: Record<number, Text>; aim?: Record<number, Square[]>; ends?: "mate" | "gain";
+  /** A model win: how many plies to play before "Play it from here" starts a bot game (the position right after the other side's mistake). */
+  from?: number }
 export interface CourseOpening {
   id: string; group: Group; side: "w" | "b"; name: Text; about: Text; plan: Text;
   /** The repertoire option in the review drill (src/content/repertoire.ts), when there is one. */
   rep?: string;
-  main: CourseLine; win: CourseLine; game: CourseLine;
+  /** `win` is the first model win (step 3, and what counts the step done); `wins` are the extras (main openings only, DECISIONS #133), each with its own tick. */
+  main: CourseLine; win: CourseLine; wins?: CourseLine[]; game: CourseLine;
 }
 
 export const GROUPS: { group: Group; title: Text }[] = [
@@ -2425,3 +2428,9 @@ export const COURSE: CourseOpening[] = [
 export const courseOpening = (id: string) => COURSE.find(o => o.id === id);
 export const STEPS = ["learn", "practise", "win", "game"] as const;
 export type Step = (typeof STEPS)[number];
+/** The key of every line an opening has: main, win, win2, win3 ... (the extra model wins), game. Keys name the lines in course-boxes.json and the extra wins in the progress list. */
+export const lineKeys = (o: CourseOpening): string[] => ["main", "win", ...(o.wins ?? []).map((_, i) => `win${i + 2}`), "game"];
+export const lineByKey = (o: CourseOpening, k: string): CourseLine =>
+  k === "main" ? o.main : k === "win" ? o.win : k === "game" ? o.game : o.wins![+k.slice(3) - 2];
+/** A step of the course page's URL: the four steps, or one of the extra model wins (win2, win3). */
+export const isStepKey = (o: CourseOpening, k: string): boolean => (STEPS as readonly string[]).includes(k) || (/^win\d+$/.test(k) && !!o.wins?.[+k.slice(3) - 2]);

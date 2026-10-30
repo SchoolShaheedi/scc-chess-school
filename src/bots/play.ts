@@ -81,8 +81,8 @@ export function botList(root: HTMLElement, go: (h: string) => void) {
 }
 
 /** Play a bot from any position (the analysis board's "Play from here"): you take the side to move. */
-export function playFrom(root: HTMLElement, bot: Bot, fen: string, go: (h: string) => void): () => void {
-  return game(root, bot, new Chess(fen).turn(), go, "#/analysis", undefined, undefined, fen);
+export function playFrom(root: HTMLElement, bot: Bot, fen: string, go: (h: string) => void, opts?: { me?: "w" | "b"; back?: string }): () => void {
+  return game(root, bot, opts?.me ?? new Chess(fen).turn(), go, opts?.back ?? "#/analysis", undefined, undefined, fen);
 }
 
 /** Colour choice (and a clock), then the game. `testLevel` = this game is that level's test. */

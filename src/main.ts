@@ -61,7 +61,6 @@ import { masterScreen } from "./master/screen";
 import { gameSettingsHTML, wireGameSettings } from "./play/gamesettings";
 import { wideLayout } from "./wide";
 import { courseHub, coursePage, runCourse } from "./openings/course";
-import type { Step } from "./content/course";
 import { ask } from "./ui/dialog";
 import { startMusic } from "./music";
 
@@ -487,7 +486,7 @@ function route() {
     // the openings course (DECISIONS #127): /o/<id> is an opening, /o/<id>/<step> plays a step
     if (!openingsOpen()) return openingsHub(app, go);
     const step = location.hash.split("?")[0].split("/")[4];
-    if (arg === "o" && sub && step) { teardown = runCourse(app, sub, step as Step, go); return; }
+    if (arg === "o" && sub && step) { teardown = runCourse(app, sub, step, go); return; }
     if (arg === "o" && sub) return coursePage(app, sub, go);
     return courseHub(app, go);
   }
