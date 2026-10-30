@@ -219,8 +219,10 @@ export function unsafe(after: Chess, sq: string): boolean {
 /** Has the learner (colour `me`) met an engine-drill goal in this position? */
 export function engineGoalMet(g: Chess, me: "w" | "b", goal: "promote" | "wipe" | "hold" | "mate" | "queen", lastMove?: Move): boolean {
   const bare = g.board().flat().filter(p => p && p.color !== me).length === 1;   // only their king left
-  // A promote drill is also won when the defender gives up everything to stop the pawn (the Lucena ends this way).
-  if (goal === "promote") return !!lastMove && lastMove.color === me && (!!lastMove.promotion || bare);
+  // A promote drill is also won when the defender gives up everything to stop the pawn (the Lucena ends this way): that
+  // is, when the learner's own move has just taken their last piece. A defender who STARTED with only a king (K+P vs K)
+  // is "bare" from move one, so bare alone would count any first move as a win (found 2026-10-30).
+  if (goal === "promote") return !!lastMove && lastMove.color === me && (!!lastMove.promotion || (!!lastMove.captured && bare));
   if (goal === "queen") return !!lastMove && lastMove.color === me && !!lastMove.promotion;
   if (goal === "wipe") return bare;
   return false;   // "hold" is met by surviving maxMoves, counted by the runner; "mate" only by checkmate, which the runner sees itself
