@@ -53,6 +53,15 @@ describe("openings course", () => {
       if (mover !== o.side) expect(t.en, `${o.id} ${k} ply ${p} (${lineByKey(o, k).moves[+p]}) is the opponent's move`).not.toMatch(IMP);
     }
   });
+  it("every model win names the other side's mistake: a ply of theirs inside the line", () => {
+    for (const o of COURSE) for (const k of lineKeys(o)) {
+      if (k === "main" || k === "game") continue;
+      const line = lineByKey(o, k);
+      expect(line.mistake, `${o.id} ${k} has a mistake ply`).toBeTypeOf("number");
+      expect(line.mistake!, `${o.id} ${k}: mistake is inside the line`).toBeLessThan(line.moves.length);
+      expect((line.mistake! % 2 === 0 ? "w" : "b"), `${o.id} ${k}: the mistake is the other side's move`).not.toBe(o.side);
+    }
+  });
   it("the main lines start the full games", () => {
     for (const o of COURSE) expect(o.game.moves.slice(0, o.main.moves.length)).toEqual(o.main.moves);
   });

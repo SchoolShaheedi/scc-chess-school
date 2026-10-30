@@ -38,7 +38,7 @@ const boxKey = (key: string) => (key === "learn" || key === "practise" ? "main" 
 function startPly(o: CourseOpening, key: string): number {
   const line = lineOf(o, key);
   if (key === "learn" || key === "practise") return line.moves.length;
-  if (line.from !== undefined) return line.from;
+  if (line.mistake !== undefined) return line.mistake + 1;
   let dev = 0; while (dev < line.moves.length && line.moves[dev] === o.main.moves[dev]) dev++;   // the first move off the main line
   const mine = (dev % 2 === 0) === (o.side === "w");
   return Math.min(dev + (mine ? 2 : 1), line.moves.length - 2);

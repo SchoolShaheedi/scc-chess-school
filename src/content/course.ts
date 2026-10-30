@@ -11,8 +11,8 @@ export type Group = "start" | "white" | "e4" | "d4";
  *  before it is played (the "why"); a note on the other side's move is shown after it lands. `aim` puts the gold
  *  star from that ply on, until the next entry. `ends` says what a model line finishes with. */
 export interface CourseLine { title?: Text; moves: string[]; notes: Record<number, Text>; aim?: Record<number, Square[]>; ends?: "mate" | "gain";
-  /** A model win: how many plies to play before "Play it from here" starts a bot game (the position right after the other side's mistake). */
-  from?: number }
+  /** A model win: the ply index of the other side's mistake (0 = White's first move). The trap alert reads it, and "Play it from here" starts right after it. */
+  mistake?: number }
 export interface CourseOpening {
   id: string; group: Group; side: "w" | "b"; name: Text; about: Text; plan: Text;
   /** The repertoire option in the review drill (src/content/repertoire.ts), when there is one. */
@@ -92,6 +92,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 4: ["f7"], 22: ["f5"] },
     },
     win: {
+      mistake: 11,
       title: { en: "Légal's trap: Black grabs your queen", pa: "Légal ਦਾ ਜਾਲ: ਕਾਲਾ ਤੁਹਾਡੀ ਰਾਣੀ ਮਾਰ ਲੈਂਦਾ ਹੈ" }, ends: "mate",
       moves: "e4 e5 Nf3 Nc6 Bc4 d6 Nc3 Bg4 h3 Bh5 Nxe5 Bxd1 Bxf7+ Ke7 Nd5#".split(" "),
       notes: {
@@ -153,6 +154,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 14: ["h7"] },
     },
     win: {
+      mistake: 19,
       title: { en: "Model win: the open h-file", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: ਖੁੱਲ੍ਹੀ h ਲਾਈਨ" },
       ends: "mate",
       moves: "d4 d5 Bf4 Nf6 e3 e6 Nf3 c5 c3 Nc6 Nbd2 Bd6 Bg3 O-O Bd3 c4 Bb1 Bxg3 hxg3 b5 Ne5 Bb7 Bxh7+ Nxh7 Qh5 Ng5 Qh8#".split(" "),
@@ -213,6 +215,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 2: ["d5"] },
     },
     win: {
+      mistake: 9,
       title: { en: "Model win: Black hangs on to the pawn", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: ਕਾਲਾ ਪਿਆਦੇ ਨੂੰ ਫੜੀ ਰੱਖਦਾ ਹੈ" },
       ends: "gain",
       moves: "d4 d5 c4 dxc4 e3 b5 a4 c6 axb5 cxb5 Qf3".split(" "),
@@ -278,6 +281,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 18: ["f6"] },
     },
     win: {
+      mistake: 19,
       title: { en: "Model win: Black's queen goes hunting", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: ਕਾਲੇ ਦੀ ਰਾਣੀ ਸ਼ਿਕਾਰ ਉੱਤੇ ਨਿਕਲਦੀ ਹੈ" },
       ends: "mate",
       moves: "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nxd4 Bb4 Nxc6 Bxc3+ bxc3 bxc6 Bd3 Qe7 O-O O-O Re1 Qc5 e5 Qxf2+ Kxf2 d6 exf6 g6 Qf3 Rb8 Bh6 Rb6 Bxf8 c5 Bh6 c4 Re8#".split(" "),
@@ -344,6 +348,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 5: ["f2"] },
     },
     win: {
+      mistake: 18,
       title: { en: "Model win: trap the pinning bishop", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: ਪਿੰਨ ਕਰਨ ਵਾਲੇ ਊਠ ਨੂੰ ਫਸਾਓ" },
       ends: "mate",
       moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O a6 Bg5 h6 Bh4 g5 b4 gxh4 d4 Bb6 Nxh4 exd4 Bxf7+ Kxf7 e5 dxe5 cxd4 Qxd4 Qb3+ Be6 Qc2 Qxh4 Nd2 Rhg8 b5 Rxg2+ Kxg2 Rg8+ Kf3 Qg4#".split(" "),
@@ -414,6 +419,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 9: ["c2"] },
     },
     win: {
+      mistake: 20,
       title: { en: "Model win: the knight jumps to g4", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: ਘੋੜਾ g4 ਉੱਤੇ ਛਾਲ ਮਾਰਦਾ ਹੈ" },
       ends: "mate",
       moves: "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Be3 a6 Bd3 Nf6 O-O Ne5 f4 Neg4 Qe1 Bc5 e5 Nxe3 Qxe3 Ng4 Qe4 d5 Bb5+ axb5 Nxd5 exd5 Qxd5 O-O h3 Rd8 Qxd8+ Qxd8 Rf2 Qxd4 Rf1 Nxf2 c3 Qxf4 a3 Ng4+ Rf2 Qc1#".split(" "),
@@ -491,6 +497,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 7: ["f5"] },
     },
     win: {
+      mistake: 26,
       title: { en: "Model win: the queen on b3", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: b3 ਉੱਤੇ ਰਾਣੀ" },
       ends: "mate",
       moves: "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 c4 e6 Bd2 Bd6 h5 Bh7 Qb3 Bxg3 fxg3 Ngf6 Bd3 Nc5 Bxh7 Nxb3 Rd1 Nxd2 Ne5 Qxd4 Nxc6 Qe3#".split(" "),
@@ -557,6 +564,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 3: ["d5"] },
     },
     win: {
+      mistake: 24,
       title: { en: "Model win: the two bishops strike", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: ਦੋਵੇਂ ਊਠ ਵਾਰ ਕਰਦੇ ਹਨ" },
       ends: "mate",
       moves: "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 h6 Bxf6 Bxf6 Qc2 dxc4 Rd1 c5 Ne4 cxd4 Nxf6+ Qxf6 Rxd4 e5 Rd5 Nc6 Bxc4 Nb4 Qb3 Nxd5 h3 e4 O-O exf3 g3 Nb6 Rd1 Bxh3 a4 Nxc4 Rd3 Ne5 Rd6 Qxd6 Qxb7 Qd1+ Kh2 Ng4+ Kxh3 Nxf2+ Kh4 Qh1#".split(" "),
@@ -633,6 +641,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 9: ["f5"] },
     },
     win: {
+      mistake: 18,
       title: { en: "Model win: White's knight goes too far", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: ਚਿੱਟੇ ਦਾ ਘੋੜਾ ਬਹੁਤ ਅੱਗੇ ਚਲਾ ਜਾਂਦਾ ਹੈ" },
       ends: "mate",
       moves: "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 Ne5 Nbd7 Bf4 Nd5 g3 Nxe5 dxe5 Nxf4 Qxd8+ Kxd8 O-O-O+ Nd5 Nxd5 cxd5 Rxd5+ Ke8 Rc5 e6 Bg2 Bxc5 e3 Bd7 h4 c3 b4 Bxb4 Be4 Ke7 h5 Rac8 f4 Ba3+ Kb1 Rc5 Bc2 Bc6 Rd1 Rb5+ Bb3 Be4+ Ka1 Bb2#".split(" "),
@@ -710,6 +719,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 19: ["g3"] },
     },
     win: {
+      mistake: 14,
       title: { en: "Model win: mate on d1", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: d1 ਉੱਤੇ ਸ਼ਹਿ-ਮਾਤ" },
       ends: "mate",
       moves: "d4 Nf6 c4 g6 Nc3 Bg7 g3 d5 e3 dxc4 Qa4+ Bd7 Qxc4 Bc6 d5 Nxd5 Bg2 Nxc3 Nf3 Qd1#".split(" "),
@@ -771,6 +781,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 4: ["e5"], 12: ["f7"] },
     },
     win: {
+      mistake: 7,
       title: { en: "Model win: Bird's Defence goes wrong", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: ਬਰਡ ਬਚਾਅ ਗ਼ਲਤ ਹੋ ਜਾਂਦਾ ਹੈ" },
       ends: "mate",
       moves: "e4 e5 Nf3 Nc6 Bb5 Nd4 Nxd4 Nf6 Nf3 c6 Be2 a5 d4 a4 dxe5 a3 exf6 Qa5+ b4 Bxb4+ Bd2 d5 fxg7 Rg8 c3 Qb6 cxb4 c5 Nc3 d4 Nd5 Qd8 Bg5 Qxg5 Nxg5 c4 Nf6+ Kd8 Qxd4+ Kc7 Qe5+ Kb6 Qc5+ Ka6 Qa5#".split(" "),
@@ -844,6 +855,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 16: ["f7"] },
     },
     win: {
+      mistake: 19,
       title: { en: "Model win: the pin on f6", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: f6 ਉੱਤੇ ਪਿੰਨ" },
       ends: "mate",
       moves: "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 d4 O-O Bd3 f5 exf6 Nxf6 O-O Bd6 Bg5 Bg4 Qe1 Nbd7 Nxd5 Kh8 Qh4 Qe8 Nxf6 Bxh2+ Nxh2 Nxf6 Nxg4 c6 Bxf6 h5 Bxg7+ Kxg7 Qg5+ Kh8 Qh6+ Kg8 Qh7#".split(" "),
@@ -913,6 +925,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 20: ["d5"] },
     },
     win: {
+      mistake: 17,
       title: { en: "Model win: the queen on g7", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: g7 ਉੱਤੇ ਰਾਣੀ" },
       ends: "mate",
       moves: "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Ne4 Nd2 Nxd2 Bxd2 Bc5 Qg4 a5 Qxg7 Bxf2+ Kxf2 Rf8 Bg5 Qxg5 Qxg5 f5 Be2 Ba6 Bh5+ Rf7 Qg8+ Ke7 Qxf7+ Kd8 Qe8#".split(" "),
@@ -979,6 +992,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 13: ["b3"] },
     },
     win: {
+      mistake: 18,
       title: { en: "Model win: the pawn that became a queen", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: ਰਾਣੀ ਬਣਿਆ ਪਿਆਦਾ" },
       ends: "mate",
       moves: "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 a3 c4 Nbd2 Na5 Be2 Bd7 b4 cxb3 a4 b2 Bb5 bxa1=Q O-O Bxb5 Ne4 Bxf1 Qxf1 Qxa4 c4 dxe4 c5 Qbc6 Ng5 Qxd4 Nxe6 Qxe6 Qb5+ Qdd7 c6 Qd1+ Qf1 Qxf1+ Kxf1 Qc4+ Ke1 Bb4+ Kd1 Qd3+ Bd2 Qxd2#".split(" "),
@@ -1049,6 +1063,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 5: ["a5"] },
     },
     win: {
+      mistake: 16,
       title: { en: "Model win: the knight on the edge", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: ਕਿਨਾਰੇ ਉੱਤੇ ਘੋੜਾ" },
       ends: "mate",
       moves: "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 c6 Bc4 Bf5 Bd2 e6 Nb5 Qb6 Na3 Qxb2 c3 Qxa3 Ne5 Nbd7 Nxd7 Nxd7 O-O Qd6 g4 Be4 Re1 Bd5 Rxe6+ fxe6 Bf4 Qxf4 Bd3 Bd6 Qe2 Qxh2+ Kf1 Qh1#".split(" "),
@@ -1105,6 +1120,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 5: ["b4"] },
     },
     win: {
+      mistake: 16,
       title: { en: "Model win: the queen on c2", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: c2 ਉੱਤੇ ਰਾਣੀ" },
       ends: "mate",
       moves: "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Nf3 d5 Qc2 c5 Bd2 cxd4 Nxd4 e5 Nf5 d4 Ne4 Bxf5 Bxb4 Bxe4 Bxf8 Bxc2 Bb4 Nc6 Bd2 Ne4 Be2 Nxd2 Kxd2 dxe3+ Kc3 Qd2#".split(" "),
@@ -1167,6 +1183,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 13: ["e8"] },
     },
     win: {
+      mistake: 20,
       title: { en: "Model win: the e-pawn runs", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: e ਵਾਲਾ ਪਿਆਦਾ ਦੌੜਦਾ ਹੈ" },
       ends: "mate",
       moves: "d4 f5 g3 Nf6 Bg2 g6 Nf3 Bg7 O-O O-O c4 d6 Nc3 Qe8 Re1 e5 Nb5 Na6 a4 e4 c5 dxc5 dxc5 exf3 c6 fxg2 cxb7 Bxb7 Qb3+ Bd5 Nxc7 Nxc7 Qb4 Rf7 Qa3 Rd8 f3 Ne6 Be3 Bf8 Qxf8+ Qxf8 Bf2 g5 Rec1 g4 Bxa7 Rxa7 b4 gxf3 exf3 Bxf3 b5 Rd1+ Rxd1 Qc5+ Rd4 Qxd4#".split(" "),
@@ -1241,6 +1258,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 8: ["g2"] },
     },
     win: {
+      mistake: 17,
       title: { en: "Model win: the bishop on the long diagonal", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: ਲੰਮੇ ਤਿਰਛੇ ਰਾਹ ਉੱਤੇ ਊਠ" },
       ends: "mate",
       moves: "c4 e5 Nc3 Nf6 g3 d5 cxd5 Nxd5 Bg2 Nb6 Nf3 Nc6 O-O Bg4 a4 a5 d4 Nxd4 Nxe5 Bf5 Bxb7 Bc5 Be3 Ra7 Bxd4 Qd6 Bc6+ Kf8 Bxc5 Qxc5 Qd8#".split(" "),
@@ -1309,6 +1327,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 6: ["g2"] },
     },
     win: {
+      mistake: 31,
       title: { en: "Model win: the pawn on a6", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: a6 ਉੱਤੇ ਪਿਆਦਾ" },
       ends: "mate",
       moves: "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 Qxc4 h6 Ne5 Nbd7 Nc3 c5 Nxd7 Bxd7 dxc5 Rc8 b4 b6 Qxa6 bxc5 b5 Nd5 Nxd5 Bg5 Bxg5 f6 Nxf6+ Rxf6 Bxf6 Qe8 Be5 Bxb5 Qb7 Rc7 Qxc7 Qf8 Rab1 Qf7 Qxf7+ Kxf7 Rxb5 h5 Rd1 c4 Rb7+ Ke8 Bc6+ Kf8 Rd8#".split(" "),
@@ -1383,6 +1402,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 15: ["b4"] },
     },
     win: {
+      mistake: 24,
       title: { en: "Model win: the knight on f4", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: f4 ਉੱਤੇ ਘੋੜਾ" },
       ends: "mate",
       moves: "e4 d6 d4 Nf6 Nc3 g6 Nf3 Bg7 Be2 O-O O-O e5 dxe5 dxe5 Qxd8 Rxd8 Bg5 Bg4 Nd5 Nbd7 h3 Bxf3 gxf3 Nxd5 Rad1 N5f6 Bxf6 Bxf6 Bb5 Nf8 Rxd8 Rxd8 Bc4 Be7 Bd5 g5 Kg2 Ng6 Kh1 Nf4 Bb3 Nxh3 Kg2 Nf4+ Kg1 Bc5 Kh2 Rd2 Kg3 h5 Rd1 Bxf2+ Kh2 Bg3+ Kxg3 Rg2#".split(" "),
@@ -1461,6 +1481,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 3: ["d5"] },
     },
     win: {
+      mistake: 12,
       title: { en: "Model win: mate on d1", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: d1 ਉੱਤੇ ਸ਼ਹਿ-ਮਾਤ" },
       ends: "mate",
       moves: "e4 Nf6 e5 Nd5 d4 d6 Nf3 dxe5 dxe5 Bg4 h3 Bxf3 Qd3 Nb4 Qb3 Qd1#".split(" "),
@@ -1528,6 +1549,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 11: ["g7"] },
     },
     win: {
+      mistake: 28,
       title: { en: "Model win: the knight checks", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: ਘੋੜੇ ਦੀਆਂ ਸ਼ਹਿਆਂ" },
       ends: "mate",
       moves: "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5 Qd2 O-O h4 cxd4 Bxd4 Rd8 Rb1 Nc6 h5 e5 Rb5 Qa4 h6 exd4 Rb4 Nxb4 hxg7 Nc2+ Ke2 d3+ Kd1 Na1+ Ke1 Nc2+ Kd1 Na1+ Kc1 Nb3+ axb3 Qa1#".split(" "),
@@ -1601,6 +1623,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 7: ["a6"] },
     },
     win: {
+      mistake: 12,
       title: { en: "Model win: the long diagonal", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: ਲੰਮਾ ਤਿਰਛਾ ਰਾਹ" },
       ends: "mate",
       moves: "d4 Nf6 c4 e6 Nf3 b6 g3 Ba6 b3 Bb4+ Nfd2 Bb7 e4 Nxe4 Ba3 Qf6 Qe2 Nxd2 Bxb4 Nf3+ Qxf3 Bxf3 Ba3 Qxd4 Rg1 Qd1#".split(" "),
@@ -1669,6 +1692,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 12: ["b2"] },
     },
     win: {
+      mistake: 17,
       title: { en: "Model win: the bishop on g2", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: g2 ਉੱਤੇ ਊਠ" },
       ends: "mate",
       moves: "Nf3 d5 c4 e6 g3 Nf6 Bg2 Be7 O-O O-O b3 c5 Bb2 b6 d4 h6 cxd5 Qxd5 Ne1 Ne4 Nc3 Nxc3 Bxc3 cxd4 Bxd5 dxc3 Bxa8 Na6 Bg2 Rd8 Qxd8+ Bxd8 Nc2 Nb4 Nxb4 f5 Rfd1 Be7 Nc6 Kf7 Nxe7 Bb7 Bxb7 Kxe7 Rac1 a5 Rxc3 g5 Rc7+ Ke8 Bc6+ Kf8 Rd8#".split(" "),
@@ -1740,6 +1764,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 7: ["e4"] },
     },
     win: {
+      mistake: 20,
       title: { en: "Model win: the open d-file", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: ਖੁੱਲ੍ਹੀ d ਲਾਈਨ" },
       ends: "mate",
       moves: "e4 e5 Nf3 Nf6 Be2 Nc6 d3 d5 Nfd2 Be6 h3 a6 a3 Qd7 Nc3 O-O-O b4 Nd4 Nf3 dxe4 Nxe4 Nxe4 dxe4 Qa4 Kf1 Nxf3 Bd3 Rxd3 Qxd3 Nd4 Be3 Be7 Bxd4 exd4 Ke1 Bxb4+ Kf1 Bc3 Rb1 Bc4 Rxb7 Bxd3+ cxd3 Qd1#".split(" "),
@@ -1806,6 +1831,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 3: ["g7"] },
     },
     win: {
+      mistake: 20,
       title: { en: "Model win: the queen goes hunting", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: ਰਾਣੀ ਸ਼ਿਕਾਰ ਉੱਤੇ ਨਿਕਲਦੀ ਹੈ" },
       ends: "mate",
       moves: "e4 g6 d4 Bg7 Nc3 d6 Nf3 c6 Be2 Nd7 h4 h5 Ng5 Qb6 Be3 Qxb2 Na4 Qa3 c4 Nb6 Bc1 Qxa4 Qc2 Qxc2 f4 Qc3+ Kf1 Qxa1 Ke1 Qxc1+ Bd1 Qe3+ Be2 Qc3+ Kf2 Bxd4+ Kf1 Qa1+ Bd1 Qxd1#".split(" "),
@@ -1879,6 +1905,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 14: ["f7"] },
     },
     win: {
+      mistake: 11,
       title: { en: "Model win: mate on f7", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: f7 ਉੱਤੇ ਸ਼ਹਿ-ਮਾਤ" },
       ends: "mate",
       moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 Nf6 dxe5 Nxe4 Qd5 f5 Qf7#".split(" "),
@@ -1941,6 +1968,7 @@ export const COURSE: CourseOpening[] = [
       },
     },
     win: {
+      mistake: 38,
       title: { en: "Model win: the knight on d4", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: d4 ਉੱਤੇ ਘੋੜਾ" },
       ends: "mate",
       moves: "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Re1 d6 a4 Na5 Ba2 c5 Na3 Be6 Bg5 Ne8 Bd2 Bxa2 Bxa5 Qxa5 c4 Bxc4 dxc4 Nc7 Re3 Ne6 g3 Nd4 Nb5 Qd8 Kg2 Qd7 Rd3 f5 b3 fxe4 Ne1 exd3 Nxa7 Rxa7 Nxd3 Raa8 Nxe5 dxe5 Ra2 Rad8 Qh5 Qc6+ Kf1 Qh1#".split(" "),
@@ -2010,6 +2038,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 11: ["g7"] },
     },
     win: {
+      mistake: 28,
       title: { en: "Model win: the e-file", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: e ਲਾਈਨ" },
       ends: "mate",
       moves: "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 Nf3 Bg7 Be2 Bg4 Qa4+ Nbd7 Bf4 O-O O-O Qe7 Qc2 a6 a4 Rae8 h3 Nxe4 Rae1 Nxc3 bxc3 Bxf3 Bxf3 Qxe1 Bxd6 Qxc3 Qxc3 Bxc3 Rb1 Re1+ Kh2 Rxb1 Be7 Re8 Be4 Rb4 Bf5 Rxe7 Bxd7 Rxd7 d6 Rxd6 f4 Rxf4 g4 Rxa4 g5 Ra2+ Kg3 Rd3+ Kg4 Ra4#".split(" "),
@@ -2083,6 +2112,7 @@ export const COURSE: CourseOpening[] = [
       },
     },
     win: {
+      mistake: 16,
       title: { en: "Model win: the knight fork", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: ਘੋੜੇ ਦਾ ਦੋਹਰਾ ਹਮਲਾ" },
       ends: "mate",
       moves: "e4 e5 Nf3 d6 d4 Nf6 Nc3 Nbd7 Bc4 Be7 h3 c6 Bd3 O-O O-O exd4 Na4 b5 Nxd4 bxa4 Nxc6 Qe8 Re1 Bb7 Na5 Qc8 b4 Ne5 Rb1 Qc7 f4 Nxd3 e5 Nxe1 Nxb7 Qxb7 Qd2 Nf3+ gxf3 dxe5 fxe5 Nh5 Qf2 Qd5 c4 Qxe5 Bf4 Nxf4 Kf1 Qf5 Re1 Bxb4 Qh4 Qd3+ Kf2 Bxe1+ Kxe1 Qe2#".split(" "),
@@ -2161,6 +2191,7 @@ export const COURSE: CourseOpening[] = [
       },
     },
     win: {
+      mistake: 27,
       title: { en: "Model win: the e-file", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: e ਲਾਈਨ" },
       ends: "mate",
       moves: "Nf3 d5 g3 Nf6 Bg2 e6 O-O Be7 d3 O-O Nbd2 c5 e4 Nc6 Re1 Nd7 d4 a5 a4 Nxd4 exd5 Nb6 Nxd4 cxd4 dxe6 Bxe6 Nb3 Nd5 Nxd4 Bb4 Rxe6 Nc7 Re4 f5 Re5 Qf6 Rxf5 Qxf5 Nxf5 Rfd8 Nh6+ Kf8 Qf3+ Ke8 Qf7#".split(" "),
@@ -2222,6 +2253,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 13: ["e4"] },
     },
     win: {
+      mistake: 18,
       title: { en: "Model win: the passed d-pawn", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: d ਵਾਲਾ ਆਜ਼ਾਦ ਪਿਆਦਾ" },
       ends: "mate",
       moves: "d4 Nf6 c4 e6 e3 Be7 Nf3 d5 b3 O-O Bd3 c5 Bb2 Nc6 Nbd2 dxc4 Bxc4 cxd4 e4 e5 a4 Bg4 Qb1 Bxf3 Nxf3 Bb4+ Kf1 Qe7 h4 Na5 h5 Nxc4 h6 Nxb2 Nxd4 exd4 e5 Qxe5 hxg7 Rfe8 Rh3 d3 Kg1 d2 Ra2 Qe1+ Qxe1 dxe1=Q+ Kh2 Bd6+ f4 Ng4#".split(" "),
@@ -2300,6 +2332,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 11: ["g7"] },
     },
     win: {
+      mistake: 30,
       title: { en: "Model win: the d-pawn breaks through", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: d ਵਾਲਾ ਪਿਆਦਾ ਰਾਹ ਬਣਾ ਲੈਂਦਾ ਹੈ" },
       ends: "mate",
       moves: "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be2 Bg7 O-O O-O Nb3 Nc6 a4 Be6 Re1 Bxb3 cxb3 e6 Be3 d5 exd5 exd5 Bf3 d4 Bxc6 dxe3 Bxb7 exf2+ Kf1 fxe1=Q+ Kxe1 Qe7+ Qe2 Qxb7 Nb5 Rae8 g3 Rxe2+ Kxe2 Qg2+ Ke3 Bh6+ Kd3 Qe4+ Kc3 Nd5#".split(" "),
@@ -2369,6 +2402,7 @@ export const COURSE: CourseOpening[] = [
       aim: { 2: ["f6"] },
     },
     win: {
+      mistake: 21,
       title: { en: "Model win: the pawn on d6", pa: "ਮਿਸਾਲੀ ਜਿੱਤ: d6 ਉੱਤੇ ਪਿਆਦਾ" },
       ends: "mate",
       moves: "d4 Nf6 Bg5 Ne4 Bf4 c5 f3 Qa5+ c3 Nf6 d5 e6 e4 Qd8 d6 Nc6 a4 b6 Na3 Bb7 Nb5 Nh5 Nc7+ Qxc7 dxc7 Bd6 Bxd6 f5 exf5 Nf6 fxe6 Ne7 Bb5 Nc8 exd7+ Nxd7 Qe2+ Kf7 Bxd7 Nxd6 Qe6+ Kf8 Qxd6+ Kf7 Be6+ Ke8 Qd7+ Kf8 Qf7#".split(" "),
