@@ -70,7 +70,10 @@ export interface MateVsExercise extends Base {
 /** Play it out against Stockfish (DECISIONS #57). promote = queen a pawn safely; wipe = leave the opponent
  *  only a king; hold = survive maxMoves without losing. The app stops the drill if the win (or draw) slips. */
 export interface EngineVsExercise extends Base {
-  kind: "engineVs"; fen: string; goal: "promote" | "wipe" | "hold"; maxMoves: number; depth?: number;
+  kind: "engineVs"; fen: string; goal: "promote" | "wipe" | "hold" | "mate" | "queen"; maxMoves: number; depth?: number;
+  /** The Endgame ladder (2026-10-30): "mate" is met only by checkmate and "queen" only by promoting the pawn (unlike "promote", a lone enemy king does not count as met); `slip` overrides the evaluation (centipawns, the learner's view)
+   *  below which the win (or, for a hold, the draw) counts as thrown away. Default: SLIP in rules.ts. */
+  slip?: number;
 }
 /** Play an opening line from the start (DECISIONS #59). The app plays the other side's book moves; the learner
  *  must find their own side's moves. `opening` must match the Lichess opening database name (guarded). */

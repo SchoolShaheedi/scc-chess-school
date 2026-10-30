@@ -407,9 +407,9 @@ function runEngineVs(ex: EngineVsExercise, c: Ctx): Cleanup {
       const a = await engine.analyse(game.fen(), { depth }); if (!alive) return;
       const mine = -asNumber(a.score);                       // engine scored it for the side to move: flip
       if (game.isGameOver()) return ex.goal === "hold" ? win("heldDraw") : fail("slipWin");
-      if (ex.goal !== "hold" && mine < SLIP[ex.goal]) return fail("slipWin");
-      if (ex.goal === "hold" && mine < SLIP.hold) return fail("slipDraw");
-      if (ex.goal !== "hold" && engineGoalMet(game, me, ex.goal, mv)) return win(ex.goal === "promote" && mv.promotion ? "promoted" : "wiped");
+      if (ex.goal !== "hold" && mine < (ex.slip ?? SLIP[ex.goal])) return fail("slipWin");
+      if (ex.goal === "hold" && mine < (ex.slip ?? SLIP.hold)) return fail("slipDraw");
+      if (ex.goal !== "hold" && engineGoalMet(game, me, ex.goal, mv)) return win(mv.promotion ? "promoted" : "wiped");
       if (ex.goal === "hold" && moves >= ex.maxMoves) return win("heldDraw");
       if (moves >= ex.maxMoves) return fail("mateOutOfMoves");
       // the engine's reply is the best move it found

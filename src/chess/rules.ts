@@ -217,16 +217,17 @@ export function unsafe(after: Chess, sq: string): boolean {
 
 // ---- engine drills (Level 5+) ----------------------------------------------------------------
 /** Has the learner (colour `me`) met an engine-drill goal in this position? */
-export function engineGoalMet(g: Chess, me: "w" | "b", goal: "promote" | "wipe" | "hold", lastMove?: Move): boolean {
+export function engineGoalMet(g: Chess, me: "w" | "b", goal: "promote" | "wipe" | "hold" | "mate" | "queen", lastMove?: Move): boolean {
   const bare = g.board().flat().filter(p => p && p.color !== me).length === 1;   // only their king left
   // A promote drill is also won when the defender gives up everything to stop the pawn (the Lucena ends this way).
   if (goal === "promote") return !!lastMove && lastMove.color === me && (!!lastMove.promotion || bare);
+  if (goal === "queen") return !!lastMove && lastMove.color === me && !!lastMove.promotion;
   if (goal === "wipe") return bare;
-  return false;   // "hold" is met by surviving maxMoves, counted by the runner
+  return false;   // "hold" is met by surviving maxMoves, counted by the runner; "mate" only by checkmate, which the runner sees itself
 }
 
 /** The learner's evaluation threshold: below this the drill has failed (a win thrown away, or a draw lost). */
-export const SLIP = { promote: 250, wipe: 250, hold: -250 } as const;
+export const SLIP = { promote: 250, wipe: 250, mate: 250, queen: 250, hold: -250 } as const;
 
 /** A mini-game's result after a move (full check 2026-10-05). "promote": the first side to make a new piece wins.
  *  "clear": the learner wins by leaving the other side only its king, and loses if a pawn of theirs gets through.

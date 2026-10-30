@@ -53,6 +53,8 @@ import { insightsScreen } from "./insights/screen";
 import { NATIVE, OFFLINE_APP, nativeBackButton, nativeBars } from "./native";
 import { boardEditor } from "./analysis/editor";
 import { soloScreen } from "./solo/screen";
+import { ladderScreen as endgameLadder, playRung, rungOpen } from "./ladder/screen";
+import { rungById } from "./content/ladder";
 import { gameSettingsHTML, wireGameSettings } from "./play/gamesettings";
 import { wideLayout } from "./wide";
 import { courseHub, coursePage, runCourse } from "./openings/course";
@@ -326,7 +328,8 @@ function home() {
       return `<button class="li test ${st}" data-bottest="${bot.id}" data-n="${shown.n}" ${st === "locked" ? `aria-disabled="true" title="${t("testLocked")}"` : ""}>
         ${ring(s.tests[shown.n]?.passed ? 100 : 0, "var(--gold)", icon(st === "locked" ? "lock" : "trophy"))}
         <span class="grow"><b>${t("levelTest")}</b><small>${(shown.race ? t("raceShort").replace("{n}", num(shown.race)) : t("botTestShort")).replace("{bot}", tx(bot.name))}</small></span></button>`;
-    })() : ""}</div>
+    })() : ""}${shown.n === 9 ? `<button class="li current" data-href="#/ladder">${ring(0, "var(--gold)", icon("target"))}
+        <span class="grow"><b>${t("egTitle")}</b><small>${t("egAboutShort")}</small></span>${icon("arrowRight")}</button>` : ""}</div>
     </div>
   </div>${tabbar("learn")}`;
   app.querySelector<HTMLButtonElement>("[data-boss]")?.addEventListener("click", e => go(`#/boss/${(e.currentTarget as HTMLElement).dataset.boss}`));
@@ -503,6 +506,12 @@ function route() {
     if (arg === "themes") return themesScreen(app, go);
     if (arg === "theme" && sub) { teardown = playRated(app, go, sub); return; }
     return puzzleHub(app, learnerLevel(), go);
+  }
+  // the Endgame ladder (2026-10-30): #/ladder is the list, #/ladder/<rung> plays one (only once the rung before is finished)
+  if (page === "ladder") {
+    const rung = arg ? rungById(arg) : undefined;
+    if (rung && rungOpen(rung.id)) { teardown = playRung(app, rung, go); return; }
+    return endgameLadder(app, go);
   }
   if (page === "placement") { teardown = playPlacement(app, go); return; }
   if (page === "play" && arg === "friend") { teardown = friendSetup(app, go); return; }

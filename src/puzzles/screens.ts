@@ -16,6 +16,8 @@ import { asExercise, puzzleById } from "./index";
 import { type BankPuzzle, bankById, bankExercise, nearRating, THEMES, themeName } from "./bank";
 import type { PuzzleExercise, Text } from "../lesson/types";
 import { bankDue, bankIds } from "./due";
+import { RUNGS } from "../content/ladder";
+import { rungsDone } from "../ladder/screen";
 export { bankDue };
 
 type Go = (h: string) => void;
@@ -51,6 +53,9 @@ export function puzzleHub(root: HTMLElement, level: number, go: Go) {
     <button class="rushcard" data-survival><span class="rushicon">${icon("heart")}</span>
       <span class="grow"><b>${t("survTitle")}</b><small>${t("survAbout")}</small></span>
       <span class="best"><small>${t("rushBest")}</small><b>${num(s.survivalBest ?? 0)}</b></span></button>
+    <button class="rushcard" data-ladder><span class="rushicon">${icon("target")}</span>
+      <span class="grow"><b>${t("egTitle")}</b><small>${t("egAboutShort")}</small></span>
+      <span class="best"><b>${num(rungsDone())} / ${num(RUNGS.length)}</b></span></button>
     <button class="rushcard" data-solo><span class="rushicon">${icon("grid")}</span>
       <span class="grow"><b>${t("soloTitle")}</b><small>${t("soloAbout")}</small></span>${icon("arrowRight")}</button>
     <button class="rushcard" data-rush><span class="rushicon">${icon("timer")}</span>
@@ -61,6 +66,7 @@ export function puzzleHub(root: HTMLElement, level: number, go: Go) {
   root.querySelector<HTMLButtonElement>("[data-daily]")!.onclick = () => go("#/puzzles/daily");
   root.querySelector<HTMLButtonElement>("[data-rush]")!.onclick = () => go("#/puzzles/rush");
   root.querySelector<HTMLButtonElement>("[data-survival]")!.onclick = () => go("#/puzzles/survival");
+  root.querySelector<HTMLButtonElement>("[data-ladder]")!.onclick = () => go("#/ladder");
   root.querySelector<HTMLButtonElement>("[data-solo]")!.onclick = () => go("#/puzzles/solo");
   root.querySelector<HTMLButtonElement>("[data-rated]")!.onclick = () => go("#/puzzles/rated");
   root.querySelector<HTMLButtonElement>("[data-themes]")!.onclick = () => go("#/puzzles/themes");
