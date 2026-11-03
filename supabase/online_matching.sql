@@ -1,4 +1,4 @@
--- SCC Chess School: automatic matching, open challenges ("Play anyone") and rematches. NOT YET APPLIED.
+-- SCC Chess School: automatic matching, open challenges ("Play anyone") and rematches. APPLIED 2026-11-03 as migration online_matching_auto_open_rematch.
 -- Apply SECOND, after online_ratings.sql. The user's safety choice: "Grown-ups only".
 --
 -- WHO MAY BE PAIRED (one function, pair_ok, used by every path below; nothing else decides):

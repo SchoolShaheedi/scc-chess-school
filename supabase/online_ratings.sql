@@ -1,4 +1,4 @@
--- SCC Chess School: online ratings v2 (bullet / blitz / rapid, Glicko-2) and the time controls. NOT YET APPLIED.
+-- SCC Chess School: online ratings v2 (bullet / blitz / rapid, Glicko-2) and the time controls. APPLIED 2026-11-03 as migration online_ratings_glicko2_bullet_blitz_rapid (+ pin_search_path_online_helpers).
 -- Apply FIRST (then online_matching.sql, then deploy the play-move function, then the app). Builds on online.sql,
 -- online_adults.sql, magical_online.sql and simul.sql. The user's request (2026-11-03): "play online ... automatically
 -- connect to a player, also online rating system, and play anyone", safety choice "Grown-ups only".
