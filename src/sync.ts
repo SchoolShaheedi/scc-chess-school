@@ -47,12 +47,16 @@ export const account = {
 // the Android app returns through its own address (#123); the website to itself
 const redirect = () => (NATIVE ? APP_RETURN_URL : location.origin + location.pathname);
 
-export async function signInWithGoogle() {
-  if (!NATIVE) { await db!.auth.signInWithOAuth({ provider: "google", options: { redirectTo: redirect() } }); return; }
-  // in the app: Google's page opens in a browser tab, never in the app's own web view (Google refuses that)
-  const { data } = await db!.auth.signInWithOAuth({ provider: "google", options: { redirectTo: redirect(), skipBrowserRedirect: true } });
+async function signInWithProvider(provider: "google" | "apple") {
+  if (!NATIVE) { await db!.auth.signInWithOAuth({ provider, options: { redirectTo: redirect() } }); return; }
+  // in the app: the provider's page opens in a browser tab (Chrome Custom Tab / Safari view), never in the app's own
+  // web view (Google refuses that), and comes back through APP_RETURN_URL
+  const { data } = await db!.auth.signInWithOAuth({ provider, options: { redirectTo: redirect(), skipBrowserRedirect: true } });
   if (data?.url) await openSignInPage(data.url);
 }
+export const signInWithGoogle = () => signInWithProvider("google");
+/** Sign in with Apple (App Review 4.8). Offered only while APPLE_SIGNIN is on in accountui.ts. */
+export const signInWithApple = () => signInWithProvider("apple");
 
 /** The app was opened through its return address: the tokens are after the "#" (Supabase's implicit flow), or an
  *  error is. A link that carries neither is ignored. Exported for test/native-signin.test.ts. */

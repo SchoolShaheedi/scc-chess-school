@@ -3,6 +3,10 @@
   "appName": "SWC Chess School",
   "webDir": "www",
   "backgroundColor": "#141414",
+  "ios": {
+    "backgroundColor": "#141414",
+    "contentInset": "never"
+  },
   "android": {
     "backgroundColor": "#141414",
     "allowMixedContent": false

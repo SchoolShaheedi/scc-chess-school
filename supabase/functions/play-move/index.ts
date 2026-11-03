@@ -14,9 +14,9 @@ import { Chess } from "npm:chess.js@1.4.0";
 import { playMagicalFrom, replayMagical } from "./power/online.ts";   // a copy of the app's own rules (tools/sync-magical.mjs)
 
 // only the app's own addresses may call it from a browser: the live site, the Android app (Capacitor serves it from
-// https://localhost, #123), this computer's test address, and any others set in ALLOWED_ORIGINS (comma-separated).
+// https://localhost, #123), the iPhone app (capacitor://localhost), this computer's test address, and any others set in ALLOWED_ORIGINS (comma-separated).
 // The origin is not the security here (a signed-in token and an owned player are); it only keeps other sites' pages out.
-const ALLOWED = (Deno.env.get("ALLOWED_ORIGINS") ?? "").split(",").map(s => s.trim()).filter(Boolean).concat(["https://scc-chess-school.pages.dev", "https://localhost", "http://localhost:8752", "http://127.0.0.1:8752"]);
+const ALLOWED = (Deno.env.get("ALLOWED_ORIGINS") ?? "").split(",").map(s => s.trim()).filter(Boolean).concat(["https://scc-chess-school.pages.dev", "https://localhost", "capacitor://localhost", "http://localhost:8752", "http://127.0.0.1:8752"]);
 let cors: Record<string, string> = {};
 const reply = (status: number, body: unknown) => new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } });
 

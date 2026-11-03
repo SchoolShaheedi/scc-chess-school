@@ -760,6 +760,7 @@ export const UI = {
   no: { en: "No", pa: "ਨਹੀਂ" },
   askParent: { en: "Ask a parent or guardian to sign in with their own account. Your progress will be saved there, safely.", pa: "ਆਪਣੇ ਮਾਤਾ-ਪਿਤਾ ਜਾਂ ਸਰਪ੍ਰਸਤ ਨੂੰ ਉਨ੍ਹਾਂ ਦੇ ਆਪਣੇ ਖਾਤੇ ਨਾਲ ਸਾਈਨ ਇਨ ਕਰਨ ਲਈ ਕਹੋ। ਤੁਹਾਡਾ ਸਿੱਖਿਆ ਦਾ ਹਿਸਾਬ ਉੱਥੇ ਸੁਰੱਖਿਅਤ ਸੰਭਾਲਿਆ ਜਾਵੇਗਾ।" },
   imParent: { en: "I'm a parent or guardian", pa: "ਮੈਂ ਮਾਤਾ-ਪਿਤਾ ਜਾਂ ਸਰਪ੍ਰਸਤ ਹਾਂ" },
+  apple: { en: "Sign in with Apple", pa: "Apple ਨਾਲ ਸਾਈਨ ਇਨ ਕਰੋ" },
   google: { en: "Continue with Google", pa: "Google ਨਾਲ ਜਾਰੀ ਰੱਖੋ" },
   emailLabel: { en: "Your email: we send a one-tap sign-in link", pa: "ਤੁਹਾਡੀ ਈਮੇਲ: ਅਸੀਂ ਇੱਕ-ਟੈਪ ਸਾਈਨ-ਇਨ ਲਿੰਕ ਭੇਜਾਂਗੇ" },
   sendLink: { en: "Email me a link", pa: "ਮੈਨੂੰ ਲਿੰਕ ਭੇਜੋ" },

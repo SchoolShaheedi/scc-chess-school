@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Launcher icons, the adaptive-icon foreground and the splash screens for the Android app (DECISIONS #121), from the
-app's own icon (04_Assets/sheets/app-icon.png: the knight in its phulkari border). Run after `npx cap add android`:
+app's own icon (04_Assets/sheets/app-icon.png: the knight in its phulkari border). Run after `npx cap add android` (and `npx cap add ios`):
     python3 make-icons.py
 """
 import glob, os
@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 R = os.path.join(HERE, 'android/app/src/main/res/')
-master = Image.open(os.path.join(HERE, '../../../04_Assets/sheets/app-icon.png')).convert('RGBA')
+master = Image.open(os.environ.get('MASTER_ICON') or os.path.join(HERE, '../../../04_Assets/sheets/app-icon.png')).convert('RGBA')
 # the master is a rounded square on white: cut 7% off each side so no white corner is left, then let Android round it
 w = master.width; cut = round(w * 0.07)
 square = master.crop((cut, cut, w - cut, w - cut))
@@ -42,4 +42,16 @@ for path in glob.glob(R + 'drawable*/splash.png'):
     d = round(min(sw, sh) * 0.32)
     bg.alpha_composite(rounded(square, d, round(d * 0.18)), ((sw - d) // 2, (sh - d) // 2))
     bg.convert('RGB').save(path)
+# iOS (after `npx cap add ios`): the App Store icon is ONE opaque 1024 square with no rounded corners (iOS rounds it), and
+# the splash is the same black with the icon in the middle. Skipped when there is no ios/ folder.
+X = os.path.join(HERE, 'ios/App/App/Assets.xcassets/')
+if os.path.isdir(X):
+    square.convert('RGB').resize((1024, 1024), Image.LANCZOS).save(X + 'AppIcon.appiconset/AppIcon-512@2x.png')
+    for path in glob.glob(X + 'Splash.imageset/splash-*.png'):
+        sw, sh = Image.open(path).size
+        bg = Image.new('RGBA', (sw, sh), (0x14, 0x14, 0x14, 255))
+        d = round(min(sw, sh) * 0.26)
+        bg.alpha_composite(rounded(square, d, round(d * 0.18)), ((sw - d) // 2, (sh - d) // 2))
+        bg.convert('RGB').save(path)
+    print('iOS icon and splash written')
 print('icons and splash screens written')
