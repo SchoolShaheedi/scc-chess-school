@@ -123,7 +123,7 @@ function gamesBlock(host: HTMLElement, list: ReturnType<typeof games>, go: (h: s
     host.querySelector("[data-gfcount]")!.textContent = t("gfCount").replace("{n}", num(shown.length)).replace("{total}", num(list.length));
     host.querySelector("[data-gflist]")!.innerHTML = shown.length ? `<div class="gamelist">${shown.map(({ g, i }) => `<button class="gamerow" data-game="${i}">
       <span class="res ${g.result}">${t(g.result === "won" ? "resWon" : g.result === "lost" ? "resLost" : "resDraw")}</span>
-      <span class="grow"><b>${t("vsWord")} ${tx(g.opp)}${g.oppRating ? ` ~${num(g.oppRating)}` : ""}</b>
+      <span class="grow"><b>${t("vsWord")} ${tx(g.opp)}${g.oppRating ? ` ~${num(g.oppRating)}` : ""}${g.unrated ? ` <em class="unrated">${t("gameUnrated")}</em>` : ""}</b>
         <small>${new Date(g.at).toLocaleDateString(lang === "pa" ? "pa-IN" : "en-GB", { day: "numeric", month: "short" })} · ${g.tc ? (g.tc.includes("+") ? g.tc.split("+").map(x => num(+x)).join(" + ") : `${num(+g.tc)} ${t("minutes")}`) : t("untimed")} · ${movesN(Math.ceil(g.uci.length / 2))}</small></span>
       ${icon("arrowRight")}</button>`).join("")}</div>` : `<p class="note">${t("gfNone")}</p>`;
     host.querySelectorAll<HTMLButtonElement>("[data-game]").forEach(b => b.onclick = () => {

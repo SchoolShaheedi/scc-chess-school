@@ -405,7 +405,7 @@ function settings() {
         ${avatarHTML(family.current(), k ? `fr-${k}` : "")}<small>${k ? lockLabel("frame", k, tx(rewardFor("frame", k)!.name)) : t("frameNone")}</small>${k ? lockPip("frame", k) : ""}</button>`).join("")}</div></div>` : ""}
     <div class="group"><h2>${icon("sun")} ${t("themeLabel")}</h2>${seg("themeMode", s.themeMode ?? "dark", [["dark", t("themeDark")], ["light", t("themeLight")]])}</div>
     <div class="group"><h2>${icon("music")} ${t("soundLabel")}</h2>${seg("sound", String(s.sound), [["true", t("soundOn")], ["false", t("soundOff")]])}</div>
-    <div class="group"><h2>${icon("music")} ${t("musicLabel")}</h2>${seg("music", String(!!s.music), [["true", t("soundOn")], ["false", t("soundOff")]])}<p class="note">${t("musicNote")}</p></div>
+    ${OFFLINE_APP ? "" : `<div class="group"><h2>${icon("music")} ${t("musicLabel")}</h2>${seg("music", String(!!s.music), [["true", t("soundOn")], ["false", t("soundOff")]])}<p class="note">${t("musicNote")}</p></div>`}
     <div class="group"><h2>${icon("sound")} ${t("voiceLabel")}</h2>${seg("voice", String(voiceOn()), [["true", t("soundOn")], ["false", t("soundOff")]])}<p class="note">${t("voiceNote")}</p></div>
     <div class="group"><h2>${icon("vibrate")} ${t("buzzLabel")}</h2>${seg("buzz", String(s.buzz), [["true", t("soundOn")], ["false", t("soundOff")]])}</div>
     <div class="group"><h2>${icon("crown")} ${t("autoQueenLabel")}</h2>${seg("autoQueen", String(!!s.autoQueen), [["true", t("soundOn")], ["false", t("soundOff")]])}<p class="note">${t("autoQueenNote")}</p></div>
@@ -433,7 +433,7 @@ function settings() {
   // teacher tools only for approved teachers (the database decides: is_teacher())
   void isTeacher().catch(() => false).then(yes => { const g = app.querySelector<HTMLElement>("[data-teacher]"); if (g && yes) g.hidden = false; });
   app.querySelector<HTMLButtonElement>("[data-teach]")!.onclick = () => go("#/teach");
-  app.querySelector<HTMLButtonElement>("[data-reset]")!.onclick = () => { void ask(t("resetConfirm"), { danger: true }).then(ok => { if (ok) { store.reset(); go("#/"); } }); };
+  app.querySelector<HTMLButtonElement>("[data-reset]")!.onclick = () => { void ask(t("resetConfirm"), { danger: true }).then(ok => { if (ok) { store.resetProgress(); go("#/"); } }); };
 }
 
 let routedPath = "";
@@ -478,7 +478,8 @@ function route() {
   // teacher pages need a signed-in, approved teacher; anyone else lands on Settings
   if (page === "teach") {
     if (!account.signedIn()) return settings();
-    void isTeacher().catch(() => false).then(yes => { if (!yes) go("#/settings"); else if (arg) void classView(app, arg, go); else void teacherHome(app, go); });
+    const here = location.hash;   // the answer can arrive late: do not pull someone back from a page they have since left
+    void isTeacher().catch(() => false).then(yes => { if (location.hash !== here) return; if (!yes) go("#/settings"); else if (arg) void classView(app, arg, go); else void teacherHome(app, go); });
     return;
   }
   if (page === "join") return account.signedIn() ? joinScreen(app, go) : familyScreen(app, go);

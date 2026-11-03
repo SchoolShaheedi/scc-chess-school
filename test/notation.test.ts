@@ -38,7 +38,13 @@ describe("readMove refuses", () => {
   it("castling not allowed here", () => expect(san("4k3/8/8/8/8/8/8/R3K3 w Q - 0 1", "0-0")).toBe("illegal"));
   it("two knights could go there", () => { expect(san(TWO_KNIGHTS, "Nd2")).toBe("ambiguous"); expect(san(TWO_KNIGHTS, "nd2")).toBe("ambiguous"); });
   it("bc4 may be the pawn or the bishop", () => { expect(san(BC4, "bc4")).toBe("ambiguous"); expect(san(BC4, "bxc4")).toBe("bxc4"); expect(san(BC4, "Bxc4")).toBe("Bxc4"); });
-  it("a promotion without its piece", () => expect(san(PROMO, "e8")).toBe("illegal"));
+  it("a promotion without its piece says what is missing", () => {
+    for (const s of ["e8", "e7e8"]) expect(san(PROMO, s)).toBe("promotion");
+    expect(san(PROMO_TAKE, "exd8")).toBe("promotion");
+    expect(san(PROMO_TAKE, "ed8")).toBe("promotion");
+    expect(san(PROMO, "e7")).toBe("illegal");   // not a move at all
+    expect(san(START, "e8")).toBe("illegal");
+  });
   it("a pawn push that is really a capture", () => expect(san(EP, "d6")).toBe("illegal"));
 });
 
@@ -52,6 +58,13 @@ describe("checkTyped", () => {
   it("a missing + still counts as right", () => expect(checkTyped(PROMO, "e8=Q", "e8=Q+")).toMatchObject({ result: "right" }));
   it("wrong gives the proper name of what was typed", () => expect(checkTyped(START, "e4", "Nf3")).toEqual({ result: "wrong", san: "e4" }));
   it("the other promotion is wrong", () => expect(checkTyped(PROMO, "e8=N", "e8=Q+")).toEqual({ result: "wrong", san: "e8=N" }));
+  it("when the expected move is mate, any mating move is right", () => {
+    const BACK = "6k1/5ppp/8/8/8/8/8/R3R1K1 w - - 0 1";   // Ra8# and Re8# both mate
+    expect(checkTyped(BACK, "Re8", "Ra8#")).toMatchObject({ result: "right", san: "Re8#" });
+    expect(checkTyped(BACK, "Ra8", "Ra8#")).toEqual({ result: "right", san: "Ra8#", exact: false });
+    expect(checkTyped(BACK, "Kf1", "Ra8#")).toMatchObject({ result: "wrong" });   // a quiet move is still wrong
+  });
+  it("a bare promotion is reported as such", () => expect(checkTyped(PROMO, "e8", "e8=Q+")).toEqual({ result: "promotion" }));
   it("passes on the reader's refusals", () => { expect(checkTyped(START, "e5", "Nf3")).toEqual({ result: "illegal" }); expect(checkTyped(START, "??", "Nf3")).toEqual({ result: "empty" }); });
 });
 

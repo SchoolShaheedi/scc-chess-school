@@ -66,3 +66,24 @@ describe("signing in on a device (review 2026-10-18)", () => {
     expect(store.get().xp).toBe(12);
   });
 });
+
+describe("removed children stay removed", () => {
+  const p = (id: string) => ({ id, avatar: "cat", colour: "#000", look: "junior" as const });
+  it("a child removed on one device is not brought back by a device that still has them", () => {
+    const phone = { v: 2 as const, active: "p1", profiles: [p("p1")], saved: { p1: emptySaved() }, removed: [{ id: "p2", at: "2026-11-02T10:00:00Z" }] };
+    const tablet = { v: 2 as const, active: "p1", profiles: [p("p1"), p("p2")], saved: { p1: emptySaved(), p2: { ...emptySaved(), xp: 50 } } };
+    for (const m of [mergeFamily(phone, tablet), mergeFamily(tablet, phone)]) {
+      expect(m.profiles.map(x => x.id)).toEqual(["p1"]); expect(m.saved.p2).toBeUndefined(); expect(m.removed?.map(r => r.id)).toEqual(["p2"]);
+    }
+  });
+  it("never ends with no child at all", () => {
+    const a = { v: 2 as const, active: "p1", profiles: [p("p1")], saved: {}, removed: [{ id: "p1", at: "x" }] };
+    expect(mergeFamily(a, a).profiles.length).toBe(1);
+  });
+  it("family.remove records the removal so the sync carries it", () => {
+    const first = family.current().id;
+    const extra = family.add("fish", "#1D4ED8", "young")!;
+    family.switchTo(first); family.remove(extra);
+    expect(family.snapshot().removed?.map(r => r.id)).toContain(extra);
+  });
+});

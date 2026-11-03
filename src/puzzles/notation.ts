@@ -5,7 +5,7 @@ import { Chess, type Move } from "chess.js";
 
 export type NotationRead =
   | { ok: true; move: Move; san: string }
-  | { ok: false; reason: "empty" | "unreadable" | "illegal" | "ambiguous" };
+  | { ok: false; reason: "empty" | "unreadable" | "illegal" | "ambiguous" | "promotion" };
 
 /** Everything the learner may have typed that does not change the move: spaces, + # ! ?, x, = and a colon. */
 const clean = (s: string) => s.normalize("NFKC").replace(/[−–—]/g, "-").replace(/[\s+#!?=:x×X]/g, "");
@@ -37,7 +37,9 @@ export function readMove(fen: string, input: string): NotationRead {
   const sq = /^([a-h][1-8])([a-h][1-8])([qrbnQRBN])?$/.exec(s);
   if (sq) {
     const m = legal.filter(x => x.from === sq[1] && x.to === sq[2] && (x.promotion ?? "") === (sq[3]?.toLowerCase() ?? ""));
-    return m.length === 1 ? { ok: true, move: m[0], san: m[0].san } : { ok: false, reason: "illegal" };
+    if (m.length === 1) return { ok: true, move: m[0], san: m[0].san };
+    // e7e8 with no piece: the squares are right, the new piece is missing
+    return { ok: false, reason: !sq[3] && legal.some(x => x.from === sq[1] && x.to === sq[2] && x.promotion) ? "promotion" : "illegal" };
   }
   // a lower-case promotion letter: e8q, exd8n
   s = s.replace(/^([a-h]?[a-h][18])([qrbn])$/, (_, a: string, p: string) => a + p.toUpperCase());
@@ -49,20 +51,25 @@ export function readMove(fen: string, input: string): NotationRead {
   const viaLower = lowerPiece ? legal.filter(m => forms(m).includes(lowerPiece)) : [];
   const all = [...new Set([...asIs, ...viaLower])];
   if (all.length === 1) return { ok: true, move: all[0], san: all[0].san };
-  return { ok: false, reason: all.length > 1 ? "ambiguous" : "illegal" };
+  if (all.length > 1) return { ok: false, reason: "ambiguous" };
+  // a bare pawn move that only fits promotion moves (e8 for e8=Q): say what is missing, not "illegal"
+  if (legal.some(m => m.promotion && forms(m).some(f => f.slice(0, -1) === s))) return { ok: false, reason: "promotion" };
+  return { ok: false, reason: "illegal" };
 }
 
 export type NotationCheck =
   | { result: "right"; san: string; exact: boolean }   // exact: it was typed exactly as the proper SAN
   | { result: "wrong"; san: string }                   // a legal move, not the one asked for; `san` is how it is properly written
-  | { result: "unreadable" | "illegal" | "ambiguous" | "empty" };
+  | { result: "unreadable" | "illegal" | "ambiguous" | "empty" | "promotion" };
 
 /** Check a typed answer against the expected move (as a SAN in that position). */
 export function checkTyped(fen: string, input: string, expectedSan: string): NotationCheck {
   const r = readMove(fen, input);
   if (!r.ok) return { result: r.reason };
   const want = new Chess(fen).moves({ verbose: true }).find(m => m.san === expectedSan);
-  const same = !!want && want.from === r.move.from && want.to === r.move.to && want.promotion === r.move.promotion;
+  // when the expected move gives mate, any legal move that gives mate is just as good
+  const same = !!want && ((want.from === r.move.from && want.to === r.move.to && want.promotion === r.move.promotion)
+    || (want.san.endsWith("#") && r.move.san.endsWith("#")));
   return same ? { result: "right", san: r.san, exact: input.trim() === r.san } : { result: "wrong", san: r.san };
 }
 

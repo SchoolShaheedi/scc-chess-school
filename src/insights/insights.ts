@@ -30,7 +30,7 @@ export interface OpeningRow { name: string; games: number; won: number; drawn: n
 export function byOpening(games: SavedGame[], names: Record<string, string>): OpeningRow[] {
   const rows = new Map<string, OpeningRow>();
   for (const g of games) {
-    if (g.startFen) continue;                      // a game from a set position has no opening
+    if (g.startFen || g.unrated) continue;         // a game from a set position has no opening; an unrated one is practice
     const c = new Chess(), sans: string[] = [];
     for (const u of g.uci.slice(0, 12)) { try { sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san); } catch { break; } }
     const name = openingOf(sans, names); if (!name) continue;

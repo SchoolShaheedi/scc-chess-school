@@ -5,7 +5,7 @@ import { Chess } from "chess.js";
 import { describe, expect, it } from "vitest";
 import { UI } from "../src/i18n";
 import {
-  BATTLE_BANDS, BATTLE_GRACE_MS, BATTLE_MIN_MS, BATTLE_SECONDS, BATTLE_SET, BATTLE_TARGET, clockSkew, compare, inWindow, isLevel,
+  BATTLE_BANDS, BATTLE_GRACE_MS, BATTLE_MIN_MS, BATTLE_SECONDS, BATTLE_SET, BATTLE_TARGET, clockSkew, compare, inWindow, isLevel, judgedAt,
   judgeMove, outcome, pickSet, plausible, publicOf, raceable, resultFor, type PoolPuzzle, type Tally,
 } from "../src/battle/rules";
 // @ts-expect-error a plain .mjs build script, no types
@@ -131,6 +131,17 @@ describe("timing", () => {
     expect(inWindow(START, START)).toBe(true);
     expect(inWindow(END + BATTLE_GRACE_MS, START)).toBe(true);
     expect(inWindow(END + BATTLE_GRACE_MS + 1, START)).toBe(false);
+  });
+  it("the grace is live: an answer inside it is judged before time ends the battle, after it time wins", () => {
+    const a = T(2), b = T(1), c = (nowMs: number) => ({ startMs: START, nowMs, setLength: 20 });
+    const inGrace = END + 500;
+    expect(outcome(a, b, c(inGrace)).over).toBe(true);                                        // by the real clock it is over...
+    expect(outcome(a, b, c(judgedAt(inGrace, START))).over).toBe(false);                      // ...but the answer is judged first
+    expect(inWindow(END + BATTLE_GRACE_MS + 1, START)).toBe(false);                            // past the grace the server refuses the answer and time ends it
+    expect(judgedAt(START + 1000, START)).toBe(START + 1000);                                 // inside the three minutes nothing changes
+  });
+  it("a target reached inside the grace still ends the battle", () => {
+    expect(outcome(T(5), T(0), { startMs: START, nowMs: judgedAt(END + 500, START), setLength: 20 })).toMatchObject({ over: true, reason: "target" });
   });
   it("refuses a move faster than a person plays", () => {
     expect(plausible(START + BATTLE_MIN_MS - 1, null, START)).toBe(false);

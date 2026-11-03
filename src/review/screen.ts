@@ -6,7 +6,7 @@
 import { Chess } from "chess.js";
 import { Board } from "../chess/board";
 import { placementFromFen, type Square } from "../chess/types";
-import { getEngine } from "../engine/browser";
+import { getEngine, stopEngine } from "../engine/browser";
 import { num, t, tx } from "../i18n";
 import { icon } from "../icons";
 import type { Text } from "../lesson/types";
@@ -42,7 +42,7 @@ const pieceWord = (p: string): Text => UI[`pc${p.toUpperCase()}` as UIKey];
 export function reviewGame(root: HTMLElement, go: (h: string) => void): () => void {
   const game = last;
   let alive = true, board: Board | null = null;
-  const teardown = () => { alive = false; board?.destroy(); board = null; };
+  const teardown = () => { alive = false; stopEngine(); board?.destroy(); board = null; };
   if (!game) { go("#/"); return teardown; }
   const bar = `<div class="lessonbar"><button class="iconbtn" data-back aria-label="${t("back")}">${icon("chevronLeft")}</button><h1 class="grow">${t("reviewTitle")}</h1></div>`;
 
@@ -67,17 +67,27 @@ export function reviewGame(root: HTMLElement, go: (h: string) => void): () => vo
     <h1>${t("reviewing")}</h1><div class="testbar wide"><i data-prog style="width:0%"></i></div><p data-count></p></div></div>`;
   root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go(game.back);
 
+  /** The engine failed (a crash, no memory): a card with Back and Try again, never a progress bar that stops for ever. */
+  const failed = () => {
+    if (!alive) return;
+    root.innerHTML = `<div class="screen">${bar}<div class="hero"><div class="trophy light">${icon("timer")}</div>
+      <h1>${t("analyseFailTitle")}</h1><p>${t("analyseFailBody")}</p></div>
+      <div class="actions"><button class="btn wide" data-retry>${t("retry")}</button><button class="btn wide ghost" data-back2>${t("back")}</button></div></div>`;
+    root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go(game!.back);
+    root.querySelector<HTMLButtonElement>("[data-back2]")!.onclick = () => go(game!.back);
+    root.querySelector<HTMLButtonElement>("[data-retry]")!.onclick = () => go(`${location.hash.split("?")[0]}?${Date.now()}`);
+  };
   (async () => {
     // the two best moves of every position: the second one tells a "Great" (only) move from an ordinary best one
     // depth 14, but governed: a slow phone steps the depth down so the whole review stays inside ~REVIEW_BUDGET_MS (depth.ts)
-    const engine = await getEngine(), evals: { score: Score; best: string; second?: Score }[] = [];
+    const evals: { score: Score; best: string; second?: Score }[] = [];
     const gov = new DepthGovernor(fens.length - (finalScore ? 1 : 0), REVIEW_DEPTH, REVIEW_BUDGET_MS);
     for (let i = 0; i < fens.length; i++) {
       if (!alive) return;
       if (i === fens.length - 1 && finalScore) evals.push({ score: finalScore, best: "" });
       else {
         const depth = gov.next(), t0 = performance.now();
-        const c = await engine.candidates(fens[i], { n: 2, depth });
+        const c = await getEngine().candidates(fens[i], { n: 2, depth });
         gov.record(depth, performance.now() - t0);
         evals.push(c.length ? { score: c[0].score, best: c[0].move, second: c[1]?.score } : { score: { cp: 0 }, best: "" });
       }
@@ -89,7 +99,7 @@ export function reviewGame(root: HTMLElement, go: (h: string) => void): () => vo
     const graded = grade(moves, evals, new Chess(fens[0]).turn());
     const white = evals.map((e, i) => whiteWin(e.score, new Chess(fens[i]).turn() === "w"));
     summary(refine(graded, fens, evals.map(e => e.second), moves.map(m => m.san)), white);
-  })();
+  })().catch(failed);
 
   function summary(r: Reviewed[], white: number[]) {
     store.recordPractice("review");

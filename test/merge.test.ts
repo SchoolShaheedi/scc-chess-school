@@ -29,3 +29,24 @@ describe("merge: placement", () => {
     expect(merge(base, { ...base, placed: 4 }).placed).toBe(4);
   });
 });
+
+describe("merge: reset my progress", () => {
+  const old = s({ xp: 400, lessons: { "1.1": { stars: 3, completedAt: "2026-10-01" } }, rushBest: 9 });
+  it("a newer reset beats the older progress on the other side", () => {
+    const reset = s({ xp: 0, resetAt: "2026-11-02T10:00:00.000Z" });
+    for (const m of [merge(reset, old), merge(old, reset)]) {
+      expect(m.xp).toBe(0); expect(m.lessons).toEqual({}); expect(m.rushBest).toBeUndefined(); expect(m.resetAt).toBe("2026-11-02T10:00:00.000Z");
+    }
+  });
+  it("progress made after the reset, on a device that has seen it, merges as usual", () => {
+    const r = "2026-11-02T10:00:00.000Z";
+    const a = s({ xp: 30, resetAt: r, lessons: { "1.1": { stars: 1, completedAt: "2026-11-03" } } }), b = s({ xp: 55, resetAt: r });
+    const m = merge(a, b);
+    expect(m.xp).toBe(55); expect(Object.keys(m.lessons)).toEqual(["1.1"]); expect(m.resetAt).toBe(r);
+  });
+  it("the later of two resets wins", () => {
+    const m = merge(s({ xp: 5, resetAt: "2026-11-01T00:00:00Z" }), s({ xp: 9, resetAt: "2026-11-02T00:00:00Z" }));
+    expect(m.xp).toBe(9); expect(m.resetAt).toBe("2026-11-02T00:00:00Z");
+  });
+  it("without any reset nothing changes", () => expect(merge(old, s({ xp: 10 })).resetAt).toBeUndefined());
+});

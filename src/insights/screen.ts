@@ -4,7 +4,7 @@
 // are remembered on this device, beside the game list (play/history.ts), so a game is only ever looked at once.
 import { Chess } from "chess.js";
 import { family } from "../family";
-import { getEngine } from "../engine/browser";
+import { getEngine, stopEngine } from "../engine/browser";
 import type { Score } from "../engine/uci";
 import { num, t, tx, UI, type UIKey } from "../i18n";
 import { icon } from "../icons";
@@ -19,7 +19,7 @@ import { store } from "../store";
 import NAMES from "../content/opening-names.json";
 import { themeName } from "../puzzles/bank";
 import { openingsReport } from "./openings-report";
-import { addTactics, emptyTactics, gameTactics, shown, TACTIC_THEME } from "./tactics";
+import { addTactics, emptyTactics, gameTactics, shown, TACTIC_THEME, type TacticRow } from "./tactics";
 import { type Band, byOpening, byPhase, byTime, myMoves, type MyMove, type Phase, replay, summarise } from "./insights";
 
 // sign-out on a shared device wipes these with the games (history.ts forgetGames)
@@ -38,11 +38,31 @@ const PRACTISE: Record<Phase, number> = { opening: 6, middlegame: 4, endgame: 5 
 const GREEN = "#81B64C", GREY = "#8A847A", RED = "#E06A4A", GOLD = "#F0C048";
 const tone = (a: number) => a >= 80 ? GREEN : a >= 65 ? GOLD : RED;
 const words = (k: string) => UI[k as UIKey];
+/** Each graded game's tactic rows, worked out once and kept beside the drops (same life as the grades: forgetGames wipes both). */
+const tacKey = () => `scc-insights-tac-${family.current().id}`;
+let tacMemo: Record<string, TacticRow[]> | null = null, tacFor = "";
+function tacCache(): Record<string, TacticRow[]> {
+  if (!tacMemo || tacFor !== tacKey()) {
+    tacFor = tacKey();
+    try { tacMemo = JSON.parse(localStorage.getItem(tacFor) ?? "{}") as Record<string, TacticRow[]>; } catch { tacMemo = {}; }
+  }
+  return tacMemo;
+}
+function tacticsOf(g: SavedGame, drops: number[]): TacticRow[] {
+  const c = tacCache(), hit = c[g.at];
+  if (hit) return hit;
+  const rows = gameTactics(g, drops);
+  c[g.at] = rows;
+  const live = new Set(games().map(x => x.at));
+  try { localStorage.setItem(tacFor, JSON.stringify(Object.fromEntries(Object.entries(c).filter(([at]) => live.has(at))))); } catch { /* full or blocked */ }
+  return rows;
+}
 const nGames = (n: number) => n === 1 ? t("insGame1") : t("insGamesN").replace("{n}", num(n));
 
 export function insightsScreen(root: HTMLElement, go: (h: string) => void, lessonFor: (level: number) => string | null): () => void {
   let alive = true;
-  const teardown = () => { alive = false; };
+  tacMemo = null;   // read the kept tactic rows afresh each time the page opens (sign-out may have wiped them)
+  const teardown = () => { alive = false; stopEngine(); };
   const back = "#/me";
   const bar = `<div class="lessonbar"><button class="iconbtn" data-back aria-label="${t("back")}">${icon("chevronLeft")}</button><h1 class="grow">${t("insTitle")}</h1></div>`;
   const list = games(), graded = cache();
@@ -53,7 +73,6 @@ export function insightsScreen(root: HTMLElement, go: (h: string) => void, lesso
     <h1>${t("insAnalysing")}</h1><div class="testbar wide"><i data-prog style="width:0%"></i></div><p data-count></p></div></div>`;
   root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go(back);
   void (async () => {
-    const engine = await getEngine();
     for (let k = 0; k < todo.length; k++) {
       if (!alive) return;
       const c = root.querySelector("[data-count]"); if (c) c.textContent = t("insAnalysingN").replace("{a}", num(k + 1)).replace("{b}", num(todo.length));
@@ -65,26 +84,38 @@ export function insightsScreen(root: HTMLElement, go: (h: string) => void, lesso
         if (!alive) return;
         if (i === fens.length - 1 && last.isGameOver()) { evals.push({ score: last.isCheckmate() ? { mate: 0 } : { cp: 0 }, best: "" }); continue; }
         const depth = gov.next(), t0 = performance.now();
-        const cands = await engine.candidates(fens[i], { n: 1, depth });
+        const cands = await getEngine().candidates(fens[i], { n: 1, depth });
         gov.record(depth, performance.now() - t0);
         evals.push(cands.length ? { score: cands[0].score, best: cands[0].move } : { score: { cp: 0 }, best: "" });
       }
       const drops = grade(sans.map((san, i) => ({ san, uci: ucis[i] })), evals, new Chess(fens[0]).turn()).map(m => Math.round(m.drop * 10) / 10);
       graded[g.at] = drops; keep(graded);   // remembered game by game, so leaving half-way loses nothing
+      tacticsOf(g, drops);                    // the tactic rows are worked out once, here, and kept beside the drops
       const p = root.querySelector<HTMLElement>("[data-prog]"); if (p) p.style.width = `${((k + 1) / todo.length) * 100}%`;
     }
     if (alive) render();
-  })();
+  })().catch(() => {
+    if (!alive) return;
+    root.innerHTML = `<div class="screen">${bar}<div class="hero"><div class="trophy light">${icon("chart")}</div>
+      <h1>${t("analyseFailTitle")}</h1><p>${t("analyseFailBody")}</p></div>
+      <div class="actions"><button class="btn wide" data-retry>${t("retry")}</button><button class="btn wide ghost" data-back2>${t("back")}</button></div></div>`;
+    root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go(back);
+    root.querySelector<HTMLButtonElement>("[data-back2]")!.onclick = () => go(back);
+    root.querySelector<HTMLButtonElement>("[data-retry]")!.onclick = () => go(`#/insights?${Date.now()}`);
+  });
   return teardown;
 
   function render() {
     const look = store.get().look, mine: MyMove[] = [];
     const done: SavedGame[] = list.filter(g => graded[g.at]);
     for (const g of done) mine.push(...myMoves(g, graded[g.at]));
-    // tactics found and missed, by the rules, in the graded games (the Learning set): one row per tactic, linking to its puzzle theme
-    const tactics = shown(done.reduce((acc, g) => addTactics(acc, gameTactics(g, graded[g.at])), emptyTactics()));
-    const yours = openingsReport(list, NAMES as Record<string, string>), cName = (id: string) => tx(courseOpening(id)!.name);
-    const openings = byOpening(list, NAMES as Record<string, string>), phases = byPhase(mine), time = byTime(mine);
+    // tactics found and missed, by the rules, in the graded games (the Learning set): one row per tactic, linking to its puzzle theme;
+    // each game's rows are worked out once (tacticsOf), so opening the page is only a sum
+    const tactics = shown(done.reduce((acc, g) => addTactics(acc, tacticsOf(g, graded[g.at])), emptyTactics()));
+    // results (win rates by opening) count only rated games: an odds game, or one where the bot had a problem, is practice
+    const rated = list.filter(g => !g.unrated);
+    const yours = openingsReport(rated, NAMES as Record<string, string>), cName = (id: string) => tx(courseOpening(id)!.name);
+    const openings = byOpening(rated, NAMES as Record<string, string>), phases = byPhase(mine), time = byTime(mine);
     const s = summarise(phases, time), ph = (p: Phase) => t(`insPh_${p}` as UIKey);
     const lower = (x: string) => store.get().lang === "en" ? x.toLowerCase() : x;
 

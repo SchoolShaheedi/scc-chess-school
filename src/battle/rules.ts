@@ -52,6 +52,11 @@ export const resultFor = (side: "a" | "b", winner: Winner | null): "won" | "lost
 export const inWindow = (nowMs: number, startMs: number, seconds = BATTLE_SECONDS) =>
   nowMs >= startMs && nowMs <= startMs + seconds * 1000 + BATTLE_GRACE_MS;
 
+/** The moment to judge "is the battle over?" by when an answer arrives: while it is inside the grace (after the three minutes,
+ *  before the grace ends) the clock is held one millisecond before time-up, so the answer is judged and counted FIRST;
+ *  only once the grace has passed does time itself end the battle. */
+export const judgedAt = (nowMs: number, startMs: number, seconds = BATTLE_SECONDS) => Math.min(nowMs, startMs + seconds * 1000 - 1);
+
 /** Moves arriving faster than a person can play are refused (a script answering from the public bank). */
 export const plausible = (nowMs: number, lastMs: number | null, startMs: number) => nowMs - Math.max(lastMs ?? 0, startMs) >= BATTLE_MIN_MS;
 

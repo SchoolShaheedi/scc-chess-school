@@ -9,6 +9,8 @@ import { family } from "./family";
 import { forgetClasses, pushSummaries } from "./teach/api";
 import { store } from "./store";
 import { APP_RETURN_URL, NATIVE, onReturnToApp, openSignInPage } from "./native";
+import { ask } from "./ui/dialog";
+import { t } from "./i18n";
 
 const URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
@@ -87,10 +89,20 @@ const forgetDevice = () => {
   synced = false; syncingFor = null; lastSaved = null; forgetClasses();
 };
 
-/** Saves now anything still waiting (a change in the last 1.5 s), so signing out never drops it (DECISIONS #128). */
-async function flush() { clearTimeout(pushTimer); if (session && synced) await push(); }
+/** Saves now anything still waiting (a change in the last 1.5 s), so signing out never drops it (DECISIONS #128).
+ *  True when everything is saved (or there is no account to save to); false when the save did not happen. */
+async function flush(): Promise<boolean> {
+  clearTimeout(pushTimer);
+  if (!session) return true;
+  return synced ? push() : false;   // never read the account yet: nothing here has been saved to it
+}
 
-export async function signOut() { await flush(); await db?.auth.signOut(); forgetDevice(); }
+/** Signs out and wipes the device. If the latest progress could not be saved first, asks before wiping it (false = stayed signed in). */
+export async function signOut(): Promise<boolean> {
+  if (!(await flush()) && !(await ask(t("signOutUnsaved"), { yes: t("signOut"), no: t("keepPlaying"), danger: true }))) return false;
+  await db?.auth.signOut(); forgetDevice();
+  return true;
+}
 
 /** Right to erasure: removes the progress row and the account itself (supabase/schema.sql). */
 export async function deleteAccount(): Promise<string | null> {
@@ -108,20 +120,22 @@ async function pull(userId: string): Promise<Family | null | undefined> {
   return asFamily(data?.data);   // a row from before profiles becomes the first child
 }
 
-async function push() {
-  if (!session || !synced) return;
+/** Saves this device's progress to the account (merged with what is there). True once it is saved. */
+async function push(): Promise<boolean> {
+  if (!session || !synced) return false;
   const id = session.user.id;
   // read the row again first and merge it in: a tablet left open all day must not overwrite the lessons the child did
   // on a phone since (DECISIONS #128); if it cannot be read, try again shortly rather than save over it
   const remote = await pull(id);
-  if (session?.user.id !== id || !synced) return;
-  if (remote === undefined) { clearTimeout(pushTimer); pushTimer = setTimeout(() => void push(), 15000); return; }
+  if (session?.user.id !== id || !synced) return false;
+  if (remote === undefined) { clearTimeout(pushTimer); pushTimer = setTimeout(() => void push(), 15000); return false; }
   if (remote) { merging = true; try { family.applyRemote(remote); } finally { merging = false; } }
   const { error } = await db!.from("progress").upsert({
     user_id: id, data: family.snapshot(), updated_at: new Date().toISOString(),
   });
-  if (error) console.warn("progress save failed", error.message);
-  else { lastSaved = new Date(); notify(); void pushSummaries().catch(() => {}); }
+  if (error) { console.warn("progress save failed", error.message); return false; }
+  lastSaved = new Date(); notify(); void pushSummaries().catch(() => {});
+  return true;
 }
 
 /** On sign-in, the device's progress and the account's are merged, so nothing done offline is lost. */

@@ -151,12 +151,14 @@ export function playBoss(root: HTMLElement, bot: Bot, go: (h: string) => void, b
 
 function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => void, back: string, testLevel?: number, race?: number, startFen?: string, tc = "none", coachMode = false,
   bossDone?: (r: "won" | "lost" | "draw") => void, special?: { odds: Odds; variant: Variant }): () => void {
-  const engine = getEngine(), g = startFen ? new Chess(startFen) : new Chess();
+  const g = startFen ? new Chess(startFen) : new Chess();
   // odds and variant games are unrated, like Play vs Coach (DECISIONS #108), and do not count as a bot win
   const odds = special?.odds ?? "none", variant = special?.variant ?? "none", unrated = odds !== "none" || variant !== "none";
   const vstate = () => ({ variant, checks: countChecks(g.history({ verbose: true })) });
   const them: "w" | "b" = me === "w" ? "b" : "w";
   let busy = false, alive = true, over = false, timer = 0;
+  // the engine failed and the bot played a random legal move at least once: the game is practice, never rated
+  let botFailed = false;
   // DECISIONS #84: a premove queued while the bot thinks, and the move being looked at (null = the live game)
   let pre: [Square, Square] | null = null, view: number | null = null;
   // Insights (DECISIONS #113): your thinking time per move, by ply; your turn starts when the bot's move lands
@@ -281,7 +283,7 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     // rather than leaving the game "thinking" for ever with your pieces locked
     let mv: string;
     try {
-      const eng = await engine;
+      const eng = getEngine();   // fresh each time: a dead engine is replaced by a new one (engine/browser.ts)
       mv = await botMove(eng, g.fen(), legal, bot, Math.random, g.history());
       // a variant: take a win, avoid letting you win next move (src/bots/variants.ts); the engine's other candidates are asked only when needed
       if (variant !== "none") {
@@ -290,8 +292,10 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
         mv = variantChoice(g.fen(), vs, mv, ranked, legal);
       }
     }
-    catch { mv = legal[Math.floor(Math.random() * legal.length)]; }
+    catch { mv = legal[Math.floor(Math.random() * legal.length)]; botFailed = true; }
     if (!alive || over) return;   // resigned, out of time, or left while the bot was thinking: its move must not land
+    // the clock ran out while the bot thought (or before it moved): no move lands and no increment is paid
+    if (clock) { const f = flagged(clock, Date.now()); if (f) { checkEnd(false, f); bars(); return; } }
     g.move({ from: mv.slice(0, 2), to: mv.slice(2, 4), promotion: mv[4] }); tick(); turnAt = Date.now();
     const queued = pre; pre = null;
     busy = false; show(true);   // not busy BEFORE drawing, so your pieces are drawn as pick-up-able
@@ -309,6 +313,7 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     busy = true;
     const pr = legal[0].promotion ? promo ?? await promotion(ctx, me) : undefined;
     if (over) return;   // the clock ran out while the promotion choice was open
+    if (clock) { const f = flagged(clock, Date.now()); if (f) { checkEnd(false, f); bars(); return; } }   // flagged but not yet noticed by the timer: the move is refused
     const before = new Set(hanging(g.fen(), me).map(h => h.sq));
     times[g.history().length] = Date.now() - turnAt;
     const m = g.move({ from: legal[0].from, to: legal[0].to, promotion: pr }); tick(); show(true);
@@ -332,7 +337,7 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     showBtn.textContent = t("coachShow"); showBtn.disabled = true;   // nothing to show until the coach has looked
     coach(t("coachLooking"), "think");
     let c;
-    try { c = await commentary(await engine, g.fen(), ply); } catch { showBtn.disabled = false; return; }
+    try { c = await commentary(getEngine(), g.fen(), ply); } catch { showBtn.disabled = false; return; }
     showBtn.disabled = false;
     if (!alive || over || g.history().length !== ply || quiet) return;   // you moved, or the game ended, while it looked
     const th: Threat = c.threat;
@@ -360,7 +365,7 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     const lost = !won && !flagDraw && (resigned || vw === them || (!vw && g.isCheckmate() && g.turn() === me) || raceLost || flag === me);
     const how = resigned ? t("byResign") : flag ? t("byTime") : vw ? t(variant === "koth" ? "byKoth" : "byThreeCheck") : g.isCheckmate() ? t("byMate") : raceWon || raceLost ? t("byRace").replace("{n}", num(race!)) : g.isStalemate() ? t("byStalemate") : t("byRule");
     // a boss game is the hero's, not a bot's: it counts as practice, never as a bot win or for the rating
-    if (bossDone || unrated) store.recordPractice();
+    if (bossDone || unrated || botFailed) store.recordPractice();
     else store.recordGame(bot.id, won, helped || race ? undefined : bot.rating, won ? 1 : lost ? 0 : 0.5, clock ? tc : "none");
     if (won && testLevel) store.recordTest(testLevel, 1, true);
     lastResult = won ? "won" : lost ? "lost" : "draw";
@@ -368,8 +373,11 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     coach(t(won ? "gcWon" : lost ? "gcLost" : "gcDraw"), won ? "cheer" : lost ? "think" : "happy", won ? "ok" : "");
     // a variant game is not saved: Game Review and Insights judge by standard chess, which would mislead
     if (variant === "none") saveGame({ at: new Date().toISOString(), opp: bot.name, oppRating: bot.rating, me, result: lastResult, tc: clock ? tc : undefined, uci: uciOf(), startFen,
-      ms: uciOf().map((_, i) => times[i] ?? null) });
+      ms: uciOf().map((_, i) => times[i] ?? null), ...(odds !== "none" || botFailed ? { unrated: true } : {}) });
     // DECISIONS #117: the badges and the banner on the board first, then the result card
+    // the game is over NOW, before the result card appears a moment later: say so, and lock the buttons
+    say(`<b>${lastResult === "won" ? t("gameWon") : lastResult === "lost" ? fill(t("gameLost"), bot) : t("gameDrawn")}</b> · ${how}`);
+    root.querySelectorAll<HTMLButtonElement>("[data-acts] button").forEach(b => { b.disabled = true; });
     announceEnd(board, kindOf(how, lastResult === "draw"), won ? them : lost ? me : null);
     setTimeout(() => alive && result(lastResult!, how), END_PAUSE);
     return true;
@@ -389,6 +397,7 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     card.innerHTML = `<button class="iconbtn x" data-x aria-label="${t("close")}">${icon("close")}</button>
       ${art(bot, r === "won" ? "lose" : r === "lost" ? "win" : "neutral")}
       <h2>${r === "won" ? t("gameWon") : r === "lost" ? fill(t("gameLost"), bot) : t("gameDrawn")}</h2><p>${how} · ${movesN(Math.ceil(g.history().length / 2))}</p>
+      ${botFailed ? `<p class="note">${t("botProblem")}</p>` : ""}
       ${r === "won" && testLevel ? `<p class="testmsg">${t("botTestPassed")}</p>` : ""}${buttons}`;
     card.hidden = false;
     root.querySelector<HTMLElement>("[data-acts]")!.innerHTML = `<div class="resultacts">${buttons}</div>`;
@@ -449,7 +458,7 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     view = null; busy = true; helped = true; say(t("engineThinking"));
     // the hint must never lock the game: a failed or stopped engine just gives no arrow (DECISIONS #128)
     let a: Awaited<ReturnType<Uci["analyse"]>> | null = null;
-    try { a = await (await engine).analyse(g.fen(), { depth: 10 }); } catch { /* no hint this time */ } finally { busy = false; }
+    try { a = await getEngine().analyse(g.fen(), { depth: 10 }); } catch { /* no hint this time */ } finally { busy = false; }
     if (!alive || over) return;
     show(false, a && a.best.length >= 4 ? [[a.best.slice(0, 2) as Square, a.best.slice(2, 4) as Square]] : undefined); turnText();
   });
