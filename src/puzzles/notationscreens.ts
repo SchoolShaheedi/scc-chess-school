@@ -24,7 +24,7 @@ const esc = (x: string) => x.replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 
 /** What to tell the learner when what they typed is not a move. */
 export function refusalText(reason: Exclude<NotationRead, { ok: true }>["reason"]): string {
-  return t(({ empty: "ntEmpty", unreadable: "ntUnreadable", illegal: "ntIllegal", ambiguous: "ntAmbiguous" } as const)[reason]);
+  return t(({ empty: "ntEmpty", unreadable: "ntUnreadable", illegal: "ntIllegal", ambiguous: "ntAmbiguous", promotion: "ntPromo" } as const)[reason]);
 }
 
 /** The text box and its button, for the drills and for typed moves in a bot game: 16px or more, so iOS does not zoom. */

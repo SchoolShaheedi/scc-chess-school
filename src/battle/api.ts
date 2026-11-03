@@ -45,6 +45,11 @@ export async function battleMove(battle: string, player: string, uci: string): P
   const { data, error } = await db()!.functions.invoke("puzzle-battle", { body: { action: "move", battle, player, uci } });
   return error ? { error: await invokeError(error) } : (data as MoveReply);
 }
+/** Where my current puzzle stands on the server (after my own moves so far), for a phone that came back mid-puzzle. */
+export async function battlePosition(battle: string, player: string): Promise<{ fen: string; step: number; idx: number } | null> {
+  const { data, error } = await db()!.functions.invoke("puzzle-battle", { body: { action: "position", battle, player } });
+  return error || !data?.fen ? null : (data as { fen: string; step: number; idx: number });
+}
 /** Time is up (or both are through the set): ask the server to finish the battle (it checks the time itself). */
 export async function claimBattle(battle: string, player: string) {
   await db()!.functions.invoke("puzzle-battle", { body: { action: "claim", battle, player } });

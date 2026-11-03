@@ -34,7 +34,7 @@ export function matchCourse(name: string, sans: string[], course: CourseOpening[
 export function openingsReport(games: SavedGame[], names: Record<string, string>, course: CourseOpening[] = COURSE): OpeningLine[] {
   const rows = new Map<string, OpeningLine & { sans: string[] }>();
   for (const g of games) {
-    if (g.startFen) continue;
+    if (g.startFen || g.unrated) continue;
     const c = new Chess(), sans: string[] = [];
     for (const u of g.uci.slice(0, 12)) { try { sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san); } catch { break; } }
     const name = openingOf(sans, names); if (!name) continue;

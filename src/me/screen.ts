@@ -80,7 +80,7 @@ export function mePage(root: HTMLElement, go: (h: string) => void) {
   wireStats(root, go);
   // this child's class leaderboards (DECISIONS #89)
   if (signedIn()) void myClasses().then(list => {
-    const box = root.querySelector<HTMLElement>("[data-classboards]"), mine = list.filter(m => m.profile_id === family.current().id);
+    const box = root.querySelector<HTMLElement>("[data-classboards]"), mine = list.filter(m => m.profile_id === family.current().id && m.approved);
     if (!box || !mine.length) return;
     box.innerHTML = `<h3 class="sub">${t("boardTitle")}</h3>${mine.map(m => `<button class="gamerow" data-cb="${m.class_id}">${icon("trophy")}<span class="grow"><b>${m.title.replace(/[&<>"]/g, "")}</b></span>${icon("arrowRight")}</button>`).join("")}`;
     box.querySelectorAll<HTMLButtonElement>("[data-cb]").forEach(b => b.onclick = () => go(`#/class/${b.dataset.cb}`));
@@ -126,7 +126,7 @@ function gamesBlock(host: HTMLElement, list: ReturnType<typeof games>, go: (h: s
     host.querySelector("[data-gfcount]")!.textContent = t("gfCount").replace("{n}", num(shown.length)).replace("{total}", num(list.length));
     host.querySelector("[data-gflist]")!.innerHTML = shown.length ? `<div class="gamelist">${shown.map(({ g, i }) => `<button class="gamerow" data-game="${i}">
       <span class="res ${g.result}">${t(g.result === "won" ? "resWon" : g.result === "lost" ? "resLost" : "resDraw")}</span>
-      <span class="grow"><b>${t("vsWord")} ${tx(g.opp)}${g.oppRating ? ` ~${num(g.oppRating)}` : ""}</b>
+      <span class="grow"><b>${t("vsWord")} ${tx(g.opp)}${g.oppRating ? ` ~${num(g.oppRating)}` : ""}${g.unrated ? ` <em class="unrated">${t("gameUnrated")}</em>` : ""}</b>
         <small>${new Date(g.at).toLocaleDateString(lang === "pa" ? "pa-IN" : "en-GB", { day: "numeric", month: "short" })} · ${g.tc ? (g.tc.includes("+") ? g.tc.split("+").map(x => num(+x)).join(" + ") : `${num(+g.tc)} ${t("minutes")}`) : t("untimed")} · ${movesN(Math.ceil(g.uci.length / 2))}</small></span>
       ${icon("arrowRight")}</button>`).join("")}</div>` : `<p class="note">${t("gfNone")}</p>`;
     host.querySelectorAll<HTMLButtonElement>("[data-game]").forEach(b => b.onclick = () => {

@@ -16,4 +16,4 @@ export async function boot(root, files) {
   }
   return db;
 }
-export const ALL = ["schema.sql","classes.sql","online.sql","online_adults.sql","magical_online.sql","simul.sql","community.sql","battles.sql","online_ratings.sql","online_matching.sql"];
+export const ALL = ["schema.sql","classes.sql","online.sql","online_adults.sql","magical_online.sql","simul.sql","community.sql","battles.sql","class_approval.sql","online_ratings.sql","online_matching.sql"];

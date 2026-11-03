@@ -7,8 +7,8 @@ import { dbClient, userId } from "../sync";
 import { summaryOf, type Summary } from "./summary";
 
 export interface ClassRow { id: string; code: string; title: string; homework: string | null }
-export interface Pupil { parent: string; profile_id: string; avatar: string; colour: string; summary: Partial<Summary>; updated_at: string }
-export interface Joined { class_id: string; profile_id: string; title: string; homework: string | null }
+export interface Pupil { parent: string; profile_id: string; avatar: string; colour: string; summary: Partial<Summary>; updated_at: string; approved: boolean }
+export interface Joined { class_id: string; profile_id: string; title: string; homework: string | null; approved: boolean }
 
 const db = () => dbClient();
 const CODE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";   // no I, O, 0 or 1: nothing to misread
@@ -38,23 +38,45 @@ export async function setHomework(classId: string, lesson: string | null) {
 export async function deleteClass(classId: string) { await db()!.from("classes").delete().eq("id", classId); }
 export async function pupils(classId: string): Promise<Pupil[]> {
   if (!db()) return [];
-  const { data } = await db()!.from("memberships").select("parent, profile_id, avatar, colour, summary, updated_at").eq("class_id", classId).order("joined_at");
+  const { data } = await db()!.from("memberships").select("parent, profile_id, avatar, colour, summary, updated_at, approved").eq("class_id", classId).order("joined_at");
   return (data as Pupil[]) ?? [];
 }
+/** How many pupils are waiting to be let in, per class (for the badge on the teacher's class list). */
+export async function waitingCounts(): Promise<Record<string, number>> {
+  if (!db()) return {};
+  const { data } = await db()!.from("memberships").select("class_id").eq("approved", false);
+  const out: Record<string, number> = {};
+  for (const r of (data as { class_id: string }[]) ?? []) out[r.class_id] = (out[r.class_id] ?? 0) + 1;
+  return out;
+}
+/** The teacher lets a waiting pupil in (the database checks it is THEIR class). Returns an error message or null. */
+export async function approvePupil(classId: string, p: Pupil): Promise<string | null> {
+  const { error } = await db()!.rpc("approve_member", { p_class: classId, p_parent: p.parent, p_profile: p.profile_id }); return error?.message ?? null;
+}
+/** The teacher turns a waiting pupil away. */
+export async function rejectPupil(classId: string, p: Pupil): Promise<string | null> {
+  const { error } = await db()!.rpc("reject_member", { p_class: classId, p_parent: p.parent, p_profile: p.profile_id }); return error?.message ?? null;
+}
+/** Pupils the teacher has let in, and those still waiting. */
+export const splitPupils = (all: Pupil[]) => ({ approved: all.filter(p => p.approved), waiting: all.filter(p => !p.approved) });
 export async function removePupil(classId: string, p: Pupil) {
   await db()!.from("memberships").delete().eq("class_id", classId).eq("parent", p.parent).eq("profile_id", p.profile_id);
 }
 
 // ---------- parents ----------
-export async function previewClass(code: string): Promise<string | null> {
-  if (!db()) return null;
-  const { data } = await db()!.rpc("class_preview", { p_code: code.trim() });
-  return (data as { title: string }[] | null)?.[0]?.title ?? null;
+/** The class title for a code, or null; `limited` is true when this account has made too many wrong guesses (10 an hour). */
+export async function previewClass(code: string): Promise<{ title: string | null; limited: boolean }> {
+  if (!db()) return { title: null, limited: false };
+  const { data, error } = await db()!.rpc("class_preview", { p_code: code.trim() });
+  if (error) return { title: null, limited: isLimited(error.message) };
+  return { title: (data as { title: string }[] | null)?.[0]?.title ?? null, limited: false };
 }
+export const isLimited = (msg: string) => /too many/i.test(msg);
 export async function joinClass(code: string): Promise<string | null> {
   const p = family.current();
-  const { error } = await db()!.rpc("join_class", { p_code: code.trim(), p_profile: p.id, p_avatar: p.avatar, p_colour: p.colour });
+  const { data, error } = await db()!.rpc("join_class", { p_code: code.trim(), p_profile: p.id, p_avatar: p.avatar, p_colour: p.colour });
   if (error) return error.message;
+  if (!data) return "no class with that code";    // a wrong code comes back empty (so the miss is counted)
   joined = null; await pushSummaries(); return null;
 }
 let joined: Joined[] | null = null;

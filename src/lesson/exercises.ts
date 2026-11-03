@@ -8,7 +8,7 @@ import { defend, engineGoalMet, judge, miniGameResult, SLIP, whyIllegal } from "
 import { botById, botMove } from "../bots/bots";
 import { answerSquares } from "../chess/structure";
 import { getEngine } from "../engine/browser";
-import { asNumber } from "../engine/uci";
+import { asNumber, type Uci } from "../engine/uci";
 import { type PieceCode, type Placement, type Square, placementFromFen } from "../chess/types";
 import { num, t, tx, type UIKey } from "../i18n";
 import { canSkip, canWatch, firstSafeMove, firstStarsMove, goalMove, rungFor, topicKey, topicOf, watchLine, watchPick } from "./help";
@@ -360,7 +360,6 @@ function runMateVs(ex: MateVsExercise, c: Ctx): Cleanup {
 }
 
 function runEngineVs(ex: EngineVsExercise, c: Ctx): Cleanup {
-  const engine = getEngine();
   const me = new Chess(ex.fen).turn();
   const depth = ex.depth ?? 12;
   let game: Chess, moves = 0, mistakes = 0, busy = false, alive = true, done = false;
@@ -404,7 +403,13 @@ function runEngineVs(ex: EngineVsExercise, c: Ctx): Cleanup {
       busy = true; c.status(t("engineThinking"));
       // judge the move first: has it already met the goal, or thrown the result away?
       if (game.isCheckmate()) return win("checkmate");
-      const a = await engine.analyse(game.fen(), { depth }); if (!alive) return;
+      let a: Awaited<ReturnType<Uci["analyse"]>>;
+      try { a = await getEngine().analyse(game.fen(), { depth }); }
+      catch {   // the engine failed: take the move back, say so, and leave the board ready (never stuck "thinking")
+        if (!alive) return;
+        game.undo(); moves--; busy = false; show(); counter(); c.say(t("whyFail"), "no"); return;
+      }
+      if (!alive) return;
       const mine = -asNumber(a.score);                       // engine scored it for the side to move: flip
       if (game.isGameOver()) return ex.goal === "hold" ? win("heldDraw") : fail("slipWin");
       if (ex.goal !== "hold" && mine < (ex.slip ?? SLIP[ex.goal])) return fail("slipWin");
@@ -526,14 +531,17 @@ function runLine(ex: LineExercise, c: Ctx): Cleanup {
 }
 
 function runEngineBest(ex: EngineBestExercise, c: Ctx): Cleanup {
-  const engine = getEngine(), game = new Chess(ex.fen), me = game.turn(), tol = ex.tolerance ?? 50;
-  let mistakes = 0, busy = true, alive = true, done = false, best = -Infinity, bestMove = "";
+  const game = new Chess(ex.fen), me = game.turn(), tol = ex.tolerance ?? 50;
+  // `noEngine`: the engine failed, so there is nothing to compare with; any legal move is accepted rather than stranding the learner
+  let mistakes = 0, busy = true, alive = true, done = false, best = -Infinity, bestMove = "", noEngine = false;
   c.board.setFlip(me === "b");
   c.board.set(placementFromFen(ex.fen), { check: checkSquare(game) });
   c.status(t("engineThinking"));
   // the engine's own verdict on the position, so each try is compared like with like
-  engine.analyse(ex.fen, { depth: 16 }).then(a => { if (!alive) return; best = asNumber(a.score); bestMove = a.best; busy = false;
-    c.status(t(me === "w" ? "whiteToMove" : "blackToMove")); });
+  const unavailable = () => { noEngine = true; busy = false; c.status(t(me === "w" ? "whiteToMove" : "blackToMove")); c.say(t("engineGone"), "info"); };
+  const first = (() => { try { return getEngine().analyse(ex.fen, { depth: 16 }); } catch (e) { return Promise.reject(e); } })();
+  first.then(a => { if (!alive) return; best = asNumber(a.score); bestMove = a.best; busy = false;
+    c.status(t(me === "w" ? "whiteToMove" : "blackToMove")); }).catch(() => { if (alive) unavailable(); });
   c.board.interact({
     canPick: s => { if (done) return t("wellDone"); if (busy) return t("engineThinking"); const p = game.get(s as CjSquare); return p && p.color === me ? true : t("whyNotYours"); },
     targets: s => game.moves({ square: s as CjSquare, verbose: true }).map(m => m.to),
@@ -546,9 +554,12 @@ function runEngineBest(ex: EngineBestExercise, c: Ctx): Cleanup {
       busy = true; c.status(t("engineThinking"));
       const trial = new Chess(ex.fen); trial.move({ from, to, promotion: promo });
       c.board.set(placementFromFen(trial.fen()), { lastMove: [from, to] }, [from, to]);
-      const mine = trial.isCheckmate() ? 100000 : -asNumber((await engine.analyse(trial.fen(), { depth: 14 })).score);
+      let mine = 100000;
+      if (!noEngine && !trial.isCheckmate()) {
+        try { mine = -asNumber((await getEngine().analyse(trial.fen(), { depth: 14 })).score); } catch { if (!alive) return; noEngine = true; }
+      }
       if (!alive) return;
-      if (mine >= best - tol) {
+      if (noEngine || mine >= best - tol) {
         done = true; c.status("");
         c.say(`${t("goodMove")}${ex.idea ? `<br><small>${tx(ex.idea)}</small>` : ""}`, "ok"); c.done(mistakes); return;
       }

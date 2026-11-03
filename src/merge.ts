@@ -6,11 +6,11 @@ import { mergeCard } from "./openings/srs";
 /** What is saved to an account: progress only. Look, language, pieces and coach stay per device. */
 export type Saved = Pick<State, "xp" | "streak" | "lessons"> & { tests?: State["tests"]; placed?: number; daily?: State["daily"]; rushBest?: number; rep?: State["rep"]; active?: string[]; goal?: State["goal"]; stats?: State["stats"]; rating?: State["rating"]; missed?: State["missed"];
   prating?: State["prating"]; hist?: State["hist"]; themeStats?: State["themeStats"]; results?: State["results"]; puzzlesByDay?: State["puzzlesByDay"];
-  unlocked?: string[]; freezes?: number; heroes?: string[]; boss?: Record<string, number>; heroAvatar?: string; soloPath?: number[]; survivalBest?: number; calcBest?: number[]; visionBest?: Record<string, number>; ladder?: State["ladder"]; masterBest?: Record<string, number> };
+  unlocked?: string[]; freezes?: number; heroes?: string[]; boss?: Record<string, number>; heroAvatar?: string; soloPath?: number[]; survivalBest?: number; calcBest?: number[]; visionBest?: Record<string, number>; ladder?: State["ladder"]; masterBest?: Record<string, number>; resetAt?: string };
 
 export const savable = (s: Readonly<State>): Saved => ({ xp: s.xp, streak: s.streak, lessons: s.lessons, tests: s.tests, placed: s.placed, daily: s.daily, rushBest: s.rushBest, rep: s.rep, active: s.active, goal: s.goal, stats: s.stats, rating: s.rating, missed: s.missed,
   prating: s.prating, hist: s.hist, themeStats: s.themeStats, results: s.results, puzzlesByDay: s.puzzlesByDay,
-  unlocked: s.unlocked, freezes: s.freezes, heroes: s.heroes, boss: s.boss, heroAvatar: s.heroAvatar, soloPath: s.soloPath, survivalBest: s.survivalBest, calcBest: s.calcBest, visionBest: s.visionBest, ladder: s.ladder, masterBest: s.masterBest });
+  unlocked: s.unlocked, freezes: s.freezes, heroes: s.heroes, boss: s.boss, heroAvatar: s.heroAvatar, soloPath: s.soloPath, survivalBest: s.survivalBest, calcBest: s.calcBest, visionBest: s.visionBest, ladder: s.ladder, masterBest: s.masterBest, resetAt: s.resetAt });
 
 const NO_GOAL = { date: "", n: 0 }, NO_STATS: State["stats"] = { botWins: {}, games: 0, dailies: 0, reviews: 0 };
 function mergeGoal(a: State["goal"] = NO_GOAL, b: State["goal"] = NO_GOAL): State["goal"] {
@@ -30,6 +30,10 @@ function mergeCards(a: State["missed"], b: State["missed"]): State["missed"] {
 }
 
 export function merge(a: Saved, b: Saved): Saved {
+  // "Reset my progress" on any device: the side with the newer reset wins whole. The other side's progress is from before the
+  // reset (it was read before that device saw it), so merging it in would bring the old progress back.
+  const resA = a.resetAt ?? "", resB = b.resetAt ?? "";
+  if (resA !== resB) return resA > resB ? { ...a } : { ...b };
   const lessons: Saved["lessons"] = { ...a.lessons };
   for (const [id, r] of Object.entries(b.lessons)) {
     const mine = lessons[id];
@@ -83,7 +87,7 @@ export function merge(a: Saved, b: Saved): Saved {
     // has seen more results; counts: the higher count wins (two devices are not double-counted, as with the totals)
     prating: (a.prating?.n ?? 0) >= (b.prating?.n ?? 0) ? a.prating : b.prating,
     hist: mergeHist(a, b), themeStats: maxCounts(a.themeStats, b.themeStats), results: maxCounts(a.results, b.results),
-    puzzlesByDay: maxDays(a.puzzlesByDay, b.puzzlesByDay) };
+    puzzlesByDay: maxDays(a.puzzlesByDay, b.puzzlesByDay), ...(resA ? { resetAt: resA } : {}) };
 }
 /** Endgame ladder stars from two devices: the better stars on each rung. */
 function mergeLadder(a: State["ladder"] = {}, b: State["ladder"] = {}): State["ladder"] {
@@ -120,7 +124,9 @@ function maxCounts<T extends number[]>(a: Record<string, T> = {}, b: Record<stri
 /** One child: an animal avatar, a colour and an age band. No name, no age. */
 export interface Profile { id: string; avatar: string; colour: string; look: State["look"] }
 /** Everything saved to the account: every child's progress, and which child was using the app. */
-export interface Family { v: 2; active: string; profiles: Profile[]; saved: Record<string, Saved> }
+export interface Family { v: 2; active: string; profiles: Profile[]; saved: Record<string, Saved>;
+  /** Children removed by the parent (id and when), so a device that still has them cannot bring them back through a merge. */
+  removed?: { id: string; at: string }[] }
 
 export const emptySaved = (): Saved => ({ xp: 0, streak: { days: 0, last: "" }, lessons: {} });
 
@@ -142,12 +148,19 @@ export function asFamily(data: unknown): Family | null {
 /** Two families merged: children are matched by id (this device's avatar, colour and look win), and each
  *  child's progress is merged as before. The device keeps the child it was using. */
 export function mergeFamily(local: Family, remote: Family): Family {
-  const profiles = [...local.profiles];
-  for (const p of remote.profiles) if (!profiles.some(q => q.id === p.id)) profiles.push(p);
+  // a removal on either side holds: the id is never merged back in (ids are time-based, so a new child never reuses one)
+  const removed = [...(local.removed ?? [])];
+  for (const r of remote.removed ?? []) if (!removed.some(x => x.id === r.id)) removed.push(r);
+  const gone = new Set(removed.map(r => r.id));
+  const all = [...local.profiles];
+  for (const p of remote.profiles) if (!all.some(q => q.id === p.id)) all.push(p);
+  const kept = all.filter(p => !gone.has(p.id));
+  const profiles = kept.length ? kept : all.slice(0, 1);   // never end up with no child at all
   const saved: Record<string, Saved> = {};
   for (const p of profiles) {
     const a = local.saved[p.id], b = remote.saved[p.id];
     saved[p.id] = a && b ? merge(a, b) : (a ?? b ?? emptySaved());
   }
-  return { v: 2, active: profiles.some(p => p.id === local.active) ? local.active : profiles[0].id, profiles: profiles.slice(0, 6), saved };
+  return { v: 2, active: profiles.some(p => p.id === local.active) ? local.active : profiles[0].id, profiles: profiles.slice(0, 6), saved,
+    ...(removed.length ? { removed: removed.slice(-50) } : {}) };
 }

@@ -14,7 +14,7 @@ import { myPlayer, opponents } from "../online/api";
 import { movesFor, promotion } from "../play/gamekit";
 import { sound } from "../sound";
 import { ask } from "../ui/dialog";
-import { acceptBattle, battleMove, type Battle, cancelBattle, claimBattle, declineBattle, getBattle, leaveBattle, serverSkew, watchBattle } from "./api";
+import { acceptBattle, battleMove, battlePosition, type Battle, cancelBattle, claimBattle, declineBattle, getBattle, leaveBattle, serverSkew, watchBattle } from "./api";
 import { resultFor } from "./rules";
 
 type Go = (h: string) => void;
@@ -119,9 +119,26 @@ export function battleScreen(root: HTMLElement, id: string, go: Go): () => void 
     }
     /** The next puzzle in the set: the server picked the set, so both players meet the same ones in the same order. */
     async function next() {
-      idx = idx < 0 ? myIdx() : idx + 1;
+      const resuming = idx < 0;
+      idx = resuming ? myIdx() : idx + 1;
       const pz = b.puzzles?.[idx];
       if (!pz) { busy = true; game = null; board!.interact({}); say(t("battleSetDone")); return; }
+      // coming back to a puzzle that is already part-way (a phone that slept, a reload): the server holds the step, so ask it for the
+      // position as it stands (it is built from this player's own moves, and holds no answer), never start it again from move one
+      const step = b[`${side}_step`] as number;
+      if (resuming && step > 1) {
+        busy = true; game = null; say(t("loading"));
+        let pos = await battlePosition(id, meId); if (!alive || phase !== "play") return;
+        if (!pos) { await wait(1200); if (!alive || phase !== "play") return; pos = await battlePosition(id, meId); if (!alive || phase !== "play") return; }
+        if (pos && pos.idx === idx) {
+          game = new Chess(pos.fen); learner = game.turn();   // the solver is to move
+          board!.setFlip(learner === "b"); show(); say(t("dailyFind")); busy = false;
+          return;
+        }
+        // could not be asked: say so rather than guess (a wrong guess would count as a miss)
+        say(t("battleResumeFail"), "no"); idx = -1; await wait(3000); if (alive && phase === "play") void next();
+        return;
+      }
       busy = true; game = new Chess(pz.fen);
       learner = game.turn() === "w" ? "b" : "w";                  // the first move belongs to the other side, as in every puzzle
       board!.setFlip(learner === "b"); show(); say(t("dailyFind"));

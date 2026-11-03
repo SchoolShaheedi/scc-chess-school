@@ -7,21 +7,25 @@
 import { icon } from "./icons";
 import { t } from "./i18n";
 import { store } from "./store";
+import { OFFLINE_APP } from "./native";
 
 export const LIVE_STREAM = "https://radio.sikhnet.com/proxy/channel09/live";   // SikhNet Radio: Sri Harimandir Sahib
 
 let audio: HTMLAudioElement | null = null;
 let paused = false;          // the learner pressed Pause (for this visit only; the setting stays on)
 let offAir = false;          // the stream could not be reached (no broadcast at this hour, or offline)
+let offAirAt = 0;            // when it last failed: while off air it is retried by a button press, or at most every 60 s
+const RETRY_MS = 60_000;
 let button: HTMLButtonElement | null = null;
 
 function draw() {
-  const on = !!store.get().music;
+  const on = !!store.get().music && !OFFLINE_APP;
   if (!on) { button?.remove(); button = null; return; }
   if (!button) {
     button = document.createElement("button");
     button.className = "livepill";
-    button.onclick = () => { paused = !paused; offAir = false; sync(); };
+    // off air, a press is "try again" (it must not flip Pause); otherwise it is Pause / Play
+    button.onclick = () => { if (offAir) { offAir = false; paused = false; } else paused = !paused; sync(); };
     document.body.appendChild(button);
   }
   const playing = !paused && !offAir;
@@ -34,12 +38,17 @@ function draw() {
 }
 
 function sync() {
-  const want = !!store.get().music && !paused && document.visibilityState === "visible";
+  const want = !!store.get().music && !OFFLINE_APP && !paused && document.visibilityState === "visible";
+  // off air: no retry on every store change or tap; only a button press (offAir cleared there) or after RETRY_MS
+  if (want && offAir && Date.now() - offAirAt < RETRY_MS) { draw(); return; }
+  if (want && offAir) offAir = false;
   if (want) {
     if (!audio) {
       audio = new Audio();
       audio.volume = 0.45;
-      audio.onerror = () => { offAir = true; audio?.removeAttribute("src"); audio = null; draw(); };
+      const mine = audio;
+      audio.onerror = () => { if (audio !== mine) return; offAir = true; offAirAt = Date.now(); audio?.removeAttribute("src"); audio = null; draw(); };
+      audio.onplaying = () => { offAir = false; draw(); };
       audio.src = LIVE_STREAM;   // a live stream: reconnecting (not resuming) is how it catches up after a pause
     }
     if (audio.paused) void audio.play().catch(() => { /* waits for the learner's first tap */ });

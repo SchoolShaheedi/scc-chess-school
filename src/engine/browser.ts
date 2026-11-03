@@ -4,6 +4,10 @@ import { Uci } from "./uci";
 
 let engine: Uci | null = null;
 
+/** Cuts short any search in flight, if an engine has been started at all (leaving a screen: the answer is no longer wanted).
+ *  Unlike getEngine() it never starts one. */
+export function stopEngine() { engine?.stop(); }
+
 export function getEngine(): Uci {
   if (!engine) {
     const worker = new Worker("engine/stockfish-19-lite-single.js");

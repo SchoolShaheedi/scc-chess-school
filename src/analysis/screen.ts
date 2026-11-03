@@ -8,7 +8,7 @@ import { Board } from "../chess/board";
 import { placementFromFen, type Square } from "../chess/types";
 import { BOTS } from "../bots/bots";
 import { playFrom } from "../bots/play";
-import { getEngine } from "../engine/browser";
+import { getEngine, stopEngine } from "../engine/browser";
 import type { Score } from "../engine/uci";
 import { num, t, tx, type UIKey } from "../i18n";
 import { icon } from "../icons";
@@ -20,7 +20,7 @@ import { explorerHTML } from "./explorer";
 import { editFrom } from "./editor";
 import { addMove, deleteSideline, fromLine, hasVariations, inSideline, mainLine, pgnWithVariations, stepBack, stepForward, toEnd, tokens, ucisOf, type Node, type Path } from "./tree";
 import { describeThreat, nullMove, pvSan, whiteScore } from "./threat";
-import { tell } from "../ui/dialog";
+import { promptText, tell } from "../ui/dialog";
 
 type Go = (h: string) => void;
 const START = new Chess().fen();
@@ -183,7 +183,8 @@ export function analysisBoard(root_: HTMLElement, go: Go): () => void {
   };
   // load a FEN (a position) or a PGN (a game)
   q("[data-load]").onclick = () => {
-    const text = prompt(t("anaLoadAsk"))?.trim(); if (!text) return;
+    void promptText(t("anaLoadAsk")).then(answer => {
+    const text = answer?.trim(); if (!text) return;
     try {
       if (/^[rnbqkpRNBQKP1-8]+(\/[rnbqkpRNBQKP1-8]+){7}\s/.test(text)) { new Chess(text); start = text; tree = fromLine([]); path = []; }
       else {
@@ -192,6 +193,7 @@ export function analysisBoard(root_: HTMLElement, go: Go): () => void {
       }
       refresh();
     } catch { void tell(t("anaLoadBad")); }
+    });
   };
   // play on from here against a bot: the learner takes the side to move
   q("[data-playfrom]").onclick = () => {
@@ -199,10 +201,10 @@ export function analysisBoard(root_: HTMLElement, go: Go): () => void {
     extra.innerHTML = `<div class="botpick"><b>${t("anaPickBot")}</b>${BOTS.map(b => `<button data-pb="${b.id}"><img src="art/bots/${b.id}-neutral.webp" alt="">${tx(b.name)}<small>~${num(b.rating)}</small></button>`).join("")}</div>`;
     extra.querySelectorAll<HTMLButtonElement>("[data-pb]").forEach(b => b.onclick = () => {
       pending = { start, uci: [], at: 0, tree, path };   // coming back from the game reopens this analysis, side-lines and all
-      alive = false; board.destroy();
+      alive = false; stopEngine(); board.destroy();
       sub = playFrom(root_, BOTS.find(x => x.id === b.dataset.pb)!, fen, go);
     });
   };
   refresh();
-  return () => { alive = false; board.destroy(); sub?.(); };
+  return () => { alive = false; stopEngine(); board.destroy(); sub?.(); };
 }

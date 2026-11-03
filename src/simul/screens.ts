@@ -60,6 +60,9 @@ export function simulScreen(root: HTMLElement, classId: string, go: Go): () => v
     // ---------- the running simul ----------
     async function run(sim: Simul) {
       let games: Game[] = await simulGames(sim.id), who = await simulBoards(sim.id), sel: string | null = null, busy = false, note = "";
+      // the teacher is in the middle of something on the big board (a piece being dragged, the promotion picker open): a live
+      // update then must not redraw the page and destroy the board under their hand; it waits (`pending`) until they are idle
+      let dragging = false, promoting = false, pending = false;
       if (!alive) return;
       const tp = sim.teacher_player!;
       const who1 = (id: string): SimulBoard | undefined => who.find(w => w.game === id);
@@ -68,27 +71,48 @@ export function simulScreen(root: HTMLElement, classId: string, go: Go): () => v
       const label = (id: string) => { const w = who1(id); return w ? esc(pupilLabel(classId, w.parent, w.profile_id)) : ""; };
       const face = (id: string) => { const w = who1(id); return avatarHTML(w ? { avatar: w.avatar, colour: w.colour } : { avatar: "cat", colour: "#9AA39E" }); };
 
+      const userBusy = () => busy || dragging || promoting;
+      /** Draws the page now if the teacher is idle; otherwise once they are. */
+      const redraw = () => { if (userBusy()) pending = true; else { pending = false; draw(); } };
+      const settle = () => { if (pending && !userBusy()) { pending = false; draw(); } };
+      const onUp = () => { if (!dragging) return; dragging = false; setTimeout(() => { if (alive) settle(); }, 60); };
+      document.addEventListener("pointerup", onUp); document.addEventListener("pointercancel", onUp);
+      const stopUp = () => { document.removeEventListener("pointerup", onUp); document.removeEventListener("pointercancel", onUp); };
+      const sumHTML = () => { const sum = summarise(states());
+        return `<b>${num(sum.waitingForTeacher)}</b> ${t("simulWaitingYou")} · ${t("simulScore").replace("{w}", num(sum.teacherWon)).replace("{d}", num(sum.drawn)).replace("{p}", num(sum.pupilWon))}`; };
+      const cellHTML = (g: Game) => {
+        const s = boardState(g);
+        return `<button class="simulcell ${s.toMove === "teacher" ? "wait" : ""} ${g.id === sel ? "on" : ""}" data-open="${g.id}">${mini(g.fen)}
+              <span class="who">${face(g.id)}<small>${label(g.id)}</small></span>
+              <small class="st">${s.toMove === "teacher" ? t("simulYourMove") : s.toMove === "pupil" ? t("simulTheirMove") : s.outcome === "teacher" ? t("simulYouWon") : s.outcome === "pupil" ? t("simulPupilWon") : t("simulDrawn")}</small></button>`;
+      };
+      const wireOpen = (b: HTMLElement) => { b.onclick = () => { sel = b.dataset.open!; note = ""; pending = false; draw(); }; };
+      /** A live update for one board: only its own cell and the score line change; the page is redrawn only for the board being played. */
+      const refreshOne = (g: Game) => {
+        if (g.id === sel) return redraw();
+        const cell = root.querySelector<HTMLElement>(`[data-open="${g.id}"]`);
+        if (!cell) return redraw();   // a board that was not on the page yet
+        const tmp = document.createElement("div"); tmp.innerHTML = cellHTML(g);
+        const fresh = tmp.firstElementChild as HTMLElement; wireOpen(fresh); cell.replaceWith(fresh);
+        const s = root.querySelector<HTMLElement>("[data-sum]"); if (s) s.innerHTML = sumHTML();
+      };
+
       function draw() {
-        const st = states(), sum = summarise(st), pick = sel ? games.find(g => g.id === sel) : undefined;
-        board?.destroy(); board = null;
+        const pick = sel ? games.find(g => g.id === sel) : undefined;
+        board?.destroy(); board = null; dragging = false;
         root.innerHTML = `<div class="screen">${bar(`${t("simulTitle")} · ${title}`)}
-          <p class="note"><b>${num(sum.waitingForTeacher)}</b> ${t("simulWaitingYou")} · ${t("simulScore").replace("{w}", num(sum.teacherWon)).replace("{d}", num(sum.drawn)).replace("{p}", num(sum.pupilWon))}</p>
+          <p class="note" data-sum>${sumHTML()}</p>
           <div class="actions"><button class="btn" data-next>${icon("arrowRight")} ${t("simulNext")}</button><button class="btn ghost" data-seat>${t("simulSeat")}</button></div>
           <p class="note ${note ? "err" : ""}" data-note>${note || (games.length ? "" : t("simulNobody"))}</p>
           ${pick ? `<div class="pbar">${face(pick.id)}<div class="grow"><b>${label(pick.id) || t("simulBoards")}</b></div>
               <b>${pick.status === "finished" ? (pick.result === "1-0" ? t("simulYouWon") : pick.result === "0-1" ? t("simulPupilWon") : t("simulDrawn")) : chessOf(pick).turn() === "w" ? t("simulYourMove") : t("simulTheirMove")}</b></div>
             <div class="frame"><div class="boardwrap" data-board></div></div><div class="extra" data-extra></div>` : ""}
           <h2 class="sec">${t("simulBoards")} <span>${num(games.length)}</span></h2>
-          <div class="simulgrid">${games.map((g, i) => {
-            const s = st[i];
-            return `<button class="simulcell ${s.toMove === "teacher" ? "wait" : ""} ${g.id === sel ? "on" : ""}" data-open="${g.id}">${mini(g.fen)}
-              <span class="who">${face(g.id)}<small>${label(g.id)}</small></span>
-              <small class="st">${s.toMove === "teacher" ? t("simulYourMove") : s.toMove === "pupil" ? t("simulTheirMove") : s.outcome === "teacher" ? t("simulYouWon") : s.outcome === "pupil" ? t("simulPupilWon") : t("simulDrawn")}</small></button>`;
-          }).join("")}</div>
+          <div class="simulgrid">${games.map(cellHTML).join("")}</div>
           <p class="note">${t("simulSafe")}</p>
           <div class="actions"><button class="danger" data-end>${t("simulEnd")}</button></div></div>`;
         root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go(`#/teach/${classId}`);
-        root.querySelectorAll<HTMLButtonElement>("[data-open]").forEach(b => b.onclick = () => { sel = b.dataset.open!; note = ""; draw(); });
+        root.querySelectorAll<HTMLElement>("[data-open]").forEach(wireOpen);
         root.querySelector<HTMLButtonElement>("[data-next]")!.onclick = () => {
           const n = nextBoard(states(), sel); if (n) { sel = n; note = ""; } else note = t("simulNoneWaiting");
           draw();
@@ -107,6 +131,7 @@ export function simulScreen(root: HTMLElement, classId: string, go: Go): () => v
       /** The selected board, large, with the teacher's moves going through play-move like any online game. */
       function mount(g: Game) {
         board = new Board(root.querySelector("[data-board]")!, {});
+        root.querySelector<HTMLElement>("[data-board]")!.addEventListener("pointerdown", () => { dragging = true; });
         const showPos = () => { const c = chessOf(g), last = g.moves.at(-1); board!.set(placementFromFen(c.fen()), { lastMove: last ? [last.slice(0, 2), last.slice(2, 4)] as [CjSquare, CjSquare] : undefined, check: checkSquare(c) }); };
         showPos();
         const ctx = { board: board!, extra: root.querySelector<HTMLElement>("[data-extra]")!, say: () => {}, status: () => {}, done: () => {} };
@@ -118,23 +143,29 @@ export function simulScreen(root: HTMLElement, classId: string, go: Go): () => v
             const c = chessOf(g); if (g.status !== "active" || c.turn() !== "w" || busy) return;
             const legal = movesFor(c, from as CjSquare, to as CjSquare);
             if (!legal.length) { board!.shake(to); note = refusal(c.fen(), from, to); root.querySelector<HTMLElement>("[data-note]")!.textContent = note; return; }
+            promoting = !!legal[0].promotion;
             const pr = legal[0].promotion ? await promotion(ctx, "w") : undefined;
+            promoting = false; if (!alive) return;
             const uci = legal[0].from + legal[0].to + (pr ?? "");
             busy = true;
             const e = await sendMove(g.id, tp, uci);                        // checked by play-move: legal, and the teacher's turn
-            busy = false; if (!alive) return;
-            if (e) { note = e; draw(); return; }
-            // the live update brings the new position; move on to the next board that is waiting
+            if (!alive) return;
+            if (e) { busy = false; note = e; draw(); return; }
             note = "";
+            // do not wait for the live update alone (it may be late or lost): read the boards again, then show the new position
+            try { games = await simulGames(sim.id); } catch { /* the live update will bring it */ }
+            busy = false; if (!alive) return;
+            pending = false; draw();
           },
         });
       }
 
-      unwatch = watchSimul(sim.id, g => {
+      const stopWatch = watchSimul(sim.id, g => {
         if (!alive) return;
         games = mergeGames(games, [g]);
-        if (!who1(g.id)) void simulBoards(sim.id).then(w => { who = w; if (alive) draw(); }); else draw();
+        if (!who1(g.id)) void simulBoards(sim.id).then(w => { who = w; if (alive) refreshOne(g); }); else refreshOne(g);
       });
+      unwatch = () => { stopWatch(); stopUp(); };   // leaving also removes the pointer listeners
       draw();
     }
   })();
