@@ -407,7 +407,7 @@ function settings() {
         ${avatarHTML(family.current(), k ? `fr-${k}` : "")}<small>${k ? lockLabel("frame", k, tx(rewardFor("frame", k)!.name)) : t("frameNone")}</small>${k ? lockPip("frame", k) : ""}</button>`).join("")}</div></div>` : ""}
     <div class="group"><h2>${icon("sun")} ${t("themeLabel")}</h2>${seg("themeMode", s.themeMode ?? "dark", [["dark", t("themeDark")], ["light", t("themeLight")]])}</div>
     <div class="group"><h2>${icon("music")} ${t("soundLabel")}</h2>${seg("sound", String(s.sound), [["true", t("soundOn")], ["false", t("soundOff")]])}</div>
-    ${OFFLINE_APP ? "" : `<div class="group"><h2>${icon("music")} ${t("musicLabel")}</h2>${seg("music", String(!!s.music), [["true", t("soundOn")], ["false", t("soundOff")]])}<p class="note">${t("musicNote")}</p></div>`}
+    ${OFFLINE_APP ? "" : `<div class="group"><h2>${icon("music")} ${t("musicLabel")}</h2>${seg("music", String(s.music !== false), [["true", t("soundOn")], ["false", t("soundOff")]])}<p class="note">${t("musicNote")}</p></div>`}
     <div class="group"><h2>${icon("sound")} ${t("voiceLabel")}</h2>${seg("voice", String(voiceOn()), [["true", t("soundOn")], ["false", t("soundOff")]])}<p class="note">${t("voiceNote")}</p></div>
     <div class="group"><h2>${icon("vibrate")} ${t("buzzLabel")}</h2>${seg("buzz", String(s.buzz), [["true", t("soundOn")], ["false", t("soundOff")]])}</div>
     <div class="group"><h2>${icon("crown")} ${t("autoQueenLabel")}</h2>${seg("autoQueen", String(!!s.autoQueen), [["true", t("soundOn")], ["false", t("soundOff")]])}<p class="note">${t("autoQueenNote")}</p></div>

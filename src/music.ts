@@ -1,7 +1,8 @@
 // Live kirtan from Sachkhand Sri Harmandar Sahib in the background (DECISIONS #129, as the user finally set it on
 // 2026-10-29: "only Darbar Sahib… play in the background with a pause option, only audio, no video"). The audio is
 // SGPC's live broadcast as streamed by SikhNet Radio, which the charity has permission to use (the user, 2026-10-29).
-// Off until switched on in Settings; once on, a small floating button pauses and plays it from any screen. A browser
+// ON by default (the user, 2026-11-03: it "should auto-play"), off only when switched off in Settings; a small
+// floating button pauses and plays it from any screen. A browser
 // only allows sound after a tap, so the first tap starts it. When Amritsar is not broadcasting the stream fails and the
 // button says so. It pauses while the app is hidden, and never records, cuts or alters the broadcast.
 import { icon } from "./icons";
@@ -19,7 +20,7 @@ const RETRY_MS = 60_000;
 let button: HTMLButtonElement | null = null;
 
 function draw() {
-  const on = !!store.get().music && !OFFLINE_APP;
+  const on = store.get().music !== false && !OFFLINE_APP;
   if (!on) { button?.remove(); button = null; return; }
   if (!button) {
     button = document.createElement("button");
@@ -38,7 +39,7 @@ function draw() {
 }
 
 function sync() {
-  const want = !!store.get().music && !OFFLINE_APP && !paused && document.visibilityState === "visible";
+  const want = store.get().music !== false && !OFFLINE_APP && !paused && document.visibilityState === "visible";
   // off air: no retry on every store change or tap; only a button press (offAir cleared there) or after RETRY_MS
   if (want && offAir && Date.now() - offAirAt < RETRY_MS) { draw(); return; }
   if (want && offAir) offAir = false;
