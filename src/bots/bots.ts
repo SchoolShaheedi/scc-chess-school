@@ -101,12 +101,19 @@ function styleBonus(fen: string, style: Bot["style"]): (uci: string) => number {
   };
 }
 
+/** Does this SAN history, played from the standard start, reach `fen`? False for odds and set-position games. */
+function replaysFrom(history: string[], fen: string): boolean {
+  const key = (f: string) => f.split(" ").slice(0, 4).join(" ");
+  try { const g = new Chess(); for (const m of history) g.move(m); return key(g.fen()) === key(fen); } catch { return false; }
+}
+
 /** The bot's move in this position (UCI, e.g. "e2e4"). `history` (SAN) lets it play from the opening book. */
 export async function botMove(engine: Uci, fen: string, legal: string[], bot: Bot, rand: () => number = Math.random, history: string[] = []): Promise<string> {
   // a careless bot can still blunder in the opening; otherwise it plays book moves like a person would
+  // (the book is for the standard start: a game from another position, such as an odds game, never matches it)
   if (rand() >= bot.careless) {
     const san = bookMove(history, rand);
-    if (san) { try { const m = new Chess(fen).move(san); return m.from + m.to + (m.promotion ?? ""); } catch { /* history and fen disagree: use the engine */ } }
+    if (san && replaysFrom(history, fen)) { try { const m = new Chess(fen).move(san); return m.from + m.to + (m.promotion ?? ""); } catch { /* history and fen disagree: use the engine */ } }
   }
   const cands = await engine.candidates(fen, { n: bot.spread, depth: bot.depth });
   return chooseMove(cands, legal, bot, rand, styleBonus(fen, bot.style));
