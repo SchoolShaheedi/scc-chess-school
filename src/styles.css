@@ -92,7 +92,7 @@ button:focus-visible, a:focus-visible, [tabindex]:focus-visible { outline: 3px s
 
 /* ---------- welcome (DECISIONS #48) ---------- */
 .wscreen { padding: 0; }
-.welcome { display: flex; flex-direction: column; min-height: 100vh; }
+.welcome { display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
 .wlang { display: inline-flex; border-radius: 999px; padding: 3px; background: var(--surface-2); gap: 2px; }
 .wlang button { border: 0; background: none; border-radius: 999px; padding: 8px 14px; font-weight: 600; min-height: 40px; }
 .wlang button[aria-pressed="true"] { background: var(--surface); box-shadow: var(--shadow); }
@@ -1209,7 +1209,7 @@ html:not([data-theme="dark"]) .trp.off { color: #6B6B74; }
 :root { --sat: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); --sab: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)); }
 body { padding-top: var(--sat); padding-bottom: var(--sab); }
 /* full-height screens fill what is left between the system bars, so their last button never hides behind one */
-.welcome { min-height: calc(100vh - var(--sat) - var(--sab)); }
+.welcome { min-height: calc(100vh - var(--sat) - var(--sab)); min-height: calc(100dvh - var(--sat) - var(--sab)); }
 .wwal, .donescreen { min-height: calc(100dvh - var(--sat) - var(--sab)); }
 .wwal, .donescreen { padding-bottom: calc(16px + var(--sab)); }
 /* the coach on the last onboarding screen: held to its box (it overflowed over the words, found on Android 2026-10-17) */
@@ -1378,3 +1378,11 @@ html.wide .livepill { bottom: 20px; }
   html.wide .gamescreen .pbar { min-height: 36px; padding: 0 8px; }
   html.wide .gamescreen .pbar .av, html.wide .gamescreen .pbar .av .botart { width: 32px; height: 32px; }
 }
+
+/* No zoom, vertical scroll only (2026-11-03: "the page zooms in"). Pinch and double-tap zoom are off for the whole
+   page (the board and drag areas keep their own touch-action: none; side-scrolling strips are their own scrollers),
+   and every text box is at least 16px so an iPhone never zooms in when one is tapped. */
+html, body { touch-action: pan-y; overscroll-behavior-x: none; }
+html { overflow-x: clip; }
+input, select, textarea { font-size: max(16px, 1em); }
+.plabel, .pgnbox { font-size: 16px; }
