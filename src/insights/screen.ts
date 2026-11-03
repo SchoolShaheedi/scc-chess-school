@@ -17,7 +17,9 @@ import { DepthGovernor, INSIGHTS_BUDGET_MS, INSIGHTS_DEPTH } from "../review/dep
 import { mineDue } from "../puzzles/due";
 import { store } from "../store";
 import NAMES from "../content/opening-names.json";
+import { themeName } from "../puzzles/bank";
 import { openingsReport } from "./openings-report";
+import { addTactics, emptyTactics, gameTactics, shown, TACTIC_THEME } from "./tactics";
 import { type Band, byOpening, byPhase, byTime, myMoves, type MyMove, type Phase, replay, summarise } from "./insights";
 
 // sign-out on a shared device wipes these with the games (history.ts forgetGames)
@@ -79,6 +81,8 @@ export function insightsScreen(root: HTMLElement, go: (h: string) => void, lesso
     const look = store.get().look, mine: MyMove[] = [];
     const done: SavedGame[] = list.filter(g => graded[g.at]);
     for (const g of done) mine.push(...myMoves(g, graded[g.at]));
+    // tactics found and missed, by the rules, in the graded games (the Learning set): one row per tactic, linking to its puzzle theme
+    const tactics = shown(done.reduce((acc, g) => addTactics(acc, gameTactics(g, graded[g.at])), emptyTactics()));
     const yours = openingsReport(list, NAMES as Record<string, string>), cName = (id: string) => tx(courseOpening(id)!.name);
     const openings = byOpening(list, NAMES as Record<string, string>), phases = byPhase(mine), time = byTime(mine);
     const s = summarise(phases, time), ph = (p: Phase) => t(`insPh_${p}` as UIKey);
@@ -125,12 +129,18 @@ export function insightsScreen(root: HTMLElement, go: (h: string) => void, lesso
         : `<p class="note">${t("insYoursNone")}</p>`}</div>
       <h2 class="sec">${t("insPhases")}</h2>
       <div class="inscard">${(["opening", "middlegame", "endgame"] as Phase[]).map(p => barRow(ph(p), phases[p])).join("")}</div>
+      <h2 class="sec">${t("insTactics")}</h2>
+      <div class="inscard">${tactics.length ? `<p class="note">${t("insTacNote")}</p>` + tactics.map(r => `<div class="instac"><div class="insopen"><span class="grow"><b>${tx(themeName(TACTIC_THEME[r.id])!)}</b>
+        <small>${t(r.id === "hanging" ? "insTacWon" : "insTacFound")} ${num(r.found)} · ${t("insTacMissed")} ${num(r.missed)}${r.id === "hanging" ? ` · ${t("insTacLeft")} ${num(r.left)}` : ""}</small></span></div>
+        <button class="inslink" data-theme="${TACTIC_THEME[r.id]}" aria-label="${t("insTacPractise")}: ${tx(themeName(TACTIC_THEME[r.id])!)}"><span class="grow">${t("insTacPractise")} · ${tx(themeName(TACTIC_THEME[r.id])!)}</span>${icon("chevronRight")}</button></div>`).join("")
+        : `<p class="note">${t("insTacNone")}</p>`}</div>
       <h2 class="sec">${t("insTime")}</h2>
       <div class="inscard">${time ? (["fast", "mid", "slow"] as Band[]).map(b => barRow(t(`insBand_${b}` as UIKey), time[b].accuracy, t("insShare").replace("{n}", num(time[b].share)))).join("")
         : `<p class="note">${t("insTimeNone")}</p>`}</div>
     </div>`;
     root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go(back);
     root.querySelectorAll<HTMLButtonElement>("[data-learn]").forEach(b => b.onclick = () => go(`#/openings/o/${b.dataset.learn}`));
+    root.querySelectorAll<HTMLButtonElement>("[data-theme]").forEach(b => b.onclick = () => go(`#/puzzles/theme/${b.dataset.theme}`));
     root.querySelector<HTMLButtonElement>("[data-practise]")?.addEventListener("click", () => go(drillPhase !== null ? `#/puzzles/bank${drillPhase ? `/${drillPhase}` : ""}` : to!));
   }
 }

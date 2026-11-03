@@ -167,23 +167,25 @@ const DIRS: Record<string, number[][]> = {
 };
 
 /** Along each line from the moved slider: the first two pieces met. A pin is enemy-smaller in front of
- *  enemy-bigger (or the king); a skewer is enemy-bigger (or the king) in front of enemy-smaller. */
-export function lineTactic(after: Chess, sq: string, kind: "pin" | "skewer"): boolean {
-  const me = after.get(sq as CjSquare)!; const dirs = DIRS[me.type]; if (!dirs) return false;
+ *  enemy-bigger (or the king); a skewer is enemy-bigger (or the king) in front of enemy-smaller.
+ *  Returns the two pieces (and their squares) of the first such line, or null. */
+export function lineHit(after: Chess, sq: string, kind: "pin" | "skewer"): { front: { type: string; sq: string }; back: { type: string; sq: string } } | null {
+  const me = after.get(sq as CjSquare)!; const dirs = DIRS[me.type]; if (!dirs) return null;
   const f0 = sq.charCodeAt(0) - 97, r0 = +sq[1] - 1;
   for (const [df, dr] of dirs) {
-    const met: { type: string; color: string }[] = [];
+    const met: { type: string; color: string; sq: string }[] = [];
     for (let f = f0 + df, r = r0 + dr; f >= 0 && f < 8 && r >= 0 && r < 8 && met.length < 2; f += df, r += dr) {
-      const p = after.get((String.fromCharCode(97 + f) + (r + 1)) as CjSquare);
-      if (p) met.push(p);
+      const s = String.fromCharCode(97 + f) + (r + 1), p = after.get(s as CjSquare);
+      if (p) met.push({ type: p.type, color: p.color, sq: s });
     }
     if (met.length < 2 || met.some(p => p.color === me.color)) continue;
     const [front, back] = met;
-    if (kind === "pin" && front.type !== "k" && VALUE[back.type] > VALUE[front.type]) return true;
-    if (kind === "skewer" && VALUE[front.type] > VALUE[back.type]) return true;
+    if (kind === "pin" && front.type !== "k" && VALUE[back.type] > VALUE[front.type]) return { front, back };
+    if (kind === "skewer" && VALUE[front.type] > VALUE[back.type]) return { front, back };
   }
-  return false;
+  return null;
 }
+export const lineTactic = (after: Chess, sq: string, kind: "pin" | "skewer"): boolean => lineHit(after, sq, kind) !== null;
 
 /** A piece OTHER than the one that moved now attacks a worthwhile enemy target it did not attack before. */
 /** After `move`, is the side to move in check from a piece OTHER than the one that just moved? */
