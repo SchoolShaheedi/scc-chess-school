@@ -1,5 +1,5 @@
--- SCC Chess School: Puzzle Battle with friends and classmates (class features 2026-11-03, not yet in DECISIONS.md). NOT APPLIED: written in the repo only, for
--- review. Builds on online.sql + online_adults.sql (players, friendships, can_play) and classes.sql (memberships).
+-- SCC Chess School: Puzzle Battle with friends and classmates (DECISIONS #135). APPLIED 2026-11-03 as migration
+-- puzzle_battle_friends_classmates. Builds on online.sql + online_adults.sql (players, friendships, can_play) and classes.sql (memberships).
 -- Apply this BEFORE deploying the puzzle-battle server function (supabase/functions/puzzle-battle).
 --
 -- The rules that protect children are HERE, in the database, the same way as for friend games:

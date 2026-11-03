@@ -1,4 +1,4 @@
--- SCC Chess School: the teacher-run class simul (class features 2026-11-03, not yet in DECISIONS.md). NOT APPLIED: written in the repo only, for review.
+-- SCC Chess School: the teacher-run class simul (DECISIONS #135). APPLIED 2026-11-03 as migration class_simul_grownups_only.
 -- Builds on classes.sql (teachers, classes, memberships) and online.sql / online_adults.sql (players, games).
 -- No server-function change: a simul board is an ordinary row in public.games, so every move still goes through
 -- play-move exactly as in a friend game (it checks the caller owns the player and that it is their turn).

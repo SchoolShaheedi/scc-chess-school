@@ -19,7 +19,7 @@ import {
   type PoolPuzzle, type PublicPuzzle, type Tally,
 } from "./rules.ts";
 
-const ALLOWED = (Deno.env.get("ALLOWED_ORIGINS") ?? "").split(",").map(s => s.trim()).filter(Boolean).concat(["https://scc-chess-school.pages.dev", "https://localhost", "http://localhost:8752", "http://127.0.0.1:8752"]);
+const ALLOWED = (Deno.env.get("ALLOWED_ORIGINS") ?? "").split(",").map(s => s.trim()).filter(Boolean).concat(["https://scc-chess-school.pages.dev", "https://localhost", "capacitor://localhost", "http://localhost:8752", "http://127.0.0.1:8752"]);
 // where the puzzle bank is served from (the app's own site); the bank is public, the SOLUTIONS are used only in here
 const SITE = (Deno.env.get("SITE_URL") ?? "https://scc-chess-school.pages.dev").replace(/\/$/, "");
 let cors: Record<string, string> = {};
