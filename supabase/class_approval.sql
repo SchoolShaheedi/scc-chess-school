@@ -1,5 +1,5 @@
 -- SCC Chess School: a class code alone no longer makes someone a classmate (the user chose "Limit + teacher approves").
--- NOT YET APPLIED. Builds on classes.sql, community.sql, online.sql + online_adults.sql (can_play), battles.sql, simul.sql.
+-- APPLIED 2026-11-03 as migration class_code_limit_teacher_approval. Builds on classes.sql, community.sql, online.sql + online_adults.sql (can_play), battles.sql, simul.sql.
 --
 -- The gap: class_preview and join_class had no wrong-code limit and joining was instant, so anyone who guessed a
 -- 6-character class code became a "classmate" who could challenge or battle the children. Two locks now:
