@@ -1290,12 +1290,18 @@ html:has(.gamescreen) body::before { background: #141414; }
 .livepill { position: fixed; left: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); z-index: 90; display: grid; place-items: center;
   width: 44px; height: 44px; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--ink);
   box-shadow: 0 6px 18px rgba(0,0,0,.35); }
+.dlgtext { width: 100%; box-sizing: border-box; margin: 4px 0 10px; padding: 10px; font: inherit; font-size: 16px; color: var(--ink); background: var(--surface-2, var(--surface)); border: 1px solid var(--line); border-radius: 10px; resize: vertical; }
 .livepill svg { width: 20px; height: 20px; color: var(--gold); }
 .livepill.offair svg { color: var(--muted); }
 .livepill[aria-pressed="true"] svg { animation: livepulse 2.4s ease-in-out infinite; }
 @keyframes livepulse { 50% { opacity: .45; } }
 @media (prefers-reduced-motion: reduce) { .livepill[aria-pressed="true"] svg { animation: none; } }
 html.wide .livepill { bottom: 20px; }
+/* Home and the tab pages: the pill sits at the right edge, small, so it never covers the start of a left-aligned link (Home's "See all levels") */
+body:not(:has(.lessonbar)) .livepill { left: auto; right: 12px; width: 38px; height: 38px; }
+/* on a game or lesson screen (they have a top bar and bottom buttons) the pill sits small in the top bar, between the title and the menu, never over the buttons */
+body:has(.lessonbar) .livepill { top: calc(env(safe-area-inset-top, 0px) + 10px); right: 62px; left: auto; bottom: auto; width: 32px; height: 32px; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+body:has(.lessonbar) .livepill svg { width: 16px; height: 16px; }
 /* "No dead ends" (2026-10-29): the glowing right answer, the practise-again tag, the missed themes after a test */
 .choice.glow { border-color: var(--gold); box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 35%, transparent); }
 .li .again { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: var(--kesri); white-space: nowrap; }
@@ -1416,3 +1422,4 @@ input, select, textarea { font-size: max(16px, 1em); }
 .simulcell.wait { border-color: var(--gold); box-shadow: 0 0 0 2px var(--last); } .simulcell.on { outline: 2px solid var(--kesri); }
 .simulcell .who { display: flex; align-items: center; gap: 4px; } .simulcell .who .kidav { width: 28px; height: 28px; }
 .simulcell .st { color: var(--muted); font-size: 12px; }
+.gamerow em.unrated { font-style: normal; font-size: 11px; font-weight: 700; margin-left: 6px; padding: 1px 6px; border-radius: 8px; background: var(--tint, #eee); color: var(--muted); }

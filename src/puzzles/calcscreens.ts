@@ -60,7 +60,7 @@ const sanOf = (fen: string, from: string, to: string) => {
 };
 
 export function playCalc(root: HTMLElement, go: Go, level: number): () => void {
-  if (young() || level < 1 || level > CALC_LEVELS || level > calcUnlocked(store.get().calcBest)) { go("#/puzzles/calc"); return () => {}; }
+  if (young() || !Number.isInteger(level) || level < 1 || level > CALC_LEVELS || level > calcUnlocked(store.get().calcBest)) { go("#/puzzles/calc"); return () => {}; }
   const used = new Set<string>();
   let streak = 0, alive = true, ui: ReturnType<typeof puzzleScreen> | null = null;
   const teardown = () => { alive = false; ui?.board.destroy(); ui = null; };

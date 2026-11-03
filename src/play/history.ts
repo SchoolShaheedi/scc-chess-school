@@ -14,6 +14,9 @@ export interface SavedGame {
   /** Insights (DECISIONS #113): how long each move took, in ms, by ply; null where it was not measured (the
    *  opponent's moves, or an online move made in an earlier visit). Absent on games saved before 2026-10-16. */
   ms?: (number | null)[];
+  /** Practice, not rated: a game with piece odds, or one where the bot's engine failed and it played a random move.
+   *  It stays in the list (labelled) but never counts in the record, the win rates or the openings report. */
+  unrated?: boolean;
 }
 const MAX = 50;
 const key = () => `scc-games-${family.current().id}`;

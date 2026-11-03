@@ -57,13 +57,17 @@ export const family = {
     if (id === fam.active || fam.profiles.length < 2) return;
     const { [id]: _gone, ...saved } = fam.saved;
     try { localStorage.removeItem(`scc-games-${id}`); } catch { /* blocked */ }   // their game list goes with them
-    fam = { ...fam, profiles: fam.profiles.filter(p => p.id !== id), saved };
+    fam = { ...fam, profiles: fam.profiles.filter(p => p.id !== id), saved, removed: [...(fam.removed ?? []), { id, at: new Date().toISOString() }].slice(-50) };
     persist();
   },
 
   /** The account's family merged with this device's (sync.ts, on sign-in). */
   applyRemote(remote: Family | null, remoteFirst = false) {
     const merged = !remote ? family.snapshot() : remoteFirst ? mergeFamily(remote, family.snapshot()) : mergeFamily(family.snapshot(), remote);
+    // a child the account says was removed goes from this device too, with their games and Insights
+    for (const p of fam.profiles) if (!merged.profiles.some(q => q.id === p.id)) {
+      try { localStorage.removeItem(`scc-games-${p.id}`); localStorage.removeItem(`scc-insights-${p.id}`); localStorage.removeItem(`scc-insights-tac-${p.id}`); } catch { /* blocked */ }
+    }
     fam = merged;
     switching = true;
     try { store.replaceProgress(fillSaved(fam.saved[fam.active] ?? emptySaved())); store.set({ look: family.current().look }); }

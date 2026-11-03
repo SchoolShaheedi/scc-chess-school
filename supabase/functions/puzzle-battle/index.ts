@@ -9,13 +9,14 @@
 // POST { action: "accept", battle, player }       the invited player accepts: picks the puzzle set, starts the countdown
 // POST { action: "move", battle, player, uci }    one of the solver's moves in the current puzzle
 // POST { action: "claim", battle, player }        time is up (or both are through the set): finish the battle
+// POST { action: "position", battle, player }     where this player's current puzzle stands (a phone that came back): the position after their own moves so far
 //
 // The database write uses Supabase's server key, which Supabase gives every server function (SUPABASE_SERVICE_ROLE_KEY).
 // It exists only on Supabase's servers. The invite, decline, cancel and leave steps are database functions (battles.sql).
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { Chess } from "npm:chess.js@1.4.0";
 import {
-  BATTLE_BANDS, BATTLE_COUNTDOWN_MS, BATTLE_SET, inWindow, isLevel, judgeMove, outcome, pickSet, plausible, publicOf,
+  BATTLE_BANDS, BATTLE_COUNTDOWN_MS, BATTLE_SET, inWindow, isLevel, judgeMove, judgedAt, outcome, pickSet, plausible, publicOf,
   type PoolPuzzle, type PublicPuzzle, type Tally,
 } from "./rules.ts";
 
@@ -57,7 +58,7 @@ Deno.serve(async req => {
   let body: { action?: string; battle?: string; player?: string; uci?: string };
   try { body = await req.json(); } catch { return reply(400, { error: "bad request" }); }
   const { action, battle: battleId, player, uci } = body;
-  if (!battleId || !player || !["accept", "move", "claim"].includes(action ?? "")) return reply(400, { error: "bad request" });
+  if (!battleId || !player || !["accept", "move", "claim", "position"].includes(action ?? "")) return reply(400, { error: "bad request" });
   if (action === "move" && !(typeof uci === "string" && /^[a-h][1-8][a-h][1-8][qrbn]?$/.test(uci))) return reply(400, { error: "bad move" });
 
   const db = createClient(url, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
@@ -91,8 +92,8 @@ Deno.serve(async req => {
   const tally = (s: "a" | "b"): Tally => ({ solved: bt[`${s}_solved`], missed: bt[`${s}_missed`], lastAt: bt[`${s}_last`] ? Date.parse(bt[`${s}_last`]) : null, idx: bt[`${s}_idx`] });
   const startMs = Date.parse(bt.started_at), setLength = (bt.puzzles as unknown[]).length;
   const clock = { startMs, nowMs: now, setLength, target: bt.target, seconds: bt.seconds };
-  const finishPatch = (a: Tally, b: Tally) => {
-    const o = outcome(a, b, clock);
+  const finishPatch = (a: Tally, b: Tally, nowMs = now) => {
+    const o = outcome(a, b, { ...clock, nowMs });
     return o.over ? { o, patch: { status: "finished", winner: o.winner, reason: o.reason, finished_at: new Date(now).toISOString() } } : { o, patch: {} };
   };
   const ta = tally("a"), tb = tally("b");
@@ -105,10 +106,26 @@ Deno.serve(async req => {
     return error || !data?.length ? reply(409, { error: "the battle changed, try again" }) : reply(200, { ok: true, over: true, winner: o.winner, reason: o.reason });
   }
 
+  // ---------- position: a player who came back mid-puzzle (a phone that slept) gets the board as the server holds it ----------
+  // It is built from this player's OWN line so far (their earlier moves and the replies); the next answer is never in it.
+  if (action === "position") {
+    const mine = tally(side), step: number = bt[`${side}_step`], pub = (bt.puzzles as PublicPuzzle[])[mine.idx];
+    if (!pub) return reply(409, { error: "you have finished the set" });
+    try {
+      const line = (await bandOf(pub.band)).get(pub.id);
+      if (!line) return reply(500, { error: "battle state error" });
+      const g = new Chess(line.fen);
+      for (const x of line.moves.slice(0, step)) g.move({ from: x.slice(0, 2), to: x.slice(2, 4), promotion: x[4] });
+      return reply(200, { ok: true, idx: mine.idx, step, fen: g.fen(), last: line.moves[step - 1] ?? null });
+    } catch { return reply(502, { error: "the puzzle bank is not reachable, try again" }); }
+  }
+
   // ---------- move ----------
-  // the clock decides first: too late, or the battle is already decided, ends it as it stands
+  // the clock decides first: too late, or the battle is already decided, ends it as it stands. An answer that arrives after
+  // the three minutes but inside the grace is judged FIRST (the battle is held at "not yet time-up" for that check, judgedAt),
+  // and only after the grace has passed does time end the battle without it.
   if (now < startMs) return reply(409, { error: "it has not started yet" });
-  if (!inWindow(now, startMs, bt.seconds) || finishPatch(ta, tb).o.over) {
+  if (!inWindow(now, startMs, bt.seconds) || finishPatch(ta, tb, judgedAt(now, startMs, bt.seconds)).o.over) {
     const { o, patch } = finishPatch(ta, tb);
     if (o.over) await db.from("battles").update(patch).eq("id", bt.id).eq("status", "active");
     return reply(409, { error: "the battle is over", over: o.over, winner: o.winner, reason: o.reason });

@@ -45,5 +45,27 @@ export const ask = (message: string, o: AskOptions = {}) => open(message, [
   { label: o.yes ?? t("yes"), value: true, cls: o.danger ? "danger" : "" },
 ], true);
 
+/** A question with a text box (a pasted FEN or PGN is several lines). Resolves to the text, or null when cancelled. */
+export function promptText(message: string): Promise<string | null> {
+  return new Promise(resolve => {
+    const before = document.activeElement as HTMLElement | null;
+    const wrap = document.createElement("div");
+    wrap.className = "dlg";
+    wrap.innerHTML = `<div class="dlgcard" role="dialog" aria-modal="true" aria-labelledby="dlgmsg">
+      <p id="dlgmsg">${esc(message)}</p>
+      <textarea class="dlgtext" rows="5" autocapitalize="off" autocorrect="off" spellcheck="false" aria-labelledby="dlgmsg"></textarea>
+      <div class="dlgbtns"><button class="btn ghost" data-no>${esc(t("cancel"))}</button><button class="btn" data-yes>${esc(t("ok"))}</button></div></div>`;
+    const box = wrap.querySelector<HTMLTextAreaElement>("textarea")!;
+    const done = (v: string | null) => { document.removeEventListener("keydown", key, true); wrap.remove(); before?.focus?.(); resolve(v); };
+    const key = (e: KeyboardEvent) => { if (e.key === "Escape") { e.preventDefault(); done(null); } };
+    wrap.querySelector<HTMLButtonElement>("[data-no]")!.onclick = () => done(null);
+    wrap.querySelector<HTMLButtonElement>("[data-yes]")!.onclick = () => done(box.value);
+    wrap.onclick = e => { if (e.target === wrap) done(null); };
+    document.addEventListener("keydown", key, true);
+    document.body.appendChild(wrap);
+    box.focus();
+  });
+}
+
 /** A message with one button. */
 export const tell = (message: string) => open(message, [{ label: t("ok"), value: true, cls: "" }], false).then(() => {});

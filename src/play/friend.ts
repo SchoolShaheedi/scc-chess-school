@@ -136,6 +136,7 @@ function friendGame(root: HTMLElement, go: Go, startClock: Clock | null, turnBoa
       const legal = movesFor(g, from, to);
       if (!legal.length) { board.shake(to); root.querySelector("[data-state]")!.textContent = refusal(g.fen(), from, to); return; }
       const promo = legal[0].promotion ? await promotion(ctx, g.turn()) : undefined;
+      if (over) return;   // the clock ran out (or the game was ended) while the promotion choice was open
       times[g.history().length] = Date.now() - turnAt;
       g.move({ from: legal[0].from, to: legal[0].to, promotion: promo }); turnAt = Date.now();
       if (clock) clock = press(clock, Date.now());
