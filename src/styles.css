@@ -1402,3 +1402,17 @@ input, select, textarea { font-size: max(16px, 1em); }
 .gfilters select { min-height: 44px; padding: 6px 8px; border: 2px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); font-weight: 600; }
 .gfcount { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 8px; font-size: 14px; color: var(--muted); font-weight: 700; }
 .gfcount .btn { padding: 6px 12px; min-height: 36px; font-size: 14px; }
+/* ---------- Puzzle Battle and the class simul (class features 2026-11-03, not yet in DECISIONS.md) ---------- */
+.bscores { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.bscores .bside { display: grid; justify-items: center; gap: 2px; min-width: 72px; }
+.bscores .bside b { font-size: 26px; font-variant-numeric: tabular-nums; } .bscores .bside.me b { color: var(--kesri); }
+.bscores .bside small { color: var(--muted); font-size: 12px; }
+.bclock { font: 700 28px/1 var(--display); font-variant-numeric: tabular-nums; } .bclock.low { color: var(--bad); }
+.bigcount { font: 700 72px/1 var(--display); color: var(--kesri); font-variant-numeric: tabular-nums; }
+.seg.levels { margin: 6px 0; }
+.thumb.mini { width: 100%; }
+.simulgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 10px; }
+.simulcell { display: grid; gap: 4px; justify-items: center; padding: 8px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); text-align: center; }
+.simulcell.wait { border-color: var(--gold); box-shadow: 0 0 0 2px var(--last); } .simulcell.on { outline: 2px solid var(--kesri); }
+.simulcell .who { display: flex; align-items: center; gap: 4px; } .simulcell .who .kidav { width: 28px; height: 28px; }
+.simulcell .st { color: var(--muted); font-size: 12px; }

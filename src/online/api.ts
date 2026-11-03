@@ -17,6 +17,7 @@ export interface Game {
   id: string; white: string; black: string; tc_min: number; tc_inc: number; moves: string[]; fen: string;
   white_ms: number; black_ms: number; turn_since: string | null; status: "active" | "finished";
   rated?: boolean; category?: "rapid" | "blitz" | null; white_before?: number | null; black_before?: number | null;
+  simul_id?: string | null;   // a board of a teacher-run class simul (class features 2026-11-03, not yet in DECISIONS.md): the other side is the class teacher
   variant?: Variant; seed?: number | null; orbs?: { sq: string; piece: "n" | "b" | "r" | "q" }[]; changes?: number[];
   result: string | null; reason: string | null; draw_offer: string | null; reaction: { by: string; code: string; at: string } | null; updated_at: string;
 }
@@ -120,6 +121,13 @@ export async function gameAction(player: string, game: string, action: "resign" 
 export function watchGame(id: string, on: (g: Game) => void): () => void {
   const ch: RealtimeChannel = db()!.channel(`game:${id}`)
     .on("postgres_changes", { event: "UPDATE", schema: "public", table: "games", filter: `id=eq.${id}` }, p => on(p.new as Game)).subscribe();
+  return () => { void db()?.removeChannel(ch); };
+}
+/** A new game with this player in it (a teacher seating a pupil at a class simul). */
+export function watchNewGames(player: string, on: () => void): () => void {
+  const ch: RealtimeChannel = db()!.channel(`newgames:${player}`)
+    .on("postgres_changes", { event: "INSERT", schema: "public", table: "games", filter: `black=eq.${player}` }, on)
+    .on("postgres_changes", { event: "INSERT", schema: "public", table: "games", filter: `white=eq.${player}` }, on).subscribe();
   return () => { void db()?.removeChannel(ch); };
 }
 /** New or changed challenges to or from this player. */

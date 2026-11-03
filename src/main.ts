@@ -14,6 +14,8 @@ import "./theme-dark.css";   // DECISIONS #111: dark by default; Settings can sw
 import { registerSW } from "virtual:pwa-register";
 import { premovesOn } from "./play/gamekit";
 import { ladderScreen, onlineGame, onlineLobby } from "./online/screens";
+import { battleScreen } from "./battle/screens";
+import { simulScreen } from "./simul/screens";
 import { classBoardScreen } from "./teach/screens";
 import { tourneyHome, tourneyView } from "./tourney/screens";
 import { PIECE_SETS, pieceHTML } from "./chess/pieces";
@@ -452,7 +454,7 @@ function route() {
   if (gated) return page === "signin" ? signInScreen(arg === "have") : welcome();
   if (!store.get().onboarded) return onboarding(1);
   // the Android app has nothing online in version 1 (DECISIONS #121): those screens are never opened there
-  if (OFFLINE_APP && ["online", "teach", "class", "join", "signin"].includes(page)) { go("#/"); return; }
+  if (OFFLINE_APP && ["online", "teach", "class", "join", "signin", "battle", "simul"].includes(page)) { go("#/"); return; }
   if (page === "test" && arg) {
     const lv = LEVELS[parseInt(arg) - 1];
     if (lv?.test && testState(lv.n) !== "locked") { teardown = playTest(app, lv, go); return; }
@@ -534,6 +536,14 @@ function route() {
     return bossScreen(app, n, open, go);
   }
   if (page === "online") { teardown = arg === "game" && sub ? onlineGame(app, sub, go) : arg === "ladder" ? ladderScreen(app, go) : onlineLobby(app, go); return; }
+  if (page === "battle" && arg) { teardown = battleScreen(app, arg, go); return; }
+  // the teacher-run class simul: approved teachers only, as for the other teacher pages
+  if (page === "simul" && arg) {
+    if (!account.signedIn()) return settings();
+    const here = location.hash;
+    void isTeacher().catch(() => false).then(yes => { if (location.hash !== here) return; if (!yes) go("#/settings"); else teardown = simulScreen(app, arg, go); });
+    return;
+  }
   if (page === "class" && arg) return void classBoardScreen(app, arg, go);
   if (page === "tourney") return arg ? tourneyView(app, arg, go) : tourneyHome(app, go);
   if (page === "master") { teardown = masterScreen(app, go, arg); return; }   // guess the move in famous games
