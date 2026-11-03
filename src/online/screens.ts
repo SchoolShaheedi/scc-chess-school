@@ -24,10 +24,13 @@ import { askChange, burstAt, gemDecor } from "../power/ui";
 import { sound } from "../sound";
 import { ask, tell } from "../ui/dialog";
 import {
-  activeGames, addFriend, adultLadder, answerChallenge, blockPlayer, enableOnlineAdult, findGame, gamePlayers, stopSeeking, cancelChallenge, challenges, claimTime, disableOnline, enableOnline, type Game, gameAction,
-  answerFriend, friendRequests, getGame, type Me, myPlayer, newFriendCode, opponents, type Opponent, REACTIONS, removeFriend, sendChallenge, sendMove, signedIn, watchChallenges, watchGame,
-  MAGICAL_ONLINE, type Variant, watchNewGames,
+  activeGames, addFriend, adultLadder, answerChallenge, answerRematch, blockPlayer, cancelRematch, clockSkew, enableOnlineAdult, gamePlayers, cancelChallenge, challenges, claimTime, disableOnline, enableOnline, type Game, gameAction,
+  answerFriend, friendRequests, getGame, myPlayer, newFriendCode, opponents, type Opponent, primeLag, REACTIONS, removeFriend, rematchFor, requestRematch, sendChallenge, sendMove, signedIn, watchChallenges, watchGame, watchRematch,
+  MAGICAL_ONLINE, type Rematch, type Variant, watchNewGames,
 } from "./api";
+import { CATEGORIES, type Category } from "./matching";
+import { deltaText } from "./glicko";
+import { catName } from "./play";
 import { acceptBattle, cancelBattle, declineBattle, inviteBattle, openBattles, watchBattles } from "../battle/api";
 import type { BattleLevel } from "../battle/rules";
 
@@ -91,76 +94,45 @@ function declare(box: HTMLElement, onYes: () => void, onCancel: () => void) {
   box.querySelector<HTMLButtonElement>("[data-cancel]")!.onclick = onCancel;
 }
 
-// ---------- 18+: automatic pairing with strangers (DECISIONS #87) ----------
-const CATEGORY: Record<string, "rapid" | "blitz"> = { "10": "rapid", "5": "blitz", "3+2": "blitz" };
-let adultTc = "10";
-/** Pick a clock, press Play, and be paired with another grown-up near your rating. The grown-up question is asked
- *  again every time this opens, because children use the same phone. */
-function strangers(box: HTMLElement, me: Me, go: Go, alive: () => boolean) {
-  let passed = false, seeking = false, poll = 0;
-  const stop = () => { seeking = false; clearInterval(poll); void stopSeeking(me.id); };
-  const rating = (tc: string) => num(CATEGORY[tc] === "rapid" ? me.rapid_r : me.blitz_r);
-  const draw = (msg = "") => {
-    if (!alive()) return stop();
-    box.innerHTML = seeking
-      ? `<div class="seekcard"><span class="spinner" aria-hidden="true"></span><b>${t("adultSeeking").replace("{r}", rating(adultTc))}</b>
-          <small>${tcLabel(adultTc)} · ${t(CATEGORY[adultTc] === "rapid" ? "adultRapid" : "adultBlitz")}</small><button class="btn ghost" data-stop>${t("cancel")}</button></div>`
-      : `<p class="note">${t("adultPlayNote")}</p>
-        <div class="tcgrid">${["10", "5", "3+2"].map(x => `<button data-atc="${x}" aria-pressed="${adultTc === x}"><b>${tcLabel(x)}</b>
-          <small>${t(CATEGORY[x] === "rapid" ? "adultRapid" : "adultBlitz")} · ${rating(x)}</small></button>`).join("")}</div>
-        <button class="btn wide" data-play>${icon("play")} ${t("adultPlay")}</button><p class="note err">${msg}</p><div data-gate></div>`;
-    box.querySelectorAll<HTMLButtonElement>("[data-atc]").forEach(b => b.onclick = () => { adultTc = b.dataset.atc!; draw(); });
-    box.querySelector<HTMLButtonElement>("[data-stop]")?.addEventListener("click", () => { stop(); draw(); });
-    box.querySelector<HTMLButtonElement>("[data-play]")?.addEventListener("click", () => {
-      const start = () => { passed = true; seeking = true; draw(); void tick(); poll = window.setInterval(() => void tick(), 8000); };
-      if (passed) start(); else parentGate(box.querySelector("[data-gate]")!, start, () => draw());
-    });
-  };
-  const tick = async () => {
-    if (!seeking) return;
-    if (!alive()) return stop();
-    const r = await findGame(me.id, adultTc);
-    if (!seeking) return;
-    if (r.error) { stop(); return draw(r.error); }
-    if (r.game) { seeking = false; clearInterval(poll); go(`#/online/game/${r.game}`); }
-  };
-  // leaving the lobby while waiting takes you out of the pool
-  window.addEventListener("hashchange", () => { if (seeking) stop(); }, { once: true });
-  draw();
-}
-
 // ---------- the lobby ----------
 let tc = "10", colour = "random", variant: Variant = "chess", bLevel: BattleLevel = "easy";
+/** Friends and classmates: my friend code, add a friend, who I can play, challenges and Puzzle Battle. (The Play page is play.ts.) */
 export function onlineLobby(root: HTMLElement, go: Go): () => void {
-  let alive = true, unwatch: (() => void) | null = null;
+  let alive = true, unwatch: (() => void) | null = null, seq = 0;
   const leave = () => { alive = false; unwatch?.(); };
-  root.innerHTML = `<div class="screen">${bar(t("onlineTitle"))}<p class="muted">${t("loading")}</p></div>`;
-  root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/play");
+  const title = t("onlineFriendsTitle");
+  const back = () => go("#/online");
+  root.innerHTML = `<div class="screen">${bar(title)}<p class="muted">${t("loading")}</p></div>`;
+  root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = back;
   if (!signedIn()) {
-    root.innerHTML = `<div class="screen">${bar(t("onlineTitle"))}<div class="parentcard">${icon("shield")}<div><b>${t("onlineNeedsAccount")}</b><small>${t("onlineNeedsAccountNote")}</small></div></div></div>`;
-    root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/play");
+    root.innerHTML = `<div class="screen">${bar(title)}<div class="parentcard">${icon("shield")}<div><b>${t("onlineNeedsAccount")}</b><small>${t("onlineNeedsAccountNote")}</small></div></div></div>`;
+    root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = back;
     return leave;
   }
   void (async () => {
     const me = await myPlayer(); if (!alive) return;
     if (!me) {
-      root.innerHTML = `<div class="screen">${bar(t("onlineTitle"))}<div class="hero">${avatarHTML(family.current(), "big")}</div>
+      root.innerHTML = `<div class="screen">${bar(title)}<div class="hero">${avatarHTML(family.current(), "big")}</div>
         <div class="parentcard">${icon("shield")}<div><b>${t("onlineOffTitle")}</b><small>${t("onlineAboutParent")}</small></div></div>
         <div class="actions"><button class="btn wide" data-family>${t("famTitle")}</button></div></div>`;
-      root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/play");
+      root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = back;
       root.querySelector<HTMLButtonElement>("[data-family]")!.onclick = () => go("#/family");
       return;
     }
-    const render = async () => {
+    // a redraw from a live update is skipped while a friend code is half typed, and only the newest render draws
+    const render = async (fromEvent = false) => {
+      if (fromEvent && root.querySelector<HTMLInputElement>("#fc")?.value) return;
+      const my = ++seq;
       const [opps, chs, games, reqs, bts] = await Promise.all([opponents(me.id), challenges(me.id), activeGames(me.id), friendRequests(me.id), openBattles(me.id).catch(() => [])]);
-      if (!alive) return;
+      if (!alive || my !== seq) return;
+      if (fromEvent && root.querySelector<HTMLInputElement>("#fc")?.value) return;
       const who = new Map(opps.map(o => [o.player, o]));
       const face = (id: string) => avatarHTML(who.get(id) ?? { avatar: "cat", colour: "#9AA39E" });
       const incoming = chs.filter(c => c.to_player === me.id), outgoing = chs.filter(c => c.from_player === me.id);
       // Puzzle Battle (class features 2026-11-03): invitations come the same way as challenges, from friends and classmates only
       const bRun = bts.filter(x => x.status === "active"), bIn = bts.filter(x => x.status === "invited" && x.to_player === me.id), bOut = bts.filter(x => x.status === "invited" && x.from_player === me.id);
       const bFace = (x: { from_player: string; to_player: string }) => face(x.from_player === me.id ? x.to_player : x.from_player);
-      root.innerHTML = `<div class="screen">${bar(t("onlineTitle"))}
+      root.innerHTML = `<div class="screen">${bar(title)}
         <div class="li"><span>${avatarHTML(family.current(), "")}</span><span class="grow"><small>${t("onlineCode")}</small><b class="codetxt big">${me.friend_code}</b></span></div>
         <p class="note">${t("onlineCodeNote")}</p>
         ${games.length ? `<h2 class="sec">${t("onlineYourGames")}</h2>${games.map(g => `<button class="botcard" data-game="${g.id}">${g.simul_id ? avatarHTML({ avatar: "turtle", colour: "#C99A2E" }) : face(g.white === me.id ? g.black : g.white)}
@@ -179,8 +151,6 @@ export function onlineLobby(root: HTMLElement, go: Go): () => void {
           <button class="btn" data-accept="${c.id}">${t("onlineAccept")}</button><button class="btn ghost" data-decline="${c.id}">${t("onlineDecline")}</button></div>`).join("")}` : ""}
         ${outgoing.length ? `<h2 class="sec">${t("onlineWaiting")}</h2>${outgoing.map(c => `<div class="botcard">${face(c.to_player)}
           <span class="grow"><b>${t("onlineWaitingFor")}</b><small>${vLabel(c.variant)}${tcLabel(c.tc)}</small></span><button class="btn ghost" data-cancel="${c.id}">${t("cancel")}</button></div>`).join("")}` : ""}
-        ${me.adult ? `<h2 class="sec">${t("adultPlayTitle")}</h2><div data-strangers></div>
-          <button class="btn ghost wide" data-ladder>${icon("trophy")} ${t("ladderTitle")}</button>` : ""}
         <h2 class="sec">${t("onlinePlayWho")}</h2>
         ${MAGICAL_ONLINE ? `<div class="seg variants" role="group">${(["chess", "magical"] as const).map(v => `<button data-variant="${v}" aria-pressed="${variant === v}">${v === "chess" ? t("chessPlain") : `✨ ${t("powerTitle")}`}</button>`).join("")}</div>` : ""}
         <div class="seg tcs" role="group">${["none", "10", "5", "3+2"].map(x => `<button data-tc="${x}" aria-pressed="${tc === x}">${tcLabel(x)}</button>`).join("")}</div>
@@ -197,11 +167,9 @@ export function onlineLobby(root: HTMLElement, go: Go): () => void {
           <input id="fc" maxlength="6" autocapitalize="characters" autocomplete="off" required placeholder="ABC234" class="codein">
           <button class="btn wide" type="submit">${icon("plus")} ${t("onlineAdd")}</button></form><p class="note err" data-err></p>
         <p class="note">${t("onlineSafety")}</p></div>`;
-      root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/play");
+      root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = back;
       const errBox = root.querySelector<HTMLElement>("[data-err]")!;
-      const sbox = root.querySelector<HTMLElement>("[data-strangers]"); if (sbox) strangers(sbox, me, go, () => alive);
       root.querySelectorAll<HTMLButtonElement>("[data-tc]").forEach(b => b.onclick = () => { tc = b.dataset.tc!; void render(); });
-      root.querySelector<HTMLButtonElement>("[data-ladder]")?.addEventListener("click", () => go("#/online/ladder"));
       root.querySelectorAll<HTMLButtonElement>("[data-c]").forEach(b => b.onclick = () => { colour = b.dataset.c!; void render(); });
       root.querySelectorAll<HTMLButtonElement>("[data-variant]").forEach(b => b.onclick = () => { variant = b.dataset.variant as Variant; void render(); });
       root.querySelectorAll<HTMLButtonElement>("[data-game]").forEach(b => b.onclick = () => go(`#/online/game/${b.dataset.game}`));
@@ -235,33 +203,39 @@ export function onlineLobby(root: HTMLElement, go: Go): () => void {
       };
     };
     await render();
-    // a challenge accepted by the other side opens the game; anything else redraws the lobby
-    const u1 = watchChallenges(me.id, async () => {
-      const mine = (await activeGames(me.id)).at(-1);
-      if (alive && mine && mine.moves.length === 0 && location.hash === "#/online") go(`#/online/game/${mine.id}`); else if (alive) void render();
+    if (!alive) return;
+    // MY challenge that has just been accepted opens its game (by the game id on that very row, not by guessing the newest
+    // game); any other change redraws the lobby, unless a friend code is half typed
+    const u1 = watchChallenges(me.id, c => {
+      if (!alive) return;
+      if (c && c.from_player === me.id && c.status === "accepted" && c.game && location.hash === "#/online/friends") go(`#/online/game/${c.game}`);
+      else void render(true);
     });
     // a Puzzle Battle accepted by the other side opens at once; any other change redraws the lobby
     const u2 = watchBattles(me.id, async () => {
       const run = (await openBattles(me.id).catch(() => [])).find(x => x.status === "active" && x.from_player === me.id);
-      if (alive && run && location.hash === "#/online") go(`#/battle/${run.id}`); else if (alive) void render();
+      if (alive && run && location.hash === "#/online/friends") go(`#/battle/${run.id}`); else if (alive) void render(true);
     });
     // a class simul (class features 2026-11-03): the teacher seats the pupil, and the new board shows up in Your games
-    const u3 = watchNewGames(me.id, () => { if (alive) void render(); });
+    const u3 = watchNewGames(me.id, () => { if (alive) void render(true); });
     unwatch = () => { u1(); u2(); u3(); };
+    if (!alive) unwatch();   // left while the first draw was loading: the watchers must not outlive the screen
   })();
   return leave;
 }
 
 // ---------- the live game ----------
 export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
-  let alive = true, unwatch: (() => void) | null = null, timer = 0, watchdog = 0, board: Board | null = null, onVisible: (() => void) | null = null;
-  const leave = () => { alive = false; unwatch?.(); clearInterval(timer); clearInterval(watchdog); if (onVisible) document.removeEventListener("visibilitychange", onVisible); board?.destroy(); };
+  let alive = true, unwatch: (() => void) | null = null, timer = 0, watchdog = 0, board: Board | null = null, onVisible: (() => void) | null = null, rematchPoll = 0, unwatchRematch: (() => void) | null = null;
+  const leave = () => { alive = false; unwatch?.(); unwatchRematch?.(); clearInterval(timer); clearInterval(watchdog); clearInterval(rematchPoll); if (onVisible) document.removeEventListener("visibilitychange", onVisible); board?.destroy(); };
   root.innerHTML = `<div class="screen">${bar(t("onlineTitle"))}<p class="muted">${t("loading")}</p></div>`;
   root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/online");
   void (async () => {
-    const [me, first] = await Promise.all([myPlayer(), getGame(id)]);
+    const [me, first, skew] = await Promise.all([myPlayer(), getGame(id), clockSkew()]);
     if (!alive) return;
     if (!me || !first) return go("#/online");
+    void primeLag(me.id);                                   // bullet: measure this connection's round trip for the server's lag allowance
+    const now = () => Date.now() + skew;                    // the server's clock, as near as we can tell (the clocks below are the server's)
     // alreadyOver: opened after the game ended (a reload, the back button): show the result, but don't save it, cheer
     // or add it to Your games a second time (full check 2026-10-08)
     let g: Game = first, busy = false, busySince = 0, view: number | null = null, ended = false, lastReactionAt = "";
@@ -301,7 +275,7 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
     // the clocks come from the server; between updates the side to move counts down here
     const left = (side: "w" | "b") => {
       const base = side === "w" ? g.white_ms : g.black_ms, c = chess();
-      return g.tc_min && g.status === "active" && g.turn_since && c.turn() === side ? Math.max(0, base - (Date.now() - Date.parse(g.turn_since))) : base;
+      return g.tc_min && g.status === "active" && g.turn_since && c.turn() === side ? Math.max(0, base - (now() - Date.parse(g.turn_since))) : base;
     };
     function bars() {
       const c = chess(), cap = captured(c), turn = c.turn();
@@ -328,51 +302,94 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
         root.querySelector<HTMLButtonElement>("[data-acceptdraw]")?.addEventListener("click", () => void gameAction(me!.id, g.id, "accept_draw"));
       }
     }
+    // ---- after the game: the rating change, rematch and "new opponent" (online ratings v2) ----
+    let provisional = false, blocked = false, rm: Rematch | null = null, wentToRematch = false;
+    const canRematch = () => !magical && !viaSimul && !!oppId && g.moves.length >= 2 && g.result !== null && !blocked;
+    /** "rating 1432 +8": the change the database wrote when it rated the game (nothing for an unrated or very short game). */
+    const ratingLine = () => {
+      const d = mine === "w" ? g.white_delta : g.black_delta, before = mine === "w" ? g.white_before : g.black_before;
+      if (!rated || d == null || before == null) return "";
+      return `${t("ratedGame")} · ${t("adultRating")} ${num(before + d)}${provisional ? "?" : ""} <b class="delta ${d >= 0 ? "up" : "down"}">${deltaText(d)}</b>`;
+    };
+    const paintRating = () => root.querySelectorAll<HTMLElement>("[data-ratingline]").forEach(el => { el.innerHTML = ratingLine(); });
+    const paintRematch = () => {
+      if (rm?.status === "accepted" && rm.new_game && !wentToRematch) { wentToRematch = true; go(`#/online/game/${rm.new_game}`); return; }
+      const fresh = rm && (rm.status !== "pending" || Date.parse(rm.created_at) > Date.now() - 60000) ? rm : null;
+      const mineOffer = fresh?.status === "pending" && fresh.from_player === me!.id, theirs = fresh?.status === "pending" && fresh.to_player === me!.id;
+      const newOpp = g.via === "seek" || g.via === "rematch";
+      const tcKey = g.tc_min ? `${g.tc_min}+${g.tc_inc}` : "";
+      const html = `${canRematch() ? (mineOffer ? `<p class="note"><b>${t("rmWaiting")}</b> <button class="linkbtn" data-rm-cancel>${t("cancel")}</button></p>`
+        : theirs ? `<p class="note"><b>${t("rmWants")}</b></p><div class="actions"><button class="btn" data-rm-yes>${t("onlineAccept")}</button><button class="btn ghost" data-rm-no>${t("onlineDecline")}</button></div>`
+        : fresh?.status === "declined" && fresh.from_player === me!.id ? `<p class="note">${t("rmDeclined")}</p>`
+        : `<button class="btn wide" data-rm-ask>${icon("swords")} ${t("rmAsk")}</button>`) : ""}
+        ${newOpp && tcKey && !blocked ? `<button class="btn ghost wide" data-newopp="${tcKey}">${icon("play")} ${t("newOpponent")}</button>` : ""}<p class="note err" data-rm-err></p>`;
+      root.querySelectorAll<HTMLElement>("[data-rematch]").forEach(el => { el.innerHTML = html; });
+      const err = (m: string) => root.querySelectorAll<HTMLElement>("[data-rm-err]").forEach(el => { el.textContent = m; });
+      root.querySelectorAll<HTMLButtonElement>("[data-rm-ask]").forEach(b => b.onclick = async () => {
+        b.disabled = true; const e = await requestRematch(me!.id, g.id); if (e) err(t("rmGone")); void refreshRematch();
+      });
+      root.querySelectorAll<HTMLButtonElement>("[data-rm-cancel]").forEach(b => b.onclick = async () => { if (rm) await cancelRematch(me!.id, rm.id); void refreshRematch(); });
+      root.querySelectorAll<HTMLButtonElement>("[data-rm-yes]").forEach(b => b.onclick = async () => { if (rm) { const e = await answerRematch(me!.id, rm.id, true); if (e) err(t("rmGone")); } void refreshRematch(); });
+      root.querySelectorAll<HTMLButtonElement>("[data-rm-no]").forEach(b => b.onclick = async () => { if (rm) await answerRematch(me!.id, rm.id, false); void refreshRematch(); });
+      root.querySelectorAll<HTMLButtonElement>("[data-newopp]").forEach(b => b.onclick = () => go(`#/online/search/${encodeURIComponent(b.dataset.newopp!)}`));
+    };
+    const refreshRematch = async () => { if (!alive || !canRematch()) return; const r = await rematchFor(g.id); if (!alive) return; rm = r; paintRematch(); };
     function finish() {
       if (ended) return; ended = true; clearInterval(timer);
-      const won = (g.result === "1-0") === (mine === "w") && g.result !== "1/2-1/2", draw = g.result === "1/2-1/2";
-      const r: "won" | "lost" | "draw" = draw ? "draw" : won ? "won" : "lost";
-      const how = t(`byOnline_${g.reason}` as "byOnline_mate");
+      const aborted = g.result === null;                                  // closed before anybody moved: no result, no rating
+      const won = (g.result === "1-0") === (mine === "w") && g.result !== "1/2-1/2" && !aborted, draw = g.result === "1/2-1/2";
+      const r: "won" | "lost" | "draw" = draw || aborted ? "draw" : won ? "won" : "lost";
+      const how = aborted ? t("onlineAborted") : t(`byOnline_${g.reason}` as "byOnline_mate");
       // DECISIONS #117: the king badges always; the banner only when the game ends while watching it
-      const kind = g.reason === "mate" ? "mate" : g.reason === "resign" ? "resign" : g.reason === "time" ? (draw ? "draw" : "time") : g.reason === "stalemate" ? "stalemate" : draw ? "draw" : "other";
-      const loser = draw ? null : won ? theirs : mine;
+      const kind = g.reason === "mate" ? "mate" : g.reason === "resign" ? "resign" : g.reason === "time" ? (draw ? "draw" : "time") : g.reason === "stalemate" ? "stalemate" : draw || aborted ? "draw" : "other";
+      const loser = draw || aborted ? null : won ? theirs : mine;
+      const oppName = rated ? { en: "Online player", pa: "ਔਨਲਾਈਨ ਖਿਡਾਰੀ" } : { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" };
       if (alreadyOver) board!.setEnd(endBadges(kind, loser)); else announceEnd(board!, kind, loser);
       // a Magical Chess game is not kept in Your games or reviewed: those replay it as plain chess, which it is not
-      if (!alreadyOver && !magical) saveGame({ at: new Date().toISOString(), opp: { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" }, me: mine, result: r, tc: g.tc_min ? (g.tc_inc ? `${g.tc_min}+${g.tc_inc}` : String(g.tc_min)) : undefined, uci: g.moves,
+      if (!alreadyOver && !magical && !aborted) saveGame({ at: new Date().toISOString(), opp: oppName, me: mine, result: r, tc: g.tc_min ? (g.tc_inc ? `${g.tc_min}+${g.tc_inc}` : String(g.tc_min)) : undefined, uci: g.moves,
         ms: g.moves.map((_, i) => times[i] ?? null) });
-      if (!magical) setLastGame({ uci: g.moves, me: mine, botName: { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" }, back: "#/online" });
+      if (!magical) setLastGame({ uci: g.moves, me: mine, botName: oppName, back: "#/online" });
       if (r === "won" && !alreadyOver) { sound.complete(); confetti(root.querySelector(".screen")!); }
-      const buttons = `${g.moves.length >= 2 && !magical ? `<button class="btn wide gold" data-review>${icon("target")} ${t("reviewTitle")}</button>` : ""}
+      const buttons = `<p class="note ratingline" data-ratingline></p>
+        <div class="rematch" data-rematch></div>
+        ${g.moves.length >= 2 && !magical ? `<button class="btn wide gold" data-review>${icon("target")} ${t("reviewTitle")}</button>` : ""}
         <button class="btn ghost wide" data-lobby>${t("onlineBackToLobby")}</button>
         ${g.moves.length >= 2 ? shareButton() : ""}
         ${rated && oppId ? `<button class="linkbtn" data-block>${t("adultBlock")}</button>` : ""}`;
       const card = root.querySelector<HTMLElement>("[data-card]")!;
       card.innerHTML = `<button class="iconbtn x" data-x aria-label="${t("close")}">${icon("close")}</button>${avatarHTML(opp, "big")}
-        <h2>${r === "won" ? t("gameWon") : r === "lost" ? t("onlineLost") : t("gameDrawn")}</h2><p>${how}</p>${buttons}`;
+        <h2>${aborted ? t("gameDrawn") : r === "won" ? t("gameWon") : r === "lost" ? t("onlineLost") : t("gameDrawn")}</h2><p>${how}</p>${buttons}`;
       card.hidden = true; if (alreadyOver) card.hidden = false; else setTimeout(() => { if (alive) card.hidden = false; }, END_PAUSE);
       const acts = root.querySelector<HTMLElement>("[data-acts]")!; acts.innerHTML = `<div class="resultacts">${buttons}</div>`; acts.hidden = true;
       root.querySelectorAll<HTMLButtonElement>("[data-review]").forEach(b => b.onclick = () => go("#/review"));
       root.querySelectorAll<HTMLButtonElement>("[data-lobby]").forEach(b => b.onclick = () => go("#/online"));
       wireShare(root, () => { const c = chess(), last = g.moves.at(-1);   // DECISIONS #115
-        return { pos: placementFromFen(c.fen()), lastMove: last ? [last.slice(0, 2), last.slice(2, 4)] : undefined, flip: mine === "b", result: r, how, opp: { en: "Online friend", pa: "ਔਨਲਾਈਨ ਦੋਸਤ" }, moves: Math.ceil(g.moves.length / 2) }; });
+        return { pos: placementFromFen(c.fen()), lastMove: last ? [last.slice(0, 2), last.slice(2, 4)] : undefined, flip: mine === "b", result: r, how, opp: oppName, moves: Math.ceil(g.moves.length / 2) }; });
       card.querySelector<HTMLButtonElement>("[data-x]")!.onclick = () => { card.hidden = true; acts.hidden = false; };
       root.querySelectorAll<HTMLButtonElement>("[data-block]").forEach(b => b.onclick = async () => {
         if (!oppId || !(await ask(t("adultBlockConfirm"), { danger: true }))) return;
         const e = await blockPlayer(me!.id, oppId);
+        if (!e) { blocked = true; paintRematch(); }
         root.querySelectorAll<HTMLButtonElement>("[data-block]").forEach(x => { x.disabled = true; x.textContent = e ?? t("adultBlocked"); });
       });
-      // a rated game: the new rating and the change, once the database has rated it
-      if (rated) void gamePlayers(g.id).then(now => {
-        const before = mine === "w" ? g.white_before : g.black_before, after = now.find(x => x.side === mine)?.rating;
-        if (!alive || before == null || after == null) return;
-        const d = after - before, p = card.querySelector("p");
-        if (p) p.innerHTML += ` · ${t("adultRating")} ${num(after)} <b class="delta ${d >= 0 ? "up" : "down"}">${d >= 0 ? "+" : "−"}${num(Math.abs(d))}</b>`;
-      });
+      // a rated game: the new rating and the change. The database writes them a moment after the game ends, so they are
+      // painted now if they are there and again when the live update that carries them arrives (apply)
+      paintRating();
+      if (rated) void gamePlayers(g.id).then(sides => { provisional = !!sides.find(x => x.side === mine)?.provisional; if (alive) paintRating(); });
+      paintRematch();
+      if (canRematch()) {
+        void refreshRematch();
+        rematchPoll = window.setInterval(() => void refreshRematch(), 2500);
+        unwatchRematch = watchRematch(g.id, () => void refreshRematch());
+      }
       say("");
     }
     const apply = (next: Game) => {
-      const moved = next.moves.length !== g.moves.length;
-      g = next; busy = false;
+      // while my move is on its way, an update with FEWER moves than my optimistic list (a reaction, a draw offer) keeps
+      // my move on the board; the update that carries it (or the watchdog's re-sync) clears the wait
+      const keep = busy && next.status === "active" && next.moves.length < g.moves.length;
+      const moved = !keep && next.moves.length !== g.moves.length;
+      g = keep ? { ...next, moves: g.moves } : next; if (!keep) busy = false;
       if (moved) { view = null; show(true); } else show();
       // a reaction from the other player pops up for a moment
       if (g.reaction && g.reaction.by !== me!.id && g.reaction.at !== lastReactionAt) {
@@ -380,7 +397,7 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
         const pop = document.createElement("div"); pop.className = "reactpop"; pop.textContent = reactionText(g.reaction.code);
         root.querySelector(".frame")!.appendChild(pop); setTimeout(() => pop.remove(), 2500);
       }
-      if (g.status === "finished") finish();
+      if (g.status === "finished") { finish(); paintRating(); }   // the rating change can arrive in a second update
     };
     board.interact({
       canPick: s => {
@@ -400,7 +417,7 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
         if (!legal.length) { board!.shake(to); say(refusal(c.fen(), from, to)); return; }
         const pr = legal[0].promotion ? await promotion(ctx, mine) : undefined;
         const uci = legal[0].from + legal[0].to + (pr ?? "");
-        if (g.turn_since) times[g.moves.length] = Math.max(0, Date.now() - Date.parse(g.turn_since));   // Insights (#113)
+        if (g.turn_since) times[g.moves.length] = Math.max(0, now() - Date.parse(g.turn_since));   // Insights (#113)
         // show it at once; the server's answer (by the live update) confirms it, or puts the board back
         busy = true; busySince = Date.now();
         const before = g; g = { ...g, moves: [...g.moves, uci] }; show(true);
@@ -443,6 +460,7 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
     document.addEventListener("visibilitychange", onVisible);
     // catch up if an update arrived before the live channel opened (this also shows the result of a finished game, once)
     await resync();
+    if (!alive) return;
     show();
     if (g.status === "finished") finish();
   })();
@@ -450,7 +468,7 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
 }
 
 // ---------- the grown-up ladder (DECISIONS #89) ----------
-let ladderCat: "rapid" | "blitz" = "rapid";
+let ladderCat: Category = "rapid";
 /** The top 50 grown-ups for a clock speed (at least 5 rated games), as animal + rating, and my own place. */
 export function ladderScreen(root: HTMLElement, go: Go): () => void {
   let alive = true;
@@ -463,14 +481,14 @@ export function ladderScreen(root: HTMLElement, go: Go): () => void {
     const rows = await adultLadder(me.id, ladderCat);
     if (!alive) return;
     root.innerHTML = `<div class="screen">${bar(t("ladderTitle"))}
-      <div class="seg" role="group">${(["rapid", "blitz"] as const).map(c => `<button data-cat="${c}" aria-pressed="${ladderCat === c}">${t(c === "rapid" ? "adultRapid" : "adultBlitz")}</button>`).join("")}</div>
+      <div class="seg" role="group">${CATEGORIES.map(c => `<button data-cat="${c}" aria-pressed="${ladderCat === c}">${catName(c)}</button>`).join("")}</div>
       <p class="muted">${t("ladderAbout")}</p>
       ${rows.length ? `<table class="boardtable"><tr><th></th><th></th><th>${t("ratingLabel")}</th><th>${t("ladderGames")}</th></tr>
         ${rows.map(r => `<tr class="${r.me ? "me" : ""}"><td class="n">${num(r.place)}</td><td>${avatarHTML(r)}${r.me ? ` <b>${t("you")}</b>` : ""}</td>
-          <td class="n"><b>${num(r.rating)}</b></td><td class="n">${num(r.games)}</td></tr>`).join("")}</table>` : `<p class="note">${t("ladderEmpty")}</p>`}
+          <td class="n"><b>${num(r.rating)}${r.provisional ? "?" : ""}</b></td><td class="n">${num(r.games)}</td></tr>`).join("")}</table>` : `<p class="note">${t("ladderEmpty")}</p>`}
       ${rows.some(r => r.me) ? "" : `<p class="note">${t("ladderNotYet")}</p>`}</div>`;
     root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/online");
-    root.querySelectorAll<HTMLButtonElement>("[data-cat]").forEach(b => b.onclick = () => { ladderCat = b.dataset.cat as "rapid" | "blitz"; void draw(); });
+    root.querySelectorAll<HTMLButtonElement>("[data-cat]").forEach(b => b.onclick = () => { ladderCat = b.dataset.cat as Category; void draw(); });
   };
   void draw();
   return () => { alive = false; };

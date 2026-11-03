@@ -12,7 +12,7 @@ import { games } from "../play/history";
 import NAMES from "../content/opening-names.json";
 import { describeGames, filterGames, filterOptions, isFiltered, NO_FILTER, type GameFilter } from "../play/gamefilter";
 import { statsHTML, wireStats } from "./stats";
-import { myPlayer, signedIn } from "../online/api";
+import { myPlayer, ratingSummary, signedIn } from "../online/api";
 import { myClasses } from "../teach/api";
 import { setLastGame } from "../review/screen";
 import { nextTrophy, rankOf, trophies } from "./trophies";
@@ -85,13 +85,16 @@ export function mePage(root: HTMLElement, go: (h: string) => void) {
     box.innerHTML = `<h3 class="sub">${t("boardTitle")}</h3>${mine.map(m => `<button class="gamerow" data-cb="${m.class_id}">${icon("trophy")}<span class="grow"><b>${m.title.replace(/[&<>"]/g, "")}</b></span>${icon("arrowRight")}</button>`).join("")}`;
     box.querySelectorAll<HTMLButtonElement>("[data-cb]").forEach(b => b.onclick = () => go(`#/class/${b.dataset.cb}`));
   });
-  // the grown-up profile's online ratings (DECISIONS #87), once the account answers
-  if (signedIn()) void myPlayer().then(me => {
+  // the online ratings (DECISIONS #87; bullet, blitz and rapid since online ratings v2), once the account answers. A child
+  // sees their own pool's ratings (friend and class games); a grown-up theirs (stranger games). "?" while still settling.
+  if (signedIn()) void myPlayer().then(async me => {
     const box = root.querySelector<HTMLElement>("[data-onlineratings]");
-    if (!box || !me?.adult) return;
-    box.innerHTML = `<h3 class="sub">${t("adultPlayTitle")}</h3><div class="stats"><div class="kpis">
-      <div><small>${t("adultRapid")}</small><b>${num(me.rapid_r)}</b><em>${num(me.rapid_n)} ${t("adultGames")}</em></div>
-      <div><small>${t("adultBlitz")}</small><b>${num(me.blitz_r)}</b><em>${num(me.blitz_n)} ${t("adultGames")}</em></div></div></div>`;
+    if (!box || !me) return;
+    const rows = await ratingSummary(me.id);
+    if (!root.isConnected || !box.isConnected) return;
+    box.innerHTML = `<h3 class="sub">${t("rtTitle")}</h3><button class="stats statsbtn" data-rt><div class="kpis">${rows.map(r =>
+      `<div><small>${t(r.category === "bullet" ? "catBullet" : r.category === "blitz" ? "catBlitz" : "catRapid")}</small><b>${num(r.rating)}${r.provisional ? "?" : ""}</b><em>${num(r.games)} ${t("adultGames")}</em></div>`).join("")}</div></button>`;
+    box.querySelector<HTMLButtonElement>("[data-rt]")!.onclick = () => go("#/online/rating");
   });
   root.querySelector<HTMLButtonElement>("[data-family]")!.onclick = () => go("#/family");
 }

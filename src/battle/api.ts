@@ -3,6 +3,7 @@
 // connection and a signed-in account: there is no offline battle.
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { dbClient } from "../sync";
+import { invokeError } from "../online/errors";
 import { clockSkew, type BattleLevel, type EndReason, type PublicPuzzle, type Winner } from "./rules";
 
 export interface Battle {
@@ -36,13 +37,13 @@ export async function getBattle(id: string): Promise<Battle | null> {
 }
 /** The invited player says yes: the server picks the puzzles and starts the countdown. Returns an error, or null. */
 export async function acceptBattle(player: string, id: string): Promise<string | null> {
-  const { data, error } = await db()!.functions.invoke("puzzle-battle", { body: { action: "accept", battle: id, player } });
-  return error ? (data?.error ?? error.message) : null;
+  const { error } = await db()!.functions.invoke("puzzle-battle", { body: { action: "accept", battle: id, player } });
+  return error ? await invokeError(error) : null;
 }
 /** One of my moves in the current puzzle: the server judges it and sends back the opponent's reply, if there is one. */
 export async function battleMove(battle: string, player: string, uci: string): Promise<MoveReply> {
   const { data, error } = await db()!.functions.invoke("puzzle-battle", { body: { action: "move", battle, player, uci } });
-  return error ? { error: data?.error ?? error.message } : (data as MoveReply);
+  return error ? { error: await invokeError(error) } : (data as MoveReply);
 }
 /** Time is up (or both are through the set): ask the server to finish the battle (it checks the time itself). */
 export async function claimBattle(battle: string, player: string) {

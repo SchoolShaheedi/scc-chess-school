@@ -14,6 +14,8 @@ import "./theme-dark.css";   // DECISIONS #111: dark by default; Settings can sw
 import { registerSW } from "virtual:pwa-register";
 import { premovesOn } from "./play/gamekit";
 import { ladderScreen, onlineGame, onlineLobby } from "./online/screens";
+import { openLobby, playOnline } from "./online/play";
+import { ratingScreen } from "./online/rating";
 import { battleScreen } from "./battle/screens";
 import { simulScreen } from "./simul/screens";
 import { classBoardScreen } from "./teach/screens";
@@ -535,7 +537,13 @@ function route() {
     if (sub) { teardown = bossRound(app, n, parseInt(sub), open, go); return; }
     return bossScreen(app, n, open, go);
   }
-  if (page === "online") { teardown = arg === "game" && sub ? onlineGame(app, sub, go) : arg === "ladder" ? ladderScreen(app, go) : onlineLobby(app, go); return; }
+  // Play Online: #/online is the Play page; /search/<clock> starts searching at once ("new opponent"); /lobby = open challenges;
+  // /friends = friend code and challenges; /rating = my ratings, graph and history; /ladder = the grown-up ladder; /game/<id>
+  if (page === "online") {
+    teardown = arg === "game" && sub ? onlineGame(app, sub, go) : arg === "ladder" ? ladderScreen(app, go) : arg === "friends" ? onlineLobby(app, go)
+      : arg === "lobby" ? openLobby(app, go) : arg === "rating" ? ratingScreen(app, go) : playOnline(app, go, arg === "search" && sub ? decodeURIComponent(sub) : undefined);
+    return;
+  }
   if (page === "battle" && arg) { teardown = battleScreen(app, arg, go); return; }
   // the teacher-run class simul: approved teachers only, as for the other teacher pages
   if (page === "simul" && arg) {

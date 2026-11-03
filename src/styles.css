@@ -1416,3 +1416,15 @@ input, select, textarea { font-size: max(16px, 1em); }
 .simulcell.wait { border-color: var(--gold); box-shadow: 0 0 0 2px var(--last); } .simulcell.on { outline: 2px solid var(--kesri); }
 .simulcell .who { display: flex; align-items: center; gap: 4px; } .simulcell .who .kidav { width: 28px; height: 28px; }
 .simulcell .st { color: var(--muted); font-size: 12px; }
+
+/* Play Online v2 (2026-11-03): clock picker, big Play button, rating graph, rematch */
+.tcgroup { margin-bottom: 8px; } .tcgroup .sub small { color: var(--muted); font-weight: 600; margin-left: 6px; }
+.tcrow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.tcrow button { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 12px 6px; min-height: 48px; font: inherit; color: var(--ink); }
+.tcrow button[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--kesri); }
+.bigplay { min-height: 60px; font-size: 20px; margin: 10px 0 4px; }
+.linklist { display: grid; gap: 8px; margin: 12px 0; }
+.rgraph { margin: 8px 0; color: var(--kesri); } .rgraph svg { width: 100%; height: 120px; background: var(--surface-2); border-radius: 12px; display: block; }
+.rgraph figcaption { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; }
+.statsbtn { width: 100%; border: 0; background: none; padding: 0; text-align: inherit; font: inherit; color: inherit; }
+.ratingline { min-height: 1.2em; margin: 4px 0; } .rematch { display: grid; gap: 8px; margin: 6px 0; }

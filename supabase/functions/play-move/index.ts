@@ -5,12 +5,14 @@
 //
 // POST { game, player, uci }           a move
 // POST { game, player, uci, change }   a Magical Chess move; change = the piece becomes its gem's piece (Stage 2)
-// POST { game, player, claim: "time" } the opponent's clock has run out
+// POST { game, player, uci, lag }     the same, with the mover's measured round trip in ms: the server forgives a capped, quota-limited part of it (lag.ts)
+// POST { game, player, claim: "time" } the opponent's clock has run out (allowed once it is past zero by the flagged side's remaining lag allowance)
 //
 // The database write uses Supabase's server key, which Supabase gives every server function automatically
 // (SUPABASE_SERVICE_ROLE_KEY). It exists only on Supabase's servers: it is never in the app or in this repository.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { Chess } from "npm:chess.js@1.4.0";
+import { flagGrace, lagCredit, nextQuota } from "./lag.ts";   // the lag allowance for bullet (pure, tested in test/lag.test.ts)
 import { playMagicalFrom, replayMagical } from "./power/online.ts";   // a copy of the app's own rules (tools/sync-magical.mjs)
 
 // only the app's own addresses may call it from a browser: the live site, the Android app (Capacitor serves it from
@@ -31,12 +33,13 @@ Deno.serve(async req => {
   const asUser = createClient(url, Deno.env.get("SUPABASE_ANON_KEY")!, { global: { headers: { Authorization: req.headers.get("Authorization") ?? "" } } });
   const { data: { user } } = await asUser.auth.getUser();
   if (!user) return reply(401, { error: "sign in first" });
-  let body: { game?: string; player?: string; uci?: string; claim?: string; change?: boolean };
+  let body: { game?: string; player?: string; uci?: string; claim?: string; change?: boolean; lag?: number };
   try { body = await req.json(); } catch { return reply(400, { error: "bad request" }); }
-  const { game: gameId, player, uci, claim, change } = body;
+  const { game: gameId, player, uci, claim, change, lag } = body;
   if (!gameId || !player || (!uci && claim !== "time")) return reply(400, { error: "bad request" });
   if (uci && !/^[a-h][1-8][a-h][1-8][qrbn]?$/.test(uci)) return reply(400, { error: "bad move" });
   if (change !== undefined && typeof change !== "boolean") return reply(400, { error: "bad request" });
+  if (lag !== undefined && typeof lag !== "number") return reply(400, { error: "bad request" });
 
   const db = createClient(url, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
   const { data: me } = await db.from("online_players").select("id").eq("id", player).eq("parent", user.id).maybeSingle();
@@ -63,6 +66,8 @@ Deno.serve(async req => {
     const base = side === "w" ? g.white_ms : g.black_ms;
     return timed && side === turn && since !== null ? base - (now - since) : base;
   };
+  // the lag allowance left for a side; 0 when the database has no quota column yet (the function can be deployed first)
+  const quotaOf = (side: "w" | "b"): number => { const q = (g as Record<string, unknown>)[side === "w" ? "white_quota" : "black_quota"]; return typeof q === "number" ? q : 0; };
   const finish = async (result: string, reason: string, patch: Record<string, unknown> = {}) => {
     const { data, error } = await db.from("games").update({ ...patch, status: "finished", result, reason, draw_offer: null, updated_at: new Date(now).toISOString() })
       .eq("id", g.id).eq("status", "active").eq("updated_at", g.updated_at).select("id");   // only if nobody changed it meanwhile (updated_at is the version)
@@ -89,13 +94,16 @@ Deno.serve(async req => {
   };
 
   if (claim === "time") {
-    if (!timed || left(turn) > 0) return reply(409, { error: "there is still time" });
+    // the flagged side may still be owed its lag allowance for a move that is on its way
+    if (!timed || left(turn) + flagGrace(quotaOf(turn)) > 0) return reply(409, { error: "there is still time" });
     return finish(flagResult(turn), "time", { [turn === "w" ? "white_ms" : "black_ms"]: 0 });
   }
 
   const mySide = g.white === player ? "w" : "b";
   if (mySide !== turn) return reply(409, { error: "not your turn" });
-  if (timed && left(turn) <= 0) return finish(flagResult(turn), "time", { [turn === "w" ? "white_ms" : "black_ms"]: 0 });
+  // lag allowance: forgive part of the time this move spent on the network (capped, from a per-side quota)
+  const credit = timed && since !== null ? lagCredit(lag, quotaOf(turn), now - since) : 0;
+  if (timed && left(turn) + credit <= 0) return finish(flagResult(turn), "time", { [turn === "w" ? "white_ms" : "black_ms"]: 0 });
   let lan: string, end: Chess;
   const patch: Record<string, unknown> = { draw_offer: null, updated_at: new Date(now).toISOString() };
   if (magical) {
@@ -113,7 +121,8 @@ Deno.serve(async req => {
   patch.moves = [...g.moves, lan];
 
   // the clock: White's first move starts it (nobody loses time settling in); then the mover is charged and gets the increment
-  if (timed && since !== null) patch[turn === "w" ? "white_ms" : "black_ms"] = Math.max(0, left(turn)) + g.tc_inc * 1000;
+  if (timed && since !== null) patch[turn === "w" ? "white_ms" : "black_ms"] = Math.max(0, left(turn) + credit) + g.tc_inc * 1000;
+  if (timed && (turn === "w" ? "white_quota" : "black_quota") in g) patch[turn === "w" ? "white_quota" : "black_quota"] = nextQuota(quotaOf(turn), credit);
   patch.turn_since = timed ? new Date(now).toISOString() : null;
 
   // Magical Chess: a change can make positions differ, so repetition is not judged there (as against the bots)
