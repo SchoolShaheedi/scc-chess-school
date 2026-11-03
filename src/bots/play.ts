@@ -30,6 +30,7 @@ import { copyText, pgnOf } from "../play/pgn";
 import { type Bot, BOTS, botMove, nextOpponent } from "./bots";
 import { goodMove, hanging } from "./gamecoach";
 import { findTrap } from "./traps";
+import { countChecks, letsOpponentWin, ODDS, oddsFen, type Odds, type Variant, VARIANTS, variantChoice, variantWinner } from "./variants";
 import { courseOpening } from "../content/course";
 import { commentary, type Threat } from "./commentary";
 import { coachHTML, type Mood } from "../coach";
@@ -94,6 +95,8 @@ export function playBot(root: HTMLElement, bot: Bot, go: (h: string) => void, te
   let cleanup = () => {};
   const back = testLevel ? "#/" : "#/play";
   const timed = !testLevel && !race && !coachMode;   // a level test and a coached game are always untimed
+  const special = timed;   // odds and variants: only in a plain game (not a level test, a race or Play vs Coach)
+  botOdds = "none"; botVariant = "none";
   const render = () => {
     root.innerHTML = `<div class="screen">
     <div class="lessonbar"><button class="iconbtn" data-back aria-label="${t("back")}">${icon("chevronLeft")}</button>
@@ -101,6 +104,12 @@ export function playBot(root: HTMLElement, bot: Bot, go: (h: string) => void, te
     <div class="botintro">${art(bot, "neutral")}<h2>${tx(bot.name)} <small>~${num(bot.rating)}</small></h2><p>${tx(bot.about)}</p>
       ${race ? `<p class="raceline">${icon("target")} ${t("raceRule").replace("{n}", num(race)).replace("{bot}", tx(bot.name))}</p>` : ""}
       ${coachMode ? `<p class="helpline">${icon("ok")} ${t("playCoachSub")}</p><p class="note">${t("coachModeNote")}</p>` : `<p class="helpline">${icon(bot.help ? "ok" : "lock")} ${t(bot.help && testLevel ? "helpTest" : bot.help ? "helpOn" : "helpOff")}</p>`}</div>
+    ${special ? `<h2 class="sec">${t("oddsTitle")}</h2>
+    <div class="seg" role="group">${ODDS.map(o => `<button data-odds="${o}" aria-pressed="${botOdds === o}">${o === "none" ? t("oddsNone") : oddsName(o)}</button>`).join("")}</div>
+    ${botOdds !== "none" ? `<p class="note">${t("oddsNote").replace("{bot}", tx(bot.name)).replace("{piece}", oddsPiece(botOdds))}</p>` : ""}
+    <h2 class="sec">${t("variantTitle")}</h2>
+    <div class="seg" role="group">${VARIANTS.map(v => `<button data-variant="${v}" aria-pressed="${botVariant === v}">${t(VARIANT_KEY[v])}</button>`).join("")}</div>
+    ${botVariant !== "none" ? `<p class="helpline">${icon("target")} ${t(botVariant === "koth" ? "kothRule" : "threeRule")}</p><p class="note">${t("variantNote").replace("{bot}", tx(bot.name))}</p>` : ""}` : ""}
     ${timed ? `<h2 class="sec">${t("clockTitle")}</h2>
     <div class="seg tcs" role="group">${TCS.map(([id, m, inc]) => `<button data-tc="${id}" aria-pressed="${botTc === id}">${id === "none" ? t("clockNone") : inc ? `${num(m)} + ${num(inc)}` : `${num(m)} ${t("minutes")}`}</button>`).join("")}</div>
     ${botTc !== "none" && bot.help ? `<p class="note">${t("timedNoHelp")}</p>` : ""}` : ""}
@@ -109,10 +118,15 @@ export function playBot(root: HTMLElement, bot: Bot, go: (h: string) => void, te
       `<button data-c="${c}"><span class="kingdot ${c}"></span>${t(c === "w" ? "colourWhite" : c === "b" ? "colourBlack" : "colourRandom")}</button>`).join("")}</div>
   </div>`;
     root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go(back);
+    // odds and a variant do not mix: each one is its own kind of game
+    root.querySelectorAll<HTMLButtonElement>("[data-odds]").forEach(b => b.onclick = () => { botOdds = b.dataset.odds as Odds; if (botOdds !== "none") botVariant = "none"; render(); });
+    root.querySelectorAll<HTMLButtonElement>("[data-variant]").forEach(b => b.onclick = () => { botVariant = b.dataset.variant as Variant; if (botVariant !== "none") botOdds = "none"; render(); });
     root.querySelectorAll<HTMLButtonElement>("[data-tc]").forEach(b => b.onclick = () => { botTc = b.dataset.tc!; render(); });
     root.querySelectorAll<HTMLButtonElement>("[data-c]").forEach(b => b.onclick = () => {
       const c = b.dataset.c === "random" ? (Math.random() < .5 ? "w" : "b") : b.dataset.c as "w" | "b";
-      cleanup = game(root, bot, c, go, back, testLevel, race, undefined, timed ? botTc : "none", coachMode);
+      const odds = special ? botOdds : "none", variant = special ? botVariant : "none";
+      cleanup = game(root, bot, c, go, back, testLevel, race, odds === "none" ? undefined : oddsFen(odds, c === "w" ? "b" : "w"), timed ? botTc : "none", coachMode,
+        undefined, { odds, variant });
     });
   };
   render();
@@ -122,6 +136,13 @@ export function playBot(root: HTMLElement, bot: Bot, go: (h: string) => void, te
 // DECISIONS #84: the clocks offered against a bot (untimed stays the default: it is the best way to learn)
 const TCS: [string, number, number][] = [["none", 0, 0], ["10", 10, 0], ["5", 5, 0], ["3+2", 3, 2]];
 let botTc = "none";
+// Play variety: the odds and the variant picked on the setup screen (reset each time the screen opens)
+let botOdds: Odds = "none", botVariant: Variant = "none";
+const VARIANT_KEY = { none: "variantStd", koth: "variantKoth", threecheck: "variantThree" } as const;
+const ODDS_PIECE = { pawn: ["f", "P"], knight: ["b", "N"], rook: ["a", "R"] } as const;
+const oddsName = (o: Exclude<Odds, "none">) => t(`pc${ODDS_PIECE[o][1]}` as Parameters<typeof t>[0]);
+/** "f-pawn", "b-knight", "a-rook": the piece the bot gives. */
+const oddsPiece = (o: Exclude<Odds, "none">) => `${ODDS_PIECE[o][0]}-${oddsName(o)}`;
 
 /** A level's boss, round 3 (DECISIONS #109): a real game against the hero, as White, no take-backs, unrated. */
 export function playBoss(root: HTMLElement, bot: Bot, go: (h: string) => void, back: string, onDone: (r: "won" | "lost" | "draw") => void): () => void {
@@ -129,8 +150,11 @@ export function playBoss(root: HTMLElement, bot: Bot, go: (h: string) => void, b
 }
 
 function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => void, back: string, testLevel?: number, race?: number, startFen?: string, tc = "none", coachMode = false,
-  bossDone?: (r: "won" | "lost" | "draw") => void): () => void {
+  bossDone?: (r: "won" | "lost" | "draw") => void, special?: { odds: Odds; variant: Variant }): () => void {
   const engine = getEngine(), g = startFen ? new Chess(startFen) : new Chess();
+  // odds and variant games are unrated, like Play vs Coach (DECISIONS #108), and do not count as a bot win
+  const odds = special?.odds ?? "none", variant = special?.variant ?? "none", unrated = odds !== "none" || variant !== "none";
+  const vstate = () => ({ variant, checks: countChecks(g.history({ verbose: true })) });
   const them: "w" | "b" = me === "w" ? "b" : "w";
   let busy = false, alive = true, over = false, timer = 0;
   // DECISIONS #84: a premove queued while the bot thinks, and the move being looked at (null = the live game)
@@ -145,11 +169,13 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
   // the clock is charged from the side that moved first, so a game from a set position starts the right clock
   let clock: Clock | null = tcDef && tcDef[1] ? { ...newClock(tcDef[1], tcDef[2]), turn: g.turn() } : null;
   const help = bot.help && !clock;   // take-backs and hints would make a clock meaningless
+  const hintOk = help && variant === "none";   // Stockfish's hint knows only standard chess
   // DECISIONS #94: no coach for the 16+ look, unless they asked for one (Play vs Coach, #108)
   const lookOf = store.get().look, coached = lookOf !== "adult" || coachMode;
   root.innerHTML = `<div class="screen">
     <div class="lessonbar"><button class="iconbtn" data-back aria-label="${t("back")}">${icon("chevronLeft")}</button>
       <h1 class="grow">${tx(bot.name)} <small>~${num(bot.rating)}</small></h1></div>
+    ${unrated ? `<p class="note vline" data-vline></p>` : ""}
     <div class="pbar" data-top></div>
     <div class="frame"><div class="boardwrap" data-board></div><div class="overcard" data-card hidden></div></div>
     <div class="pbar" data-bottom></div>
@@ -163,7 +189,7 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     <div class="extra" data-extra></div>
     <div class="actions" data-acts>
       ${help ? `<button class="btn ghost" data-undo>${icon("again")} ${t("takeback")}</button>` : ""}
-      ${help && !testLevel ? `<button class="btn ghost" data-hint>${icon("hint")} ${t("hint")}</button>` : ""}
+      ${hintOk && !testLevel ? `<button class="btn ghost" data-hint>${icon("hint")} ${t("hint")}</button>` : ""}
       <button class="btn ghost" data-resign>${t("resign")}</button>
     </div></div>`;
   const board = new Board(root.querySelector("[data-board]")!, { flip: me === "b", game: true });
@@ -190,6 +216,13 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
 
   /** The two player bars (DECISIONS #84, chess.com's layout): picture, name, what they have taken, the clock. */
   function bars() {
+    const vl = root.querySelector<HTMLElement>("[data-vline]");
+    if (vl) {
+      const ck = vstate().checks;
+      vl.textContent = variant === "koth" ? t("kothLine")
+        : variant === "threecheck" ? t("threeLine").replace("{a}", num(ck[me])).replace("{b}", num(ck[them])).replace("{bot}", tx(bot.name))
+        : t("oddsLine").replace("{bot}", tx(bot.name)).replace("{piece}", oddsPiece(odds as Exclude<Odds, "none">));
+    }
     const c = captured(g), now = Date.now();
     const caps = (by: "w" | "b") => c[by].map(p => `<span class="cp">${pieceHTML(`${by === "w" ? "b" : "w"}${p.toUpperCase()}` as PieceCode)}</span>`).join("");
     const lead = (side: "w" | "b") => { const l = side === "w" ? c.lead : -c.lead; return l > 0 ? `<span class="lead">+${num(l)}</span>` : ""; };
@@ -231,7 +264,7 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
   const trapSaid = new Set<string>();
   function trapAlert() {
     const s = store.get();
-    if (!coached || lookOf === "young" || s.focusMode || coachMode || startFen || bossDone || race || over) return;
+    if (!coached || lookOf === "young" || s.focusMode || coachMode || startFen || variant !== "none" || bossDone || race || over) return;
     const studied = (id: string) => (s.rep.course?.[id] ?? []).includes("win");
     const hit = findTrap(g.fen(), me, g.history().length, studied);
     if (!hit || trapSaid.has(hit.kind)) return;
@@ -247,7 +280,16 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     // if the engine fails (a worker crash, low memory on an old phone) the bot still answers with a legal move,
     // rather than leaving the game "thinking" for ever with your pieces locked
     let mv: string;
-    try { mv = await botMove(await engine, g.fen(), legal, bot, Math.random, g.history()); }
+    try {
+      const eng = await engine;
+      mv = await botMove(eng, g.fen(), legal, bot, Math.random, g.history());
+      // a variant: take a win, avoid letting you win next move (src/bots/variants.ts); the engine's other candidates are asked only when needed
+      if (variant !== "none") {
+        const vs = vstate();
+        const ranked = letsOpponentWin(g.fen(), mv, vs) ? (await eng.candidates(g.fen(), { n: 8, depth: Math.max(2, Math.min(bot.depth, 8)) })).map(c => c.move) : [];
+        mv = variantChoice(g.fen(), vs, mv, ranked, legal);
+      }
+    }
     catch { mv = legal[Math.floor(Math.random() * legal.length)]; }
     if (!alive || over) return;   // resigned, out of time, or left while the bot was thinking: its move must not land
     g.move({ from: mv.slice(0, 2), to: mv.slice(2, 4), promotion: mv[4] }); tick(); turnAt = Date.now();
@@ -309,21 +351,23 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
   function checkEnd(resigned = false, flag?: "w" | "b"): boolean {
     if (over) return true;
     const raceWon = !!race && taken(me) >= race, raceLost = !!race && taken(them) >= race;
-    if (!resigned && !flag && !g.isGameOver() && !raceWon && !raceLost) return false;
+    const vw = variant === "none" ? null : variantWinner(g, variant, vstate().checks);
+    if (!resigned && !flag && !g.isGameOver() && !raceWon && !raceLost && !vw) return false;
     over = true; clearInterval(timer);
     // out of time loses, unless the other side has only its king: it could never mate, so it is a draw
     const flagDraw = !!flag && flagOutcome(g, flag) === "draw";
-    const won = !resigned && !flagDraw && ((g.isCheckmate() && g.turn() !== me) || (!g.isCheckmate() && raceWon) || flag === them);
-    const lost = !won && !flagDraw && (resigned || (g.isCheckmate() && g.turn() === me) || raceLost || flag === me);
-    const how = resigned ? t("byResign") : flag ? t("byTime") : g.isCheckmate() ? t("byMate") : raceWon || raceLost ? t("byRace").replace("{n}", num(race!)) : g.isStalemate() ? t("byStalemate") : t("byRule");
+    const won = !resigned && !flagDraw && (vw === me || (!vw && g.isCheckmate() && g.turn() !== me) || (!g.isCheckmate() && raceWon) || flag === them);
+    const lost = !won && !flagDraw && (resigned || vw === them || (!vw && g.isCheckmate() && g.turn() === me) || raceLost || flag === me);
+    const how = resigned ? t("byResign") : flag ? t("byTime") : vw ? t(variant === "koth" ? "byKoth" : "byThreeCheck") : g.isCheckmate() ? t("byMate") : raceWon || raceLost ? t("byRace").replace("{n}", num(race!)) : g.isStalemate() ? t("byStalemate") : t("byRule");
     // a boss game is the hero's, not a bot's: it counts as practice, never as a bot win or for the rating
-    if (bossDone) store.recordPractice();
+    if (bossDone || unrated) store.recordPractice();
     else store.recordGame(bot.id, won, helped || race ? undefined : bot.rating, won ? 1 : lost ? 0 : 0.5, clock ? tc : "none");
     if (won && testLevel) store.recordTest(testLevel, 1, true);
     lastResult = won ? "won" : lost ? "lost" : "draw";
     bossDone?.(lastResult);
     coach(t(won ? "gcWon" : lost ? "gcLost" : "gcDraw"), won ? "cheer" : lost ? "think" : "happy", won ? "ok" : "");
-    saveGame({ at: new Date().toISOString(), opp: bot.name, oppRating: bot.rating, me, result: lastResult, tc: clock ? tc : undefined, uci: uciOf(), startFen,
+    // a variant game is not saved: Game Review and Insights judge by standard chess, which would mislead
+    if (variant === "none") saveGame({ at: new Date().toISOString(), opp: bot.name, oppRating: bot.rating, me, result: lastResult, tc: clock ? tc : undefined, uci: uciOf(), startFen,
       ms: uciOf().map((_, i) => times[i] ?? null) });
     // DECISIONS #117: the badges and the banner on the board first, then the result card
     announceEnd(board, kindOf(how, lastResult === "draw"), won ? them : lost ? me : null);
@@ -337,8 +381,8 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     view = null; pre = null; show(); say("");
     if (r === "won") sound.complete();
     // Game Review straight after the game (DECISIONS #73); the game is also kept in Your games (Me tab)
-    setLastGame({ uci: uciOf(), me, botName: bot.name, oppRating: bot.rating, back: location.hash.split("?")[0], startFen });
-    const buttons = `${g.history().length >= 2 ? `<button class="btn wide gold" data-review>${icon("target")} ${t("reviewTitle")}</button>` : ""}
+    if (variant === "none") setLastGame({ uci: uciOf(), me, botName: bot.name, oppRating: bot.rating, back: location.hash.split("?")[0], startFen });
+    const buttons = `${g.history().length >= 2 && variant === "none" ? `<button class="btn wide gold" data-review>${icon("target")} ${t("reviewTitle")}</button>` : ""}
       <div class="two"><button class="btn ghost" data-again>${t("rematch")}</button><button class="btn ghost" data-other>${bossDone ? t("bossBack") : testLevel ? t("backHome") : t("newBot")}</button></div>
       ${g.history().length >= 2 ? shareButton() : ""}<button class="linkbtn" data-pgn>${t("copyPgn")}</button><div data-pgnbox></div>`;
     const card = root.querySelector<HTMLElement>("[data-card]")!;
