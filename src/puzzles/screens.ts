@@ -18,6 +18,7 @@ import type { PuzzleExercise, Text } from "../lesson/types";
 import { bankDue, bankIds } from "./due";
 import { RUNGS } from "../content/ladder";
 import { rungsDone } from "../ladder/screen";
+import { notationOpen } from "./notationscreens";
 export { bankDue };
 
 type Go = (h: string) => void;
@@ -52,6 +53,8 @@ export function puzzleHub(root: HTMLElement, level: number, go: Go) {
       <span class="grow"><b>${t("themesTitle")}</b><small>${t("themesAbout").split(/[.।]/)[0]}</small></span>${icon("arrowRight")}</button>
     <button class="rushcard" data-calc><span class="rushicon">${icon("hint")}</span>
       <span class="grow"><b>${t("calcTitle")}</b><small>${t("calcAbout")}</small></span>${icon("arrowRight")}</button>
+    <button class="rushcard" data-notation><span class="rushicon">${icon(notationOpen(level) ? "hint" : "lock")}</span>
+      <span class="grow"><b>${t("ntTitle")}</b><small>${notationOpen(level) ? t("ntAbout") : t("ntLocked")}</small></span>${icon("arrowRight")}</button>
     <button class="rushcard" data-survival><span class="rushicon">${icon("heart")}</span>
       <span class="grow"><b>${t("survTitle")}</b><small>${t("survAbout")}</small></span>
       <span class="best"><small>${t("rushBest")}</small><b>${num(s.survivalBest ?? 0)}</b></span></button>
@@ -69,6 +72,7 @@ export function puzzleHub(root: HTMLElement, level: number, go: Go) {
   root.querySelector<HTMLButtonElement>("[data-rush]")!.onclick = () => go("#/puzzles/rush");
   root.querySelector<HTMLButtonElement>("[data-survival]")!.onclick = () => go("#/puzzles/survival");
   root.querySelector<HTMLButtonElement>("[data-calc]")!.onclick = () => go("#/puzzles/calc");
+  root.querySelector<HTMLButtonElement>("[data-notation]")!.onclick = () => go("#/puzzles/notation");
   root.querySelector<HTMLButtonElement>("[data-ladder]")!.onclick = () => go("#/ladder");
   root.querySelector<HTMLButtonElement>("[data-solo]")!.onclick = () => go("#/puzzles/solo");
   root.querySelector<HTMLButtonElement>("[data-rated]")!.onclick = () => go("#/puzzles/rated");

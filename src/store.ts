@@ -44,6 +44,8 @@ export interface State {
   legalDots?: boolean;
   coordsMode?: "off" | "in" | "out";
   focusMode?: boolean;
+  /** Practice tools (2026-11-03): a box to type moves (Nf3) in bot games. Off by default. */
+  typeMoves?: boolean;
   /** Solo Chess (DECISIONS #115): stars on each puzzle of the Young path, and Puzzle Survival's best score. */
   soloPath?: number[];
   survivalBest?: number;

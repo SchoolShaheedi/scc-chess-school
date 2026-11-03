@@ -17,6 +17,8 @@ import { OFFLINE_APP } from "../native";
 import { shareButton, wireShare } from "../play/share";
 import { announceEnd, END_PAUSE, kindOf } from "../play/gameover";
 import { gameMenuButton, wireGameMenu } from "../play/gamesettings";
+import { readMove } from "../puzzles/notation";
+import { moveFormHTML, refusalText } from "../puzzles/notationscreens";
 import { pieceHTML } from "../chess/pieces";
 import type { PieceCode } from "../chess/types";
 import { myAvatarHTML } from "../me/family";
@@ -157,6 +159,7 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
     <div class="moverow"><button class="iconbtn" data-prev aria-label="${t("movePrev")}">${icon("chevronLeft")}</button>
       <div class="movelist grow" data-moves></div>
       <button class="iconbtn" data-next aria-label="${t("moveNext")}">${icon("chevronRight")}</button></div>
+    ${store.get().typeMoves ? moveFormHTML(t("gsKeysPlay")) : ""}
     <div class="extra" data-extra></div>
     <div class="actions" data-acts>
       ${help ? `<button class="btn ghost" data-undo>${icon("again")} ${t("takeback")}</button>` : ""}
@@ -379,6 +382,17 @@ function game(root: HTMLElement, bot: Bot, me: "w" | "b", go: (h: string) => voi
       await play(from, to);
     },
   });
+  // typed moves (Practice tools, off by default): Nf3, exd5, O-O, e8=Q; only on your own turn in the live game
+  const typed = root.querySelector<HTMLFormElement>("[data-ntform]");
+  if (typed) typed.onsubmit = async e => {
+    e.preventDefault();
+    const box = typed.querySelector<HTMLInputElement>("[data-ntinput]")!;
+    if (over || busy || view !== null || g.turn() !== me) return;
+    const r = readMove(g.fen(), box.value);
+    if (!r.ok) return say(refusalText(r.reason));
+    box.value = "";
+    await play(r.move.from as Square, r.move.to as Square, r.move.promotion);
+  };
   root.querySelector<HTMLButtonElement>("[data-prev]")!.onclick = () => look((view ?? g.history().length) - 1);
   root.querySelector<HTMLButtonElement>("[data-next]")!.onclick = () => look((view ?? g.history().length) + 1);
   root.querySelector<HTMLButtonElement>("[data-undo]")?.addEventListener("click", () => {

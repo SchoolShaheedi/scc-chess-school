@@ -1390,3 +1390,15 @@ html, body { touch-action: pan-y; overscroll-behavior-x: none; }
 html { overflow-x: clip; }
 input, select, textarea { font-size: max(16px, 1em); }
 .plabel, .pgnbox { font-size: 16px; }
+
+/* Write the move and the game filters (Practice tools, 2026-11-03). Every text box and select stays at 16px or more. */
+.ntform { display: flex; gap: 8px; align-items: stretch; margin: 8px 0 0; }
+.ntinput { flex: 1; min-width: 0; font-size: max(18px, 1em); font-weight: 700; min-height: 48px; padding: 8px 14px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); }
+.ntinput:focus { outline: 3px solid var(--kesri); outline-offset: 1px; }
+.ntchoices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ntchoices .btn { font-size: 18px; font-weight: 700; min-height: 48px; }
+.gfilters { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 4px 0 8px; }
+.gfilters label { display: grid; gap: 2px; font-size: 13px; color: var(--muted); font-weight: 700; }
+.gfilters select { min-height: 44px; padding: 6px 8px; border: 2px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); font-weight: 600; }
+.gfcount { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 8px; font-size: 14px; color: var(--muted); font-weight: 700; }
+.gfcount .btn { padding: 6px 12px; min-height: 36px; font-size: 14px; }
