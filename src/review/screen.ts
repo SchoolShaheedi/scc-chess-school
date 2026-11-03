@@ -21,6 +21,7 @@ import { runExercise } from "../lesson/exercises";
 import { gameId, minePuzzles } from "../puzzles/mine";
 import { DepthGovernor, REVIEW_BUDGET_MS, REVIEW_DEPTH } from "./depth";
 import { refutation } from "./refute";
+import { moveNote, shortNote } from "./movenote";
 
 export interface PlayedGame { uci: string[]; me: "w" | "b"; botName: Text; back: string; startFen?: string;
   /** The opponent's rating, when it is a bot: it steadies the Game Rating estimate. */
@@ -205,11 +206,15 @@ export function reviewGame(root: HTMLElement, go: (h: string) => void): () => vo
         board!.set(placementFromFen(fens[at + 1]), { lastMove: [m.uci.slice(0, 2) as Square, m.uci.slice(2, 4) as Square] });
       }
       const whose = m.by === game!.me ? (game!.meName ? tx(game!.meName) : t("you")) : tx(game!.botName);
-      const bestSan = weak ? new Chess(fens[at]).move({ from: m.best.slice(0, 2), to: m.best.slice(2, 4), promotion: m.best[4] }).san : "";
-      const why = reasonText(m, words, pieceWord);
+      // a plain-words note on every move: what it did, and for a weak move what went wrong and the better move.
+      // The Young look keeps two sentences (what it did, the better move) and drops the percentages.
+      const young = store.get().look === "young", note = moveNote(fens[at], m, words, pieceWord), lines = young ? shortNote(note) : [...note.what, ...note.why];
+      const own = m.label === "brilliant" || m.label === "great" ? reasonText(m, words, pieceWord) : null;
+      const head = weak ? t("reviewChanceOnly").replace("{a}", num(Math.round(m.before))).replace("{b}", num(Math.round(m.after)))
+        : t(m.label === "book" ? "mn_book" : m.label === "good" ? "reviewGood" : "reviewBest");
       root.querySelector("[data-note]")!.innerHTML = `<b class="tag ${m.label}">${lbl(m.label)}</b> ${num(Math.floor(at / 2) + 1)}${m.by === "w" ? "." : "…"} ${m.san} · ${whose}
-        <p>${weak ? t("reviewChance").replace("{a}", num(Math.round(m.before))).replace("{b}", num(Math.round(m.after))).replace("{best}", bestSan) : t(m.label === "good" || m.label === "book" ? "reviewGood" : "reviewBest")}</p>
-        ${why ? `<p class="coachline">${tx(why)}</p>` : ""}`;
+        ${young && lines.length ? "" : `<p>${head}</p>`}
+        ${[...(own ? [own] : []), ...lines].map(x => `<p class="coachline">${tx(x)}</p>`).join("")}`;
       whyBtn.hidden = !weak;
       better.hidden = !weak; better.textContent = showBetter ? t("showPlayed") : t("showBetter");
       retryBtn.hidden = !(weak && m.by === game!.me);
