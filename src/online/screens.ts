@@ -26,8 +26,10 @@ import { ask, tell } from "../ui/dialog";
 import {
   activeGames, addFriend, adultLadder, answerChallenge, blockPlayer, enableOnlineAdult, findGame, gamePlayers, stopSeeking, cancelChallenge, challenges, claimTime, disableOnline, enableOnline, type Game, gameAction,
   answerFriend, friendRequests, getGame, type Me, myPlayer, newFriendCode, opponents, type Opponent, REACTIONS, removeFriend, sendChallenge, sendMove, signedIn, watchChallenges, watchGame,
-  MAGICAL_ONLINE, type Variant,
+  MAGICAL_ONLINE, type Variant, watchNewGames,
 } from "./api";
+import { acceptBattle, cancelBattle, declineBattle, inviteBattle, openBattles, watchBattles } from "../battle/api";
+import type { BattleLevel } from "../battle/rules";
 
 type Go = (h: string) => void;
 const bar = (title: string) => `<div class="lessonbar"><button class="iconbtn" data-back aria-label="${t("back")}">${icon("chevronLeft")}</button><h1 class="grow">${title}</h1></div>`;
@@ -128,7 +130,7 @@ function strangers(box: HTMLElement, me: Me, go: Go, alive: () => boolean) {
 }
 
 // ---------- the lobby ----------
-let tc = "10", colour = "random", variant: Variant = "chess";
+let tc = "10", colour = "random", variant: Variant = "chess", bLevel: BattleLevel = "easy";
 export function onlineLobby(root: HTMLElement, go: Go): () => void {
   let alive = true, unwatch: (() => void) | null = null;
   const leave = () => { alive = false; unwatch?.(); };
@@ -150,19 +152,28 @@ export function onlineLobby(root: HTMLElement, go: Go): () => void {
       return;
     }
     const render = async () => {
-      const [opps, chs, games, reqs] = await Promise.all([opponents(me.id), challenges(me.id), activeGames(me.id), friendRequests(me.id)]);
+      const [opps, chs, games, reqs, bts] = await Promise.all([opponents(me.id), challenges(me.id), activeGames(me.id), friendRequests(me.id), openBattles(me.id).catch(() => [])]);
       if (!alive) return;
       const who = new Map(opps.map(o => [o.player, o]));
       const face = (id: string) => avatarHTML(who.get(id) ?? { avatar: "cat", colour: "#9AA39E" });
       const incoming = chs.filter(c => c.to_player === me.id), outgoing = chs.filter(c => c.from_player === me.id);
+      // Puzzle Battle (class features 2026-11-03): invitations come the same way as challenges, from friends and classmates only
+      const bRun = bts.filter(x => x.status === "active"), bIn = bts.filter(x => x.status === "invited" && x.to_player === me.id), bOut = bts.filter(x => x.status === "invited" && x.from_player === me.id);
+      const bFace = (x: { from_player: string; to_player: string }) => face(x.from_player === me.id ? x.to_player : x.from_player);
       root.innerHTML = `<div class="screen">${bar(t("onlineTitle"))}
         <div class="li"><span>${avatarHTML(family.current(), "")}</span><span class="grow"><small>${t("onlineCode")}</small><b class="codetxt big">${me.friend_code}</b></span></div>
         <p class="note">${t("onlineCodeNote")}</p>
-        ${games.length ? `<h2 class="sec">${t("onlineYourGames")}</h2>${games.map(g => `<button class="botcard" data-game="${g.id}">${face(g.white === me.id ? g.black : g.white)}
-          <span class="grow"><b>${t("onlineGameOn")}</b><small>${vLabel(g.variant)}${tcLabel(g.tc_min ? (g.tc_inc ? `${g.tc_min}+${g.tc_inc}` : String(g.tc_min)) : "none")}</small></span>${icon("arrowRight")}</button>`).join("")}` : ""}
+        ${games.length ? `<h2 class="sec">${t("onlineYourGames")}</h2>${games.map(g => `<button class="botcard" data-game="${g.id}">${g.simul_id ? avatarHTML({ avatar: "turtle", colour: "#C99A2E" }) : face(g.white === me.id ? g.black : g.white)}
+          <span class="grow"><b>${g.simul_id ? t("simulYourTeacher") : t("onlineGameOn")}</b><small>${g.simul_id ? `${t("simulClassGame")} · ` : ""}${vLabel(g.variant)}${tcLabel(g.tc_min ? (g.tc_inc ? `${g.tc_min}+${g.tc_inc}` : String(g.tc_min)) : "none")}</small></span>${icon("arrowRight")}</button>`).join("")}` : ""}
         ${reqs.length ? `<h2 class="sec">${t("onlineFriendRequests")}</h2><p class="note">${t("onlineFriendRequestsNote")}</p>${reqs.map(r => `<div class="botcard">${avatarHTML(r)}
           <span class="grow"><b>${t("onlineWantsFriend")}</b></span>
           <button class="btn" data-befriend="${r.player}">${t("onlineAccept")}</button><button class="btn ghost" data-refuse="${r.player}">${t("onlineDecline")}</button></div>`).join("")}` : ""}
+        ${bRun.length || bIn.length || bOut.length ? `<h2 class="sec">${t("battleInvites")}</h2>
+          ${bRun.map(x => `<button class="botcard" data-bopen="${x.id}">${bFace(x)}<span class="grow"><b>${t("battleRunning")}</b><small>${t(`battleLevel_${x.level}` as "battleLevel_easy")}</small></span>${icon("arrowRight")}</button>`).join("")}
+          ${bIn.map(x => `<div class="botcard">${bFace(x)}<span class="grow"><b>${t("battleWantsToPlay")}</b><small>${t(`battleLevel_${x.level}` as "battleLevel_easy")}</small></span>
+            <button class="btn" data-baccept="${x.id}">${t("onlineAccept")}</button><button class="btn ghost" data-bdecline="${x.id}">${t("onlineDecline")}</button></div>`).join("")}
+          ${bOut.map(x => `<div class="botcard">${bFace(x)}<span class="grow"><b>${t("battleWaitingFor")}</b><small>${t(`battleLevel_${x.level}` as "battleLevel_easy")}</small></span>
+            <button class="btn ghost" data-bcancel="${x.id}">${t("cancel")}</button></div>`).join("")}` : ""}
         ${incoming.length ? `<h2 class="sec">${t("onlineIncoming")}</h2>${incoming.map(c => `<div class="botcard">${face(c.from_player)}
           <span class="grow"><b>${t("onlineWantsToPlay")}</b><small>${vLabel(c.variant)}${tcLabel(c.tc)}</small></span>
           <button class="btn" data-accept="${c.id}">${t("onlineAccept")}</button><button class="btn ghost" data-decline="${c.id}">${t("onlineDecline")}</button></div>`).join("")}` : ""}
@@ -174,9 +185,12 @@ export function onlineLobby(root: HTMLElement, go: Go): () => void {
         ${MAGICAL_ONLINE ? `<div class="seg variants" role="group">${(["chess", "magical"] as const).map(v => `<button data-variant="${v}" aria-pressed="${variant === v}">${v === "chess" ? t("chessPlain") : `✨ ${t("powerTitle")}`}</button>`).join("")}</div>` : ""}
         <div class="seg tcs" role="group">${["none", "10", "5", "3+2"].map(x => `<button data-tc="${x}" aria-pressed="${tc === x}">${tcLabel(x)}</button>`).join("")}</div>
         <div class="seg colours" role="group">${(["w", "random", "b"] as const).map(c => `<button data-c="${c}" aria-pressed="${colour === c}"><span class="kingdot ${c}"></span>${t(c === "w" ? "colourWhite" : c === "b" ? "colourBlack" : "colourRandom")}</button>`).join("")}</div>
+        ${opps.length ? `<p class="note">${icon("puzzle")} <b>${t("battleTitle")}</b>: ${t("battleAbout")}</p>
+          <div class="seg levels" role="group">${(["easy", "medium", "hard"] as const).map(l => `<button data-blevel="${l}" aria-pressed="${bLevel === l}">${t(`battleLevel_${l}` as "battleLevel_easy")}</button>`).join("")}</div>` : ""}
         ${opps.length ? `<div class="botlist">${opps.map((o: Opponent) => `<div class="botcard">${avatarHTML(o)}
           <span class="grow"><b>${o.friend ? t("onlineFriend") : t("onlineClassmate")}</b><small>${o.friend && o.classmate ? t("onlineBoth") : ""}</small></span>
           <button class="btn" data-challenge="${o.player}" ${outgoing.some(c => c.to_player === o.player) ? "disabled" : ""}>${t("onlineChallenge")}</button>
+          <button class="btn ghost" data-battle="${o.player}" ${bOut.some(x => x.to_player === o.player) ? "disabled" : ""} aria-label="${t("battleTitle")}">${icon("puzzle")} ${t("battleGoBtn")}</button>
           ${o.friend ? `<button class="iconbtn" data-unfriend="${o.player}" aria-label="${t("onlineUnfriend")}">${icon("trash")}</button>` : ""}</div>`).join("")}</div>`
           : `<p class="note">${t("onlineNobody")}</p>`}
         <form class="emailform" data-add><label class="note" for="fc">${t("onlineAddFriend")}</label>
@@ -198,6 +212,16 @@ export function onlineLobby(root: HTMLElement, go: Go): () => void {
         const r = await answerChallenge(me.id, b.dataset.accept!, true);
         if (r.game) go(`#/online/game/${r.game}`); else { errBox.textContent = r.error ?? ""; void render(); }
       });
+      root.querySelectorAll<HTMLButtonElement>("[data-blevel]").forEach(b => b.onclick = () => { bLevel = b.dataset.blevel as BattleLevel; void render(); });
+      root.querySelectorAll<HTMLButtonElement>("[data-battle]").forEach(b => b.onclick = async () => {
+        const e = await inviteBattle(me.id, b.dataset.battle!, bLevel); if (e) errBox.textContent = e; else void render();
+      });
+      root.querySelectorAll<HTMLButtonElement>("[data-bopen]").forEach(b => b.onclick = () => go(`#/battle/${b.dataset.bopen}`));
+      root.querySelectorAll<HTMLButtonElement>("[data-baccept]").forEach(b => b.onclick = async () => {
+        const e = await acceptBattle(me.id, b.dataset.baccept!); if (e) { errBox.textContent = e; void render(); } else go(`#/battle/${b.dataset.baccept}`);
+      });
+      root.querySelectorAll<HTMLButtonElement>("[data-bdecline]").forEach(b => b.onclick = async () => { await declineBattle(me.id, b.dataset.bdecline!); void render(); });
+      root.querySelectorAll<HTMLButtonElement>("[data-bcancel]").forEach(b => b.onclick = async () => { await cancelBattle(me.id, b.dataset.bcancel!); void render(); });
       root.querySelectorAll<HTMLButtonElement>("[data-decline]").forEach(b => b.onclick = async () => { await answerChallenge(me.id, b.dataset.decline!, false); void render(); });
       root.querySelectorAll<HTMLButtonElement>("[data-cancel]").forEach(b => b.onclick = async () => { await cancelChallenge(me.id, b.dataset.cancel!); void render(); });
       root.querySelectorAll<HTMLButtonElement>("[data-befriend]").forEach(b => b.onclick = async () => { await answerFriend(me.id, b.dataset.befriend!, true); void render(); });
@@ -212,10 +236,18 @@ export function onlineLobby(root: HTMLElement, go: Go): () => void {
     };
     await render();
     // a challenge accepted by the other side opens the game; anything else redraws the lobby
-    unwatch = watchChallenges(me.id, async () => {
+    const u1 = watchChallenges(me.id, async () => {
       const mine = (await activeGames(me.id)).at(-1);
       if (alive && mine && mine.moves.length === 0 && location.hash === "#/online") go(`#/online/game/${mine.id}`); else if (alive) void render();
     });
+    // a Puzzle Battle accepted by the other side opens at once; any other change redraws the lobby
+    const u2 = watchBattles(me.id, async () => {
+      const run = (await openBattles(me.id).catch(() => [])).find(x => x.status === "active" && x.from_player === me.id);
+      if (alive && run && location.hash === "#/online") go(`#/battle/${run.id}`); else if (alive) void render();
+    });
+    // a class simul (class features 2026-11-03): the teacher seats the pupil, and the new board shows up in Your games
+    const u3 = watchNewGames(me.id, () => { if (alive) void render(); });
+    unwatch = () => { u1(); u2(); u3(); };
   })();
   return leave;
 }
@@ -241,7 +273,7 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
     const oppSide = sides.find(x => x.side === theirs), mySide = sides.find(x => x.side === mine);
     const opp = { avatar: oppSide?.avatar ?? "cat", colour: oppSide?.colour ?? "#9AA39E" }, oppId = oppSide?.player ?? null;
     // Magical Chess with friends (Stage 2): the position comes from the seed, the moves and the changes, not the moves alone
-    const magical = first.variant === "magical";
+    const magical = first.variant === "magical", viaSimul = !!first.simul_id;
     const line = () => magicalLine(g.seed ?? 0, g.moves, g.changes ?? []);
     const rated = !!first.rated, ratingOf = (x?: { rating: number | null }) => (rated && x?.rating ? ` <small>~${num(x.rating)}</small>` : "");
     root.innerHTML = `<div class="screen">${bar(t("onlineTitle"))}
@@ -276,7 +308,7 @@ export function onlineGame(root: HTMLElement, id: string, go: Go): () => void {
       const caps = (by: "w" | "b") => cap[by].map(p => `<span class="cp">${pieceHTML(`${by === "w" ? "b" : "w"}${p.toUpperCase()}` as PieceCode)}</span>`).join("")
         + ((by === "w" ? cap.lead : -cap.lead) > 0 ? `<span class="lead">+${num(Math.abs(cap.lead))}</span>` : "");
       const clk = (side: "w" | "b") => g.tc_min ? `<b class="clk ${turn === side && g.turn_since && g.status === "active" ? "run" : ""} ${left(side) < 20000 ? "low" : ""}">${fmt(left(side))}</b>` : "";
-      root.querySelector("[data-top]")!.innerHTML = `<span class="av">${avatarHTML(opp)}</span><div class="grow"><b>${t("onlineOpponent")}${ratingOf(oppSide)}</b><div class="caps">${caps(theirs)}</div></div>${clk(theirs)}`;
+      root.querySelector("[data-top]")!.innerHTML = `<span class="av">${avatarHTML(opp)}</span><div class="grow"><b>${viaSimul ? t("simulYourTeacher") : t("onlineOpponent")}${ratingOf(oppSide)}</b><div class="caps">${caps(theirs)}</div></div>${clk(theirs)}`;
       root.querySelector("[data-bottom]")!.innerHTML = `<span class="av">${avatarHTML(family.current())}</span><div class="grow"><b>${t("you")}${ratingOf(mySide)}</b><div class="caps">${caps(mine)}</div></div>${clk(mine)}`;
     }
     function show(anim = false) {
