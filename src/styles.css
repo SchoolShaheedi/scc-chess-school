@@ -1358,3 +1358,23 @@ html.wide .livepill { bottom: 20px; }
 .duerow { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
 .duedot { width: 10px; height: 10px; border-radius: 50%; background: #CFC8B8; flex: none; }
 .duedot.on { background: var(--kesri); }
+
+/* Bigger board, edge to edge like chess.com (2026-11-03, trial A in 02_Design/trials/board-size-trials.png).
+   On a phone the board's frame drops its padding and runs to both screen edges (331 → 375px on a 375 phone);
+   in a game the player bars slim down. On a laptop the game board takes the full height less the two bars. */
+@media (max-width: 899px) {
+  .screen > .frame, .wleft > .frame { margin-inline: -16px; padding: 0; border-radius: 0; box-shadow: none; background: none; }
+  .screen > .frame > .boardwrap, .wleft > .frame > .boardwrap { border-radius: 0; }
+  [data-look="adult"] .screen > .frame > .boardwrap { border-inline: 0; }
+  .gamescreen { gap: 8px; }
+}
+.gamescreen .pbar { min-height: 40px; }
+.gamescreen .pbar .av, .gamescreen .pbar .av .botart { width: 36px; height: 36px; }
+@media (min-width: 900px) {
+  html.wide .screen.gamescreen[data-wide] { padding-top: 8px; padding-bottom: 8px; }
+  html.wide .gamescreen[data-wide="board"] .wleft { gap: 4px;
+    width: min(calc(100dvh - 110px), calc(100vw - 92px - 64px - 360px)); }
+  html.wide .gamescreen[data-wide="board"] .wright { min-width: 320px; }
+  html.wide .gamescreen .pbar { min-height: 36px; padding: 0 8px; }
+  html.wide .gamescreen .pbar .av, html.wide .gamescreen .pbar .av .botart { width: 32px; height: 32px; }
+}
