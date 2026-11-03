@@ -10,14 +10,16 @@ import { type State, store } from "../store";
 const seg = (name: string, cur: string, items: [string, string][]) =>
   `<div class="seg" role="group" data-gs="${name}">${items.map(([v, label]) => `<button data-v="${v}" aria-pressed="${v === cur}">${label}</button>`).join("")}</div>`;
 
-/** The four switches, for Settings and for the in-game sheet. */
+/** The switches, for Settings and for the in-game sheet (which has the four board ones). */
 export function gameSettingsHTML(withNotes = true): string {
   const s = store.get(), on = (b: boolean) => String(b), onOff: [string, string][] = [["true", t("soundOn")], ["false", t("soundOff")]];
   const row = (label: string, note: string, ctl: string) => `<div class="gsrow"><b>${label}</b>${withNotes ? `<small>${note}</small>` : ""}${ctl}</div>`;
   return row(t("gsConfirmLabel"), t("gsConfirmNote"), seg("confirmMoves", on(!!s.confirmMoves), onOff))
     + row(t("gsDotsLabel"), t("gsDotsNote"), seg("legalDots", on(s.legalDots !== false), onOff))
     + row(t("gsCoordsLabel"), t("gsCoordsNote"), seg("coordsMode", s.coordsMode ?? "in", [["off", t("gsCoordsOff")], ["in", t("gsCoordsIn")], ["out", t("gsCoordsOut")]]))
-    + row(t("gsFocusLabel"), t("gsFocusNote"), seg("focusMode", on(!!s.focusMode), onOff));
+    + row(t("gsFocusLabel"), t("gsFocusNote"), seg("focusMode", on(!!s.focusMode), onOff))
+    // typed moves are read when a bot game opens, so the switch lives in Settings, not in the in-game sheet
+    + (withNotes ? row(t("gsKeysLabel"), t("gsKeysNote"), seg("typeMoves", on(!!s.typeMoves), onOff)) : "");
 }
 
 /** Wire the switches inside `host`; `changed` runs after each one is saved. */

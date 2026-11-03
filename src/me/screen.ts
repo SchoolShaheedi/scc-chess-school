@@ -9,6 +9,8 @@ import { icon } from "../icons";
 import { store, today, unlockAll } from "../store";
 import { tabbar } from "../tabbar";
 import { games } from "../play/history";
+import NAMES from "../content/opening-names.json";
+import { describeGames, filterGames, filterOptions, isFiltered, NO_FILTER, type GameFilter } from "../play/gamefilter";
 import { statsHTML, wireStats } from "./stats";
 import { myPlayer, signedIn } from "../online/api";
 import { myClasses } from "../teach/api";
@@ -56,17 +58,9 @@ export function mePage(root: HTMLElement, go: (h: string) => void) {
     <div data-classboards></div>
     <button class="inslink" data-insights>${icon("chart")}<span class="grow"><b>${t("insTitle")}</b><small>${t("insMeSub")}</small></span>${icon("chevronRight")}</button>
     <h2 class="sec">${t("meGames")} <span>${num(list.length)}</span></h2>
-    ${list.length ? `<div class="gamelist">${list.slice(0, 20).map((g, i) => `<button class="gamerow" data-game="${i}">
-      <span class="res ${g.result}">${t(g.result === "won" ? "resWon" : g.result === "lost" ? "resLost" : "resDraw")}</span>
-      <span class="grow"><b>${t("vsWord")} ${tx(g.opp)}${g.oppRating ? ` ~${num(g.oppRating)}` : ""}</b>
-        <small>${new Date(g.at).toLocaleDateString(s.lang === "pa" ? "pa-IN" : "en-GB", { day: "numeric", month: "short" })} · ${g.tc ? (g.tc.includes("+") ? g.tc.split("+").map(x => num(+x)).join(" + ") : `${num(+g.tc)} ${t("minutes")}`) : t("untimed")} · ${movesN(Math.ceil(g.uci.length / 2))}</small></span>
-      ${icon("arrowRight")}</button>`).join("")}</div>` : `<p class="note">${t("gamesNone")}</p>`}
+    <div data-games></div>
   </div>${tabbar("me")}`;
-  root.querySelectorAll<HTMLButtonElement>("[data-game]").forEach(b => b.onclick = () => {
-    const g = list[+b.dataset.game!];
-    setLastGame({ uci: g.uci, me: g.me, meName: g.meName, botName: g.opp, oppRating: g.oppRating, back: "#/me", startFen: g.startFen });
-    go("#/review");
-  });
+  gamesBlock(root.querySelector<HTMLElement>("[data-games]")!, list, go);
   root.querySelector<HTMLButtonElement>("[data-settings]")!.onclick = () => go("#/settings");
   root.querySelector<HTMLButtonElement>("[data-insights]")!.onclick = () => go("#/insights");
   // DECISIONS #109: tap a hero you have won to use it as your picture; tap it again for your animal
@@ -100,6 +94,51 @@ export function mePage(root: HTMLElement, go: (h: string) => void) {
       <div><small>${t("adultBlitz")}</small><b>${num(me.blitz_r)}</b><em>${num(me.blitz_n)} ${t("adultGames")}</em></div></div></div>`;
   });
   root.querySelector<HTMLButtonElement>("[data-family]")!.onclick = () => go("#/family");
+}
+
+/** The filters kept for the visit (Me is redrawn when you come back to it, and the filters should still be there). */
+let gameFilter: GameFilter = { ...NO_FILTER };
+
+/** "Your games" (DECISIONS #84): the last 50, with filters (Practice tools, 2026-11-03): result, colour, opponent, opening, date. */
+function gamesBlock(host: HTMLElement, list: ReturnType<typeof games>, go: (h: string) => void) {
+  if (!list.length) { host.innerHTML = `<p class="note">${t("gamesNone")}</p>`; return; }
+  const lang = store.get().lang, infos = describeGames(list, NAMES as Record<string, string>), opts = filterOptions(infos);
+  const sel = (key: keyof GameFilter, label: string, items: [string, string][]) =>
+    `<label>${label}<select data-gf="${key}">${items.map(([v, l]) => `<option value="${v.replace(/"/g, "&quot;")}" ${gameFilter[key] === v ? "selected" : ""}>${l.replace(/</g, "&lt;")}</option>`).join("")}</select></label>`;
+  const all: [string, string] = ["all", t("gfAll")];
+  // a filter value that no longer occurs (a game dropped off the list of 50) is cleared, so the list is never empty for no visible reason
+  if (gameFilter.bot !== "all" && !opts.bots.some(b => b.key === gameFilter.bot)) gameFilter = { ...gameFilter, bot: "all" };
+  if (gameFilter.opening !== "all" && !opts.openings.some(o => o.key === gameFilter.opening)) gameFilter = { ...gameFilter, opening: "all" };
+  host.innerHTML = `<div class="gfilters" role="group" aria-label="${t("gfFind")}">
+      ${sel("result", t("gfResult"), [all, ["won", t("resWon")], ["lost", t("resLost")], ["draw", t("resDraw")]])}
+      ${sel("colour", t("gfColour"), [all, ["w", t("colourWhite")], ["b", t("colourBlack")]])}
+      ${sel("bot", t("gfBot"), [all, ...opts.bots.map((b): [string, string] => [b.key, tx(b.label)])])}
+      ${sel("opening", t("gfOpening"), [all, ...opts.openings.map((o): [string, string] => [o.key, tx(o.label)])])}
+      ${sel("when", t("gfWhen"), [all, ["week", t("gfWeek")], ["month", t("gfMonth")]])}
+    </div>
+    <div class="gfcount" aria-live="polite"><span data-gfcount></span>${isFiltered(gameFilter) ? `<button class="btn ghost" data-gfclear>${t("gfClear")}</button>` : ""}</div>
+    <div data-gflist></div>`;
+  const draw = () => {
+    const shown = filterGames(infos, gameFilter);
+    host.querySelector("[data-gfcount]")!.textContent = t("gfCount").replace("{n}", num(shown.length)).replace("{total}", num(list.length));
+    host.querySelector("[data-gflist]")!.innerHTML = shown.length ? `<div class="gamelist">${shown.map(({ g, i }) => `<button class="gamerow" data-game="${i}">
+      <span class="res ${g.result}">${t(g.result === "won" ? "resWon" : g.result === "lost" ? "resLost" : "resDraw")}</span>
+      <span class="grow"><b>${t("vsWord")} ${tx(g.opp)}${g.oppRating ? ` ~${num(g.oppRating)}` : ""}</b>
+        <small>${new Date(g.at).toLocaleDateString(lang === "pa" ? "pa-IN" : "en-GB", { day: "numeric", month: "short" })} · ${g.tc ? (g.tc.includes("+") ? g.tc.split("+").map(x => num(+x)).join(" + ") : `${num(+g.tc)} ${t("minutes")}`) : t("untimed")} · ${movesN(Math.ceil(g.uci.length / 2))}</small></span>
+      ${icon("arrowRight")}</button>`).join("")}</div>` : `<p class="note">${t("gfNone")}</p>`;
+    host.querySelectorAll<HTMLButtonElement>("[data-game]").forEach(b => b.onclick = () => {
+      const g = list[+b.dataset.game!];
+      setLastGame({ uci: g.uci, me: g.me, meName: g.meName, botName: g.opp, oppRating: g.oppRating, back: "#/me", startFen: g.startFen });
+      go("#/review");
+    });
+  };
+  host.querySelectorAll<HTMLSelectElement>("[data-gf]").forEach(el => el.onchange = () => {
+    gameFilter = { ...gameFilter, [el.dataset.gf!]: el.value } as GameFilter;
+    gamesBlock(host, list, go);   // redrawn whole, so the clear button comes and goes
+    host.querySelector<HTMLSelectElement>(`[data-gf="${el.dataset.gf}"]`)?.focus();
+  });
+  host.querySelector<HTMLButtonElement>("[data-gfclear]")?.addEventListener("click", () => { gameFilter = { ...NO_FILTER }; gamesBlock(host, list, go); });
+  draw();
 }
 
 const pct = (n: number, d: number) => Math.round((Math.min(n, d) / d) * 100);

@@ -30,6 +30,7 @@ import { bossOpen, hasHero, heroArt, heroLessons, heroOf } from "./heroes/heroes
 import { playTest } from "./lesson/testplayer";
 import { playPlacement } from "./lesson/placement";
 import { calcHub, playCalc, playVision } from "./puzzles/calcscreens";
+import { notationHub, playNotation } from "./puzzles/notationscreens";
 import type { VisionKind } from "./puzzles/vision";
 import { playBank, playDaily, playRush, playSurvival, puzzleHub, playRated, themesScreen } from "./puzzles/screens";
 import { reviewGame } from "./review/screen";
@@ -508,6 +509,10 @@ function route() {
       if (sub?.startsWith("v-")) { teardown = playVision(app, go, sub.slice(2) as VisionKind); return; }
       if (sub) { teardown = playCalc(app, go, parseInt(sub)); return; }
       return calcHub(app, go);
+    }
+    if (arg === "notation") {   // Practice tools: #/puzzles/notation, /notation/type, /notation/name (open from Level 3)
+      if (sub === "type" || sub === "name") { teardown = playNotation(app, go, sub, learnerLevel()); return; }
+      return notationHub(app, go, learnerLevel());
     }
     if (arg === "themes") return themesScreen(app, go);
     if (arg === "theme" && sub) { teardown = playRated(app, go, sub); return; }
