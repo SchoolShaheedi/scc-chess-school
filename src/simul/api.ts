@@ -3,7 +3,7 @@
 // Needs a connection and a signed-in, approved teacher; nothing here runs offline.
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import type { Game } from "../online/api";
-import { dbClient, userId } from "../sync";
+import { dbClient } from "../sync";
 
 export interface Simul { id: string; class_id: string; teacher_player: string | null; status: "active" | "finished"; created_at: string }
 /** Which game is which pupil: animal + colour, and the ids the teacher's own device labels are keyed by. */
@@ -40,13 +40,5 @@ export function watchSimul(id: string, on: (g: Game) => void): () => void {
   return () => { void db()?.removeChannel(ch); };
 }
 
-// ---------- the parent's switch ----------
+
 /** Whether each of my children has the class simul switched on, by "class:profile". */
-export async function simulOkMap(): Promise<Record<string, boolean>> {
-  const c = db(); if (!c) return {};
-  const { data } = await c.from("memberships").select("class_id, profile_id, simul_ok").eq("parent", userId()!);
-  return Object.fromEntries(((data as { class_id: string; profile_id: string; simul_ok: boolean }[]) ?? []).map(m => [`${m.class_id}:${m.profile_id}`, m.simul_ok]));
-}
-export async function setSimulOk(classId: string, profileId: string, on: boolean) {
-  await db()?.rpc("set_simul_ok", { p_class: classId, p_profile: profileId, p_on: on });
-}

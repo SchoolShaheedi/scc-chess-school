@@ -3,18 +3,16 @@
 -- No server-function change: a simul board is an ordinary row in public.games, so every move still goes through
 -- play-move exactly as in a friend game (it checks the caller owns the player and that it is their turn).
 --
--- THIS EXTENDS A SAFEGUARDING RULE and needs the charity's yes before it is applied: so far a child's online games are
--- with other children only (#86, #87, #102: "children and adults still never meet"). A simul is a teacher, whom a parent
--- already trusts with a class (#82), playing the class. So it is held to a stricter gate than friend games:
+-- WHO PLAYS (the user, 2026-11-03: "full game for 16+, no kids access"): a simul seats ONLY grown-up players, the
+-- account holders who declared "18 or older" (online_players.adult, online_adults.sql). A child's player is never seated,
+-- so adults and children still never meet (#86, #87, #102). The server has no 16-17 group: they are not seated either.
 --   * only an approved teacher (is_teacher()), and only for THEIR OWN class (classes.teacher = the caller);
---   * only pupils whose PARENT has switched "play my class's simul" on for that class (memberships.simul_ok, off by
---     default, changed only through set_simul_ok(), and the app asks the grown-up question first) AND has online play on;
+--   * only class members whose own grown-up player is online and not paused;
 --   * the teacher plays as ONE fixed animal and colour (a "teacher" player row, kept PAUSED so it can never be found by a
 --     friend code, never appears in anyone's opponent list, never joins the rated pool, and can never be challenged);
---   * leaving the class, or the parent switching the simul off, ends that pupil's board at once (a draw, nobody loses);
+--   * leaving the class ends that member's board at once (a draw, nobody loses);
 --   * still NO chat of any kind: the four fixed reactions only.
 
-alter table public.memberships add column if not exists simul_ok boolean not null default false;
 
 create table if not exists public.simuls (
   id             uuid primary key default gen_random_uuid(),
@@ -34,23 +32,8 @@ create unique index if not exists one_active_simul_per_class on public.simuls (c
 alter table public.games add column if not exists simul_id uuid references public.simuls (id) on delete set null;
 create index if not exists games_simul on public.games (simul_id) where simul_id is not null;
 
-/** The parent switches the class simul on (or off) for one child in one class. Switching off ends that child's board. */
-create or replace function public.set_simul_ok(p_class uuid, p_profile text, p_on boolean) returns void
-  language plpgsql security definer set search_path = public as $$
-begin
-  if auth.uid() is null then raise exception 'sign in first'; end if;
-  update public.memberships set simul_ok = p_on where class_id = p_class and parent = auth.uid() and profile_id = p_profile;
-  if not found then raise exception 'not your child in that class'; end if;
-  if not p_on then
-    update public.games g set status = 'finished', result = '1/2-1/2', reason = 'abandoned', updated_at = now()
-      where g.status = 'active' and g.simul_id in (select id from public.simuls where class_id = p_class)
-        and g.black in (select id from public.online_players where parent = auth.uid() and profile_id = p_profile);
-  end if;
-end $$;
-
 /** Internal: give every ready pupil of the simul's class a board, if they do not have one yet. Returns how many were added.
- *  Ready = their parent turned the simul on for this class, online play is on for the child, a child's (not grown-up's)
- *  player that is not paused. The teacher is White on every board and the games are untimed. */
+ *  Ready = a class member's GROWN-UP player (declared 18 or older), online and not paused. Children are never seated. The teacher is White on every board and the games are untimed. */
 create or replace function public.simul_seat(p_simul uuid) returns int
   language plpgsql security definer set search_path = public as $$
 declare s public.simuls; n int := 0; r record;
@@ -60,7 +43,7 @@ begin
   for r in
     select o.id as pid from public.memberships m
       join public.online_players o on o.parent = m.parent and o.profile_id = m.profile_id
-      where m.class_id = s.class_id and m.simul_ok and not o.adult and not o.paused
+      where m.class_id = s.class_id and o.adult and not o.paused
         and not exists (select 1 from public.games g where g.simul_id = s.id and g.black = o.id)
       limit 40
   loop
@@ -110,7 +93,7 @@ begin
   update public.simuls set status = 'finished', ended_at = now() where id = p_simul;
 end $$;
 
-/** A child who leaves the class has their simul board drawn at once (and the teacher's view of them goes, as in classes.sql). */
+/** A member who leaves the class has their simul board drawn at once (and the teacher's view of them goes, as in classes.sql). */
 create or replace function public.simul_on_leave() returns trigger
   language plpgsql security definer set search_path = public as $$
 begin
@@ -122,7 +105,7 @@ end $$;
 drop trigger if exists simul_on_leave on public.memberships;
 create trigger simul_on_leave after delete on public.memberships for each row execute function public.simul_on_leave();
 
-revoke all on function public.set_simul_ok(uuid, text, boolean), public.simul_seat(uuid), public.simul_start(uuid), public.simul_boards(uuid),
+revoke all on function public.simul_seat(uuid), public.simul_start(uuid), public.simul_boards(uuid),
   public.simul_end(uuid), public.simul_on_leave() from public, anon, authenticated;
-grant execute on function public.set_simul_ok(uuid, text, boolean), public.simul_seat(uuid), public.simul_start(uuid),
+grant execute on function public.simul_seat(uuid), public.simul_start(uuid),
   public.simul_boards(uuid), public.simul_end(uuid) to authenticated;

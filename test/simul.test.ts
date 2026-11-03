@@ -73,15 +73,13 @@ describe("the SQL keeps its promises (supabase/simul.sql)", () => {
     expect(sql).toMatch(/simul_start[\s\S]*?classes where id = p_class and teacher = auth\.uid\(\)/);
     expect(sql).toMatch(/simul_seat[\s\S]*?teacher = auth\.uid\(\) and status = 'active'/);
   });
-  it("only pupils whose parent switched it on, with online play on and not grown-ups, get a board", () => {
+  it("only grown-up players (declared 18 or older) get a board: children never do (2026-11-03, 16+ only)", () => {
     const seat = sql.match(/create or replace function public\.simul_seat[\s\S]*?end \$\$;/)![0];
-    expect(seat).toMatch(/m\.simul_ok/); expect(seat).toMatch(/not o\.adult/); expect(seat).toMatch(/not o\.paused/);
+    expect(seat).toMatch(/and o\.adult and/); expect(seat).not.toMatch(/not o\.adult/); expect(seat).toMatch(/not o\.paused/);
     expect(seat).toMatch(/m\.class_id = s\.class_id/);
   });
-  it("the switch is off by default and only the parent's own function changes it", () => {
-    expect(sql).toMatch(/add column if not exists simul_ok boolean not null default false/);
-    expect(sql).toMatch(/set_simul_ok[\s\S]*?parent = auth\.uid\(\) and profile_id = p_profile/);
-    expect(sql).not.toMatch(/grant update[^;]*simul_ok/);
+  it("there is no parent switch any more: no child can be put in a simul by anyone", () => {
+    expect(sql).not.toMatch(/simul_ok/);
   });
   it("the teacher's own player is kept paused, so it can never be found, befriended or challenged", () => {
     expect(sql).toMatch(/insert into public\.online_players \(parent, profile_id, avatar, colour, friend_code, paused\)[\s\S]*?true\) returning id into tp/);
@@ -91,9 +89,8 @@ describe("the SQL keeps its promises (supabase/simul.sql)", () => {
     expect(sql).not.toMatch(/create policy[^;]*on public\.simuls for (insert|update|delete|all)/);
     expect(sql).toMatch(/alter table public\.simuls enable row level security/);
   });
-  it("a pupil leaving the class, or the parent switching off, draws their board at once", () => {
+  it("a member leaving the class has their board drawn at once", () => {
     expect(sql).toMatch(/create trigger simul_on_leave after delete on public\.memberships/);
-    expect(sql).toMatch(/set_simul_ok[\s\S]*?if not p_on then[\s\S]*?result = '1\/2-1\/2'/);
   });
   it("the internal trigger function is not callable by anyone", () => {
     expect(sql).toMatch(/revoke all on function[^;]*public\.simul_on_leave\(\)[^;]*from public, anon, authenticated;/);

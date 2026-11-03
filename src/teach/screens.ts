@@ -9,7 +9,6 @@ import { classBoard, createClass, deleteClass, joinClass, leaveClass, myClasses,
 import { mondayOf } from "./summary";
 import { today } from "../store";
 import { parentGate } from "../online/screens";
-import { setSimulOk, simulOkMap } from "../simul/api";
 import { ask } from "../ui/dialog";
 
 type Go = (h: string) => void;
@@ -118,14 +117,12 @@ export function joinScreen(root: HTMLElement, go: Go) {
 
 /** The active child's classes on the family screen, each with Leave. */
 export async function classesBlock(box: HTMLElement, go: Go) {
-  const kid = family.current().id, mine = (await myClasses(true)).filter(m => m.profile_id === kid), shown = await onBoard(), simulOn = await simulOkMap();
+  const kid = family.current().id, mine = (await myClasses(true)).filter(m => m.profile_id === kid), shown = await onBoard();
   box.innerHTML = `<h2 class="sec">${t("joinMine")}</h2>
     ${mine.map(m => `<div class="li"><span class="rushicon dark">${icon("users")}</span><span class="grow"><b>${esc(m.title)}</b>
       ${m.homework ? `<small>${t("hwLabel")}: ${m.homework}</small>` : ""}</span><button class="btn ghost" data-leave="${m.class_id}">${t("joinLeaveBtn")}</button></div>
       <div class="boardrow"><button class="btn ghost" data-board="${m.class_id}">${icon("trophy")} ${t("boardTitle")}</button>
         <label class="declare"><input type="checkbox" data-show="${m.class_id}" ${shown[`${m.class_id}:${kid}`] ? "checked" : ""}> ${t("boardShow")}</label></div>
-      <div class="boardrow"><label class="declare"><input type="checkbox" data-simulok="${m.class_id}" ${simulOn[`${m.class_id}:${kid}`] ? "checked" : ""}> ${t("simulOk")}</label></div>
-      <p class="note">${t("simulOkNote")}</p>
       <div data-gate="${m.class_id}"></div>`).join("")}
     <button class="btn ghost wide" data-join>${icon("plus")} ${t("joinTitle")}</button>`;
   box.querySelectorAll<HTMLButtonElement>("[data-board]").forEach(b => b.onclick = () => go(`#/class/${b.dataset.board}`));
@@ -135,13 +132,6 @@ export async function classesBlock(box: HTMLElement, go: Go) {
     if (!c.checked) { void setOnBoard(id, kid, false); return; }
     c.checked = false;
     parentGate(box.querySelector<HTMLElement>(`[data-gate="${id}"]`)!, async () => { await setOnBoard(id, kid, true); void classesBlock(box, go); }, () => void classesBlock(box, go));
-  });
-  // the class simul (class features 2026-11-03): the same rule, a grown-up switches it on; turning it off needs no question
-  box.querySelectorAll<HTMLInputElement>("[data-simulok]").forEach(c => c.onchange = () => {
-    const id = c.dataset.simulok!;
-    if (!c.checked) { void setSimulOk(id, kid, false); return; }
-    c.checked = false;
-    parentGate(box.querySelector<HTMLElement>(`[data-gate="${id}"]`)!, async () => { await setSimulOk(id, kid, true); void classesBlock(box, go); }, () => void classesBlock(box, go));
   });
   box.querySelector<HTMLButtonElement>("[data-join]")!.onclick = () => go("#/join");
   box.querySelectorAll<HTMLButtonElement>("[data-leave]").forEach(b => b.onclick = async () => {
