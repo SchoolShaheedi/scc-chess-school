@@ -5,7 +5,7 @@ import { family } from "../family";
 import { num, t, tx } from "../i18n";
 import { icon } from "../icons";
 import { avatarHTML } from "../me/family";
-import { classBoard, createClass, deleteClass, joinClass, leaveClass, myClasses, onBoard, previewClass, pupils, removePupil, setHomework, setOnBoard, teacherClasses, type Pupil } from "./api";
+import { approvePupil, classBoard, createClass, deleteClass, isLimited, joinClass, leaveClass, myClasses, onBoard, previewClass, pupils, rejectPupil, removePupil, setHomework, setOnBoard, splitPupils, teacherClasses, waitingCounts, type Pupil } from "./api";
 import { mondayOf } from "./summary";
 import { today } from "../store";
 import { parentGate } from "../online/screens";
@@ -26,11 +26,11 @@ export const pupilLabel = (classId: string, parent: string, profileId: string): 
 export async function teacherHome(root: HTMLElement, go: Go) {
   root.innerHTML = `<div class="screen">${bar(t("teachTitle"))}<p class="muted">${t("loading")}</p></div>`;
   root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/settings");
-  const classes = await teacherClasses();
+  const [classes, waiting] = await Promise.all([teacherClasses(), waitingCounts()]);
   root.innerHTML = `<div class="screen">${bar(t("teachTitle"))}
     <p class="muted">${t("teachAbout")}</p>
     <div class="botlist">${classes.map(c => `<button class="botcard" data-class="${c.id}"><span class="rushicon dark">${icon("users")}</span>
-      <span class="grow"><b>${esc(c.title)}</b><small>${t("teachCode")}: <b class="codetxt">${c.code}</b></small></span>${icon("arrowRight", "go")}</button>`).join("")}</div>
+      <span class="grow"><b>${esc(c.title)}</b><small>${t("teachCode")}: <b class="codetxt">${c.code}</b></small></span>${waiting[c.id] ? `<span class="waitbadge" aria-label="${t("teachWaitingBadge")}">${num(waiting[c.id])} ${t("teachWaitingBadge")}</span>` : ""}${icon("arrowRight", "go")}</button>`).join("")}</div>
     <form class="emailform" data-new><label class="note" for="ct">${t("teachNew")}</label>
       <input id="ct" maxlength="40" required placeholder="${t("teachNewPh")}"><button class="btn wide" type="submit">${icon("plus")} ${t("teachCreate")}</button></form>
     <p class="note err" data-err></p>
@@ -47,13 +47,18 @@ export async function teacherHome(root: HTMLElement, go: Go) {
 export async function classView(root: HTMLElement, classId: string, go: Go) {
   const c = (await teacherClasses()).find(x => x.id === classId);
   if (!c) return go("#/teach");
-  const list = await pupils(classId), lab = labels();
+  const all = await pupils(classId), lab = labels(), { approved: list, waiting } = splitPupils(all);
   const lessons = LEVELS.flatMap(l => l.lessons);
   root.innerHTML = `<div class="screen">${bar(esc(c.title))}
     <div class="code"><small class="note">${t("teachCodeHow")}</small><b class="codetxt big">${c.code}</b></div>
     <h2 class="sec">${t("teachHomework")}</h2>
     <select class="hwsel" data-hw aria-label="${t("teachHomework")}"><option value="">${t("teachNoHomework")}</option>${lessons.map(l =>
       `<option value="${l.id}" ${c.homework === l.id ? "selected" : ""}>${l.id} · ${esc(tx(l.title))}</option>`).join("")}</select>
+    ${waiting.length ? `<h2 class="sec">${t("teachWaiting")} <span>${num(waiting.length)}</span></h2>
+      <div class="pupils">${waiting.map(p => `<div class="pupil">${avatarHTML(p)}<div class="grow"><b>${t("teachWaiting")}</b></div>
+        <button class="btn" data-ok="${esc(pupilKey(classId, p))}">${t("teachApprove")}</button>
+        <button class="btn ghost" data-no="${esc(pupilKey(classId, p))}">${t("teachReject")}</button></div>`).join("")}</div>
+      <p class="note">${t("teachApproveNote")}</p>` : ""}
     <h2 class="sec">${t("teachPupils")} <span>${num(list.length)}</span></h2>
     ${list.length ? `<div class="pupils">${list.map(p => {
       const s = p.summary, key = pupilKey(classId, p);
@@ -71,6 +76,14 @@ export async function classView(root: HTMLElement, classId: string, go: Go) {
   root.querySelector<HTMLButtonElement>("[data-simul]")!.onclick = () => go(`#/simul/${classId}`);
   root.querySelector<HTMLSelectElement>("[data-hw]")!.onchange = e => void setHomework(classId, (e.target as HTMLSelectElement).value || null);
   root.querySelectorAll<HTMLInputElement>("[data-label]").forEach(i => i.onchange = () => setLabel(i.dataset.label!, i.value));
+  root.querySelectorAll<HTMLButtonElement>("[data-ok]").forEach(b => b.onclick = async () => {
+    const p = waiting.find(x => pupilKey(classId, x) === b.dataset.ok)!;
+    await approvePupil(classId, p); void classView(root, classId, go);
+  });
+  root.querySelectorAll<HTMLButtonElement>("[data-no]").forEach(b => b.onclick = async () => {
+    const p = waiting.find(x => pupilKey(classId, x) === b.dataset.no)!;
+    if (await ask(t("teachRejectConfirm"), { danger: true })) { await rejectPupil(classId, p); void classView(root, classId, go); }
+  });
   root.querySelectorAll<HTMLButtonElement>("[data-rm]").forEach(b => b.onclick = async () => {
     const p = list.find(x => pupilKey(classId, x) === b.dataset.rm)!;
     if (await ask(t("teachRemoveConfirm"), { danger: true })) { await removePupil(classId, p); void classView(root, classId, go); }
@@ -92,7 +105,8 @@ export function joinScreen(root: HTMLElement, go: Go) {
     root.querySelector<HTMLFormElement>("[data-code]")!.onsubmit = async e => {
       e.preventDefault();
       const code = root.querySelector<HTMLInputElement>("#cc")!.value.toUpperCase();
-      const title = await previewClass(code);
+      const { title, limited } = await previewClass(code);
+      if (limited) return step1(t("joinLimited"));
       if (!title) return step1(t("joinBad"));
       step2(code, title);
     };
@@ -109,8 +123,18 @@ export function joinScreen(root: HTMLElement, go: Go) {
     root.querySelector<HTMLButtonElement>("[data-cancel]")!.onclick = () => go("#/family");
     root.querySelector<HTMLButtonElement>("[data-agree]")!.onclick = async () => {
       const err = await joinClass(code);
-      if (err) root.querySelector("[data-err]")!.textContent = err; else go("#/family");
+      if (err) root.querySelector("[data-err]")!.textContent = isLimited(err) ? t("joinLimited") : /no class/i.test(err) ? t("joinBad") : err;
+      else step3(title);
     };
+  };
+  // the child is only PENDING until the teacher approves (class_approval.sql)
+  const step3 = (title: string) => {
+    root.innerHTML = `<div class="screen">${bar(t("joinTitle"))}
+      <div class="hero">${avatarHTML(kid, "big")}<h3>${esc(title)}</h3></div>
+      <div class="parentcard">${icon("shield")}<div><b>${t("joinPending")}</b><small>${t("joinPendingNote")}</small></div></div>
+      <div class="actions"><button class="btn wide" data-done>${t("ok")}</button></div></div>`;
+    root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/family");
+    root.querySelector<HTMLButtonElement>("[data-done]")!.onclick = () => go("#/family");
   };
   step1();
 }
@@ -120,10 +144,10 @@ export async function classesBlock(box: HTMLElement, go: Go) {
   const kid = family.current().id, mine = (await myClasses(true)).filter(m => m.profile_id === kid), shown = await onBoard();
   box.innerHTML = `<h2 class="sec">${t("joinMine")}</h2>
     ${mine.map(m => `<div class="li"><span class="rushicon dark">${icon("users")}</span><span class="grow"><b>${esc(m.title)}</b>
-      ${m.homework ? `<small>${t("hwLabel")}: ${m.homework}</small>` : ""}</span><button class="btn ghost" data-leave="${m.class_id}">${t("joinLeaveBtn")}</button></div>
-      <div class="boardrow"><button class="btn ghost" data-board="${m.class_id}">${icon("trophy")} ${t("boardTitle")}</button>
+      ${m.approved ? (m.homework ? `<small>${t("hwLabel")}: ${m.homework}</small>` : "") : `<small class="pending">${t("joinPending")}</small>`}</span><button class="btn ghost" data-leave="${m.class_id}">${t("joinLeaveBtn")}</button></div>
+      ${m.approved ? `<div class="boardrow"><button class="btn ghost" data-board="${m.class_id}">${icon("trophy")} ${t("boardTitle")}</button>
         <label class="declare"><input type="checkbox" data-show="${m.class_id}" ${shown[`${m.class_id}:${kid}`] ? "checked" : ""}> ${t("boardShow")}</label></div>
-      <div data-gate="${m.class_id}"></div>`).join("")}
+      <div data-gate="${m.class_id}"></div>` : `<p class="note">${t("joinPendingNote")}</p>`}`).join("")}
     <button class="btn ghost wide" data-join>${icon("plus")} ${t("joinTitle")}</button>`;
   box.querySelectorAll<HTMLButtonElement>("[data-board]").forEach(b => b.onclick = () => go(`#/class/${b.dataset.board}`));
   // showing a child to classmates is the parent's decision (behind the grown-up question); hiding needs no question
@@ -141,7 +165,7 @@ export async function classesBlock(box: HTMLElement, go: Go) {
 
 /** Homework for the active child, if a class set one: shown on the home screen. */
 export async function homeworkCard(box: HTMLElement, go: Go) {
-  const hw = (await myClasses()).find(m => m.profile_id === family.current().id && m.homework);
+  const hw = (await myClasses()).find(m => m.profile_id === family.current().id && m.approved && m.homework);
   const lesson = hw?.homework ? findLesson(hw.homework) : undefined;
   if (!hw || !lesson) { box.innerHTML = ""; return; }
   box.innerHTML = `<button class="goalcard hwcard" data-hw><span class="rushicon dark">${icon("book")}</span>
@@ -156,7 +180,7 @@ export async function classBoardScreen(root: HTMLElement, classId: string, go: G
   root.innerHTML = `<div class="screen">${bar(t("boardTitle"))}<p class="muted">${t("loading")}</p></div>`;
   root.querySelector<HTMLButtonElement>("[data-back]")!.onclick = () => go("#/me");
   const [mine, rows] = await Promise.all([myClasses(), classBoard(classId, family.current().id)]);
-  const cls = mine.find(m => m.class_id === classId);
+  const cls = mine.find(m => m.class_id === classId && m.approved);
   if (!cls) return go("#/me");
   root.innerHTML = `<div class="screen">${bar(esc(cls.title))}
     <p class="muted">${t("boardAbout")}</p>

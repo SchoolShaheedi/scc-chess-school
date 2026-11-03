@@ -80,7 +80,7 @@ export function mePage(root: HTMLElement, go: (h: string) => void) {
   wireStats(root, go);
   // this child's class leaderboards (DECISIONS #89)
   if (signedIn()) void myClasses().then(list => {
-    const box = root.querySelector<HTMLElement>("[data-classboards]"), mine = list.filter(m => m.profile_id === family.current().id);
+    const box = root.querySelector<HTMLElement>("[data-classboards]"), mine = list.filter(m => m.profile_id === family.current().id && m.approved);
     if (!box || !mine.length) return;
     box.innerHTML = `<h3 class="sub">${t("boardTitle")}</h3>${mine.map(m => `<button class="gamerow" data-cb="${m.class_id}">${icon("trophy")}<span class="grow"><b>${m.title.replace(/[&<>"]/g, "")}</b></span>${icon("arrowRight")}</button>`).join("")}`;
     box.querySelectorAll<HTMLButtonElement>("[data-cb]").forEach(b => b.onclick = () => go(`#/class/${b.dataset.cb}`));
