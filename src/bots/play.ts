@@ -105,7 +105,7 @@ export function playBot(root: HTMLElement, bot: Bot, go: (h: string) => void, te
       ${race ? `<p class="raceline">${icon("target")} ${t("raceRule").replace("{n}", num(race)).replace("{bot}", tx(bot.name))}</p>` : ""}
       ${coachMode ? `<p class="helpline">${icon("ok")} ${t("playCoachSub")}</p><p class="note">${t("coachModeNote")}</p>` : `<p class="helpline">${icon(bot.help ? "ok" : "lock")} ${t(bot.help && testLevel ? "helpTest" : bot.help ? "helpOn" : "helpOff")}</p>`}</div>
     ${special ? `<h2 class="sec">${t("oddsTitle")}</h2>
-    <div class="seg" role="group">${ODDS.map(o => `<button data-odds="${o}" aria-pressed="${botOdds === o}">${o === "none" ? t("oddsNone") : oddsName(o)}</button>`).join("")}</div>
+    <div class="seg" role="group">${ODDS.map(o => `<button data-odds="${o}" aria-pressed="${botOdds === o}">${o === "none" ? t("oddsNone") : oddsName(o).replace(/^\p{Ll}/u, c => c.toUpperCase())}</button>`).join("")}</div>
     ${botOdds !== "none" ? `<p class="note">${t("oddsNote").replace("{bot}", tx(bot.name)).replace("{piece}", oddsPiece(botOdds))}</p>` : ""}
     <h2 class="sec">${t("variantTitle")}</h2>
     <div class="seg" role="group">${VARIANTS.map(v => `<button data-variant="${v}" aria-pressed="${botVariant === v}">${t(VARIANT_KEY[v])}</button>`).join("")}</div>
