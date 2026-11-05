@@ -15,7 +15,7 @@ const EMAIL_SIGNIN = true;
  *  OFF until the Apple provider is set up in Supabase (native/SIGN-IN-SETUP.md, part 5): with it off, the button is
  *  not drawn and nothing else changes. Turn it ON only once the provider is saved in Supabase; it then shows on the
  *  iPhone app, the Android app and the website alike. */
-const APPLE_SIGNIN = false;
+const APPLE_SIGNIN = true;   // ON 2026-11-05: Apple provider saved in Supabase (Services ID com.sikhworldchampionship.chess.signin, key P88MR54NNH; secret expires 2027-05-04)
 
 export function mountAccount(box: HTMLElement, opts: { startAt?: Step } = {}): () => void {
   let step: Step = opts.startAt ?? "start", error = "";

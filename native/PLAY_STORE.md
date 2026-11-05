@@ -44,6 +44,7 @@ is approved and live.
 >
 > • 93 lessons in 10 levels, from how the pieces move to tactics, endgames, openings and strategy
 > • An openings course of 34 openings, each taught in five steps: learn it, practise it, watch a model win, play the whole game to mate, then review
+> • Learn all the checkmates: 37 named mates, from the back-rank mate to famous traps, each one shown, built up move by move, played with help, then practised on real puzzles
 > • Three looks for three ages: big and friendly for 5–9, the full course for 10–15, clean and compact for adults
 > • A friendly coach explains every idea, and the superheroes of each level (Himmat, Seva, Ekta and more) cheer you on
 > • Eight bots to play, from a beginner up to about 2300 (strong club and master level), each with their own style, plus Play vs Coach
@@ -57,7 +58,7 @@ is approved and live.
 > • An analysis board with a position editor, an openings trainer and a two-player mode on one phone
 > • Live kirtan from Sri Darbar Sahib (Harmandar Sahib), streamed through SikhNet Radio, to play quietly in the background while you learn (it needs an internet connection and can be paused or turned off in Settings)
 > • Dark and light looks, piece sets and boards to earn, and share your best games as a picture
-> • Play friends and classmates online: only four friendly messages, and no chat
+> • Play online: grown-ups get auto-match, ratings and play anyone; children play only friends their parent accepted and classmates, with four friendly messages and no chat
 >
 > No adverts, no tracking, and nothing sold or shared. Children appear to other players only as an animal and a
 > colour, and there is no chat. The code is open source (GPLv3).
