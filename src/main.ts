@@ -66,6 +66,9 @@ import { masterScreen } from "./master/screen";
 import { gameSettingsHTML, wireGameSettings } from "./play/gamesettings";
 import { wideLayout } from "./wide";
 import { courseHub, coursePage, runCourse } from "./openings/course";
+import { matesHub, matesPage, runMate, trainMates } from "./mates/screens";
+import { dueCount as matesDue, learntCount as matesLearnt } from "./mates/progress";
+import { MATES } from "./content/mates";
 import { ask } from "./ui/dialog";
 import { startMusic } from "./music";
 
@@ -261,11 +264,12 @@ function miniTiles(s: ReturnType<typeof store.get>): string {
   const nextBot = nextOpponent(s.rating.r, s.stats.botWins);
   const tile = (href: string, cls: string, ic: Parameters<typeof icon>[0], title: string, sub: string) =>
     `<button class="mtile ${cls}" data-href="${href}">${icon(ic)}<b>${title}</b><small>${sub}</small></button>`;
-  return `<div class="mtiles ${openingsOpen() ? "four" : ""}">
+  return `<div class="mtiles ${openingsOpen() ? "five" : "four"}">
     ${tile("#/puzzles/daily", "t1", dailyDone ? "check" : "target", t("dailyTitle"), dailyDone ? t("dailyDone") : t("dailyReward"))}
     ${tile(`#/play/${nextBot.id}`, "t4", "swords", t("playBot").replace("{bot}", tx(nextBot.name)), t("playNextSub"))}
     <div class="mtile goal"><span class="goalring" style="--deg:${Math.round((n / GOAL) * 360)}deg"><span>${num(n)}/${num(GOAL)}</span></span><b>${n >= GOAL ? t("goalDone") : t("goalTitle")}</b></div>
     ${openingsOpen() ? tile("#/openings", "t2", "book", t("courseTitle"), dueCount() ? t("openDueHome").replace("{n}", num(dueCount())) : t("openNoneDueShort")) : ""}
+    ${tile("#/mates", "t5", "target", t("matesTitle"), (matesDue() ? t("matesHomeSub").replace("{k}", num(matesDue())) : t("matesLearnt")).replace("{n}", num(matesLearnt())).replace("{m}", num(MATES.length)))}
   </div>`;
 }
 
@@ -494,6 +498,14 @@ function route() {
     if (arg === "o" && sub && step) { teardown = runCourse(app, sub, step, go); return; }
     if (arg === "o" && sub) return coursePage(app, sub, go);
     return courseHub(app, go);
+  }
+  // Learn all the checkmates (DECISIONS #137): #/mates is the list, /<id> a mate, /<id>/<step> a step, /review the review
+  if (page === "mates") {
+    if (arg === "review") { teardown = trainMates(app, go); return; }
+    const mate = arg ? MATES.find(x => x.id === arg) : undefined;
+    if (mate && sub) { teardown = runMate(app, mate.id, sub, go); return; }
+    if (mate) { teardown = matesPage(app, mate.id, go); return; }
+    return matesHub(app, go);
   }
   if (page === "review") { teardown = reviewGame(app, go); return; }
   // Insights (DECISIONS #113): practise goes to the level's next open lesson, or nowhere if the level is still locked

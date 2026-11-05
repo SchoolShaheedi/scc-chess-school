@@ -54,6 +54,8 @@ export interface State {
   visionBest?: Record<string, number>;
   /** The Endgame ladder (2026-10-30): stars (1-3) on each finished rung, keyed by rung id (src/content/ladder.ts). */
   ladder?: Record<string, 1 | 2 | 3>;
+  /** Learn all the checkmates (DECISIONS #137): the steps done on each mate ("see", "watch", "help", the practice stages "p1" "p2" "p3"), and the review card of each mate that has joined the review (key "mate:<id>"). */
+  mates?: { done: Record<string, string[]>; cards: Record<string, { box: number; due: string }> };
   /** Master games (guess the move): the best score per game and side, keyed "<game id>:w" or "<game id>:b". */
   masterBest?: Record<string, number>;
   /** When this child's progress was last reset by the learner (ISO time). Synced: merge() lets the newer reset win, so a reset sticks across devices. */
@@ -314,12 +316,12 @@ export const store = {
   },
   /** Progress merged in from the signed-in account (sync.ts). */
   replaceProgress(p: Pick<State, "xp" | "streak" | "lessons" | "tests" | "placed" | "daily" | "rushBest" | "rep" | "active" | "goal" | "stats" | "rating" | "missed" | "prating" | "hist" | "themeStats" | "results" | "puzzlesByDay"
-    | "unlocked" | "freezes" | "heroes" | "boss" | "heroAvatar" | "soloPath" | "survivalBest" | "calcBest" | "visionBest" | "ladder" | "masterBest" | "resetAt">) {
+    | "unlocked" | "freezes" | "heroes" | "boss" | "heroAvatar" | "soloPath" | "survivalBest" | "calcBest" | "visionBest" | "ladder" | "masterBest" | "mates" | "resetAt">) {
     // rewards, freezes and heroes are per child too: without them, switching child kept the last child's (fixed 2026-10-16)
     store.set({ xp: p.xp, streak: p.streak, lessons: p.lessons, tests: p.tests, placed: p.placed, daily: p.daily, rushBest: p.rushBest, rep: p.rep, active: p.active, goal: p.goal, stats: p.stats, rating: p.rating, missed: p.missed,
       prating: p.prating, hist: p.hist, themeStats: p.themeStats, results: p.results, puzzlesByDay: p.puzzlesByDay,
       unlocked: p.unlocked, freezes: p.freezes, heroes: p.heroes, boss: p.boss, heroAvatar: p.heroAvatar,
-      soloPath: p.soloPath, survivalBest: p.survivalBest, calcBest: p.calcBest, visionBest: p.visionBest, ladder: p.ladder, masterBest: p.masterBest, resetAt: p.resetAt });
+      soloPath: p.soloPath, survivalBest: p.survivalBest, calcBest: p.calcBest, visionBest: p.visionBest, ladder: p.ladder, masterBest: p.masterBest, mates: p.mates, resetAt: p.resetAt });
   },
   /** A level test result: the best score is kept, and a pass is never lost. */
   recordTest(level: number, score: number, passed: boolean) {

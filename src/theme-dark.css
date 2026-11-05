@@ -22,7 +22,7 @@ html[data-theme="dark"] .wlang button[aria-pressed="true"] { background: var(--s
 html[data-theme="dark"] .lessonbar small, html[data-theme="dark"] .note, html[data-theme="dark"] .muted { color: var(--muted); }
 
 /* look C's light pieces, made dark: cream tiles and secondary buttons become raised dark tiles */
-html[data-theme="dark"] :is(.mtile, .mtile.t1, .mtile.t2, .mtile.t4) { background: var(--tile); color: var(--ink); box-shadow: 0 4px 0 var(--tile-edge); }
+html[data-theme="dark"] :is(.mtile, .mtile.t1, .mtile.t2, .mtile.t4, .mtile.t5) { background: var(--tile); color: var(--ink); box-shadow: 0 4px 0 var(--tile-edge); }
 html[data-theme="dark"] .mtile small { color: var(--muted); }
 html[data-theme="dark"] .mtile.goal { box-shadow: 0 4px 0 var(--tile-edge); }
 html[data-theme="dark"] .nextcard { box-shadow: 0 4px 0 var(--tile-edge); }
