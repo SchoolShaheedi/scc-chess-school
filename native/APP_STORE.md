@@ -30,7 +30,7 @@ is accurate and keeps every feature. (Do not tick "Made for Kids".)
 
 ## Promotional text (170 max, can be changed any time without a new review)
 
-> Learn chess from the first move to tournament play: 93 lessons, 8 bots, a 34-opening course, puzzles and live kirtan from Sri Darbar Sahib. Free, no ads.
+> Learn chess from the first move to tournament play: 93 lessons, 37 checkmates, 8 bots, a 34-opening course, puzzles and live kirtan from Sri Darbar Sahib. Free, no ads.
 
 ## Description (4,000 max)
 
@@ -40,6 +40,7 @@ is accurate and keeps every feature. (Do not tick "Made for Kids".)
 >
 > • 93 lessons in 10 levels, from how the pieces move to tactics, endgames, openings and strategy
 > • An openings course of 34 openings, each taught in five steps: learn it, practise it, watch a model win, play the whole game to mate, then review
+> • Learn all the checkmates: 37 named mates, from the back-rank mate to famous traps, each one shown, built up move by move, played with help, then practised on real puzzles
 > • Three looks for three ages: big and friendly for 5–9, the full course for 10–15, clean and compact for adults
 > • A friendly coach explains every idea, and the superheroes of each level (Himmat, Seva, Ekta and more) cheer you on
 > • Eight bots to play, from a beginner up to about 2300 (strong club and master level), each with their own style, plus Play vs Coach
@@ -53,7 +54,7 @@ is accurate and keeps every feature. (Do not tick "Made for Kids".)
 > • An analysis board with a position editor, an openings trainer and a two-player mode on one phone
 > • Live kirtan from Sri Darbar Sahib (Harmandar Sahib), streamed through SikhNet Radio, to play quietly in the background while you learn (it needs an internet connection and can be paused or turned off in Settings)
 > • Dark and light looks, piece sets and boards to earn, and share your best games as a picture
-> • Play friends and classmates online: only four friendly messages, and no chat
+> • Play online: grown-ups get auto-match, ratings and play anyone; children play only friends their parent accepted and classmates, with four friendly messages and no chat
 >
 > No adverts, no tracking, and nothing sold or shared. Children appear to other players only as an animal and a
 > colour, and there is no chat. The code is open source (GPLv3).
@@ -79,7 +80,7 @@ English description instead:
 
 ## Graphics
 - **App icon:** built in (1024 × 1024, opaque, no rounded corners: iOS rounds it).
-- **Screenshots:** App Store Connect needs the **6.9-inch iPhone** set (1320 × 2868) and, for an iPad build, 13-inch iPad.
+- **Screenshots:** App Store Connect (Nov 2026) wants the **6.3-inch iPhone** set (1206 × 2622; 1320 × 2868 is refused) and the 13-inch iPad set (2064 × 2752). Both are in `store/ios/`.
   There is no Xcode on this Mac, so take them in Xcode's Simulator or on a real iPhone. The Android ones in `store/`
   are the wrong size and must not be reused as they are. Suggested five: home, a lesson, a bot game, Magical Chess, puzzles.
 
