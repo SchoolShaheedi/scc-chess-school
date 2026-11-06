@@ -1418,7 +1418,7 @@ export const UI = {
   matesReviewRow: { en: "Review", pa: "ਦੁਹਰਾਈ" },
   matesLinkLadder: { en: "Practise it on the Endgame ladder", pa: "ਅੰਤਲੀ ਖੇਡ ਦੀ ਪੌੜੀ 'ਤੇ ਅਭਿਆਸ ਕਰੋ" },
   matesLinkLesson: { en: "Practise it in lesson {l}", pa: "ਪਾਠ {l} ਵਿੱਚ ਅਭਿਆਸ ਕਰੋ" },
-  matesSourceBank: { en: "From Lichess puzzle {id} (CC0).", pa: "ਲਾਇਚੈੱਸ ਬੁਝਾਰਤ {id} ਤੋਂ (CC0)।" },
+  matesSourceBank: { en: "From Lichess puzzle {id} (CC0).", pa: "Lichess ਬੁਝਾਰਤ {id} ਤੋਂ (CC0)।" },
   matesSourceGame: { en: "From {game}.", pa: "{game} ਤੋਂ।" },
   matesSourceMade: { en: "A line built for this lesson; the computer checked every move.", pa: "ਇਸ ਪਾਠ ਲਈ ਬਣਾਈ ਲਾਈਨ; ਕੰਪਿਊਟਰ ਨੇ ਹਰ ਚਾਲ ਜਾਂਚੀ ਹੈ।" },
   matesAlsoCalled: { en: "Also called: {n}", pa: "ਹੋਰ ਨਾਂ: {n}" },
