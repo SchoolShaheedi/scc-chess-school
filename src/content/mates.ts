@@ -21,7 +21,7 @@ export const MATE_GROUPS: { group: MateGroup; title: Text }[] = [
   { group: "knight", title: { en: "Knight mates", pa: "ਘੋੜੇ ਦੀਆਂ ਮਾਤਾਂ" } },
   { group: "bishop", title: { en: "Bishop mates", pa: "ਊਠ ਦੀਆਂ ਮਾਤਾਂ" } },
   { group: "queen", title: { en: "Queen mates", pa: "ਰਾਣੀ ਦੀਆਂ ਮਾਤਾਂ" } },
-  { group: "traps", title: { en: "Famous traps", pa: "ਮਸ਼ਹੂਰ ਫੰਦੇ" } },
+  { group: "traps", title: { en: "Famous traps", pa: "ਮਸ਼ਹੂਰ ਜਾਲ" } },
   { group: "basic", title: { en: "Basic endgame mates", pa: "ਅੰਤਲੀ ਖੇਡ ਦੀਆਂ ਮੁੱਢਲੀਆਂ ਮਾਤਾਂ" } },
 ];
 
@@ -57,7 +57,7 @@ export const MATES: Mate[] = [
   {
     id: "backrank", group: "first",
     name: { en: "Back-rank mate", pa: "ਪਿਛਲੀ ਕਤਾਰ ਦੀ ਮਾਤ" },
-    about: { en: "The king is trapped on the back row by its own pawns.", pa: "ਬਾਦਸ਼ਾਹ ਆਪਣੇ ਹੀ ਪਿਆਦਿਆਂ ਕਰਕੇ ਪਿਛਲੀ ਕਤਾਰ ਵਿੱਚ ਫਸ ਗਿਆ।" },
+    about: { en: "The king is trapped on the back row by its own pawns.", pa: "ਬਾਦਸ਼ਾਹ ਆਪਣੇ ਹੀ ਪਿਆਦਿਆਂ ਕਰਕੇ ਪਿਛਲੀ ਕਤਾਰ ਵਿੱਚ ਫਸਿਆ ਹੋਇਆ ਹੈ।" },
     also: { en: "corridor mate", pa: "ਕੋਰੀਡੋਰ ਮਾਤ" },
     final: "8/8/4k3/4Pp2/5P2/8/6PP/3r3K w - - 0 48",
     line: { fen: "8/8/4k3/4Pp2/r4P2/8/2Rp2PP/3R3K w - - 0 45", moves: "d1d2 a4a1 c2c1 a1c1 d2d1 c1d1".split(" "), source: { kind: "bank", id: "47hfM" } },
@@ -131,7 +131,7 @@ export const MATES: Mate[] = [
   {
     id: "blindswine", group: "teams",
     name: { en: "Blind swine mate", pa: "ਬਲਾਈਂਡ ਸਵਾਈਨ ਮਾਤ" },
-    about: { en: "Two rooks on the 7th row finish the king.", pa: "ਸੱਤਵੀਂ ਕਤਾਰ ਦੇ ਦੋ ਹਾਥੀ ਬਾਦਸ਼ਾਹ ਨੂੰ ਮਾਤ ਦਿੰਦੇ ਹਨ।" },
+    about: { en: "Two rooks on the 7th row finish the king.", pa: "ਸੱਤਵੀਂ ਕਤਾਰ 'ਤੇ ਦੋ ਹਾਥੀ ਬਾਦਸ਼ਾਹ ਨੂੰ ਮਾਤ ਦਿੰਦੇ ਹਨ।" },
     final: "5Rk1/5R2/6P1/5p2/8/1Pp5/P1P2q2/2K5 b - - 0 44",
     line: { fen: "5k2/5Rb1/6P1/5p2/4r3/1Pp5/P1P2q2/2KR4 b - - 8 41", moves: "f8g8 d1d8 e4e8 d8e8 g7f8 e8f8".split(" "), source: { kind: "bank", id: "04qWI" } },
     practice: { theme: "blindSwineMate" },
@@ -156,7 +156,7 @@ export const MATES: Mate[] = [
   {
     id: "doubleknight", group: "knight",
     name: { en: "Double knight mate", pa: "ਦੋ ਘੋੜਿਆਂ ਦੀ ਮਾਤ" },
-    about: { en: "One knight checks, the other finishes.", pa: "ਇੱਕ ਘੋੜਾ ਸ਼ਹਿ ਦਿੰਦਾ ਹੈ, ਦੂਜਾ ਮਾਤ ਕਰਦਾ ਹੈ।" },
+    about: { en: "One knight checks, the other finishes.", pa: "ਇੱਕ ਘੋੜਾ ਸ਼ਹਿ ਦਿੰਦਾ ਹੈ, ਦੂਜਾ ਮਾਤ ਦਿੰਦਾ ਹੈ।" },
     final: "k1n5/ppNN4/8/8/8/8/8/K7 b - - 0 2",
     line: { fen: "1kn5/ppp5/4NN2/8/8/8/8/K7 w - - 0 1", moves: "f6d7 b8a8 e6c7".split(" "), source: { kind: "built" } },
   },
@@ -308,7 +308,7 @@ export const MATES: Mate[] = [
     name: { en: "Légal's mate", pa: "ਲੇਗਾਲ ਦੀ ਮਾਤ" },
     about: { en: "Give up the queen: two knights and a bishop finish the king.", pa: "ਰਾਣੀ ਦੇ ਦਿਓ: ਦੋ ਘੋੜੇ ਅਤੇ ਇੱਕ ਊਠ ਬਾਦਸ਼ਾਹ ਨੂੰ ਮਾਤ ਦਿੰਦੇ ਹਨ।" },
     final: "rn1q1bnr/ppp1kB1p/3p2p1/3NN3/4P3/8/PPPP1PPP/R1BbK2R b KQ - 2 7",
-    line: { fen: "rn1qkbnr/ppp2ppp/3p4/4p3/2B1P1b1/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 4", moves: "b1c3 g7g6 f3e5 g4d1 c4f7 e8e7 c3d5".split(" "), source: { kind: "game", name: { en: "Légal vs Saint-Brie, Paris 1750", pa: "ਲੇਗਾਲ ਬਨਾਮ ਸੇਂਟ-ਬ੍ਰੀ, ਪੈਰਿਸ, ੧੭੫੦" } }, notes: { 2: { en: "The knight takes the pawn on e5 and leaves the queen to be taken. It is a trap!", pa: "ਘੋੜਾ e5 'ਤੇ ਪਿਆਦਾ ਮਾਰਦਾ ਹੈ ਅਤੇ ਰਾਣੀ ਨੂੰ ਮਾਰੇ ਜਾਣ ਲਈ ਛੱਡ ਦਿੰਦਾ ਹੈ। ਇਹ ਫੰਦਾ ਹੈ!" } } },
+    line: { fen: "rn1qkbnr/ppp2ppp/3p4/4p3/2B1P1b1/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 4", moves: "b1c3 g7g6 f3e5 g4d1 c4f7 e8e7 c3d5".split(" "), source: { kind: "game", name: { en: "Légal vs Saint-Brie, Paris 1750", pa: "ਲੇਗਾਲ ਬਨਾਮ ਸੇਂਟ-ਬ੍ਰੀ, ਪੈਰਿਸ, ੧੭੫੦" } }, notes: { 2: { en: "The knight takes the pawn on e5 and leaves the queen to be taken. It is a trap!", pa: "ਘੋੜਾ e5 'ਤੇ ਪਿਆਦਾ ਮਾਰਦਾ ਹੈ ਅਤੇ ਰਾਣੀ ਨੂੰ ਮਾਰੇ ਜਾਣ ਲਈ ਛੱਡ ਦਿੰਦਾ ਹੈ। ਇਹ ਜਾਲ ਹੈ!" } } },
     practice: { rule: "legal" },
   },
   {
@@ -330,7 +330,7 @@ export const MATES: Mate[] = [
   {
     id: "ladder", group: "basic",
     name: { en: "Ladder mate", pa: "ਪੌੜੀ ਮਾਤ" },
-    about: { en: "Two rooks climb the board like a ladder.", pa: "ਦੋ ਹਾਥੀ ਪੌੜੀ ਵਾਂਗ ਬੋਰਡ 'ਤੇ ਚੜ੍ਹਦੇ ਹਨ।" },
+    about: { en: "Two rooks climb the board like a ladder.", pa: "ਦੋ ਹਾਥੀ ਪੌੜੀ ਵਾਂਗ ਬਿਸਾਤ 'ਤੇ ਚੜ੍ਹਦੇ ਹਨ।" },
     also: { en: "lawnmower mate", pa: "ਲਾਅਨਮੋਅਰ ਮਾਤ" },
     final: "6R1/8/7R/4K3/8/8/7k/8 b - - 5 3",
     line: { fen: "7R/8/7R/4K3/8/8/8/6k1 w - - 0 1", moves: "h6f6 g1g2 h8g8 g2h2 f6h6".split(" "), source: { kind: "built" } },

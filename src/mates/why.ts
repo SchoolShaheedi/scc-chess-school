@@ -103,15 +103,15 @@ export function whyText(fen: string, short = false): Text {
   if (own.length) {
     const one = own.length === 1, f1 = one && fem(own[0].type);
     en.push(`Its own ${listEn(own.map(p => `${NAME[p.type].en} on ${p.sq}`))} block${one ? "s" : ""} the way.`);
-    pa.push(`ਇਸ ${one ? (f1 ? "ਦੀ ਆਪਣੀ" : "ਦਾ ਆਪਣਾ") : "ਦੇ ਆਪਣੇ"} ${listPa(own.map(p => the(p).pa))} ਰਾਹ ਰੋਕਦ${one ? (f1 ? "ੀ" : "ਾ") : "ੇ"} ${one ? "ਹੈ" : "ਹਨ"}।`);
+    pa.push(`ਬਾਦਸ਼ਾਹ ${one ? (f1 ? "ਦੀ ਆਪਣੀ" : "ਦਾ ਆਪਣਾ") : "ਦੇ ਆਪਣੇ"} ${listPa(own.map(p => the(p).pa))} ਰਾਹ ਰੋਕਦ${one ? (f1 ? "ੀ" : "ਾ") : "ੇ"} ${one ? "ਹੈ" : "ਹਨ"}।`);
   }
   if (f.edges) {
     en.push("The edge of the board closes the rest.");
-    pa.push("ਬੋਰਡ ਦਾ ਕਿਨਾਰਾ ਬਾਕੀ ਰਾਹ ਬੰਦ ਕਰਦਾ ਹੈ।");
+    pa.push("ਬਿਸਾਤ ਦਾ ਕਿਨਾਰਾ ਬਾਕੀ ਰਾਹ ਬੰਦ ਕਰਦਾ ਹੈ।");
   }
   const gap = cs.length === 1 && lineHasGap(cs[0], f.king);
   en.push(cs.length > 1 ? "Only the king could answer a double check, and it has no safe square." : gap ? "Nothing can take the checking piece or block its line." : "Nothing can take the checking piece.");
-  pa.push(cs.length > 1 ? "ਦੋਹਰੀ ਸ਼ਹਿ ਦਾ ਜਵਾਬ ਸਿਰਫ਼ ਬਾਦਸ਼ਾਹ ਦੇ ਸਕਦਾ ਹੈ, ਪਰ ਉਸ ਕੋਲ ਕੋਈ ਸੁਰੱਖਿਅਤ ਖਾਨਾ ਨਹੀਂ।" : gap ? "ਸ਼ਹਿ ਦੇਣ ਵਾਲੇ ਨੂੰ ਕੋਈ ਮਾਰ ਨਹੀਂ ਸਕਦਾ ਅਤੇ ਕੋਈ ਉਸ ਦੇ ਰਾਹ ਵਿੱਚ ਨਹੀਂ ਆ ਸਕਦਾ।" : "ਸ਼ਹਿ ਦੇਣ ਵਾਲੇ ਨੂੰ ਕੋਈ ਮਾਰ ਨਹੀਂ ਸਕਦਾ।");
+  pa.push(cs.length > 1 ? "ਦੋਹਰੀ ਸ਼ਹਿ ਦਾ ਜਵਾਬ ਸਿਰਫ਼ ਬਾਦਸ਼ਾਹ ਦੇ ਸਕਦਾ ਹੈ, ਪਰ ਉਸ ਕੋਲ ਕੋਈ ਸੁਰੱਖਿਅਤ ਖਾਨਾ ਨਹੀਂ।" : gap ? "ਸ਼ਹਿ ਦੇਣ ਵਾਲੇ ਮੋਹਰੇ ਨੂੰ ਕੋਈ ਮਾਰ ਨਹੀਂ ਸਕਦਾ ਅਤੇ ਕੋਈ ਉਸ ਦੇ ਰਾਹ ਵਿੱਚ ਨਹੀਂ ਆ ਸਕਦਾ।" : "ਸ਼ਹਿ ਦੇਣ ਵਾਲੇ ਮੋਹਰੇ ਨੂੰ ਕੋਈ ਮਾਰ ਨਹੀਂ ਸਕਦਾ।");
   return { en: en.join(" "), pa: pa.join(" ") };
 }
 const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
@@ -144,18 +144,19 @@ export function moveNote(fen: string, uci: string, next?: string): Text {
   const piece = word(m.piece), to = m.to;
   if (g.isCheckmate()) return { en: `Checkmate! ${cap(NAME[m.piece].en)} to ${to}.`, pa: `ਸ਼ਹਿ-ਮਾਤ! ${NAME[m.piece].pa} ${to} 'ਤੇ।` };
   const taken = m.captured ? word(m.captured) : null;
+  const takenObj = m.captured ? `${OBLIQUE[m.captured] ?? word(m.captured).pa} ਨੂੰ` : "";   // the captured piece as the object: ਘੋੜੇ ਨੂੰ, ਰਾਣੀ ਨੂੰ
   // a sacrifice: the piece is taken at once in the line, and it is worth more than what it took
   const lost = next && next.slice(2, 4) === to && VAL[m.piece] >= 3 && VAL[m.piece] > (m.captured ? VAL[m.captured] : 0);
   const v = fem(m.piece) ? "ੀ" : "ਾ";   // the verb agrees with the piece: ਰਾਣੀ is feminine
   if (lost) return { en: `A sacrifice! The ${piece.en} on ${to} is given up.`, pa: `ਕੁਰਬਾਨੀ! ${to} ${poss(m.piece)} ${piece.pa} ਦੇ ਦਿੱਤ${v}।` };
   if (g.inCheck()) {
     return taken
-      ? { en: `Check! The ${piece.en} takes the ${taken.en} on ${to}.`, pa: `ਸ਼ਹਿ! ${piece.pa} ${to} 'ਤੇ ${taken.pa} ਮਾਰਦ${v} ਹੈ।` }
+      ? { en: `Check! The ${piece.en} takes the ${taken.en} on ${to}.`, pa: `ਸ਼ਹਿ! ${piece.pa} ${to} 'ਤੇ ${takenObj} ਮਾਰਦ${v} ਹੈ।` }
       : { en: `Check! ${cap(piece.en)} to ${to}.`, pa: `ਸ਼ਹਿ! ${piece.pa} ${to} 'ਤੇ।` };
   }
   const th = threatOf(g.fen());
-  if (th) return { en: `${cap(piece.en)} to ${to}${taken ? ", taking the " + taken.en : ""}. It threatens checkmate with ${th}.`, pa: `${piece.pa} ${to} 'ਤੇ${taken ? ", " + taken.pa + " ਮਾਰ ਕੇ" : ""}। ਇਹ ${th} ਨਾਲ ਸ਼ਹਿ-ਮਾਤ ਦੀ ਧਮਕੀ ਹੈ।` };
+  if (th) return { en: `${cap(piece.en)} to ${to}${taken ? ", taking the " + taken.en : ""}. It threatens checkmate with ${th}.`, pa: `${piece.pa} ${to} 'ਤੇ${taken ? ", " + takenObj + " ਮਾਰ ਕੇ" : ""}। ਇਹ ${th} ਨਾਲ ਸ਼ਹਿ-ਮਾਤ ਦੀ ਧਮਕੀ ਹੈ।` };
   return taken
-    ? { en: `The ${piece.en} takes the ${taken.en} on ${to}.`, pa: `${piece.pa} ${to} 'ਤੇ ${taken.pa} ਮਾਰਦ${v} ਹੈ।` }
+    ? { en: `The ${piece.en} takes the ${taken.en} on ${to}.`, pa: `${piece.pa} ${to} 'ਤੇ ${takenObj} ਮਾਰਦ${v} ਹੈ।` }
     : { en: `A quiet move: ${piece.en} to ${to}.`, pa: `ਚੁੱਪ ਚਾਲ: ${piece.pa} ${to} 'ਤੇ।` };
 }
