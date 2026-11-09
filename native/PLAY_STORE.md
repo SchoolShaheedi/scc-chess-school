@@ -37,9 +37,11 @@ is approved and live.
 
 ## Full description (4,000 characters max)
 
+**Google rejected the 1.2.0 listing on 2026-11-08 (Metadata policy: store listing promotion).** No price, "free", "no ads", rating-strength or "thousands" claims anywhere in the description, icon or promotional images. The text below is the corrected version.
+
 **English (UK)**
 > SWC Chess School teaches chess from the very first move to tournament play, in Panjabi and English, for every age.
-> It is free, with no adverts. A parent's account keeps each learner's progress on every device, and the lessons,
+> A parent's account keeps each learner's progress on every device, and the lessons,
 > bots and puzzles keep working without an internet connection.
 >
 > • 93 lessons in 10 levels, from how the pieces move to tactics, endgames, openings and strategy
@@ -47,9 +49,9 @@ is approved and live.
 > • Learn all the checkmates: 37 named mates, from the back-rank mate to famous traps, each one shown, built up move by move, played with help, then practised on real puzzles
 > • Three looks for three ages: big and friendly for 5–9, the full course for 10–15, clean and compact for adults
 > • A friendly coach explains every idea, and the superheroes of each level (Himmat, Seva, Ekta and more) cheer you on
-> • Eight bots to play, from a beginner up to about 2300 (strong club and master level), each with their own style, plus Play vs Coach
+> • Eight bots to play, from beginner to advanced, each with their own style, plus Play vs Coach
 > • Magical Chess: gold gems appear on the board, and a piece that lands on one may change into a new piece
-> • Thousands of real puzzles: daily puzzle, rated puzzles, themes, Puzzle Race, Puzzle Survival and Solo Chess
+> • Real puzzles from real games: daily puzzle, rated puzzles, themes, Puzzle Race, Puzzle Survival and Solo Chess
 > • Calculate: see the moves in your head and train your board vision
 > • Master games: replay famous games and guess the move at each turn
 > • The endgame ladder: win famous endgames, or hold the draw, one rung at a time
@@ -60,7 +62,7 @@ is approved and live.
 > • Dark and light looks, piece sets and boards to earn, and share your best games as a picture
 > • Play online: grown-ups get auto-match, ratings and play anyone; children play only friends their parent accepted and classmates, with four friendly messages and no chat
 >
-> No adverts, no tracking, and nothing sold or shared. Children appear to other players only as an animal and a
+> Children appear to other players only as an animal and a
 > colour, and there is no chat. The code is open source (GPLv3).
 >
 > Made by Shaheedi Bunga, a UK Sikh charity, as part of Sikh World Championships.
